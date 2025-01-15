@@ -306,8 +306,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <!-- Custom styles for this template -->
-    <link href="assets/css/dashboard.css" rel="stylesheet">
-    <link href="assets/css/sidebars.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/css/dashboard.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/css/sidebars.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 </head>
 
@@ -405,20 +405,20 @@
                         <ul class="nav flex-column">
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page"
-                                    href="#/">
+                                    href="{{ url_for('index', user_token=77)}}">
                                     <i class="fa fa-home"></i>
                                     Dashboard
                                 </a>
                             </li>
                             <li class="nav-item"></li>
-                            <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="#/video-player">
+                            <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="">
                                 <i class="fa-regular fa-circle-user"></i>
                                 Video Analyzser
                             </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2"
-                                    href="#" onclick="">
+                                    href="{{ url_for('upload_view.upload', user_token=77)}}" onclick="">
                                     <i class="fa fa-upload"></i>
                                     Upload
                                 </a>
@@ -460,9 +460,212 @@
             </div>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                
-                
-                <div class="container"></div>
+                <style>
+                    body {
+                        background-color: #121212;
+                        color: white;
+                    }
+
+                    .video-container {
+                        max-width: 800px;
+                        margin: auto;
+                        position: relative;
+                        border: 2px solid #333;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+                        border-radius: 8px;
+                        overflow: hidden;
+                        background-color: black;
+                    }
+
+                    #videoPlayer {
+                        width: 100%;
+                        height: auto;
+                        display: block;
+                    }
+
+                    #videoPlayer::-webkit-media-controls {
+                        display: none;
+                        /* Hide default controls */
+                    }
+
+                    .custom-controls {
+                        position: absolute;
+                        bottom: 20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        display: flex;
+                        justify-content: center;
+                        gap: 10px;
+                        background-color: rgba(0, 0, 0, 0.5);
+                        padding: 10px;
+                        border-radius: 10px;
+                    }
+
+                    .custom-controls button {
+                        background-color: transparent;
+                        color: white;
+                        border: none;
+                        font-size: 20px;
+                        cursor: pointer;
+                    }
+
+                    .custom-controls button:hover {
+                        color: #007bff;
+                    }
+
+                    .caption-box {
+                        text-align: left;
+                        padding: 10px;
+                        font-size: 16px;
+                        color: #ccc;
+                        display: none;
+                        width: 100%;
+                        background-color: rgba(0, 0, 0, 0.8);
+                        margin-top: 10px;
+                    }
+
+                    .settings-menu {
+                        position: absolute;
+                        bottom: 50px;
+                        right: 20px;
+                        background: rgba(0, 0, 0, 0.8);
+                        border-radius: 10px;
+                        padding: 15px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+                        display: none;
+                        transition: all 0.3s ease;
+                    }
+
+                    .settings-menu button {
+                        background-color: transparent;
+                        color: white;
+                        border: none;
+                        font-size: 20px;
+                        cursor: pointer;
+                    }
+
+                    .settings-menu.active {
+                        display: block;
+                    }
+
+                    .settings-menu label {
+                        font-size: 14px;
+                        margin-right: 10px;
+                    }
+
+                    #progress-bar {
+                        width: 100%;
+                        height: 5px;
+                        background-color: #444;
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        cursor: pointer;
+                    }
+
+                    #progress {
+                        height: 100%;
+                        width: 0;
+                        background-color: rgb(228, 52, 161);
+                    }
+
+                    .tooltip {
+                        position: absolute;
+                        bottom: 70px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: rgba(0, 0, 0, 0.8);
+                        color: white;
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        font-size: 14px;
+                        display: none;
+                    }
+
+                    .next-button {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background-color: #0e010b;
+                        color: white;
+                        border: 2.6px solid #d13da5;
+                        padding: 15px 30px;
+                        border-radius: 8px;
+                        font-size: 18px;
+                        display: none;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+                    }
+
+                    .next-button i {
+                        margin-right: 10px;
+                    }
+
+                    .next-button:hover {
+                        background-color: rgba(100, 36, 184, 0.582);
+                    }
+
+                    .menu-toggle {
+                        position: absolute;
+                        bottom: 10px;
+                        right: 10px;
+                        background-color: rgba(0, 0, 0, 0.8);
+                        color: white;
+                        border: none;
+                        font-size: 20px;
+                        border-radius: 50%;
+                        width: 40px;
+                        height: 40px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                    }
+
+                    .menu-toggle:hover {
+                        background-color: rgba(0, 0, 0, 0.6);
+                    }
+
+                    @media (max-width: 768px) {
+                        .caption-box {
+                            width: 100%;
+                            text-align: center;
+                        }
+                    }
+                </style>
+
+                <div class="container mt-5">
+                    <h1 class="text-center">Professional Video Player</h1>
+                    <div class="video-container">
+                        <video id="videoPlayer" autoplay muted playsinline>
+                            <source
+                                src="https:www.d-tuning.com/api/video/get/AI_Agents_And_Agentic_Reasoning.mp4"
+                                type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div id="progress-bar" onclick="seekVideo(event)">
+                            <div id="progress"></div>
+                        </div>
+                        <div class="custom-controls">
+                            <button onclick="playPauseVideo()"><i class="fas fa-play"></i></button>
+                            <button onclick="toggleMute()" id="muteButton"><i class="fas fa-volume-mute"></i></button>
+                            <button onclick="toggleCaptions()"><i class="fas fa-closed-captioning"></i></button>
+                            <button onclick="toggleSpeechText()"><i class="fas fa-comment"></i></button>
+                            <button onclick="toggleSettings()"><i class="fas fa-cog"></i></button>
+                            <button onclick="goFullScreen()"><i class="fas fa-expand"></i></button>
+                            <button onclick="nextVideo()"><i class="fas fa-step-forward"></i></button>
+                        </div>
+                        <button class="next-button" id="nextButton" onclick="nextVideo()">
+                            <i class="fas fa-step-forward"></i> Next
+                        </button>
+                        <button class="menu-toggle" onclick="toggleMainMenu()"><i class="fas fa-bars"></i></button>
+                    </div>
+                    <div id="speechText" class="caption-box">Speech text will appear here...</div>
+
+
+                </div>
+
+
 
 
                 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
@@ -493,12 +696,171 @@
 
     </div>
 
-    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>-->
+    <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/sidebars.js')}}"></script>
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
-    <script type="module" src="app.js"></script>
+
+    <script>
+        const video = document.getElementById('videoPlayer');
+        const speechText = document.getElementById('speechText');
+        const progressBar = document.getElementById('progress');
+        const progressContainer = document.getElementById('progress-bar');
+        const settingsMenu = document.getElementById('settingsMenu');
+        const muteButton = document.getElementById('muteButton');
+
+        const menuToggle = document.querySelector('.menu-toggle');
+        const customControls = document.querySelector('.custom-controls');
+
+        // Toggle play and pause functionality
+        function playPauseVideo() {
+            if (video.paused) {
+                video.play();
+                document.querySelector('.custom-controls button:first-child i').classList.replace('fa-play', 'fa-pause');
+            } else {
+                video.pause();
+                document.querySelector('.custom-controls button:first-child i').classList.replace('fa-pause', 'fa-play');
+            }
+        }
+
+        // Toggle mute/unmute functionality
+        function toggleMute() {
+            video.muted = !video.muted;
+            muteButton.querySelector('i').classList.toggle('fa-volume-mute');
+            muteButton.querySelector('i').classList.toggle('fa-volume-up');
+        }
+
+        // Toggle captions on/off
+        function toggleCaptions() {
+            const tracks = video.textTracks;
+            for (let i = 0; i < tracks.length; i++) {
+                tracks[i].mode = tracks[i].mode === 'showing' ? 'hidden' : 'showing';
+            }
+        }
+
+        // Toggle speech text visibility
+        function toggleSpeechText() {
+            speechText.style.display = speechText.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Update video speed
+        function updateSpeed(value) {
+            document.getElementById('speedValue').textContent = `${parseFloat((value * 100) / 2).toFixed(1)}%/2`;
+            video.playbackRate = parseFloat(value);
+
+
+        }
+
+        // Update video volume
+        function updateVolume(value) {
+            document.getElementById('volumeValue').textContent = `${parseFloat(value * 100).toFixed(1)}%/100`;
+
+            video.volume = parseFloat(value);
+
+            video.volume = parseFloat(value);
+
+        }
+
+        // Zoom in the video
+        function zoomInVideo() {
+            const value = (parseFloat(video.style.transform?.match(/scale\((\d*\.?\d+)\)/)?.[1] || 1) + 0.1).toFixed(1)
+            document.getElementById('zoomValue').textContent = `${parseFloat((value * 10) / 100).toFixed(1)}%`;
+
+            video.style.transform = `scale(${value})`;
+
+            video.style.transform = `scale(${value})`;
+
+
+        }
+
+        // Zoom out the video
+        function zoomOutVideo() {
+            const value = Math.max(1, (parseFloat(video.style.transform?.match(/scale\((\d*\.?\d+)\)/)?.[1] || 1) - 0.1).toFixed(1))
+            document.getElementById('zoomValue').textContent = `${value}%`;
+
+            video.style.transform = `scale(${value})`;
+        }
+
+
+
+        // Seek to a specific part of the video when clicking the progress bar
+        function seekVideo(event) {
+            const rect = progressContainer.getBoundingClientRect();
+            const offsetX = event.clientX - rect.left;
+            const width = rect.width;
+            const seekTime = (offsetX / width) * video.duration;
+            video.currentTime = seekTime;
+        }
+
+        // Update progress bar as video plays
+        video.addEventListener('timeupdate', () => {
+            const progressPercent = (video.currentTime / video.duration) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+        });
+
+        // Show the next button when the video ends
+        video.addEventListener('ended', () => {
+            nextButton.style.display = 'block';
+        });
+
+        // Hide the next button when the video is playing
+        video.addEventListener('play', () => {
+            nextButton.style.display = 'none';
+        });
+
+
+        // Placeholder for the next video functionality
+        function nextVideo() {
+            alert('Load next video functionality!');
+        }
+
+
+
+        // Toggle settings menu visibility
+        function toggleSettings() {
+            settingsMenu.classList.toggle('active');
+        }
+
+
+        // Go fullscreen
+        function goFullScreen() {
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
+            } else if (video.mozRequestFullScreen) { /* Firefox */
+                video.mozRequestFullScreen();
+            } else if (video.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                video.webkitRequestFullscreen();
+            } else if (video.msRequestFullscreen) { /* IE/Edge */
+                video.msRequestFullscreen();
+            }
+        }
+
+        // Next video function (placeholder for actual video switching)
+        function nextVideo() {
+            alert('Load the next video functionality here.');
+        }
+
+        // Toggle main menu visibility
+        function toggleMainMenu() {
+            customControls.style.display = customControls.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        document.querySelector('.custom-controls button:first-child i').classList.replace('fa-play', 'fa-pause');
+
+
+        document.querySelector('.custom-controls button:first-child i').classList.replace('fa-play', 'fa-pause');
+
+        // playPauseVideo()
+        //toggleMute()
+
+
+    </script>
+
 </body>
 
 </html>

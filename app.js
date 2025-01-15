@@ -28,13 +28,10 @@ document.addEventListener('DOMContentLoaded', (e) => {
     window.addEventListener('load', router);
     window.addEventListener('hashchange', router);
     
-    if (localStorage.getItem('current_page') == './pages/home.html') {
+    if (localStorage.getItem('current_page') === './pages/home.html') {
         
-    }else if (localStorage.getItem('current_page') == './pages/player_video.html') {
+    }else if (localStorage.getItem('current_page') === './pages/player_video.html') {
         
-        //
-    }else if (localStorage.getItem('current_page') == './pages/player_video.html') {
-        alert("Ola video player")
         /**
          *  This code below is used to add the script tag with
          * the js file path specific of the product page
@@ -47,20 +44,6 @@ document.addEventListener('DOMContentLoaded', (e) => {
         removeCanvasChildElement(body, old)
         body.appendChild(script)
 
-    }else if (localStorage.getItem('current_page') == './pages/visualizer.html') {
-        
-
-        /**
-         *  This code below is used to add the script tag with
-         * the js file path specific of the visualizer page
-         */
-        let body = document.querySelector('body')        
-        let script = document.createElement('script')
-        script.setAttribute('id', "visualization")
-        script.setAttribute('src', "js/visualization.js")
-        const old = document.getElementById("visualization")
-        removeCanvasChildElement(body, old)
-        body.appendChild(script)
     }
 
    
