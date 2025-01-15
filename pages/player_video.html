@@ -1,0 +1,206 @@
+
+<style>
+    body {
+        background-color: #121212;
+        color: white;
+    }
+
+    .video-container {
+        max-width: 800px;
+        margin: auto;
+        position: relative;
+        border: 2px solid #333;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: black;
+    }
+
+    #videoPlayer {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    #videoPlayer::-webkit-media-controls {
+        display: none;
+        /* Hide default controls */
+    }
+
+    .custom-controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .custom-controls button {
+        background-color: transparent;
+        color: white;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .custom-controls button:hover {
+        color: #007bff;
+    }
+
+    .caption-box {
+        text-align: left;
+        padding: 10px;
+        font-size: 16px;
+        color: #ccc;
+        display: none;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        margin-top: 10px;
+    }
+
+    .settings-menu {
+        position: absolute;
+        bottom: 50px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        display: none;
+        transition: all 0.3s ease;
+    }
+
+    .settings-menu button {
+        background-color: transparent;
+        color: white;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .settings-menu.active {
+        display: block;
+    }
+
+    .settings-menu label {
+        font-size: 14px;
+        margin-right: 10px;
+    }
+
+    #progress-bar {
+        width: 100%;
+        height: 5px;
+        background-color: #444;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        cursor: pointer;
+    }
+
+    #progress {
+        height: 100%;
+        width: 0;
+        background-color: rgb(228, 52, 161);
+    }
+
+    .tooltip {
+        position: absolute;
+        bottom: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        display: none;
+    }
+
+    .next-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #0e010b;
+        color: white;
+        border: 2.6px solid #d13da5;
+        padding: 15px 30px;
+        border-radius: 8px;
+        font-size: 18px;
+        display: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+    }
+
+    .next-button i {
+        margin-right: 10px;
+    }
+
+    .next-button:hover {
+        background-color: rgba(100, 36, 184, 0.582);
+    }
+
+    .menu-toggle {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: none;
+        font-size: 20px;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .menu-toggle:hover {
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    @media (max-width: 768px) {
+        .caption-box {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+
+<div class="container mt-5">
+    <h1 class="text-center">Professional Video Player</h1>
+    <div class="video-container">
+        <video id="videoPlayer" autoplay muted playsinline>
+            <source
+                src="http://localhost:5000/video/get/AI_Agents_And_Agentic_Reasoning.mp4"
+                type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div id="progress-bar" onclick="seekVideo(event)">
+            <div id="progress"></div>
+        </div>
+        <div class="custom-controls">
+            <button onclick="playPauseVideo()"><i class="fas fa-play"></i></button>
+            <button onclick="toggleMute()" id="muteButton"><i class="fas fa-volume-mute"></i></button>
+            <button onclick="toggleCaptions()"><i class="fas fa-closed-captioning"></i></button>
+            <button onclick="toggleSpeechText()"><i class="fas fa-comment"></i></button>
+            <button onclick="toggleSettings()"><i class="fas fa-cog"></i></button>
+            <button onclick="goFullScreen()"><i class="fas fa-expand"></i></button>
+            <button onclick="nextVideo()"><i class="fas fa-step-forward"></i></button>
+        </div>
+        <button class="next-button" id="nextButton" onclick="nextVideo()">
+            <i class="fas fa-step-forward"></i> Next
+        </button>
+        <button class="menu-toggle" onclick="toggleMainMenu()"><i class="fas fa-bars"></i></button>
+    </div>
+    <div id="speechText" class="caption-box">Speech text will appear here...</div>
+
+
+</div>
