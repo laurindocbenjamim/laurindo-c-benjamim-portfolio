@@ -7,7 +7,7 @@ from api.video.video_resource import VideoResource
 
 
 
-app = Flask(__name__,static_folder='static')
+app = Flask(__name__,instance_relative_config=True,static_folder='static')
 api = Api(app)
 
 
@@ -16,6 +16,21 @@ def generate_strong_secret_key(length=32):
     return ''.join(secrets.choice(alphabet) for _ in range(length))
 
 def create_app():
+
+    
+    #api = Api(app)
+
+    """
+    These options can be added to a Set-Cookie header to improve their security. Flask has 
+    configuration options to set these on the session cookie. 
+    They can be set on other cookies too.
+    """
+    app.config.update(
+        SESSION_COOKIE_SECURE=True,
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE='Lax',
+        #PERMANENT_SESSION_LIFETIME=600,
+    )
 
     app.config.from_object(TestingConfig)
 
