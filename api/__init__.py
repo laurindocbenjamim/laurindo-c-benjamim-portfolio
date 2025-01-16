@@ -2,14 +2,20 @@ import secrets
 import string
 from flask import Flask, send_file
 from flask_restful import Api, Resource
+from api.dependencies import ProxyFix, CORS
 from api.config import TestingConfig
 from api.video.video_resource import VideoResource
+from api.upload_factory.upload_controller import FileUploadResource
 
 
 
 app = Flask(__name__,instance_relative_config=True,static_folder='static')
 api = Api(app)
-
+# Enable CORS for all domains on all routes
+"""error ccess to fetch at 'http://127.0.0.1:5000/API/upload' from origin 'null' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled"""
+CORS(app)
+# Apply security middlewares 
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
 def generate_strong_secret_key(length=32): 
     alphabet = string.ascii_letters + string.digits + string.punctuation 
@@ -36,6 +42,9 @@ def create_app():
 
     #API  
     api.add_resource(VideoResource, '/video/get/<string:filename>')
+
+    # Add resource endpoints 
+    api.add_resource(FileUploadResource, '/API/upload')
 
     #
     @app.route('/videos')

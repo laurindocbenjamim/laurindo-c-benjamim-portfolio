@@ -549,8 +549,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-6 mb-1">
-                                            <button type="submit" id="btnSubmit" class="btn btn-primary btn-lg px-4 me-sm-3">
+                                        <div class="col-4 mb-1">
+                                            <button type="submit" class="btn btn-primary btn-lg px-4 me-sm-3">
                                                 Submit
                                             </button>
                                         </div>
@@ -624,8 +624,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             //const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-            const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
-  <span role="status">Loading...</span>`;
+            const loadingSpinner = document.getElementById("loading-spinner");
             const form = document.getElementById('cvForm')
 
             const jobRequirement = document.getElementById('jobRequirement')
@@ -657,81 +656,39 @@
             })
 
             // Submiting the form 
-            form.addEventListener('submit', (event) => {
-                event.preventDefault()
+            form.addEventListener('submit', (e) => {
+                e.preventDefault()
                 if (!form.checkValidity()) {
-                    event.stopPropagation();
+                    e.stopPropagation();
                     form.classList.add("was-validated");
                     return;
                 }
 
-                let endpoint = window.location.origin +'';
-                document.getElementById('btnSubmit').innerHTML = spinnerHtml
                 const headers = new Headers()
                 //headers.append('X-CSRF-Token', csrfToken)
                 //headers.append("Authorization", ` Bearer ${csrfToken}`);
 
+                // Validate Video File
+                const inputElement = document.getElementById("videoFile");
+                let videoFile = ""
 
-                // Validate document File
-                const jobRequirements = document.getElementById("jobRequirements");
-                let jobRequirementsFile = ""
-
-                try { jobRequirementsFile = jobRequirements.files[0]; } catch (err) { }
-
-                // Validate file size (example: max 2MB) 
-                const formData1 = new FormData(event.target)
-                alert(formData1.get('contentOrigin'))
-                const file = formData1.get('jobRequirements');
-                //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
-                if (file.size > 2 * 1024 * 1024) {
-                    document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-                    throw Error('File size must be less than 2MB')
+                try { videoFile = inputElement.files[0]; } catch (err) { }
+                if (videoFile && typeof videoFile === 'object') {
+                if (!videoFile) {
+                    document.getElementById("videoFile").classList.add("is-invalid");
+                    return;
+                }
+                } else {
+                videoFile = inputElement.value;
                 }
 
+                //Array.from(videoFiles).forEach(file => {
+                //  formData.append("videos[]", file);
+                //});
 
-                document.getElementById('btnSubmit').innerHTML = spinnerHtml
-                endpoint = 'http://127.0.0.1:5000/API/upload'
-                fetch(endpoint, {
-                    method: 'POST',
-                    body: formData1,//JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
-                    //headers: headers
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.text();
-                        } else {
-                            throw new Error(`${response.status} ${response.statusText} ${response.url}`);
-                        }
-                    })
-                    .then(data => {
-                        const resp = JSON.parse(data)
-                        console.log(resp)
-                        document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-                        /*
-                        loadingSpinner.style.display = 'none';
-                       
-                        //form.querySelector('.loading').classList.remove('d-block');
-                        if (resp.status_code === 200) {
-                            btnSave.style.backgroundColor = "#0ed160"
-                            btnSave.style.color = "#FFF"
-                            form.querySelector('.sent-message').classList.add('d-block');
-                            form.reset();
-                            setTimeout((e) => {
-                                window.open(`${endpoint}?course=${courseName}`, '_self')
-                            }, 400)
-                        } else {
-                            btnSave.style.backgroundColor = "red"
-                            btnSave.style.color = "#FFF"
-                            throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
-                        }*/
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                        document.getElementById('btnSubmit').innerHTML = '<span class="text-danger">Submit</span>';
-                        //displayError(form, error);
-                    });
-
-
+                // Show Loading Spinner
+                loadingSpinner.style.display = "flex";
+                saveObject(form, csrfToken, loadingSpinner)
             })
 
             /*
@@ -756,7 +713,7 @@
             })
                 */
         })
-        document.getElementById('submitB').addEventListener('click', () => {
+        document.getElementById('submitBtn').addEventListener('click', () => {
             const cvFile = document.getElementById('cvUpload').files[0];
             const jobFile = document.getElementById('jobRequirementsFile').files[0];
             const jobText = document.getElementById('jobRequirementsTextarea').value;

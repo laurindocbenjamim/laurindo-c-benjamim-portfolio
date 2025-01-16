@@ -3,6 +3,9 @@ import os
 
 class Config:
     UPLOAD_VIDEO_FOLDER='video_uploads'
+    MAX_CONTENT_LENGTH=16 * 1024 * 1024 # 16 MB limit for file uploads
+    UPLOAD_EXTENSIONS_IMAGE_ALLOWED = ['.jpg', '.png', '.gif']
+    UPLOAD_EXTENSIONS_VIDEO_ALLOWED = ['.mp4', '.mkv', '.wave']
     #@property
     #def UPLOAD_VIDEO_FOLDER(self): return 'video_uploads'
 
