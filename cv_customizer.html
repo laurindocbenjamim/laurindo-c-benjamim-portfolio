@@ -491,57 +491,79 @@
 
                 <div class="container">
                     <div class="header">
-                        <h1><i class="fas fa-file-alt"></i> CV Customization Tool</h1>
-                        <p class="text-muted">Adjust your CV to match job requirements effortlessly</p>
+                        <h1 class="text-light"><i class="fas fa-file-alt"></i> CV Customization Tool</h1>
+                        <p class="text-muted text-light-emphasis">Adjust your CV to match job requirements effortlessly</p>
                     </div>
-                    <div class="col-md-3 col-lg-5 mt-5" >
-                        <h4 class="mb-3">Billing address</h4>
-                        <form id="cvForm" novalidate enctype="multipart/form-data">
-                            <div class="row g-3">
+                    <style>
+                        #form{
+                            padding: 2rem;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+                        border-radius: 8px;
+                        overflow: hidden;
+                        background-color: rgb(41, 40, 40);
+                        }
+                    </style>
 
-                                <div class="mb-3">
-                                    <div class="col-8">
-                                        <label for="cvUpload" class="form-label">Upload your CV (Word or
-                                            PDF):</label>
-                                        <input class="form-control" type="file" name="cvUpload" id="cvUpload"
-                                            accept=".pdf, .doc, .docx" required>
-                                        <div class="invalid-feedback">
-                                            Valid CV is required.
+                    <div class="px-1 pt-1 my-2 text-center border-bottom" >
+                        <div class="col-lg-6 mx-auto">
+                            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5" id="form">
+                                <form id="cvForm" class="needs-validation" novalidate enctype="multipart/form-data">
+
+                                    <div class="row g-3" style="text-align: left;">
+
+                                        <div class="mb-2">
+                                            <div class="col-12">
+                                                <label for="cvUpload" class="form-label">Upload your CV (Word or
+                                                    PDF):</label>
+                                                <input class="form-control" type="file" name="cvUpload" id="cvUpload"
+                                                    accept=".pdf, .doc, .docx" required>
+                                                <div class="invalid-feedback">
+                                                    Valid CV is required.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <div class="col-12">
+                                                <label for="contentOrigin" class="form-label">JOB content
+                                                    origin:</label>
+                                                <select name="contentOrigin" class="form-control" id="contentOrigin"
+                                                    required>
+                                                    <option value="">Select the ontent origin...</option>
+                                                    <option value="file">File</option>
+                                                    <option value="url">URL</option>
+                                                    <option value="normal-text">Normal Text</option>
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    Valid job content origin is required.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <div class="col-12">
+                                                <span id="jobRequirement"></span>
+                                                <div class="invalid-feedback">
+                                                    Valid course name is required.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 mb-1">
+                                            <button type="submit" class="btn btn-primary btn-lg px-4 me-sm-3">
+                                                Submit
+                                                </button>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <div class="col-8">
-                                        <label for="contentOrigin" class="form-label">JOB content origin:</label>
-                                        <select name="contentOrigin" class="form-control" id="contentOrigin"
-                                            required>
-                                            <option value="">Select the ontent origin...</option>
-                                            <option value="file">File</option>
-                                            <option value="url">URL</option>
-                                            <option value="normal-text">Normal Text</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Valid job content origin is required.
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <div class="col-8" >                                        
-                                            <span id="jobRequirement"></span>
-                                        <div class="invalid-feedback">
-                                            Valid course name is required.
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-5">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
+                                    
+                                </form>
                             </div>
-                        </form>
+                        </div>
+
                     </div>
+
+
+
+                    
 
                     <div class="card p-4 mt-4 d-none" id="resultCard">
                         <h4 class="mb-3">Adjusted CV:</h4>
