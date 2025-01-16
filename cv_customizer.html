@@ -388,30 +388,35 @@
         </div>
     </header>
 
-<style>
-    .container {
+    <style>
+        .container {
             margin-top: 50px;
         }
+
         .card {
             border: none;
             border-radius: 10px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .btn-custom {
             background-color: #007bff;
             color: white;
         }
+
         .btn-custom:hover {
             background-color: #0056b3;
         }
+
         .header {
             text-align: center;
             margin-bottom: 30px;
         }
+
         .header h1 {
             color: #333;
         }
-</style>
+    </style>
 
     <div class="container-fluid">
         <div class="row">
@@ -434,14 +439,14 @@
                                 </a>
                             </li>
                             <li class="nav-item"></li>
-                            <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="cv_customizer.html">
+                            <a class="nav-link d-flex align-items-center gap-2" aria-current="page"
+                                href="cv_customizer.html">
                                 <i class="fa-regular fa-circle-user"></i>
                                 CV Customizer
                             </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2"
-                                    href="#" onclick="">
+                                <a class="nav-link d-flex align-items-center gap-2" href="#" onclick="">
                                     <i class="fa fa-upload"></i>
                                     Upload
                                 </a>
@@ -483,35 +488,71 @@
             </div>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-             
+
                 <div class="container">
                     <div class="header">
                         <h1><i class="fas fa-file-alt"></i> CV Customization Tool</h1>
                         <p class="text-muted">Adjust your CV to match job requirements effortlessly</p>
                     </div>
-                    <div class="card p-4">
-                        <form id="cvForm">
-                            <div class="mb-4">
-                                <label for="cvUpload" class="form-label">Upload your CV (Word or PDF):</label>
-                                <input class="form-control" type="file" id="cvUpload" accept=".pdf, .doc, .docx" required>
+                    <div class="col-md-3 col-lg-5 mt-5" >
+                        <h4 class="mb-3">Billing address</h4>
+                        <form id="cvForm" novalidate enctype="multipart/form-data">
+                            <div class="row g-3">
+
+                                <div class="mb-3">
+                                    <div class="col-8">
+                                        <label for="cvUpload" class="form-label">Upload your CV (Word or
+                                            PDF):</label>
+                                        <input class="form-control" type="file" name="cvUpload" id="cvUpload"
+                                            accept=".pdf, .doc, .docx" required>
+                                        <div class="invalid-feedback">
+                                            Valid CV is required.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="col-8">
+                                        <label for="contentOrigin" class="form-label">JOB content origin:</label>
+                                        <select name="contentOrigin" class="form-control" id="contentOrigin"
+                                            required>
+                                            <option value="">Select the ontent origin...</option>
+                                            <option value="file">File</option>
+                                            <option value="url">URL</option>
+                                            <option value="normal-text">Normal Text</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Valid job content origin is required.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="col-8" >                                        
+                                            <span id="jobRequirement"></span>
+                                        <div class="invalid-feedback">
+                                            Valid course name is required.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-5">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
                             </div>
-            
-                            <div class="mb-4">
-                                <label for="jobRequirements" class="form-label">Provide Job Requirements:</label>
-                                <input class="form-control mb-2" type="file" id="jobRequirementsFile" accept=".pdf, .doc, .docx">
-                                <textarea class="form-control" id="jobRequirementsTextarea" rows="4" placeholder="Or input requirements manually..."></textarea>
-                            </div>
-            
-                            <button type="button" class="btn btn-custom w-100" id="submitBtn"><i class="fas fa-magic"></i> Customize CV</button>
                         </form>
                     </div>
-                    
+
                     <div class="card p-4 mt-4 d-none" id="resultCard">
                         <h4 class="mb-3">Adjusted CV:</h4>
-                        <div id="cvPreview" class="mb-4" style="white-space: pre-wrap; background: #e9ecef; padding: 15px; border-radius: 5px; overflow-x: auto;">Your adjusted CV will appear here...</div>
+                        <div id="cvPreview" class="mb-4"
+                            style="white-space: pre-wrap; background: #e9ecef; padding: 15px; border-radius: 5px; overflow-x: auto;">
+                            Your adjusted CV will appear here...</div>
                         <div class="d-flex justify-content-end">
-                            <button class="btn btn-success me-2" id="downloadWord"><i class="fas fa-file-word"></i> Download as Word</button>
-                            <button class="btn btn-danger" id="downloadPDF"><i class="fas fa-file-pdf"></i> Download as PDF</button>
+                            <button class="btn btn-success me-2" id="downloadWord"><i class="fas fa-file-word"></i>
+                                Download as Word</button>
+                            <button class="btn btn-danger" id="downloadPDF"><i class="fas fa-file-pdf"></i> Download as
+                                PDF</button>
                         </div>
                     </div>
                 </div>
@@ -547,7 +588,7 @@
     </div>
 
     <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script> -->
-   
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="{{ url_for('static', filename='assets/js/sidebars.js')}}"></script>
@@ -557,33 +598,85 @@
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 
     <script>
-    document.getElementById('submitBtn').addEventListener('click', () => {
-        const cvFile = document.getElementById('cvUpload').files[0];
-        const jobFile = document.getElementById('jobRequirementsFile').files[0];
-        const jobText = document.getElementById('jobRequirementsTextarea').value;
 
-        if (!cvFile || (!jobFile && !jobText.trim())) {
-            alert('Please upload your CV and provide job requirements.');
-            return;
-        }
+        document.addEventListener('DOMContentLoaded', () => {
 
-        // Placeholder: Send files and text to AI API
-        setTimeout(() => {
-            const adjustedCV = "[Adjusted CV content goes here.]";
-            document.getElementById('cvPreview').textContent = adjustedCV;
-            document.getElementById('resultCard').classList.remove('d-none');
-        }, 1000);
-    });
+            const jobRequirement = document.getElementById('jobRequirement')
 
-    document.getElementById('downloadWord').addEventListener('click', () => {
-        alert('Download as Word is not yet implemented.');
-    });
+            document.getElementById('contentOrigin').addEventListener('change', (e) => {
 
-    document.getElementById('downloadPDF').addEventListener('click', () => {
-        alert('Download as PDF is not yet implemented.');
-    });
-</script>
+                if (e.target.value === 'file') {
+                    jobRequirement.innerHTML = `
+                    <label for="jobRequirements" class="form-label">Provide Job
+                                            Requirements:</label>
+                <input class="form-control mb-2" type="file" name="jobRequirements" id="jobRequirementsFile" accept=".pdf, .doc, .docx" required>
+                                    
+                    `;
+                } else if (e.target.value === 'url') {
+                    jobRequirement.innerHTML = `
+                    <label for="jobRequirements" class="form-label">Provide Job
+                                            Requirements:</label>
+                    <input class="form-control mb-2" type="text" name="jobRequirements" id="jobRequirementsFile" required>
+                                   
+                    `;
+                } else if (e.target.value === 'normal-text') {
+                    jobRequirement.innerHTML = ` 
+                    <label for="jobRequirements" class="form-label">Provide Job
+                                            Requirements:</label>                 
+                    <textarea class="form-control" name="jobRequirements" id="jobRequirementsTextarea" rows="4" placeholder="Or input requirements manually..." required></textarea>
+                                   
+                    `;
+                }
+            })
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+            document.getElementById('cvForm').addEventListener('submit', (e) => {
+                e.preventDefault()
+                const headers = new Headers()
+
+                const form = e.target
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                // Validate the form
+                if (!form.checkValidity()) {
+                    form.classList.add("was-validated");
+                    return;
+                }
+
+                const formData = new FormData(form)
+
+                alert(formData.get('contentOrigin'))
+            })
+        })
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            const cvFile = document.getElementById('cvUpload').files[0];
+            const jobFile = document.getElementById('jobRequirementsFile').files[0];
+            const jobText = document.getElementById('jobRequirementsTextarea').value;
+
+            if (!cvFile || (!jobFile && !jobText.trim())) {
+                alert('Please upload your CV and provide job requirements.');
+                return;
+            }
+
+            // Placeholder: Send files and text to AI API
+            setTimeout(() => {
+                const adjustedCV = "[Adjusted CV content goes here.]";
+                document.getElementById('cvPreview').textContent = adjustedCV;
+                document.getElementById('resultCard').classList.remove('d-none');
+            }, 1000);
+        });
+
+        document.getElementById('downloadWord').addEventListener('click', () => {
+            alert('Download as Word is not yet implemented.');
+        });
+
+        document.getElementById('downloadPDF').addEventListener('click', () => {
+            alert('Download as PDF is not yet implemented.');
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
