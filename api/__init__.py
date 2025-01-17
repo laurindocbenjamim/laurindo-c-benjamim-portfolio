@@ -6,6 +6,7 @@ from api.dependencies import ProxyFix, CORS
 from api.config import TestingConfig
 from api.video.video_resource import VideoResource
 from api.upload_factory.upload_controller import FileUploadResource
+from api.upload_factory.upload_multiple_controller import FilesUploadResource
 from api.utils.cors_police import allowed_domains_to_api_route
 from api.utils.cors_police import allowed_domains_to_upload_route
 from api.utils.cors_police import allowed_domains_to_files_route
@@ -23,7 +24,7 @@ you can configure resources accordingly:
 cors = CORS(app, resources={
     r"/upload": {"origins": allowed_domains_to_upload_route()},
     r"/API/upload": {"origins": allowed_domains_to_upload_route()},
-    r"/API/files": {"origins": allowed_domains_to_files_route()},
+    r"/API/files-storage": {"origins": allowed_domains_to_files_route()},
     r"/API/*": {"origins": allowed_domains_to_api_route()},
 })
 ## Enable CORS for specific domains 
@@ -58,10 +59,12 @@ def create_app():
     # Apply security middlewares 
     app.wsgi_app = ProxyFix(app.wsgi_app)
     #API  
-    api.add_resource(VideoResource, '/video/get/<string:filename>')
+    api.add_resource(VideoResource, '/API/files-storage/video/get/<string:filename>')
 
     # Add resource endpoints 
     api.add_resource(FileUploadResource, '/API/upload')
+
+    api.add_resource(FilesUploadResource, '/API/files-storage/upload')
 
     #
     @app.route('/videos')

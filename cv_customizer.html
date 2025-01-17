@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="22222">
     <meta name="author" content="Laurindo C.Benjamim">
     <meta name="generator" content="Laurindo C.Benjamim">
-    <title>Home</title>
+    <title>CV Customizer - Home</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
 
@@ -446,9 +446,9 @@
                             </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="#" onclick="">
+                                <a class="nav-link d-flex align-items-center gap-2" href="upload-videos.html" onclick="">
                                     <i class="fa fa-upload"></i>
-                                    Upload
+                                    Upload Videos
                                 </a>
 
                             </li>
@@ -714,7 +714,7 @@
                     //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
                     if (file.size > 2 * 1024 * 1024) {
                         document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-                        throw Error('File size must be less than 2MB')
+                        throw new Error('File size must be less than 2MB')
                     }
                 }
 

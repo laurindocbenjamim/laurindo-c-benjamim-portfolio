@@ -1,28 +1,23 @@
-from api.dependencies import os, uuid
-from api.dependencies import request, current_app
+from api.dependencies import os
+from api.dependencies import uuid
+from api.dependencies import current_app
+from api.dependencies import request
 from api.dependencies import jsonify
 from api.dependencies import Resource
 from api.dependencies import secure_filename
 from api.utils.validators import validate_file
 
-import os
-import uuid
-from flask import request, jsonify, current_app
-from flask_restful import Resource
-from werkzeug.utils import secure_filename
-from utils.validators import validate_file
-
-class FileUploadResource(Resource):
+class FilesUploadResource(Resource):
     def post(self):
         """ 
         Handle POST requests to upload files. 
         This method checks for files in the request, validates them, 
         and uploads them to the specified directory.
         """
-        if 'cvUpload' not in request.files:
+        if 'file' not in request.files:
             return jsonify({"error": "No file part"})
         
-        files = request.files.getlist('cvUpload')
+        files = request.files.getlist('file')
         
         if len(files) == 0 or (len(files) == 1 and files[0].filename == ''):
             return jsonify({"error": "No selected file"})
