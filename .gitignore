@@ -1,3 +1,9 @@
 __pycache__
 *.mp4
+*.mkv
+*.wave
+*.avi
+*.mp3
+*.pdf
+*.docx
 .env

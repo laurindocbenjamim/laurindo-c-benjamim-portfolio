@@ -3,4 +3,5 @@ Flask-RESTful
 Werkzeug
 Flask-SQLAlchemy
 Flask-CORS
+sphinx
 
