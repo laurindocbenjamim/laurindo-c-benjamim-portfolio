@@ -549,8 +549,17 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="mb-2">
+                                            <div class="col-12">
+                                                <div class="success-message text-success" id="success-message"></div>
+                                                <div class="error-message text-danger" id="error-message"></div>
+                                            </div>
+                                        </div>
+
                                         <div class="col-6 mb-1">
-                                            <button type="submit" id="btnSubmit" class="btn btn-primary btn-lg px-4 me-sm-3">
+                                            <button type="submit" id="btnSubmit"
+                                                class="btn btn-primary btn-lg px-4 me-sm-3">
                                                 Submit
                                             </button>
                                         </div>
@@ -656,6 +665,21 @@
                 }
             })
 
+            function validate_file(file) {
+                try {
+                    jobRequirementsFile = file[0];
+                    if (!jobRequirementsFile) {
+                        throw Error("File not found or not selected!")
+                    }
+                } catch (err) { }
+                // Validate file size (example: max 2MB) 
+
+                //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
+                if (file.size > 2 * 1024 * 1024) {
+                    document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+                    throw Error('File size must be less than 2MB')
+                }
+            }
             // Submiting the form 
             form.addEventListener('submit', (event) => {
                 event.preventDefault()
@@ -665,35 +689,42 @@
                     return;
                 }
 
-                let endpoint = window.location.origin +'';
+                let endpoint = window.location.origin + '';
                 document.getElementById('btnSubmit').innerHTML = spinnerHtml
                 const headers = new Headers()
                 //headers.append('X-CSRF-Token', csrfToken)
                 //headers.append("Authorization", ` Bearer ${csrfToken}`);
 
+                const formData = new FormData(event.target)
 
                 // Validate document File
                 const jobRequirements = document.getElementById("jobRequirements");
                 let jobRequirementsFile = ""
 
-                try { jobRequirementsFile = jobRequirements.files[0]; } catch (err) { }
+                if (formData.get('contentOrigin') === 'file') {
+                    try {
+                        jobRequirementsFile = jobRequirements.files[0];
+                        if (!jobRequirementsFile) {
+                            throw Error("File not found or not selected!")
+                        }
+                    } catch (err) { }
+                    // Validate file size (example: max 2MB) 
 
-                // Validate file size (example: max 2MB) 
-                const formData1 = new FormData(event.target)
-                alert(formData1.get('contentOrigin'))
-                const file = formData1.get('jobRequirements');
-                //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
-                if (file.size > 2 * 1024 * 1024) {
-                    document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-                    throw Error('File size must be less than 2MB')
+                    const file = formData.get('jobRequirements');
+                    //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
+                    if (file.size > 2 * 1024 * 1024) {
+                        document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+                        throw Error('File size must be less than 2MB')
+                    }
                 }
+
 
 
                 document.getElementById('btnSubmit').innerHTML = spinnerHtml
                 endpoint = 'http://127.0.0.1:5000/API/upload'
                 fetch(endpoint, {
                     method: 'POST',
-                    body: formData1,//JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
+                    body: formData,//JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
                     //headers: headers
                 })
                     .then(response => {
@@ -705,6 +736,13 @@
                     })
                     .then(data => {
                         const resp = JSON.parse(data)
+                        if(resp.error){
+                            document.getElementById('error-message').textContent=resp.error
+                            document.getElementById('success-message').textContent=''
+                        }else {
+                            document.getElementById('error-message').textContent=''
+                            document.getElementById('success-message').textContent=resp
+                        }
                         console.log(resp)
                         document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
                         /*

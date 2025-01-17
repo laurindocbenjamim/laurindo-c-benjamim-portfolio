@@ -6,14 +6,30 @@ from api.dependencies import ProxyFix, CORS
 from api.config import TestingConfig
 from api.video.video_resource import VideoResource
 from api.upload_factory.upload_controller import FileUploadResource
+from api.utils.cors_police import allowed_domains_to_api_route
+from api.utils.cors_police import allowed_domains_to_upload_route
+from api.utils.cors_police import allowed_domains_to_files_route
 
 
 
 app = Flask(__name__,instance_relative_config=True,static_folder='static')
 api = Api(app)
+"""
+You can modify the origins list to include the domains you wish to allow. 
+If you want to allow multiple paths or endpoints with different origins, 
+you can configure resources accordingly:
+
+"""
+cors = CORS(app, resources={
+    r"/upload": {"origins": allowed_domains_to_upload_route()},
+    r"/API/upload": {"origins": allowed_domains_to_upload_route()},
+    r"/API/files": {"origins": allowed_domains_to_files_route()},
+    r"/API/*": {"origins": allowed_domains_to_api_route()},
+})
+## Enable CORS for specific domains 
 # Enable CORS for all domains on all routes
 """error ccess to fetch at 'http://127.0.0.1:5000/API/upload' from origin 'null' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled"""
-CORS(app)
+#CORS(app)
 # Apply security middlewares 
 app.wsgi_app = ProxyFix(app.wsgi_app)
 
