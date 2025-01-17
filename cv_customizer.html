@@ -735,13 +735,14 @@
                         }
                     })
                     .then(data => {
-                        const resp = JSON.parse(data)
+                        const resp = JSON.parse(data);
                         if(resp.error){
-                            document.getElementById('error-message').textContent=resp.error
-                            document.getElementById('success-message').textContent=''
+                            document.getElementById('error-message').textContent=resp.error;
+                            document.getElementById('success-message').textContent='';
                         }else {
-                            document.getElementById('error-message').textContent=''
-                            document.getElementById('success-message').textContent=resp
+                            form.reset();
+                            document.getElementById('error-message').textContent='';
+                            document.getElementById('success-message').textContent=resp.message;
                         }
                         console.log(resp)
                         document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
@@ -764,8 +765,10 @@
                         }*/
                     })
                     .catch((error) => {
+                        document.getElementById('error-message').textContent=error
+                        document.getElementById('success-message').textContent=''
                         console.log(error)
-                        document.getElementById('btnSubmit').innerHTML = '<span class="text-danger">Submit</span>';
+                        //document.getElementById('btnSubmit').innerHTML = '<span class="text-danger">Submit</span>';
                         //displayError(form, error);
                     });
 

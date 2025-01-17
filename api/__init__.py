@@ -30,8 +30,7 @@ cors = CORS(app, resources={
 # Enable CORS for all domains on all routes
 """error ccess to fetch at 'http://127.0.0.1:5000/API/upload' from origin 'null' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled"""
 #CORS(app)
-# Apply security middlewares 
-app.wsgi_app = ProxyFix(app.wsgi_app)
+
 
 def generate_strong_secret_key(length=32): 
     alphabet = string.ascii_letters + string.digits + string.punctuation 
@@ -56,6 +55,8 @@ def create_app():
 
     app.config.from_object(TestingConfig)
 
+    # Apply security middlewares 
+    app.wsgi_app = ProxyFix(app.wsgi_app)
     #API  
     api.add_resource(VideoResource, '/video/get/<string:filename>')
 
