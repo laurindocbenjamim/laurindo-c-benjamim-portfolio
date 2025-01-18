@@ -7,6 +7,7 @@ from api.config import TestingConfig
 from api.video.video_resource import VideoResource
 from api.upload_factory.upload_controller import FileUploadResource
 from api.upload_factory.upload_multiple_controller import FilesUploadResource
+from api.endpoint_resources import load_restfull_endpoints
 from api.utils.cors_police import allowed_domains_to_api_route
 from api.utils.cors_police import allowed_domains_to_upload_route
 from api.utils.cors_police import allowed_domains_to_files_route
@@ -58,13 +59,10 @@ def create_app():
 
     # Apply security middlewares 
     app.wsgi_app = ProxyFix(app.wsgi_app)
-    #API  
-    api.add_resource(VideoResource, '/API/files-storage/video/get/<string:filename>')
 
-    # Add resource endpoints 
-    api.add_resource(FileUploadResource, '/API/upload')
-
-    api.add_resource(FilesUploadResource, '/API/files-storage/upload')
+    # Load the API endpoints
+    load_restfull_endpoints(api)
+    
 
     #
     @app.route('/videos')

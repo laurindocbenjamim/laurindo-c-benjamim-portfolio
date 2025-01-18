@@ -446,7 +446,8 @@
                             </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="upload-videos.html" onclick="">
+                                <a class="nav-link d-flex align-items-center gap-2" href="upload-videos.html"
+                                    onclick="">
                                     <i class="fa fa-upload"></i>
                                     Upload Videos
                                 </a>
@@ -517,7 +518,7 @@
                                                 <label for="cvUpload" class="form-label">Upload your CV (Word or
                                                     PDF):</label>
                                                 <input class="form-control" type="file" name="cvUpload" id="cvUpload"
-                                                    accept=".pdf, .doc, .docx" required>
+                                                    accept=".pdf, .doc, .docx" >
                                                 <div class="invalid-feedback">
                                                     Valid CV is required.
                                                 </div>
@@ -645,9 +646,10 @@
                     jobRequirement.innerHTML = `
                     <label for="jobRequirements" class="form-label">Provide Job
                                             Requirements:</label>
-                <input class="form-control mb-2" type="file" name="jobRequirements" id="jobRequirementsFile" accept=".pdf, .doc, .docx" required>
+                <input class="form-control mb-2" type="file" name="jobRequirements" id="jobRequirementsFile" accept=".pdf, .doc, .docx"  required>
                                     
                     `;
+                    //
                 } else if (e.target.value === 'url') {
                     jobRequirement.innerHTML = `
                     <label for="jobRequirements" class="form-label">Provide Job
@@ -665,19 +667,13 @@
                 }
             })
 
-            function validate_file(file) {
-                try {
-                    jobRequirementsFile = file[0];
-                    if (!jobRequirementsFile) {
-                        throw Error("File not found or not selected!")
-                    }
-                } catch (err) { }
+            function validateVideoSize(file, sizeMB) {
                 // Validate file size (example: max 2MB) 
 
                 //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
-                if (file.size > 2 * 1024 * 1024) {
+                if (file.size > sizeMB * 1024 * 1024) {
                     document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-                    throw Error('File size must be less than 2MB')
+                    throw new Error('File size must be less than or equal 16MB')
                 }
             }
             // Submiting the form 
@@ -712,9 +708,13 @@
 
                     const file = formData.get('jobRequirements');
                     //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
-                    if (file.size > 2 * 1024 * 1024) {
-                        document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-                        throw new Error('File size must be less than 2MB')
+
+                    try {
+                        validateVideoSize(file, 16)
+                    } catch (error) {
+                        document.getElementById('error-message').textContent = error;
+                        document.getElementById('success-message').textContent = '';
+                        return error
                     }
                 }
 
@@ -736,45 +736,26 @@
                     })
                     .then(data => {
                         const resp = JSON.parse(data);
-                        if(resp.error){
-                            document.getElementById('error-message').textContent=resp.error;
-                            document.getElementById('success-message').textContent='';
-                        }else {
+                        if (resp.error) {
+                            document.getElementById('error-message').textContent = resp.error;
+                            document.getElementById('success-message').textContent = '';
+                        } else {
                             form.reset();
-                            document.getElementById('error-message').textContent='';
-                            document.getElementById('success-message').textContent=resp.message;
+                            document.getElementById('error-message').textContent = '';
+                            document.getElementById('success-message').textContent = resp.message;
                         }
                         console.log(resp)
                         document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-                        /*
-                        loadingSpinner.style.display = 'none';
-                       
-                        //form.querySelector('.loading').classList.remove('d-block');
-                        if (resp.status_code === 200) {
-                            btnSave.style.backgroundColor = "#0ed160"
-                            btnSave.style.color = "#FFF"
-                            form.querySelector('.sent-message').classList.add('d-block');
-                            form.reset();
-                            setTimeout((e) => {
-                                window.open(`${endpoint}?course=${courseName}`, '_self')
-                            }, 400)
-                        } else {
-                            btnSave.style.backgroundColor = "red"
-                            btnSave.style.color = "#FFF"
-                            throw new Error(data ? data : 'Form submission failed and no error message returned from: ');
-                        }*/
+
                     })
                     .catch((error) => {
-                        document.getElementById('error-message').textContent=error
-                        document.getElementById('success-message').textContent=''
+                        document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+                        document.getElementById('error-message').textContent = error
+                        document.getElementById('success-message').textContent = ''
                         console.log(error)
-                        //document.getElementById('btnSubmit').innerHTML = '<span class="text-danger">Submit</span>';
-                        //displayError(form, error);
                     });
 
-
-            })
-
+            });
             /*
             document.getElementById('cvForm').addEventListener('submit', (e) => {
                 e.preventDefault()

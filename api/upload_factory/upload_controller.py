@@ -1,53 +1,30 @@
-from api.dependencies import os, uuid
-from api.dependencies import request, current_app
-from api.dependencies import jsonify
-from api.dependencies import Resource
-from api.dependencies import secure_filename
-from api.utils.validators import validate_file
+from api.dependencies import request,current_app, jsonify, Resource
+from api.upload_factory.file_upload import save_uploaded_file  # Import the file upload module
 
 class FileUploadResource(Resource):
     def post(self):
-        if 'cvUpload' not in request.files:
-            return jsonify({"error": "No file part"})
-        
-        file = request.files['cvUpload']
-        
-        if file.filename == '':
-            return jsonify({"error": "No selected file"})
-        
-        # Define the upload directory path within the Flask static folder
-        static_dir = os.path.join(current_app.root_path, 'static')
-        upload_dir = os.path.join(static_dir, current_app.config['UPLOAD_DOCS_FOLDER'])
-        # Define the upload directory path 
-        #upload_dir = os.path.join(os.getcwd(), current_app.config['UPLOAD_DOCS_FOLDER']) 
-        # Create the directory if it does not exist 
-        if not os.path.exists(upload_dir): 
-            os.makedirs(upload_dir, mode=0o755) # Read and execute permissions
+        # Check if the request contains the file part
+        if 'contentOrigin' in request.form and request.form['contentOrigin'] =='file':
+            if 'cvUpload' not in request.files:
+                return jsonify({"status":400, "error": "No file part"})
+            elif 'jobRequirements' not in request.files:
+                return jsonify({"status":400, "error": "No file part"})
 
-        if file and validate_file(file, current_app.config['ALLOWED_EXTENSIONS']):
-            # Generate a unique filename using UUID 
-            original_name=str(os.path.splitext(file.filename)[0]).replace(' ','_').lower()
-            """
-            Old: unique_filename = str(uuid.uuid4()) + os.path.splitext(file.filename)[1] 
-                It returns a log unique ID.
-                
-            """
-            # Original filename 
-            original_filename = secure_filename(file.filename) 
-            name_part = os.path.splitext(original_filename)[0] 
-            # Get the name part without extension 
-            extension = os.path.splitext(original_filename)[1] 
-            # Get the file extension # Generate a shorter unique identifier by taking the first 8 characters of the UUID 
-            short_uuid = str(uuid.uuid4())[:8] 
-            # Combine the original name with the short UUID 
-            unique_filename = f"{name_part}_{short_uuid}{extension}"
-
-            filename = secure_filename(unique_filename)
+            file = request.files['cvUpload']
+            file2 = request.files['jobRequirements']
         
-            file.save(os.path.join(upload_dir, filename))
-            return jsonify({"message": "File successfully uploaded."})
-        else:            
-            return jsonify({"error": f"Invalid file format!{1+0}"})
+            # Check if a file has been selected
+            if file.filename == '' or file2.filename == '':
+                return jsonify({"status":400, "error": "No selected file"})
+
+            # Use the save_uploaded_file function from the module
+            file_directory=current_app.config['UPLOAD_DOCS_FOLDER']
+            status,result = save_uploaded_file(file,file_directory)
+            if status:
+                status,result = save_uploaded_file(file2,file_directory)
+            return jsonify(result)
+        return jsonify({"status":400, "error": "The origin field has not been found!"})
             
     def get(self):
-        return jsonify({"message": "Send a POST request to upload a file."})
+        # Provide instructions for using the POST method for file upload
+        return jsonify({"status":400, "message": "Send a POST request to upload a file."})
