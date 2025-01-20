@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         document.getElementById('btnSubmit').innerHTML = spinnerHtml
-        endpoint = 'http://127.0.0.1:5000/api/video-analyzer/demo'
+        endpoint = 'http://127.0.0.1:5000/videos/post'
         
         submitForm(endpoint, formData)
     })

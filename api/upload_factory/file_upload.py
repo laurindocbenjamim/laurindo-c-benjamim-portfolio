@@ -25,8 +25,8 @@ def save_uploaded_file(file, file_directory):
 
             # Save the file to the upload directory
             file.save(os.path.join(upload_dir, filename))
-            return True, {"message": "File successfully uploaded."}
+            return True, {"status": 200, "message": "File successfully uploaded."}
         except Exception as e:
-            return False, {"error": f"Failed to save file {str(e)}"}
+            return False, {"status": 400, "error": f"Failed to save file {str(e)}"}
     else:
-        return False, {"error": "Invalid file format!"}
+        return False, {"status": 400, "error": "Invalid file format!"}

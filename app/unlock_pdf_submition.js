@@ -27,15 +27,16 @@ async function handleError(error) {
     console.log(error)
 }
 
-async function handleResponse(form, resp) {
+async function handleResponse(form, response) {
     document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-    console.log(resp)
+    //console.log(resp)
     //const resp = JSON.parse(response);
-    if (resp.status === 400 || resp.error) {
+    /*if (resp.status === 400 || resp.error) {
         document.getElementById('error-message').textContent = resp.error;
         document.getElementById('success-message').textContent = '';
-    }
-
+    }*/
+    // Handle the file download
+    const blob = await response.blob();
     const downloadUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.classList.add('btn')

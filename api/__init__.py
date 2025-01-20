@@ -16,7 +16,7 @@ from api.utils.cors_police import allowed_domains_to_files_route
 from api.utils.error_handles import handle_errors
 from api.config import csrf
 from PyPDF2 import PdfReader, PdfWriter
-
+from api.upload_factory.file_upload import save_uploaded_file  # Import the file upload module
 
 app = Flask(__name__,instance_relative_config=True,static_folder='static')
 api = Api(app)
@@ -119,16 +119,27 @@ def create_app():
         video_path = 'assets/video/AI_Agents_And_Agentic_Reasoning.mp4'
         return send_file(video_path, mimetype='video/mp4')
 
+
     @app.route('/videos/post', methods=['GET','POST'])
     @cross_origin(methods=['GET','POST'])
     @csrf.exempt
-    def get_video_post():
+    def video_post():
+       # Check if the request contains the file part
         if 'videoFileToAnalyze' not in request.files:
             return jsonify({"status":400, "error": "No video file to analyze has been found!"})
 
         file = request.files['videoFileToAnalyze']
+        
+        # Check if a file has been selected
+        if file.filename == '':
+            return jsonify({"status":400, "error": "No selected file"})
 
-        return jsonify({"status":200,"message": f"Good to see you. {file.filename}"})
+        # Use the save_uploaded_file function from the module
+        file_directory=os.path.join(app.root_path, 'static', app.config['UPLOAD_VIDEO_FOLDER'])
+        status,result = save_uploaded_file(file, file_directory)
+        if not status:
+            return jsonify({"status": 400, "error": f"Error: {result}"})
+        return jsonify(result)
 
     @app.route('/pdf-unlock/remove-protecction', methods=['POST'])
     @cross_origin(methods=['POST'])
@@ -181,7 +192,8 @@ def create_app():
             # Process the file to remove edit protection
             modified_file = os.path.join(app.root_path, 'static', app.config['MODIFIED_FOLDER'], f"unrestricted_{file.filename}")
             remove_edit_protection(filepath, modified_file)
-            return send_file(modified_file, as_attachment=True)
+            # Send the file as a binary download
+            return send_file(modified_file, as_attachment=True, download_name=f"unrestricted_{file.filename}")
         except Exception as e:
             return f"Error: {e}", 500
         finally:
