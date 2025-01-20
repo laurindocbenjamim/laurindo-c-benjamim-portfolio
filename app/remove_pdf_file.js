@@ -1,5 +1,5 @@
 
-import {submitForm} from './_token.js'
+import {submitForm} from './unlock_pdf_submition.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     //const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
@@ -95,23 +95,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(event.target)
 
         // Validate document File
-        const videoFileToAnalyze = document.getElementById("videoFileToAnalyze");
+        const file = document.getElementById("file");
         //let jobRequirementsFile = ""
 
         
             try {
                 //jobRequirementsFile = videoFileToAnalyze.files[0];
-                if (!videoFileToAnalyze.files[0]) {
+                if (!file.files[0]) {
                     throw Error("File not found or not selected!")
                 }
             } catch (err) { }
             // Validate file size (example: max 2MB) 
 
-            const file = formData.get('videoFileToAnalyze');
+            const pdfFile = formData.get('file');
             //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
             
            try {
-            validateVideoSize(file, 16)
+            validateVideoSize(pdfFile, 16)
            } catch (error) {
             document.getElementById('error-message').textContent=error;
             document.getElementById('success-message').textContent='';
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         document.getElementById('btnSubmit').innerHTML = spinnerHtml
-        endpoint = 'http://127.0.0.1:5000/api/video-analyzer/demo'
+        endpoint = 'http://127.0.0.1:5000/pdf-repository/remove-protecction'
         
         submitForm(endpoint, formData)
     })

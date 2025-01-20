@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="22222">
     <meta name="author" content="Laurindo C.Benjamim">
     <meta name="generator" content="Laurindo C.Benjamim">
-    <title>CV Customizer - Home</title>
+    <title>PDF Unlock - Home</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
 
@@ -446,10 +446,9 @@
                             </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="upload-videos.html"
-                                    onclick="">
+                                <a class="nav-link d-flex align-items-center gap-2" href="#" onclick="">
                                     <i class="fa fa-upload"></i>
-                                    Upload Videos
+                                    Upload
                                 </a>
 
                             </li>
@@ -492,8 +491,10 @@
 
                 <div class="container">
                     <div class="header">
-                        <h1 class="text-light"><i class="fas fa-file-alt"></i> CV Customization Tool</h1>
-                        <p class="text-muted text-light-emphasis">Adjust your CV to match job requirements effortlessly
+                        <h1 class="text-light"><i class="fas fa-file-alt"></i> 
+                            Unlock PDF File</h1>
+                        <p class="text-muted text-light-emphasis">
+                            Make video Analysis
                         </p>
                     </div>
                     <style>
@@ -504,60 +505,83 @@
                             overflow: hidden;
                             background-color: rgb(41, 40, 40);
                         }
+
+                        .bg-body-secondar {
+                            color: #000000;
+                            background-color: rgb(255, 255, 255);
+                            /*linear-gradient(135deg, rgba(181, 181, 212, 0.5), rgba(50, 50, 255, 0.5));  Transparent blue gradient effect */
+                        }
+
+                        .dropzone {
+                            border: 2px dashed #ccc;
+                            border-radius: 5px;
+                            padding: 20px;
+                            text-align: center;
+                            cursor: pointer;
+                        }
+
+                        .dropzone.hover {
+                            border-color: #007bff;
+                        }
+
+                        .progress {
+                            height: 20px;
+                            margin-bottom: 10px;
+                            border-radius: 5px;
+                        }
+
+                        .progress-bar {
+                            background-color: #007bff;
+                        }
+
+                        #file-list {
+                            margin-top: 20px;
+                        }
+
+                        .alert {
+                            margin-top: 10px;
+                        }
                     </style>
 
                     <div class="px-1 pt-1 my-2 text-center">
                         <div class="col-lg-6 mx-auto">
                             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5" id="form">
-                                <form id="cvForm" class="needs-validation" novalidate enctype="multipart/form-data">
+                                <form id="dataForm" class="needs-validation" novalidate enctype="multipart/form-data">
 
                                     <div class="row g-3" style="text-align: left;">
-
-                                        <div class="mb-2">
-                                            <div class="col-12">
-                                                <label for="cvUpload" class="form-label">Upload your CV (Word or
-                                                    PDF):</label>
-                                                <input class="form-control" type="file" name="cvUpload" id="cvUpload"
-                                                    accept=".pdf, .doc, .docx" >
-                                                <div class="invalid-feedback">
-                                                    Valid CV is required.
-                                                </div>
+                                        
+                                        <div class="col-12">
+                                            <div class="dropzone" id="dropzone">
+                                                <i class="bi bi-cloud-upload display-4"></i>
+                                                <p>Drag and drop files here, or click to select files.</p>
+                                                <input type="file" id="file" name="file" multiple style="display: none;"
+                                                accept=".pdf" class="form-control mb-2"
+                                                    placeholder="Develope fix problems skills" required>
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Valid video file is required.
                                             </div>
                                         </div>
+                                        <table id="file-list" class="table table-bordered mt-3">
+                                            <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th>Size</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                        
+                                        <div class="col-10 mb-1" id="">
 
-                                        <div class="mb-2">
-                                            <div class="col-12">
-                                                <label for="contentOrigin" class="form-label">JOB content
-                                                    origin:</label>
-                                                <select name="contentOrigin" class="form-control" id="contentOrigin"
-                                                    required>
-                                                    <option value="">Select the ontent origin...</option>
-                                                    <option value="file">File</option>
-                                                    <option value="url">URL</option>
-                                                    <option value="normal-text">Normal Text</option>
-                                                </select>
-                                                <div class="invalid-feedback">
-                                                    Valid job content origin is required.
-                                                </div>
-                                            </div>
                                         </div>
-
                                         <div class="mb-2">
-                                            <div class="col-12">
-                                                <span id="jobRequirement"></span>
-                                                <div class="invalid-feedback">
-                                                    Valid course name is required.
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-2">
-                                            <div class="col-12">
+                                            <div class="col-12" id="div-alerts">
                                                 <div class="success-message text-success" id="success-message"></div>
                                                 <div class="error-message text-danger" id="error-message"></div>
                                             </div>
                                         </div>
-
                                         <div class="col-6 mb-1">
                                             <button type="submit" id="btnSubmit"
                                                 class="btn btn-primary btn-lg px-4 me-sm-3">
@@ -576,18 +600,7 @@
 
 
 
-                    <div class="card p-4 mt-4 d-none" id="resultCard">
-                        <h4 class="mb-3">Adjusted CV:</h4>
-                        <div id="cvPreview" class="mb-4"
-                            style="white-space: pre-wrap; background: #e9ecef; padding: 15px; border-radius: 5px; overflow-x: auto;">
-                            Your adjusted CV will appear here...</div>
-                        <div class="d-flex justify-content-end">
-                            <button class="btn btn-success me-2" id="downloadWord"><i class="fas fa-file-word"></i>
-                                Download as Word</button>
-                            <button class="btn btn-danger" id="downloadPDF"><i class="fas fa-file-pdf"></i> Download as
-                                PDF</button>
-                        </div>
-                    </div>
+                    
                 </div>
 
 
@@ -629,180 +642,12 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
-
+    <!--<script src="app/_token.js"></script>-->
+    <script type="module" src="app/unlock_pdf_file_edition.js"></script>
+    
     <script>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            //const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-            const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
-  <span role="status">Loading...</span>`;
-            const form = document.getElementById('cvForm')
-
-            const jobRequirement = document.getElementById('jobRequirement')
-
-            document.getElementById('contentOrigin').addEventListener('change', (e) => {
-
-                if (e.target.value === 'file') {
-                    jobRequirement.innerHTML = `
-                    <label for="jobRequirements" class="form-label">Provide Job
-                                            Requirements:</label>
-                <input class="form-control mb-2" type="file" name="jobRequirements" id="jobRequirementsFile" accept=".pdf, .doc, .docx"  required>
-                                    
-                    `;
-                    //
-                } else if (e.target.value === 'url') {
-                    jobRequirement.innerHTML = `
-                    <label for="jobRequirements" class="form-label">Provide Job
-                                            Requirements:</label>
-                    <input class="form-control mb-2" type="text" name="jobRequirements" id="jobRequirementsFile" required>
-                                   
-                    `;
-                } else if (e.target.value === 'normal-text') {
-                    jobRequirement.innerHTML = ` 
-                    <label for="jobRequirements" class="form-label">Provide Job
-                                            Requirements:</label>                 
-                    <textarea class="form-control" name="jobRequirements" id="jobRequirementsTextarea" rows="4" placeholder="Or input requirements manually..." required></textarea>
-                                   
-                    `;
-                }
-            })
-
-            function validateVideoSize(file, sizeMB) {
-                // Validate file size (example: max 2MB) 
-
-                //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
-                if (file.size > sizeMB * 1024 * 1024) {
-                    document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-                    throw new Error('File size must be less than or equal 16MB')
-                }
-            }
-            // Submiting the form 
-            form.addEventListener('submit', (event) => {
-                event.preventDefault()
-                if (!form.checkValidity()) {
-                    event.stopPropagation();
-                    form.classList.add("was-validated");
-                    return;
-                }
-
-                let endpoint = window.location.origin + '';
-                document.getElementById('btnSubmit').innerHTML = spinnerHtml
-                const headers = new Headers()
-                //headers.append('X-CSRF-Token', csrfToken)
-                //headers.append("Authorization", ` Bearer ${csrfToken}`);
-
-                const formData = new FormData(event.target)
-
-                // Validate document File
-                const jobRequirements = document.getElementById("jobRequirements");
-                let jobRequirementsFile = ""
-
-                if (formData.get('contentOrigin') === 'file') {
-                    try {
-                        jobRequirementsFile = jobRequirements.files[0];
-                        if (!jobRequirementsFile) {
-                            throw Error("File not found or not selected!")
-                        }
-                    } catch (err) { }
-                    // Validate file size (example: max 2MB) 
-
-                    const file = formData.get('jobRequirements');
-                    //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
-
-                    try {
-                        validateVideoSize(file, 16)
-                    } catch (error) {
-                        document.getElementById('error-message').textContent = error;
-                        document.getElementById('success-message').textContent = '';
-                        return error
-                    }
-                }
-
-
-
-                document.getElementById('btnSubmit').innerHTML = spinnerHtml
-                endpoint = 'http://127.0.0.1:5000/api/upload'
-                fetch(endpoint, {
-                    method: 'POST',
-                    body: formData,//JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
-                    //headers: headers
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.text();
-                        } else {
-                            throw new Error(`${response.status} ${response.statusText} ${response.url}`);
-                        }
-                    })
-                    .then(data => {
-                        const resp = JSON.parse(data);
-                        if (resp.error) {
-                            document.getElementById('error-message').textContent = resp.error;
-                            document.getElementById('success-message').textContent = '';
-                        } else {
-                            form.reset();
-                            document.getElementById('error-message').textContent = '';
-                            document.getElementById('success-message').textContent = resp.message;
-                        }
-                        console.log(resp)
-                        document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-
-                    })
-                    .catch((error) => {
-                        document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-                        document.getElementById('error-message').textContent = error
-                        document.getElementById('success-message').textContent = ''
-                        console.log(error)
-                    });
-
-            });
-            /*
-            document.getElementById('cvForm').addEventListener('submit', (e) => {
-                e.preventDefault()
-                const headers = new Headers()
-
-                const form = e.target
-                if (!form.checkValidity()) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-                // Validate the form
-                if (!form.checkValidity()) {
-                    form.classList.add("was-validated");
-                    return;
-                }
-
-                const formData = new FormData(form)
-
-                alert(formData.get('contentOrigin'))
-            })
-                */
-        })
-        document.getElementById('submitB').addEventListener('click', () => {
-            const cvFile = document.getElementById('cvUpload').files[0];
-            const jobFile = document.getElementById('jobRequirementsFile').files[0];
-            const jobText = document.getElementById('jobRequirementsTextarea').value;
-
-            if (!cvFile || (!jobFile && !jobText.trim())) {
-                alert('Please upload your CV and provide job requirements.');
-                return;
-            }
-
-            // Placeholder: Send files and text to AI API
-            setTimeout(() => {
-                const adjustedCV = "[Adjusted CV content goes here.]";
-                document.getElementById('cvPreview').textContent = adjustedCV;
-                document.getElementById('resultCard').classList.remove('d-none');
-            }, 1000);
-        });
-
-        document.getElementById('downloadWord').addEventListener('click', () => {
-            alert('Download as Word is not yet implemented.');
-        });
-
-        document.getElementById('downloadPDF').addEventListener('click', () => {
-            alert('Download as PDF is not yet implemented.');
-        });
+    
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

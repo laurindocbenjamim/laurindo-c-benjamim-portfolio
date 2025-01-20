@@ -14,12 +14,12 @@ def load_restfull_endpoints(api):
     
     """
     #API  
-    api.add_resource(VideoResource, '/API/files-storage/video/get/<string:filename>')
+    api.add_resource(VideoResource, '/api/files-storage/video/get/<string:filename>')
 
     # Add resource endpoints 
-    api.add_resource(FileUploadResource, '/API/upload')
+    api.add_resource(FileUploadResource, '/api/upload')
 
-    api.add_resource(FilesUploadResource, '/API/files-storage/upload')
+    api.add_resource(FilesUploadResource, '/api/files-storage/upload')
 
     # Create the Video analyzer API endpoint
-    api.add_resource(VideoAnalyzerResource, '/API/video-analyzer/demo')
+    api.add_resource(VideoAnalyzerResource, '/api/video-analyzer/demo')

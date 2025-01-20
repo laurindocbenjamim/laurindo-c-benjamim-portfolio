@@ -1,7 +1,17 @@
 from api.dependencies import request, current_app, jsonify, Resource
 from api.upload_factory.file_upload import save_uploaded_file  # Import the file upload module
+from api.config import csrf
+from functools import wraps
+
+def csrf_exempt(func): 
+    @wraps(func) 
+    def wrapped(*args, **kwargs): 
+        return csrf.exempt(func)(*args, **kwargs) 
+    return wrapped
 
 class VideoAnalyzerResource(Resource):
+    method_decorators= {'post': [csrf_exempt]}
+    
     def post(self):
         # Check if the request contains the file part
         if 'videoFileToAnalyze' not in request.files:

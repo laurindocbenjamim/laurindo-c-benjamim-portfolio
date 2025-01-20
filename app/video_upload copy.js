@@ -1,5 +1,4 @@
 
-import {submitForm} from './_token.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     //const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
@@ -90,7 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let endpoint = window.location.origin + '';
         document.getElementById('btnSubmit').innerHTML = spinnerHtml
-       
+        const headers = new Headers()
+        //headers.append('X-CSRF-Token', csrfToken)
+        //headers.append("Authorization", ` Bearer ${csrfToken}`);
 
         const formData = new FormData(event.target)
 
@@ -122,8 +123,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('btnSubmit').innerHTML = spinnerHtml
         endpoint = 'http://127.0.0.1:5000/api/video-analyzer/demo'
-        
-        submitForm(endpoint, formData)
+        fetch(endpoint, {
+            method: 'POST',
+            body: formData,//JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
+            //headers: headers
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error(`${response.status} ${response.statusText} ${response.url}`);
+                }
+            })
+            .then(data => {
+                const resp = JSON.parse(data);
+                if(resp.status===400){
+                    document.getElementById('error-message').textContent=resp.error;
+                    document.getElementById('success-message').textContent='';
+                }else {
+                    form.reset();
+                    document.getElementById('error-message').textContent='';
+                    document.getElementById('success-message').textContent=resp.message;
+                }
+                console.log(resp)
+                document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+               
+            })
+            .catch((error) => {
+                document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+                document.getElementById('error-message').textContent=error
+                document.getElementById('success-message').textContent=''
+                console.log(error)
+            });
+
+
     })
 
     
