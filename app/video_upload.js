@@ -1,5 +1,5 @@
 
-import {submitForm} from './_token.js'
+import {submitForm} from './submit_video.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     //const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
