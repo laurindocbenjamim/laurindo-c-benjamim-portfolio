@@ -46,11 +46,14 @@ async function handleResponse(form, resp) {
         link.classList.add('btn-info');
         link.classList.add('btn-lg');
         link.textContent = 'View video';
-
-        if(resp.file){
-            link.href=`${window.location.origin}/index.html?file=${resp.file}`;
-            document.getElementById('alert-container').appendChild(link)
+        link.setAttribute('aria-label', "View the uploaded video")
+        
+        if(!resp.file){
+            link.style.display='none';
+            return;
         }
+        link.href=`${window.location.origin}/index.html?file=${resp.file}`;
+        document.getElementById('alert-container').appendChild(link)
         
     }
 
