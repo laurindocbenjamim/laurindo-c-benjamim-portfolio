@@ -1,4 +1,4 @@
-
+import {getUrlParams} from './utils.js'
 
 
 // csrf.js
@@ -31,17 +31,27 @@ async function handleError(error) {
 async function handleResponse(form, resp) {
     document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
     console.log(resp)
-    //const resp = JSON.parse(response);
+    
     if (resp.status === 400 || resp.error) {
         document.getElementById('error-message').textContent = resp.error;
         document.getElementById('success-message').textContent = '';
-    } else if (resp.status === 200) {
+        throw new Error(`Failed to upload file: ${resp.error}`);
+    } 
+    
+    if (resp.status === 200) {
         document.getElementById('error-message').textContent = '';
         document.getElementById('success-message').textContent = resp.message;
-    } else {
-        form.reset();
-        document.getElementById('error-message').textContent = '';
-        document.getElementById('success-message').textContent = resp.message;
+        const link = document.createElement('a')
+        link.classList.add('btn');
+        link.classList.add('btn-info');
+        link.classList.add('btn-lg');
+        link.textContent = 'View video';
+
+        if(resp.file){
+            link.href=`${window.location.origin}/index.html?file=${resp.file}`;
+            document.getElementById('alert-container').appendChild(link)
+        }
+        
     }
 
 
