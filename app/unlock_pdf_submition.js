@@ -37,6 +37,10 @@ async function handleResponse(form, response) {
     }*/
     // Handle the file download
     const blob = await response.blob();
+
+    // Check if it's a PDF before trying to download
+    const contentType = response.headers.get('Content-Type');
+    if (contentType === 'application/pdf') {
     const downloadUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.classList.add('btn')
@@ -48,7 +52,10 @@ async function handleResponse(form, response) {
     link.click();
     link.remove();
     document.getElementById('success-message').textContent = 'File processed successfully!';
-
+    } else {
+        document.getElementById('success-message').textContent =''
+        document.getElementById('error-message').textContent = 'Received an unexpected response.';
+    }
 };
 
 async function getCookie(name) {

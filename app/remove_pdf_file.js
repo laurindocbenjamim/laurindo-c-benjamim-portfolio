@@ -89,6 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         let endpoint = window.location.origin + '';
+        document.getElementById('error-message').textContent='';
+        document.getElementById('success-message').textContent='';
         document.getElementById('btnSubmit').innerHTML = spinnerHtml
        
 
