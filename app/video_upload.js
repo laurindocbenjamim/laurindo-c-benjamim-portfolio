@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fileInput.click();
     });
 
-    fileInput.addEventListener('change', () => {
+    fileInput.addEventListener('change', () => {alert("Selected")
         displayFileList();
     });
 
