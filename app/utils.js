@@ -1,7 +1,7 @@
 
 
 
-function getUrlParams() {
+export function getUrlParams() {
     const params = new URLSearchParams(window.location.search);
     const result = {};
   
