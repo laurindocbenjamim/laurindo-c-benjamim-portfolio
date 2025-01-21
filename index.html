@@ -713,8 +713,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 
+    <script type="module" src="app/video_player.js"></script>
+
     <script>
         const video = document.getElementById('videoPlayer');
+        const videoSource = document.querySelector('video source'); 
         const speechText = document.getElementById('speechText');
         const progressBar = document.getElementById('progress');
         const progressContainer = document.getElementById('progress-bar');
@@ -723,6 +726,35 @@
 
         const menuToggle = document.querySelector('.menu-toggle');
         const customControls = document.querySelector('.custom-controls');
+
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const result = {};
+        
+            for (const [key, value] of params) {
+            result[key] = value;
+            }
+        
+            return result;
+        }
+
+        const params = getUrlParams()
+
+        if(!params){
+            if (videoSource) {
+                videoSource.src = 'https:www.d-tuning.com/api/files-storage/video/get/AI_Agents_And_Agentic_Reasoning.mp4'; 
+            } else {
+                console.error("Could not find the 'source' element within the 'video' tag.");
+            }
+        }else{
+            if (videoSource) {
+                videoSource.src = params.file; 
+            } else {
+                console.error("Could not find the 'source' element within the 'video' tag.");
+            }
+        }
+        
+        
 
         // Toggle play and pause functionality
         function playPauseVideo() {
