@@ -123,7 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         document.getElementById('btnSubmit').innerHTML = spinnerHtml
-        endpoint = 'http://127.0.0.1:5000/pdf-unlock/modify-permition'
+        const domain='https://www.d-tuning.com'
+        endpoint = `${domain}/pdf-unlock/modify-permition`;
         
         submitForm(endpoint, formData)
     })

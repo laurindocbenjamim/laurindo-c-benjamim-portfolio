@@ -123,7 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         document.getElementById('btnSubmit').innerHTML = spinnerHtml
-        endpoint = 'http://127.0.0.1:5000/pdf-repository/remove-protecction'
+        const domain='https://www.d-tuning.com'
+        endpoint = `${domain}/pdf-repository/remove-protecction`;
         
         submitForm(endpoint, formData)
     })

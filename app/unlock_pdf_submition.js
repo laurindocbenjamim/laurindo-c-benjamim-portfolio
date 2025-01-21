@@ -7,7 +7,7 @@ let csrfToken = ''
 
 export async function fetchCsrfToken() {
     try {
-        const response = await fetch('http://localhost:5000/api/csrf-token/get', { method: 'GET' });
+        const response = await fetch('https://www.d-tuning.com/api/csrf-token/get', { method: 'GET' });
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`HTTP error! Status: ${response.status}. Response: ${errorText}`);
