@@ -97,7 +97,7 @@ def create_app():
     # Create directories
     os.makedirs(os.path.join(app.root_path, 'static', app.config['UPLOAD_VIDEO_FOLDER']), exist_ok=True)
     os.makedirs(os.path.join(app.root_path, 'static', app.config['UPLOAD_DOCS_FOLDER']), exist_ok=True)
-    os.makedirs(os.path.join(app.root_path, 'static', app.config['DECRYPTED_FOLDER']), exist_ok=True)
+    #os.makedirs(os.path.join(app.root_path, 'static', app.config['DECRYPTED_FOLDER']), exist_ok=True)
     os.makedirs(os.path.join(app.root_path, 'static', app.config['MODIFIED_FOLDER']), exist_ok=True)
 
     # Apply security middlewares 

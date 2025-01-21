@@ -8,6 +8,7 @@ from api.utils.cors_police import allowed_domains_to_files_route
 from api.utils.csrf_token import CSRFToken
 from api.video.video_resource import VideoResource
 from api.video.video_analyzer import VideoAnalyzerResource
+from api.upload_factory.file_modified_rsc import DownloadPdfFileRepository
 from api.upload_factory.upload_controller import FileUploadResource
 from api.upload_factory.upload_multiple_controller import FilesUploadResource
 from api.config import csrf
@@ -30,6 +31,8 @@ csrf.exempt(bp)
 
 def api_endpoints(csrf):
     
+    #
+    api.add_resource(DownloadPdfFileRepository, '/files-storage/pdf/get/<string:filename>')
     # Generate csrf token
     api.add_resource(CSRFToken,'/csrf-token/get')
     #API  
