@@ -52,7 +52,7 @@ async function handleResponse(form, resp) {
             link.style.display='none';
             return;
         }
-        link.href=`${window.location.origin}/index.html?file=${resp.file}`;
+        link.href=`${window.location.origin}/laurindo-c-benjamim-portfolio/index.html?file=${resp.file}`;
         document.getElementById('alert-container').appendChild(link)
         
     }
