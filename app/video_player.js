@@ -28,7 +28,7 @@ const paramValue = getSecondParameterValue(window.location.search, 'file');
 alert("Hello git codespace "+paramValue)
 //console.log(params)
 const videoSrc = paramValue ? `https:www.d-tuning.com/api/files-storage/video/get/${paramValue}` : "https:www.d-tuning.com/api/files-storage/video/get/AI_Agents_And_Agentic_Reasoning.mp4";
-//alert("Hello git codespace "+videoSrc)
+alert("SOurce URL: "+videoSrc)
 video.innerHTML = `<source src="${videoSrc}" type="video/mp4">`;
 
 
