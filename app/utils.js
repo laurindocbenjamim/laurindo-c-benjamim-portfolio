@@ -11,3 +11,8 @@ export function getUrlParams() {
 
   return result;
 }
+
+export function getSecondParameterValue(url, parameterKey) {
+  const params = new URLSearchParams(url.split('?')[1]);
+  return params.get(parameterKey);
+}

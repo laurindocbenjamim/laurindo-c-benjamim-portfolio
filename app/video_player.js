@@ -1,4 +1,4 @@
-import {getUrlParams} from './utils.js'
+import {getUrlParams, getSecondParameterValue} from './utils.js'
 
 const video = document.getElementById('videoPlayer');
 const videoSource = document.querySelector('video source'); 
@@ -23,12 +23,14 @@ const customControls = document.querySelector('.custom-controls');
 }*/
 
 
-const params = getUrlParams()
+//const params = getUrlParams()
+const paramValue = getSecondParameterValue(window.location.search, 'file');
+alert("Hello git codespace "+paramValue)
 //console.log(params)
-const videoSrc = params ? `https:www.d-tuning.com/api/files-storage/video/get/${params.file}` : "https:www.d-tuning.com/api/files-storage/video/get/AI_Agents_And_Agentic_Reasoning.mp4";
-alert("Hello git codespace "+videoSrc)
-video.innerHTML = `<source src="${videoSrc}" type="video/mp4">`;
-console.log(videoSrc)
+//const videoSrc = params ? `https:www.d-tuning.com/api/files-storage/video/get/${params.file}` : "https:www.d-tuning.com/api/files-storage/video/get/AI_Agents_And_Agentic_Reasoning.mp4";
+//alert("Hello git codespace "+videoSrc)
+//video.innerHTML = `<source src="${videoSrc}" type="video/mp4">`;
+//console.log(videoSrc)
 
  // Toggle play and pause functionality
  function playPauseVideo() {
