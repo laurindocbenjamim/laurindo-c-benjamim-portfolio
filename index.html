@@ -738,21 +738,7 @@
             return result;
         }
 
-        const params = getUrlParams()
-
-        if(!params){
-            if (videoSource) {
-                videoSource.src = 'https:www.d-tuning.com/api/files-storage/video/get/AI_Agents_And_Agentic_Reasoning.mp4'; 
-            } else {
-                console.error("Could not find the 'source' element within the 'video' tag.");
-            }
-        }else{
-            if (videoSource) {
-                videoSource.src = params.file; 
-            } else {
-                console.error("Could not find the 'source' element within the 'video' tag.");
-            }
-        }
+        
         
         
 
