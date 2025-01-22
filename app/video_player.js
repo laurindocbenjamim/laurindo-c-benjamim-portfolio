@@ -26,9 +26,10 @@ const customControls = document.querySelector('.custom-controls');
 const params = getUrlParams()
 //console.log(params)
 const videoSrc = params ? `https:www.d-tuning.com/api/files-storage/video/get/${params.file}` : "https:www.d-tuning.com/api/files-storage/video/get/AI_Agents_And_Agentic_Reasoning.mp4";
+alert("Hello git codespace "+videoSrc)
 video.innerHTML = `<source src="${videoSrc}" type="video/mp4">`;
 console.log(videoSrc)
-alert("Hello git codespace "+videoSrc)
+
  // Toggle play and pause functionality
  function playPauseVideo() {
     if (video.paused) {
@@ -124,13 +125,6 @@ video.addEventListener('ended', () => {
 video.addEventListener('play', () => {
     nextButton.style.display = 'none';
 });
-
-
-// Placeholder for the next video functionality
-function nextVideo() {
-    alert('Load next video functionality!');
-}
-
 
 
 // Toggle settings menu visibility
