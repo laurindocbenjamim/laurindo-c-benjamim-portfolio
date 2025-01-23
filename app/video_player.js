@@ -31,7 +31,13 @@ alert("Hello git codespace "+paramValue)
 //alert("SOurce URL: "+videoSrc)
 //video.innerHTML = `<source src="${videoSrc}" type="video/mp4">`;
 // Set the default video URL
-const videoUrl =  paramValue ? `https:www.d-tuning.com/api/files-storage/video/get/${paramValue}` : "https://www.d-tuning.com/api/files-storage/video/get/AI_Agents_And_Agentic_Reasoning.mp4";
+const videoUrl =null
+if(paramValue ===null || paramValue ==='null' || paramValue ===undefined || paramValue ==='undefined'){
+    videoUrl =  "https://www.d-tuning.com/api/files-storage/video/get/AI_Agents_And_Agentic_Reasoning.mp4";
+}else{
+    videoUrl =  paramValue ? `https:www.d-tuning.com/api/files-storage/video/get/${paramValue}` : "https://www.d-tuning.com/api/files-storage/video/get/AI_Agents_And_Agentic_Reasoning.mp4";
+}
+
 document.getElementById('videoSource').src = videoUrl;
 
 
