@@ -175,6 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelector('.custom-controls button:first-child i').classList.replace('fa-play', 'fa-pause');
 
-    // playPauseVideo()
+    playPauseVideo()
     //toggleMute()
 });
