@@ -1,5 +1,7 @@
 import {getUrlParams, getSecondParameterValue} from './utils.js'
 
+document.addEventListener('DOMContentLoaded', () => {
+    
 const video = document.getElementById('videoPlayer');
 const videoSource = document.querySelector('video source'); 
 const speechText = document.getElementById('speechText');
@@ -31,18 +33,19 @@ alert("Hello git codespace "+paramValue)
 //alert("SOurce URL: "+videoSrc)
 //video.innerHTML = `<source src="${videoSrc}" type="video/mp4">`;
 // Set the default video URL
+const defaultVideoPath="https://www.d-tuning.com/api/files-storage/video/get/249475_tiny_b01f14ab.mp4";
 const videoUrl =null
 if(paramValue ===null || paramValue ==='null' || paramValue ===undefined || paramValue ==='undefined'){
-    videoUrl =  "https://www.d-tuning.com/api/files-storage/video/get/AI_Agents_And_Agentic_Reasoning.mp4";
+    videoUrl =  defaultVideoPath;
 }else{
-    videoUrl =  paramValue ? `https:www.d-tuning.com/api/files-storage/video/get/${paramValue}` : "https://www.d-tuning.com/api/files-storage/video/get/AI_Agents_And_Agentic_Reasoning.mp4";
+    videoUrl =  paramValue ? `https:www.d-tuning.com/api/files-storage/video/get/${paramValue}` : defaultVideoPath;
 }
 
 document.getElementById('videoSource').src = videoUrl;
 
 
  // Toggle play and pause functionality
- function playPauseVideo() {
+function playPauseVideo() {
     if (video.paused) {
         video.play();
         document.querySelector('.custom-controls button:first-child i').classList.replace('fa-play', 'fa-pause');
@@ -174,3 +177,4 @@ document.querySelector('.custom-controls button:first-child i').classList.replac
 
 // playPauseVideo()
 //toggleMute()
+});
