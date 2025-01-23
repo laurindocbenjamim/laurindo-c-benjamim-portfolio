@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('videoSource').src = videoUrl;
 
-    document.getElementById('playPauseBtn').addEventListener('click', alert('Play/Pause button clicked'));
+    document.getElementById('playPauseBtn').addEventListener('click', playPauseVideo);
 
     // Toggle play and pause functionality
     function playPauseVideo() {
