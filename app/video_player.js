@@ -28,11 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //const params = getUrlParams()
     const paramValue = getSecondParameterValue(window.location.search, 'file');
 
-    //console.log(params)
-    //const videoSrc = paramValue ? `https:www.d-tuning.com/api/files-storage/video/get/${paramValue}` : "https:www.d-tuning.com/api/files-storage/video/get/AI_Agents_And_Agentic_Reasoning.mp4";
-    //alert("SOurce URL: "+videoSrc)
-    //video.innerHTML = `<source src="${videoSrc}" type="video/mp4">`;
-    // Set the default video URL
+    //const defaultVideoPath = "https://www.d-tuning.com/api/files-storage/video/get/249475_tiny_b01f14ab.mp4";
     const defaultVideoPath = "https://www.d-tuning.com/api/files-storage/video/get/249475_tiny_b01f14ab.mp4";
     let videoUrl = null
     if (paramValue === null || paramValue === 'null' || paramValue === undefined || paramValue === 'undefined') {
