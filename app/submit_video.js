@@ -41,19 +41,14 @@ async function handleResponse(form, resp) {
     if (resp.status === 200) {
         document.getElementById('error-message').textContent = '';
         document.getElementById('success-message').textContent = resp.message;
-        const link = document.createElement('a')
-        link.classList.add('btn');
-        link.classList.add('btn-info');
-        link.classList.add('btn-lg');
-        link.textContent = 'View video';
-        link.setAttribute('aria-label', "View the uploaded video")
-        
+               
         if(!resp.file){
-            link.style.display='none';
             return;
         }
-        link.href=`${window.location.origin}/laurindo-c-benjamim-portfolio/index.html?file=${resp.file}`;
-        document.getElementById('alert-container').appendChild(link)
+        //link.href=`${window.location.origin}/laurindo-c-benjamim-portfolio/index.html?file=${resp.file}`;
+        //link.href=`${window.location.origin}/index.html?file=${resp.file}`;
+        //document.getElementById('alert-container').appendChild(link)
+
         
     }
 
@@ -76,7 +71,7 @@ async function getCookie(name) {
 
 //const csrfToken = getCookie('csrf_token');
 
-export async function submitForm(endpoint, formData) {    
+export async function submitForm(endpoint, form, formData) {    
     if (!globalCsrfToken) {
         await fetchCsrfToken();
     }
