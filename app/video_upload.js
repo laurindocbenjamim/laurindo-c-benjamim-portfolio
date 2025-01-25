@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error("Error: "+ response)
             }
             const filelist=response.filelist
+            console.log(response)
             myVideosListContainer.innerHTML = ""; 
             let link=''
             
