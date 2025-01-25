@@ -15,6 +15,47 @@ document.addEventListener('DOMContentLoaded', () => {
     //const progressPercentage = document.getElementById('progressPercentage');
     //const uploadButton = document.getElementById('uploadButton');
     const uploadStatus = document.getElementById('uploadStatus');
+    const myVideosListContainer = document.getElementById("myVideosListContainer");
+    
+
+    getVideoFiles();
+
+    function getVideoFiles(){
+        const arrayL = [{ "name": "olaa", "filepath": "iiiiii" }];
+
+        for (let i = 0; i < 10; i++) {
+        arrayL.push({ "name": "Kkakkk", "filepath": "uuuuuuuuu" });
+        const endpoint='http://localhost:5000/api/files-storage/video/list/videos'
+        fetch(endpoint,{method: 'GET'})
+        .then(response => {
+            if (response.ok) {
+                return response.json(); // Parse the JSON response if status is OK
+            } else {
+                throw new Error(`Error: ${response.status} ${response.statusText} ${response.url}`);
+            }
+        }).then(response=>{
+           
+            if(response.status===404){
+                throw new Error("Error: "+ response)
+            }
+            const filelist=response.filelist
+            myVideosListContainer.innerHTML = ""; 
+            let link=''
+            
+            //link =`${window.location.origin}/laurindo-c-benjamim-portfolio/index.html?file`;
+            link=`${window.location.origin}/index.html?file`;
+            myVideosListContainer.innerHTML = filelist.map(item => 
+                
+                `<li><a href="${link}=${item}" class="link-body-emphasis text-primary d-inline-flex text-decoration-none rounded"><img width="20" height="20" src="https://img.icons8.com/dotty/80/video-file.png" alt="video-file"/>${item}</a></li>`
+            ).join('');
+        }).catch(err=>{
+            console.log(err)
+        });
+    }
+
+    
+
+    }
 
     dropzone.addEventListener('dragover', (e) => {
         e.preventDefault();
@@ -123,10 +164,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         document.getElementById('btnSubmit').innerHTML = spinnerHtml
-        const domain='https://www.d-tuning.com'
+        let domain='https://www.d-tuning.com'
+        domain='http://localhost:5000'
         endpoint = `${domain}/videos/post`;
         
-        submitForm(endpoint, formData)
+        submitForm(endpoint, form, formData)
     })
 
     
