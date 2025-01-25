@@ -446,14 +446,16 @@
                             </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="upload-videos.html" onclick="">
+                                <a class="nav-link d-flex align-items-center gap-2" href="upload-videos.html"
+                                    onclick="">
                                     <i class="fa fa-upload"></i>
                                     Upload Video
                                 </a>
 
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="pdf-unlock-edition.html" onclick="">
+                                <a class="nav-link d-flex align-items-center gap-2" href="pdf-unlock-edition.html"
+                                    onclick="">
                                     <i class="fa fa-upload"></i>
                                     Unlock PDF
                                 </a>
@@ -498,7 +500,7 @@
 
                 <div class="container">
                     <div class="header">
-                        <h1 class="text-light"><i class="fas fa-file-alt"></i> 
+                        <h1 class="text-light"><i class="fas fa-file-alt"></i>
                             Upload Videos</h1>
                         <p class="text-muted text-light-emphasis">
                             Make video Analysis
@@ -510,7 +512,8 @@
                             box-shadow: 0 4px 8px rgba(102, 102, 102, 0.637);
                             border-radius: 8px;
                             overflow: hidden;
-                            background-color: transparent; /*rgb(41, 40, 40);*/
+                            background-color: transparent;
+                            /*rgb(41, 40, 40);*/
                         }
 
                         .bg-body-secondar {
@@ -550,77 +553,96 @@
                         }
                     </style>
 
-                    <div class="px-1 pt-1 my-2 text-center">
-                        <div class="col-lg-6 mx-auto">
-                            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5" id="form">
-                                <form id="dataForm" class="needs-validation" novalidate enctype="multipart/form-data">
+                    <div class="row g-5">
+                        <!--Right menu -->
+                        <div class="col-md-5 col-lg-4 order-md-last">
+                            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-primary">Video Store</span>
+                                <span class="badge bg-primary rounded-pill">3</span>
+                            </h4>
+                            <ul class="list-unstyled ps-0 rounded bg-body-tertiary">
+                                <li class="mb-1">
+                                    <button
+                                        class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                                        My Videos
+                                    </button>
+                                    <div class="collapse show" id="home-collapse">
+                                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small" id="myVideosListContainer">
+                                            
+                                        </ul>
+                                    </div>
+                                </li>
+                                
+                            </ul>
+                        </div>
 
-                                    <div class="row g-3" style="text-align: left;">
-                                        
+                        <!-- Form -->
+                        <div class="col-md-7 col-lg-8 rounded bg-body-tertiary text-black pt-4">
+                            <h4 class="mb-3">Upload Video Form </h4>
+
+                            <form id="dataForm" class="needs-validation" novalidate enctype="multipart/form-data">
+
+                                <div class="row g-3" style="text-align: left;">
+
+                                    <div class="col-12">
+                                        <div class="dropzone" id="dropzone">
+                                            <i class="bi bi-cloud-upload display-4"></i>
+                                            <p>Drag and drop files here, or click to select files.</p>
+                                            <input type="file" id="file" name="videoFileToAnalyze" multiple
+                                                style="display: none;" accept="video/*" class="form-control mb-2"
+                                                placeholder="Develope fix problems skills" required>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Valid video file is required.
+                                        </div>
+                                    </div>
+                                    <table id="file-list" class="table table-bordered mt-3">
+                                        <thead>
+                                            <tr>
+                                                <th>File Name</th>
+                                                <th>Size</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+
+                                    <div class="mb-2">
                                         <div class="col-12">
-                                            <div class="dropzone" id="dropzone">
-                                                <i class="bi bi-cloud-upload display-4"></i>
-                                                <p>Drag and drop files here, or click to select files.</p>
-                                                <input type="file" id="file" name="videoFileToAnalyze" multiple style="display: none;"
-                                                    accept="video/*" class="form-control mb-2"
-                                                    placeholder="Develope fix problems skills" required>
-                                            </div>
+                                            <label for="cvUpload" class="form-label">Upload your CV (Word or
+                                                PDF):</label>
+                                            <input class="form-control" type="file" name="cvUpload" id="cvUpload"
+                                                accept=".pdf, .doc, .docx" required>
                                             <div class="invalid-feedback">
-                                                Valid video file is required.
+                                                Valid CV is required.
                                             </div>
-                                        </div>
-                                        <table id="file-list" class="table table-bordered mt-3">
-                                            <thead>
-                                                <tr>
-                                                    <th>File Name</th>
-                                                    <th>Size</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                        </table>
-
-                                        <div class="mb-2">
-                                            <div class="col-12">
-                                                <label for="cvUpload" class="form-label">Upload your CV (Word or
-                                                    PDF):</label>
-                                                <input class="form-control" type="file" name="cvUpload" id="cvUpload"
-                                                    accept=".pdf, .doc, .docx" required>
-                                                <div class="invalid-feedback">
-                                                    Valid CV is required.
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="mb-2">
-                                            <div class="col-12" id="alert-container">
-                                                <div class="success-message text-success" id="success-message"></div>
-                                                <div class="error-message text-danger" id="error-message"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6 mb-1">
-                                            <button type="submit" id="btnSubmit"
-                                                class="btn btn-primary btn-lg px-4 me-sm-3">
-                                                Submit
-                                            </button>
                                         </div>
                                     </div>
 
-                                </form>
-                            </div>
-                        </div>
+                                    <div class="mb-2">
+                                        <div class="col-12" id="alert-container">
+                                            <div class="success-message text-success" id="success-message">
+                                            </div>
+                                            <div class="error-message text-danger" id="error-message"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-1 mt-4 mb-5">
+                                        <button type="submit" id="btnSubmit"
+                                            class="btn btn-primary btn-lg px-4 me-sm-3">
+                                            Submit
+                                        </button>
+                                    </div>
+                                </div>
 
+                            </form>
+
+                        </div>
                     </div>
 
-
-
-
-
-                    
                 </div>
 
-
-
+                <!--Footer -->
                 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
                     <div class="col-md-4 d-flex align-items-center">
                         <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
@@ -660,10 +682,10 @@
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
     <!--<script src="app/_token.js"></script>-->
     <script type="module" src="app/video_upload.js"></script>
-    
+
     <script>
 
-    
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
