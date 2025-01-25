@@ -17,15 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadStatus = document.getElementById('uploadStatus');
     const myVideosListContainer = document.getElementById("myVideosListContainer");
     
+    let domain='http://localhost:5000'
+    domain='https://www.d-tuning.com'
+    getVideoFiles(domain);
 
-    getVideoFiles();
-
-    function getVideoFiles(){
-        const arrayL = [{ "name": "olaa", "filepath": "iiiiii" }];
-
-        for (let i = 0; i < 10; i++) {
-        arrayL.push({ "name": "Kkakkk", "filepath": "uuuuuuuuu" });
-        const endpoint='http://localhost:5000/api/files-storage/video/list/videos'
+    function getVideoFiles(domain){
+        
+        let endpoint=`${domain}/api/files-storage/video/list/videos`;
         fetch(endpoint,{method: 'GET'})
         .then(response => {
             if (response.ok) {
@@ -54,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
 
-    }
+    
 
     dropzone.addEventListener('dragover', (e) => {
         e.preventDefault();
