@@ -32,6 +32,10 @@ if %errorlevel% neq 0 (
 
 REM Generate Sphinx project
 echo Creating Sphinx documentation...
+
+:: sphinx-apidoc -o docs/source backend/
+:: sphinx-build -b html docs/source docs/build
+
 sphinx-quickstart docs -q -p "%project_name%" -a "%owner_name%" -v "1.0" --sep
 
 REM Build the documentation

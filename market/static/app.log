@@ -1,0 +1,269 @@
+2025-01-28 14:52:29,557 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-28 14:52:29,557 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-28 14:52:29,573 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 14:52:37,340 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 14:52:37,355 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 14:57:44,186 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\app_market.py', reloading
+2025-01-28 14:57:45,686 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 14:58:13,419 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 14:58:13,450 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 14:59:11,032 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-28 14:59:11,147 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-28 14:59:11,210 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 14:59:22,269 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 14:59:22,300 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 15:07:57,146 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-28 15:07:57,146 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-28 15:07:57,162 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:08:06,639 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:08:06,670 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 15:12:35,072 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\app_market.py', reloading
+2025-01-28 15:12:39,478 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:14:26,742 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-28 15:14:26,742 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-28 15:14:26,757 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:14:34,585 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:14:34,600 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 15:16:42,111 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\__init__.py', reloading
+2025-01-28 15:16:44,676 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:18:26,747 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-28 15:18:26,763 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-28 15:18:26,774 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:18:36,792 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:18:36,886 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 15:20:12,180 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:20:12] "GET / HTTP/1.1" 200 -
+2025-01-28 15:20:43,701 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:20:43] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-01-28 15:22:09,476 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 15:22:11,347 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:22:36,915 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:22:36,946 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 15:23:21,379 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 15:23:22,875 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:23:40,647 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:23:40,663 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 15:23:49,347 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 15:23:55,293 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:24:22,625 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:24:22,657 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 15:29:23,646 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 15:29:29,787 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:30:53,357 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:30:53,932 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 15:31:29,499 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\__init__.py', reloading
+2025-01-28 15:31:43,404 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:33:16,216 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:33:16,373 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 15:44:00,976 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 15:44:07,496 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:44:37,250 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:44:37,474 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 15:44:48,618 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\app_market.py', reloading
+2025-01-28 15:44:55,242 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:45:27,831 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:45:27,858 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 15:46:56,387 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 15:46:57,807 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:47:13,796 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:47:13,827 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 15:48:03,107 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 15:48:07,717 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:49:03,454 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:49:03,485 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 15:49:44,222 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 15:49:46,597 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:50:02,332 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:50:02,425 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 15:50:05,852 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 15:50:08,424 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:50:54,990 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:50:55,022 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 15:51:03,714 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 15:51:14,725 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:52:20,499 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:52:22,263 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 15:52:27,098 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:52:27] "[35m[1mGET /secret-key HTTP/1.1[0m" 500 -
+2025-01-28 15:52:29,572 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:52:29] "GET /secret-key?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-01-28 15:52:30,155 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:52:30] "GET /secret-key?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-01-28 15:52:39,255 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:52:39] "GET /secret-key?__debugger__=yes&cmd=resource&f=console.png&s=vYW7bC8eZfdaEPPzoCeM HTTP/1.1" 200 -
+2025-01-28 15:52:39,996 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:52:39] "GET /secret-key?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-01-28 15:53:31,051 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\utils.py', reloading
+2025-01-28 15:53:38,073 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:55:07,272 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:55:07,675 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 15:55:14,227 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:55:14] "[35m[1mGET /secret-key HTTP/1.1[0m" 500 -
+2025-01-28 15:55:21,545 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:55:21] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-01-28 15:55:21,624 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:55:21] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-01-28 15:55:25,408 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:55:25] "GET /secret-key?__debugger__=yes&cmd=resource&f=console.png&s=D7OjbC4yf9f9yVx2V7qR HTTP/1.1" 200 -
+2025-01-28 15:55:27,877 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:55:27] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-01-28 15:56:15,638 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\utils.py', reloading
+2025-01-28 15:56:19,387 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:57:07,082 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:57:07,113 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 15:57:44,505 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\__init__.py', reloading
+2025-01-28 15:57:50,354 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 15:58:16,725 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 15:58:16,779 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 15:58:20,417 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:58:20] "[35m[1mGET /secret-key HTTP/1.1[0m" 500 -
+2025-01-28 15:58:21,213 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:58:21] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-01-28 15:58:21,244 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:58:21] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-01-28 15:58:22,847 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:58:22] "GET /secret-key?__debugger__=yes&cmd=resource&f=console.png&s=2AIclsR1ySOgRFZFHYgY HTTP/1.1" 200 -
+2025-01-28 15:58:23,009 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:58:23] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-01-28 15:58:25,936 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:58:25] "[35m[1mGET /secret-key HTTP/1.1[0m" 500 -
+2025-01-28 15:58:26,413 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:58:26] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-01-28 15:58:26,413 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:58:26] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-01-28 15:58:28,613 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:58:28] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=console.png&s=2AIclsR1ySOgRFZFHYgY HTTP/1.1[0m" 304 -
+2025-01-28 15:58:28,878 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 15:58:28] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-01-28 16:01:13,966 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\config.py', reloading
+2025-01-28 16:01:18,566 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:01:35,601 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:01:35,642 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 16:01:36,248 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:01:36] "[35m[1mGET /secret-key HTTP/1.1[0m" 500 -
+2025-01-28 16:01:38,418 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:01:38] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-01-28 16:01:38,648 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:01:38] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-01-28 16:01:39,065 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:01:39] "GET /secret-key?__debugger__=yes&cmd=resource&f=console.png&s=fo77Vsr8D9bMmPVBvo6l HTTP/1.1" 200 -
+2025-01-28 16:01:41,601 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:01:41] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-01-28 16:01:51,105 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:01:51] "[35m[1mGET /secret-key HTTP/1.1[0m" 500 -
+2025-01-28 16:01:51,406 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:01:51] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-01-28 16:01:51,415 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:01:51] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-01-28 16:01:53,047 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:01:53] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=console.png&s=fo77Vsr8D9bMmPVBvo6l HTTP/1.1[0m" 304 -
+2025-01-28 16:01:53,398 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:01:53] "[36mGET /secret-key?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-01-28 16:04:44,546 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-28 16:04:44,562 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-28 16:04:44,562 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:04:56,811 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:04:56,845 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:04:57,302 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:04:57] "[33mGET /secret-key HTTP/1.1[0m" 404 -
+2025-01-28 16:05:06,303 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:05:06] "[33mGET /secret-key HTTP/1.1[0m" 404 -
+2025-01-28 16:07:28,327 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 16:07:32,769 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:08:08,358 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:08:08,389 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:08:12,731 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:08:12] "[33mGET /secret-key HTTP/1.1[0m" 404 -
+2025-01-28 16:08:18,279 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:08:18] "[33mGET /secret-key HTTP/1.1[0m" 404 -
+2025-01-28 16:09:06,841 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:09:06] "[33mGET /ssecret-key HTTP/1.1[0m" 404 -
+2025-01-28 16:09:40,259 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 16:09:42,843 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:09:57,794 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:09:57,837 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:09:58,762 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:09:58] "[33mGET /ssecret-key HTTP/1.1[0m" 404 -
+2025-01-28 16:10:13,967 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\app_market.py', reloading
+2025-01-28 16:10:14,755 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:10:23,367 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:10:23,398 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:11:55,800 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\__init__.py', reloading
+2025-01-28 16:12:05,215 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:12:20,029 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:12:20,079 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:12:20,787 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:12:20] "GET / HTTP/1.1" 200 -
+2025-01-28 16:12:43,050 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\__init__.py', reloading
+2025-01-28 16:12:48,513 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:13:05,267 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:13:05,310 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:13:05,945 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:13:05] "GET / HTTP/1.1" 200 -
+2025-01-28 16:13:17,360 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\__init__.py', reloading
+2025-01-28 16:13:21,816 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:13:42,324 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:13:42,359 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:14:46,204 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 16:14:47,850 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:15:07,540 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:15:07,568 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:15:08,103 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:15:08] "[33mGET /secrete-key HTTP/1.1[0m" 404 -
+2025-01-28 16:16:11,823 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\__init__.py', reloading
+2025-01-28 16:16:17,721 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:18:00,684 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:18:31,707 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:18:31,863 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:18:33,165 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:18:33] "[33mGET /secrete-key HTTP/1.1[0m" 404 -
+2025-01-28 16:20:11,936 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 16:20:18,768 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:21:08,429 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:21:08,476 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 16:21:11,168 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 16:21:12,265 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:21:25,608 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:21:25,647 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 16:21:26,232 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:21:26] "[35m[1mGET /se HTTP/1.1[0m" 500 -
+2025-01-28 16:21:27,920 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:21:27] "GET /se?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-01-28 16:21:27,966 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:21:27] "GET /se?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-01-28 16:21:29,212 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:21:29] "GET /se?__debugger__=yes&cmd=resource&f=console.png&s=FiQhLHdHS9IhMVYlMf54 HTTP/1.1" 200 -
+2025-01-28 16:21:29,401 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:21:29] "GET /se?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-01-28 16:21:56,427 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 16:22:04,220 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:22:57,013 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:22:57,058 - werkzeug - INFO -  * Debugger PIN: 119-319-366
+2025-01-28 16:22:58,132 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:22:58] "[35m[1mGET /se HTTP/1.1[0m" 500 -
+2025-01-28 16:22:59,325 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:22:59] "[36mGET /se?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-01-28 16:22:59,378 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:22:59] "[36mGET /se?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-01-28 16:23:00,323 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:23:00] "GET /se?__debugger__=yes&cmd=resource&f=console.png&s=HGcNa4lZzGYbbUNJlX59 HTTP/1.1" 200 -
+2025-01-28 16:23:00,784 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:23:00] "[36mGET /se?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-01-28 16:23:33,100 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\app_market.py', reloading
+2025-01-28 16:23:35,997 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:23:50,571 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:23:50,624 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:23:51,121 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:23:51] "[33mGET /se HTTP/1.1[0m" 404 -
+2025-01-28 16:25:17,507 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:25:17] "GET /auth/se HTTP/1.1" 200 -
+2025-01-28 16:26:36,866 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 16:26:41,777 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:27:08,759 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:27:08,869 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:27:09,701 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:27:09] "GET /auth/secret-key HTTP/1.1" 200 -
+2025-01-28 16:28:16,504 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 16:28:18,538 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:33:04,774 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:34:24,808 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:35:29,434 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:37:04,765 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:39:00,886 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:45:36,554 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:48:37,986 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-01-28 16:48:38,003 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-28 16:48:38,003 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:48:45,453 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:48:45,484 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:49:17,359 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:49:17] "GET /auth/secret-key HTTP/1.1" 200 -
+2025-01-28 16:54:01,445 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\routes.py', reloading
+2025-01-28 16:54:07,226 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:54:31,946 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:54:32,118 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 16:54:33,046 - werkzeug - INFO - 127.0.0.1 - - [28/Jan/2025 16:54:33] "GET /auth/secret-key HTTP/1.1" 200 -
+2025-01-28 16:58:47,611 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\views\\2fa_auth.py', reloading
+2025-01-28 16:58:51,680 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 16:59:21,664 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 16:59:21,718 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 17:00:11,456 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\views\\social_media_auth.py', reloading
+2025-01-28 17:00:14,705 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 17:00:32,567 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 17:00:32,613 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 17:02:24,452 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\test\\test_market.py', reloading
+2025-01-28 17:02:27,370 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 17:04:16,126 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 17:04:16,157 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 17:05:31,586 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\__init__.py', reloading
+2025-01-28 17:05:34,694 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 17:06:18,942 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 17:06:19,016 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 17:07:16,739 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\__init__.py', reloading
+2025-01-28 17:07:20,484 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 17:07:38,329 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 17:07:38,435 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 17:08:47,460 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\__init__.py', reloading
+2025-01-28 17:08:50,581 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 17:09:02,510 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 17:09:02,541 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 17:09:48,633 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\__init__.py', reloading
+2025-01-28 17:09:53,743 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 17:10:05,916 - werkzeug - WARNING -  * Debugger is active!
+2025-01-28 17:10:05,947 - werkzeug - INFO -  * Debugger PIN: 454-738-699
+2025-01-28 17:10:50,446 - werkzeug - INFO -  * Detected change in 'C:\\Users\\pc\\OneDrive\\Documentos\\PythonProjects\\laurindo-c-benjamim-portfolio\\market\\__init__.py', reloading
+2025-01-28 17:10:51,880 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 17:12:52,690 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 17:14:06,868 - werkzeug - INFO -  * Restarting with stat
+2025-01-28 17:15:05,956 - werkzeug - INFO -  * Restarting with stat

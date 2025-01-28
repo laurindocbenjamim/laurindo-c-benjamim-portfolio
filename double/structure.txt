@@ -1,0 +1,18 @@
+translate_app/
+├── app/
+│   ├── __init__.py
+│   ├── routes.py
+│   ├── forms.py
+│   ├── utils.py
+│   ├── templates/
+│   │   ├── index.html
+│   │   ├── result.html
+│   ├── static/
+│   │   ├── css/
+│   │   │   ├── styles.css
+│   ├── tests/
+│   │   ├── test_app.py
+├── config.py
+├── run.py
+├── requirements.txt
+├── README.md

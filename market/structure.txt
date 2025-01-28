@@ -1,0 +1,23 @@
+project/
+├── backend/
+│   ├── config.py
+│   ├── models.py
+│   ├── routes.py
+│   ├── utils.py
+│   ├── security.py
+│   ├── documentation/
+│   ├── static/uploads/
+│   └── ...
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── ...
+│   └── ...
+├── docs/
+│   ├── api.md
+│   └── ...
+├── Makefile
+├── README.md
+├── LICENSE
+└── requirements.txt
