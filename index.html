@@ -531,7 +531,7 @@
                             <source id="videoSource" src="http://localhost:5000/api/files-storage/video/get/249475_tiny_122bb7e0.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>-->
-                        <section class="videoPlayer" id="videoPlayer"></section>
+                        <section class="videoPlayerSection" id="videoPlayerSection"></section>
                         <div id="progress-bar" onclick="seekVideo(event)">
                             <div id="progress"></div>
                         </div>
@@ -579,7 +579,7 @@
     <!--<script type="module" src="app/video_player.js"></script>-->
 
     <script>
-        const video = document.getElementById('videoPlayer');
+        const video = document.getElementById('videoPlayerSection');
         let videoSource = document.querySelector('video source'); 
         
         const speechText = document.getElementById('speechText');
@@ -645,7 +645,6 @@ const videoUrl = paramValue ? `${domain}/api/files-storage/video/get/${paramValu
    
    setVideoToPlayer(videoUrl);
 
-    //document.getElementById('videoSource').src = videoUrl;
         // Toggle play and pause functionality
         function playPauseVideo() {
             if (video.paused) {
