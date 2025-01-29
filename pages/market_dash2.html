@@ -116,7 +116,8 @@
     <script>
         // static/script.js
 let currentCharts = [];
-
+let domain = 'http://localhost:5000';
+domain='https://www.d-tuning.com'
 function renderFinancialData(data, containerId, isCrypto = false) {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
@@ -180,16 +181,17 @@ function renderChart(canvas, historicalData) {
     currentCharts.push(chart);
 }
 
+
 // Stock Data Handling
 function loadData(period = '1d') {
-    fetch(`http://localhost:5000/api/stocks?symbols=AAPL,MSFT&period=1mo`)
+    fetch(`${domain}/api/stocks?symbols=AAPL,MSFT&period=1mo`)
         .then(response => response.json())
         .then(data => renderFinancialData(data, 'stocksContent'));
 }
 
 // Crypto Data Handling
 function loadCryptoData(period = '1d') {
-    fetch(`http://localhost:5000/api/crypto/${period}`)
+    fetch(`${domain}/api/crypto/${period}`)
         .then(response => response.json())
         .then(data => renderFinancialData(data, 'cryptoContent', true));
 }
