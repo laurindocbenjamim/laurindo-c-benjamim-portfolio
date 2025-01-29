@@ -579,8 +579,7 @@
     <!--<script type="module" src="app/video_player.js"></script>-->
 
     <script>
-        const video = document.getElementById('videoPlayerSection');
-        let videoSource = document.querySelector('video source'); 
+       
         
         const speechText = document.getElementById('speechText');
         const progressBar = document.getElementById('progress');
@@ -609,11 +608,11 @@
         video.innerHTML = `<source src="${videoSrc}" type="video/mp4">`;
 */
         function setVideoToPlayer(videoUrl){
-            let videoPlayer = document.getElementById('videoPlayer');
+            let videoPlayerSection = document.getElementById('videoPlayerSection');
             if(!videoUrl){
                 throw new Error("No video URL was received!")
             }
-            videoPlayer.innerHTML =`<video id="videoPlayer" autoplay muted playsinline>
+            videoPlayerSection.innerHTML =`<video id="videoPlayer" autoplay muted playsinline>
                             <source id="videoSource" src="${videoUrl}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>`;
@@ -644,6 +643,9 @@ const defaultVideoPath = `${domain}/api/files-storage/video/get/249475_tiny_f8e1
 const videoUrl = paramValue ? `${domain}/api/files-storage/video/get/${paramValue}` : defaultVideoPath;
    
    setVideoToPlayer(videoUrl);
+   
+   const video = document.getElementById('videoPlayer');
+   let videoSource = document.querySelector('video source'); 
 
         // Toggle play and pause functionality
         function playPauseVideo() {
