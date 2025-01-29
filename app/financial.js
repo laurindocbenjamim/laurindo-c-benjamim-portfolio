@@ -65,14 +65,14 @@ function renderChart(canvas, historicalData) {
 
 // Stock Data Handling
 function loadData(period = '1d') {
-    fetch(`/stocks/${period}`)
+    fetch(`http://localhost:5000/api/stocks/${period}`)
         .then(response => response.json())
         .then(data => renderFinancialData(data, 'stocksContent'));
 }
 
 // Crypto Data Handling
 function loadCryptoData(period = '1d') {
-    fetch(`/crypto/${period}`)
+    fetch(`http://localhost:5000/api/crypto/${period}`)
         .then(response => response.json())
         .then(data => renderFinancialData(data, 'cryptoContent', true));
 }
@@ -84,3 +84,4 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target.hash === '#crypto') loadCryptoData();
     });
 });
+

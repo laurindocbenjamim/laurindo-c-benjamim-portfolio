@@ -1,5 +1,23 @@
 @echo off
 
+
+:: Check if the .env directory exists in the current path
+IF not exist ".env\" (
+    echo The .env directory does not exist in the current path.
+    echo Creating the .env directory...
+    ::mkdir .env
+    python -m venv .env
+    
+    if exist ".env\" (
+        echo The .env directory has been created successfully.
+    ) else (
+        echo Failed to create the .env directory.
+    )
+) ELSE (
+    echo The .env directory already exists in the current path.
+)
+
+
 REM Function to check if the virtual environment is activated
 SETLOCAL ENABLEDELAYEDEXPANSION
 SET "VIRTUAL_ENV_ACTIVATED=0"
@@ -10,6 +28,8 @@ IF DEFINED VIRTUAL_ENV (
 IF "!VIRTUAL_ENV_ACTIVATED!"=="0" (
     echo Virtual environment not activated. Activating...
     call .env\Scripts\activate.bat
+    set "path=%cd%"
+    echo Current path: %path%
 ) ELSE (
     echo Virtual environment already activated.
 )

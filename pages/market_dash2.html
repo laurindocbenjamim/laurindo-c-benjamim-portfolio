@@ -1,0 +1,208 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --primary-color: #2962ff;
+        }
+        
+        body {
+            background: var(--bg-color);
+            min-height: 100vh;
+        }
+        
+        .nav-tabs {
+            background: var(--card-bg);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .period-selector {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <!-- Navigation -->
+        <ul class="nav nav-tabs mb-4" id="dashboardTabs">
+            <li class="nav-item">
+                <a class="nav-link" href="./../index.html">
+                    <i class="fas fa-home me-2"></i>Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#stocks">
+                    <i class="fas fa-chart-line me-2"></i>Stocks
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#crypto">
+                    <i class="fas fa-coins me-2"></i>Crypto
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Stocks Dashboard -->
+            <div class="tab-pane fade show active" id="stocks">
+                <div class="period-selector">
+                    <div class="btn-group">
+                        <button onclick="loadData('1d')" class="btn btn-outline-primary">
+                            <i class="fas fa-clock me-2"></i>1D
+                        </button>
+                        <button onclick="loadData('5d')" class="btn btn-outline-primary">
+                            <i class="fas fa-calendar-day me-2"></i>1W
+                        </button>
+                        <button onclick="loadData('1mo')" class="btn btn-outline-primary">
+                            <i class="fas fa-calendar-alt me-2"></i>1M
+                        </button>
+                        <button onclick="loadData('6mo')" class="btn btn-outline-primary">
+                            <i class="fas fa-chart-area me-2"></i>6M
+                        </button>
+                        <button onclick="loadData('1y')" class="btn btn-outline-primary">
+                            <i class="fas fa-calendar-year me-2"></i>1Y
+                        </button>
+                    </div>
+                </div>
+                <div class="row" id="stocksContent"></div>
+            </div>
+
+            <!-- Crypto Dashboard -->
+            <div class="tab-pane fade" id="crypto">
+                <div class="period-selector">
+                    <div class="btn-group">
+                        <button onclick="loadCryptoData('1d')" class="btn btn-outline-warning">
+                            <i class="fas fa-clock me-2"></i>1D
+                        </button>
+                        <!-- Add other period buttons similar to stocks -->
+                    </div>
+                </div>
+                <div class="row" id="cryptoContent"></div>
+            </div>
+
+        </div>
+
+        <div class="" id="chartContainer"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app/financial.js"></script>
+    <script src="app/dashboard_market.js"></script>
+    <script>
+        // static/script.js
+let currentCharts = [];
+
+function renderFinancialData(data, containerId, isCrypto = false) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    currentCharts.forEach(chart => chart.destroy());
+    currentCharts = [];
+
+    Object.entries(data).forEach(([symbol, stockData]) => {
+       
+        const card = document.createElement('div');
+        card.className = 'col-md-6 col-xl-4 mb-4';
+        card.innerHTML = `
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title">${symbol}</h5>
+                        <span class="badge bg-${isCrypto ? 'warning' : 'primary'}">${isCrypto ? 'CRYPTO' : 'STOCK'}</span>
+                    </div>
+                    <h2 class="card-text ${stockData.price_change >= 0 ? 'text-success' : 'text-danger'}">
+                        $${stockData.current_price.toFixed(2)}
+                        <small class="fs-6">(${stockData.change_percent.toFixed(2)}%)</small>
+                    </h2>
+                    <canvas class="mt-3" height="120"></canvas>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(card);
+        const canvas = card.querySelector('canvas');
+        renderChart(canvas, stockData.historical);
+    });
+}
+
+function renderChart(canvas, historicalData) {
+    const chart = new Chart(canvas, {
+        type: 'line',
+        data: {
+            labels: historicalData.map(d => d.date),
+            datasets: [{
+                data: historicalData.map(d => d.price),
+                borderColor: '#2962ff',
+                backgroundColor: 'rgba(41, 98, 255, 0.05)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            },
+            scales: {
+                x: { display: false },
+                y: { display: false }
+            }
+        }
+    });
+    currentCharts.push(chart);
+}
+
+// Stock Data Handling
+function loadData(period = '1d') {
+    fetch(`http://localhost:5000/api/stocks?symbols=AAPL,MSFT&period=1mo`)
+        .then(response => response.json())
+        .then(data => renderFinancialData(data, 'stocksContent'));
+}
+
+// Crypto Data Handling
+function loadCryptoData(period = '1d') {
+    fetch(`http://localhost:5000/api/crypto/${period}`)
+        .then(response => response.json())
+        .then(data => renderFinancialData(data, 'cryptoContent', true));
+}
+
+// Initial Load
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    document.getElementById('dashboardTabs').addEventListener('shown.bs.tab', event => {
+        if (event.target.hash === '#crypto') loadCryptoData();
+    });
+});
+
+
+    </script>
+</body>
+</html>
