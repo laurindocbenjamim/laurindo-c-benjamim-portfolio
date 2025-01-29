@@ -51,7 +51,7 @@ function getSecondParameterValue(url, parameterKey) {
 
 const paramValue = getSecondParameterValue(window.location.search, 'file');
 let domain='http://localhost:5000';
-domain='https:www.d-tuning.com';
+//domain='https:www.d-tuning.com';
 const defaultVideoPath = `${domain}/api/files-storage/video/get/249475_tiny_b01f14ab.mp4`;
 //const defaultVideoPath = `${domain}/api/files-storage/video/get/249475_tiny_b01f14ab.mp4`;
     let videoUrl = null

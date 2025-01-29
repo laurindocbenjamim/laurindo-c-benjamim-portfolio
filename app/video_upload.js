@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const myVideosListContainer = document.getElementById("myVideosListContainer");
     
     let domain='http://localhost:5000'
-    domain='https://www.d-tuning.com'
+    //domain='https://www.d-tuning.com'
     getVideoFiles(domain);
 
     function getVideoFiles(domain){
@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
             myVideosListContainer.innerHTML = ""; 
             let link=''
             
-            link =`${window.location.origin}/laurindo-c-benjamim-portfolio/index.html?file`;
-            //link=`${window.location.origin}/index.html?file`;
+            //link =`${window.location.origin}/laurindo-c-benjamim-portfolio/index.html?file`;
+            link=`${window.location.origin}/index.html?file`;
             myVideosListContainer.innerHTML = filelist.map(item =>                 
                 `<li><a href="${link}=${item}" class="link-body-emphasis text-primary d-inline-flex text-decoration-none rounded"><img width="20" height="20" src="https://img.icons8.com/dotty/80/video-file.png" alt="video-file"/>${item}</a></li>`
             ).join('');

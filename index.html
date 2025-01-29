@@ -527,10 +527,11 @@
                 <div class="container mt-5">
                     <h1 class="text-center">Professional Video Player</h1>
                     <div class="video-container">
-                        <video id="videoPlayer" autoplay muted playsinline>
+                        <!--<video id="videoPlayer" autoplay muted playsinline>
                             <source id="videoSource" src="http://localhost:5000/api/files-storage/video/get/249475_tiny_122bb7e0.mp4" type="video/mp4">
                             Your browser does not support the video tag.
-                        </video>
+                        </video>-->
+                        <section class="videoPlayer" id="videoPlayer"></section>
                         <div id="progress-bar" onclick="seekVideo(event)">
                             <div id="progress"></div>
                         </div>
@@ -579,7 +580,8 @@
 
     <script>
         const video = document.getElementById('videoPlayer');
-        const videoSource = document.querySelector('video source'); 
+        let videoSource = document.querySelector('video source'); 
+        
         const speechText = document.getElementById('speechText');
         const progressBar = document.getElementById('progress');
         const progressContainer = document.getElementById('progress-bar');
@@ -606,7 +608,16 @@
         const videoSrc = params ? `https:www.d-tuning.com/api/files-storage/video/get/${params.file}` : "https:www.d-tuning.com/api/files-storage/video/get/249475_tiny_bda646bf.mp4";
         video.innerHTML = `<source src="${videoSrc}" type="video/mp4">`;
 */
-
+        function setVideoToPlayer(videoUrl){
+            let videoPlayer = document.getElementById('videoPlayer');
+            if(!videoUrl){
+                throw new Error("No video URL was received!")
+            }
+            videoPlayer.innerHTML =`<video id="videoPlayer" autoplay muted playsinline>
+                            <source id="videoSource" src="${videoUrl}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>`;
+        }
 function getUrlParams() {
   const params = new URLSearchParams(window.location.search);
   const result = {};
@@ -627,18 +638,14 @@ function getSecondParameterValue(url, parameterKey) {
 
 const paramValue = getSecondParameterValue(window.location.search, 'file');
 let domain='http://localhost:5000';
-domain='https:www.d-tuning.com';
-const defaultVideoPath = `${domain}/api/files-storage/video/get/249475_tiny_b01f14ab.mp4`;
-//const defaultVideoPath = `${domain}/api/files-storage/video/get/249475_tiny_b01f14ab.mp4`;
-    let videoUrl = null
-    if (paramValue === null || paramValue === 'null' || paramValue === undefined || paramValue === 'undefined') {
-        videoUrl = defaultVideoPath;
-    } else {
-        videoUrl = paramValue ? `${domain}/api/files-storage/video/get/${paramValue}` : defaultVideoPath;
-    }
-   console.log("File: "+videoUrl)
-    
-    document.getElementById('videoSource').src = videoUrl;
+//domain='https:www.d-tuning.com';
+const defaultVideoPath = `${domain}/api/files-storage/video/get/249475_tiny_f8e13a20.mp4`;
+
+const videoUrl = paramValue ? `${domain}/api/files-storage/video/get/${paramValue}` : defaultVideoPath;
+   
+   setVideoToPlayer(videoUrl);
+
+    //document.getElementById('videoSource').src = videoUrl;
         // Toggle play and pause functionality
         function playPauseVideo() {
             if (video.paused) {
