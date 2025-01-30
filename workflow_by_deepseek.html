@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Workflow Orchestrator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .workflow-block {
+            position: absolute;
+            width: 180px;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: move;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .workflow-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .block-file { background: #e3f2fd; border: 2px solid #2196f3; }
+        .block-scraper { background: #f0f4c3; border: 2px solid #cddc39; }
+        .block-extract { background: #c8e6c9; border: 2px solid #4caf50; }
+        .block-transform { background: #fff9c4; border: 2px solid #ffeb3b; }
+        .block-clean { background: #ffcdd2; border: 2px solid #f44336; }
+        .block-load { background: #e1bee7; border: 2px solid #9c27b0; }
+        .block-warehouse { background: #d7ccc8; border: 2px solid #795548; }
+
+        .connector {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            position: absolute;
+            cursor: pointer;
+        }
+
+        .input-connector { left: -8px; background: #4CAF50; }
+        .output-connector { right: -8px; background: #2196F3; }
+
+        .connection-path {
+            stroke: #666;
+            stroke-width: 2;
+            fill: none;
+            pointer-events: none;
+        }
+
+        .drop-zone {
+            border: 2px dashed #ccc;
+            transition: all 0.3s;
+        }
+        
+        .drop-zone.dragover {
+            border-color: #0d6efd;
+            background-color: rgba(13, 110, 253, 0.1);
+        }
+        
+        .block-menu {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+        
+        .block-menu:hover {
+            opacity: 1;
+        }
+        
+        .data-source-item {
+            cursor: move;
+            transition: transform 0.2s;
+        }
+        
+        .data-source-item:hover {
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid min-vh-100 bg-light">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 bg-white border-end p-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0 text-primary"><i class="fas fa-toolbox me-2"></i>Toolbox</h4>
+                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#dataSourceModal">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                
+                <!-- Data Sources List -->
+                <div class="mb-4">
+                    <h6 class="text-muted mb-2"><i class="fas fa-database me-2"></i>Data Sources</h6>
+                    <div id="dataSourcesList" class="list-group" style="max-height: 300px; overflow-y: auto;">
+                        <!-- Dynamic content will be added here -->
+                    </div>
+                </div>
+
+                <div class="draggable-block btn btn-outline-secondary mb-2 w-100" data-type="file">
+                    <i class="fas fa-file me-2"></i>File Input
+                </div>
+                <div class="draggable-block btn btn-outline-secondary mb-2 w-100" data-type="scraper">
+                    <i class="fas fa-globe me-2"></i>Web Scraper
+                </div>
+                <div class="draggable-block btn btn-outline-secondary mb-2 w-100" data-type="extract">
+                    <i class="fas fa-database me-2"></i>Extraction Engine
+                </div>
+                <div class="draggable-block btn btn-outline-secondary mb-2 w-100" data-type="transform">
+                    <i class="fas fa-cogs me-2"></i>Transformation Engine
+                </div>
+                <div class="draggable-block btn btn-outline-secondary mb-2 w-100" data-type="clean">
+                    <i class="fas fa-broom me-2"></i>Cleaning Engine
+                </div>
+                <div class="draggable-block btn btn-outline-secondary mb-2 w-100" data-type="load">
+                    <i class="fas fa-truck-loading me-2"></i>Loading Engine
+                </div>
+                <div class="draggable-block btn btn-outline-secondary mb-2 w-100" data-type="warehouse">
+                    <i class="fas fa-server me-2"></i>Data Warehouse
+                </div>
+            </div>
+
+            <!-- Main Workspace -->
+            <div class="col-md-9 p-3">
+                <div class="d-flex justify-content-between mb-3">
+                    <h3 class="text-dark"><i class="fas fa-project-diagram me-2"></i>Workflow Canvas</h3>
+                    <div>
+                        <button id="testBtn" class="btn btn-warning me-2">
+                            <i class="fas fa-vial me-2"></i>Test Connections
+                        </button>
+                        <button id="startBtn" class="btn btn-success">
+                            <i class="fas fa-play me-2"></i>Start Process
+                        </button>
+                    </div>
+                </div>
+
+                <div id="canvas" class="bg-white rounded-3 border p-4 position-relative" 
+                     style="min-height: 600px; overflow: auto;">
+                    <!-- Workflow blocks will be added here dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Source Modal -->
+    <div class="modal fade" id="dataSourceModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Data Source</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-3">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#fileTab">Files</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#urlTab">URLs</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="fileTab">
+                            <div class="drop-zone border rounded p-4 text-center mb-3">
+                                <input type="file" id="fileInput" multiple class="d-none">
+                                <p>Drag & drop files here or</p>
+                                <button class="btn btn-sm btn-secondary" onclick="document.getElementById('fileInput').click()">
+                                    Browse Files
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="urlTab">
+                            <div class="input-group mb-3">
+                                <input type="url" id="urlInput" class="form-control" placeholder="Enter URL">
+                                <button class="btn btn-primary" onclick="addUrl()">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let blocks = [];
+            let connections = [];
+            let dataSources = [];
+
+            // Initialize interact.js
+            interact('.draggable-block').draggable({
+                listeners: {
+                    start: (event) => {
+                        const type = event.target.dataset.type;
+                        createNewBlock(type, event.clientX, event.clientY);
+                    },
+                    move: dragMoveListener,
+                    end: () => {}
+                }
+            });
+
+            function createNewBlock(type, x, y) {
+                const blockId = `block-${Date.now()}`;
+                const block = document.createElement('div');
+                block.className = `workflow-block block-${type}`;
+                block.id = blockId;
+                block.innerHTML = `
+                    <i class="fas fa-ellipsis-v block-menu"></i>
+                    <div class="connector input-connector" data-block="${blockId}"></div>
+                    <div class="connector output-connector" data-block="${blockId}"></div>
+                    <div class="text-center">
+                        <i class="${getBlockIcon(type)} fa-2x mb-2"></i>
+                        <h6 class="mb-0">${getBlockTitle(type)}</h6>
+                    </div>
+                `;
+
+                const canvas = document.getElementById('canvas');
+                const rect = canvas.getBoundingClientRect();
+                block.style.left = `${x - rect.left - 90}px`;
+                block.style.top = `${y - rect.top - 40}px`;
+
+                canvas.appendChild(block);
+                blocks.push({ id: blockId, type, x, y });
+
+                interact(block).draggable({
+                    listeners: { move: dragMoveListener },
+                    modifiers: [
+                        interact.modifiers.restrictRect({
+                            restriction: 'parent',
+                            endOnly: true
+                        })
+                    ]
+                });
+
+                interact(block.querySelectorAll('.connector')).dropzone({
+                    accept: '.connector',
+                    ondrop: handleConnection
+                });
+            }
+
+            function handleConnection(event) {
+                const source = event.relatedTarget;
+                const target = event.target;
+                if (source !== target && source.classList.contains('output-connector')) {
+                    createConnection(source, target);
+                }
+            }
+
+            function createConnection(source, target) {
+                const connection = {
+                    source: source.dataset.block,
+                    target: target.dataset.block,
+                    path: null
+                };
+                connections.push(connection);
+                updateConnections();
+            }
+
+            function updateConnections() {
+                connections.forEach(conn => {
+                    if (conn.path) conn.path.remove();
+                    const sourceEl = document.querySelector(`#${conn.source} .output-connector`);
+                    const targetEl = document.querySelector(`#${conn.target} .input-connector`);
+                    conn.path = drawConnection(sourceEl, targetEl);
+                });
+            }
+
+            function drawConnection(source, target) {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                svg.appendChild(path);
+                document.getElementById('canvas').appendChild(svg);
+
+                const updatePath = () => {
+                    const sourceRect = source.getBoundingClientRect();
+                    const targetRect = target.getBoundingClientRect();
+                    const canvasRect = document.getElementById('canvas').getBoundingClientRect();
+
+                    const start = {
+                        x: sourceRect.left - canvasRect.left + sourceRect.width,
+                        y: sourceRect.top - canvasRect.top + sourceRect.height/2
+                    };
+                    
+                    const end = {
+                        x: targetRect.left - canvasRect.left,
+                        y: targetRect.top - canvasRect.top + targetRect.height/2
+                    };
+
+                    path.setAttribute('d', `M ${start.x} ${start.y} C ${start.x + 100} ${start.y}, ${end.x - 100} ${end.y}, ${end.x} ${end.y}`);
+                    path.setAttribute('class', 'connection-path');
+                    
+                    svg.setAttribute('width', canvasRect.width);
+                    svg.setAttribute('height', canvasRect.height);
+                    svg.style.position = 'absolute';
+                    svg.style.left = '0';
+                    svg.style.top = '0';
+                };
+
+                updatePath();
+                window.addEventListener('resize', updatePath);
+                return path;
+            }
+
+            // Helper functions
+            function getBlockIcon(type) {
+                const icons = {
+                    file: 'fas fa-file',
+                    scraper: 'fas fa-globe',
+                    extract: 'fas fa-database',
+                    transform: 'fas fa-cogs',
+                    clean: 'fas fa-broom',
+                    load: 'fas fa-truck-loading',
+                    warehouse: 'fas fa-server'
+                };
+                return icons[type];
+            }
+
+            function getBlockTitle(type) {
+                const titles = {
+                    file: 'File Input',
+                    scraper: 'Web Scraper',
+                    extract: 'Extraction Engine',
+                    transform: 'Transformation Engine',
+                    clean: 'Cleaning Engine',
+                    load: 'Loading Engine',
+                    warehouse: 'Data Warehouse'
+                };
+                return titles[type];
+            }
+
+            // Data Source Handling
+            function initDataSourceDrag() {
+                interact('.data-source-item').draggable({
+                    listeners: {
+                        start(event) {
+                            event.target.classList.add('dragging');
+                        },
+                        end(event) {
+                            event.target.classList.remove('dragging');
+                        }
+                    }
+                });
+            }
+
+            document.getElementById('fileInput').addEventListener('change', function(e) {
+                Array.from(e.target.files).forEach(file => {
+                    dataSources.push({
+                        type: 'file',
+                        name: file.name,
+                        content: file
+                    });
+                });
+                updateDataSourceList();
+            });
+
+            window.addUrl = function() {
+                const urlInput = document.getElementById('urlInput');
+                if (urlInput.checkValidity()) {
+                    dataSources.push({
+                        type: 'url',
+                        name: urlInput.value,
+                        content: urlInput.value
+                    });
+                    urlInput.value = '';
+                    updateDataSourceList();
+                }
+            }
+
+            function updateDataSourceList() {
+                const list = document.getElementById('dataSourcesList');
+                list.innerHTML = dataSources.map((source, index) => `
+                    <div class="list-group-item data-source-item py-2 d-flex align-items-center">
+                        <i class="fas fa-${source.type === 'file' ? 'file' : 'link'} me-2"></i>
+                        <span class="text-truncate">${source.name}</span>
+                        <small class="ms-auto text-muted">#${index + 1}</small>
+                    </div>
+                `).join('');
+                initDataSourceDrag();
+            }
+
+            // Block Renaming
+            document.addEventListener('dblclick', function(e) {
+                if (e.target.closest('.workflow-block h6')) {
+                    const titleElement = e.target.closest('h6');
+                    const originalText = titleElement.textContent;
+                    
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = originalText;
+                    input.className = 'form-control form-control-sm';
+                    
+                    titleElement.replaceWith(input);
+                    input.focus();
+                    
+                    input.addEventListener('blur', function() {
+                        titleElement.textContent = input.value;
+                        input.replaceWith(titleElement);
+                    });
+                    
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            titleElement.textContent = input.value;
+                            input.replaceWith(titleElement);
+                        }
+                    });
+                }
+            });
+
+            // Block Context Menu
+            document.addEventListener('click', function(e) {
+                const menuBtn = e.target.closest('.block-menu');
+                if (menuBtn) {
+                    const block = menuBtn.closest('.workflow-block');
+                    showBlockMenu(block, menuBtn);
+                }
+            });
+
+            function showBlockMenu(block, trigger) {
+                const menuContent = document.createElement('div');
+                menuContent.className = 'dropdown-menu show';
+                menuContent.innerHTML = `
+                    <div class="dropdown-header">Connection Options</div>
+                    <button class="dropdown-item" type="button" onclick="handleConnectionRequest('${block.id}')">
+                        <i class="fas fa-link me-2"></i>Connect to...
+                    </button>
+                    <button class="dropdown-item" type="button" onclick="deleteBlock('${block.id}')">
+                        <i class="fas fa-trash me-2"></i>Delete
+                    </button>
+                `;
+                
+                document.body.appendChild(menuContent);
+                const rect = trigger.getBoundingClientRect();
+                menuContent.style.position = 'absolute';
+                menuContent.style.left = `${rect.left}px`;
+                menuContent.style.top = `${rect.bottom}px`;
+                
+                const clickHandler = e => {
+                    if (!menuContent.contains(e.target)) {
+                        menuContent.remove();
+                        document.removeEventListener('click', clickHandler);
+                    }
+                };
+                
+                document.addEventListener('click', clickHandler);
+            }
+
+            // File Drag & Drop Handling
+            const dropZone = document.querySelector('.drop-zone');
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+
+            dropZone.addEventListener('drop', handleDrop, false);
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            function highlight(e) {
+                dropZone.classList.add('dragover');
+            }
+
+            function unhighlight(e) {
+                dropZone.classList.remove('dragover');
+            }
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                document.getElementById('fileInput').files = files;
+                document.getElementById('fileInput').dispatchEvent(new Event('change'));
+            }
+
+            // Test and Start Buttons
+            document.getElementById('testBtn').addEventListener('click', testConnections);
+            document.getElementById('startBtn').addEventListener('click', startWorkflow);
+
+            function testConnections() {
+                const isValid = connections.every(conn => {
+                    const sourceBlock = blocks.find(b => b.id === conn.source.split(' ')[0]);
+                    const targetBlock = blocks.find(b => b.id === conn.target.split(' ')[0]);
+                    return validateConnection(sourceBlock.type, targetBlock.type);
+                });
+
+                if (!isValid) {
+                    showError('Invalid connections detected!');
+                } else {
+                    showSuccess('All connections are valid!');
+                }
+            }
+
+            function startWorkflow() {
+                // Implement workflow execution
+                showSuccess('Workflow started successfully!');
+            }
+
+            function validateConnection(sourceType, targetType) {
+                const validConnections = {
+                    file: ['extract'],
+                    scraper: ['extract'],
+                    extract: ['transform'],
+                    transform: ['clean'],
+                    clean: ['load'],
+                    load: ['warehouse']
+                };
+                return validConnections[sourceType]?.includes(targetType);
+            }
+
+            function showError(message) {
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-danger position-fixed top-0 end-0 m-3';
+                alert.role = 'alert';
+                alert.innerHTML = `<i class="fas fa-exclamation-circle me-2"></i>${message}`;
+                document.body.appendChild(alert);
+                setTimeout(() => alert.remove(), 3000);
+            }
+
+            function showSuccess(message) {
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-success position-fixed top-0 end-0 m-3';
+                alert.role = 'alert';
+                alert.innerHTML = `<i class="fas fa-check-circle me-2"></i>${message}`;
+                document.body.appendChild(alert);
+                setTimeout(() => alert.remove(), 3000);
+            }
+        });
+
+        function dragMoveListener(event) {
+            const target = event.target;
+            const x = (parseFloat(target.style.left) || 0) + event.dx;
+            const y = (parseFloat(target.style.top) || 0) + event.dy;
+            target.style.left = `${x}px`;
+            target.style.top = `${y}px`;
+        }
+    </script>
+</body>
+</html>
