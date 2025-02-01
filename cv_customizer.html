@@ -416,6 +416,7 @@
 
                                         <div class="mb-2">
                                             <div class="col-12">
+                                                <div id="download-box"></div>
                                                 <div class="success-message text-success" id="success-message"></div>
                                                 <div class="error-message text-danger" id="error-message"></div>
                                             </div>
@@ -541,6 +542,7 @@
                 event.preventDefault()
                 document.getElementById('error-message').textContent = '';
                 document.getElementById('success-message').textContent = '';
+                document.getElementById('download-box').innerHTML='';
 
                 if (!form.checkValidity()) {
                     event.stopPropagation();
@@ -549,8 +551,9 @@
                 }
                 let csrfToken=''
                 // Fetch CSRF token from the server
+                let domain ='http://127.0.0.1:5000'
                 try {
-                    const response = await fetch('http://127.0.0.1:5000/api/csrf-token/get', { method: 'GET' });
+                    const response = await fetch(`${domain}/api/csrf-token/get`, { method: 'GET' });
                     if (!response.ok) {
                         const errorText = await response.text();
                         throw new Error(`HTTP error! Status: ${response.status}. Response: ${errorText}`);
@@ -590,8 +593,7 @@
                     try {
                         validateVideoSize(file, 16)
                     } catch (error) {
-                        document.getElementById('error-message').textContent = error;
-                        document.getElementById('success-message').textContent = '';
+                        document.getElementById('error-message').textContent = error;                        
                         return error
                     }
                 }
@@ -599,8 +601,8 @@
 
 
                 document.getElementById('btnSubmit').innerHTML = spinnerHtml
-                endpoint = 'http://127.0.0.1:5000/api/cv-customizer'
-                fetch(endpoint, {
+                
+                fetch(`${domain}/api/cv-customizer`, {
                     method: 'POST',
                     body: formData,//JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
                     headers: headers
@@ -617,8 +619,24 @@
                         if (resp.error) {
                             document.getElementById('error-message').textContent = resp.error;
                             document.getElementById('success-message').textContent = '';
+                            document.getElementById('download-box').innerHTML='';
                         } else {
                             form.reset();
+                            let domain=''
+                            const downloadDocxLink =`<ul><li><a class="icon-link border" href='${domain}/${resp.docx_file_path}' target="_blank">Optimised CV.docx
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                                </svg></a></li>
+
+                                <li><a class="icon-link border" href='${domain}/${resp.pdf_file_path}' target="_blank">Optimised CV.pdf
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                                </svg></a></li><ul>
+
+                                `;
+                            document.getElementById('download-box').innerHTML=downloadDocxLink
                             document.getElementById('error-message').textContent = '';
                             document.getElementById('success-message').textContent = resp.message;
                         }
@@ -627,6 +645,7 @@
 
                     })
                     .catch((error) => {
+                        document.getElementById('download-box').innerHTML='';
                         document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
                         document.getElementById('error-message').textContent = error
                         document.getElementById('success-message').textContent = ''
