@@ -309,13 +309,88 @@
     <link href="assets/css/dashboard.css" rel="stylesheet">
     <link href="assets/css/sidebars.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    
+
+
+ <!-- ------- Libraries to Convert HTML to DOCX in JavaScript -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.0.6/pizzip.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.21.0/docxtemplater.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+ <!---------- Libraries to Convert HTML to PDF in JavaScript-->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
     <script src="assets/pages_component.js"></script>
+    <style>
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            background: white;
+            padding: 8px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toolbar button,
+        select {
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .toolbar button:hover {
+            background: #ddd;
+        }
+
+        iframe {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .preview-frame,
+        .editor-container {
+            margin-top: 10px;
+            background: white;
+            border: 1px solid #ccc;
+            min-height: 340px;
+            padding: 10px;
+            overflow-y: auto;
+            border-radius: 5px;
+            color: #333;
+            /* Darker text color for better contrast */
+            font-family: Arial, sans-serif;
+            /* Clear and readable font */
+            font-size: 16px;
+            /* Adjust text size for better visibility */
+        }
+
+        .preview-frame[contenteditable="true"]:focus {
+            outline: none;
+            border: 2px solid #aabad6;
+        }
+
+        .editor-container[contenteditable="true"]:focus {
+            outline: none;
+            border: 2px solid #aabad6;
+        }
+
+        #editor {
+            color: #333;
+            /* Darker text color for better contrast */
+            font-family: Arial, sans-serif;
+            /* Clear and readable font */
+            font-size: 16px;
+            /* Adjust text size for better visibility */
+        }
+    </style>
 
 </head>
 
-<body style="background: #00010a; color:#cac8c8
-">
+<body style="background: #00010a; color:#cac8c8">
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
         <symbol id="check2" viewBox="0 0 16 16">
             <path
@@ -424,7 +499,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-6 mb-1">
+                                        <div class="col-9 mb-2">
                                             <button type="submit" id="btnSubmit"
                                                 class="btn btn-primary btn-lg px-4 me-sm-3">
                                                 Submit
@@ -465,6 +540,129 @@
 
     </div>
 
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalPreviewDocuments" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <!-- Full screen modal -->
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <!--<div class="modal-header">-->
+
+
+
+                <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" id="exampleModalLabel" href="#" style="background-color: transparent;border: none;">
+                            
+                            Windows Preview</a>
+
+                        <div class="collapse navbar-collapse" id="navbarText">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+
+                                    <a class=" btn btn-outline-dark btn-sm active" id="btn-show-editor"
+                                        aria-current="page" href="#">
+                                        <i class="fas fa-edit"></i>
+                                        Editor.01</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class=" btn btn-outline-warning btn-sm" href="#"
+                                        id="btn-show-alternative-editor">
+                                        <i class="fas fa-edit"></i> Editor.02</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-dark btn-sm" href="#"
+                                        id="btn-download-docx">
+                                        <i class="fas fa-download"></i> DOCX</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-primary btn-sm" href="#"
+                                        id="btn-download-docx">
+                                        <i class="fas fa-download"></i>PDF</a>
+                                </li>
+                            </ul>
+                            <span class="navbar-text">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </span>
+                        </div>
+                    </div>
+                </nav>
+                <!--</div>-->
+                <div class="modal-body" id="modal-body-PreviewDocuments">
+
+                    <div class="toolbar">
+                        <button onclick="execCommand('bold')"><i class="fas fa-bold"></i></button>
+                        <button onclick="execCommand('italic')"><i class="fas fa-italic"></i></button>
+                        <button onclick="execCommand('underline')"><i class="fas fa-underline"></i></button>
+                        <button onclick="execCommand('strikeThrough')"><i class="fas fa-strikethrough"></i></button>
+                        <button onclick="execCommand('justifyLeft')"><i class="fas fa-align-left"></i></button>
+                        <button onclick="execCommand('justifyCenter')"><i class="fas fa-align-center"></i></button>
+                        <button onclick="execCommand('justifyRight')"><i class="fas fa-align-right"></i></button>
+                        <button onclick="execCommand('justifyFull')"><i class="fas fa-align-justify"></i></button>
+                        <button onclick="execCommand('insertUnorderedList')"><i class="fas fa-list-ul"></i></button>
+                        <button onclick="execCommand('insertOrderedList')"><i class="fas fa-list-ol"></i></button>
+                        <button onclick="execCommand('outdent')"><i class="fas fa-outdent"></i></button>
+                        <button onclick="execCommand('indent')"><i class="fas fa-indent"></i></button>
+                        <input type="color" onchange="execCommand('foreColor', this.value)">
+                        <input type="color" onchange="execCommand('hiliteColor', this.value)">
+                        <select onchange="execCommand('fontSize', this.value)">
+                            <option value="1">Small</option>
+                            <option value="3" selected>Normal</option>
+                            <option value="5">Large</option>
+                            <option value="7">Huge</option>
+                        </select>
+                        <select onchange="execCommand('fontName', this.value)">
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Courier New">Courier New</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
+                        <button onclick="execCommand('undo')"><i class="fas fa-undo"></i></button>
+                        <button onclick="execCommand('redo')"><i class="fas fa-redo"></i></button>
+                        <button onclick="clearEditor()"><i class="fas fa-eraser"></i> Clear</button>
+                    </div>
+
+                    <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-same-origin"
+                        style=""></iframe>
+
+                    <!-- Toolbar -->
+
+
+                    <!-- Editable CV Container -->
+                    <div id="editor" class="editor-container" contenteditable="true">
+                        <h1>Laurindo C. Benjamim</h1>
+                        <p><strong>Location:</strong> Porto, Portugal | <strong>Phone:</strong> (+351) 93-344-3506</p>
+                        <p><strong>Email:</strong> laurindocbenjamim@gmail.com | <strong>LinkedIn:</strong> <a
+                                href="https://www.linkedin.com/in/laurindocbenjamim/" target="_blank">Profile</a></p>
+                        <h2>Summary</h2>
+                        <p>Data Engineer with over 3 years of experience in designing, implementing, and managing data
+                            solutions. Proficient in ETL processes, data modeling, and cloud tools.</p>
+                        <h2>Core Skills</h2>
+                        <ul>
+                            <li>Data Engineering: ETL processes, Data modeling, Data pipelines</li>
+                            <li>Programming: Python, SQL, JavaScript, Flask, Angular</li>
+                            <li>Cloud Platforms: Azure, AWS, Google Cloud</li>
+                        </ul>
+                        <h2>Education</h2>
+                        <ul>
+                            <li>Master's in Biomedical Engineering, Universidade Católica Portuguesa do Porto (2023 –
+                                Present)</li>
+                            <li>Bachelor’s in Computer Engineering, Universidade José Eduardo dos Santos (2017)</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script> -->
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -474,8 +672,15 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <!---- Include DOMPurify (for sanitizing HTML) in my html preview -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.4/dist/purify.min.js"></script>
+
+
+   
 
     <script>
+
+
 
         document.addEventListener('DOMContentLoaded', () => {
             //const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
@@ -485,6 +690,40 @@
 
             const jobRequirement = document.getElementById('jobRequirement')
 
+            function previewPage(htmlContent) {
+                // Create a Blob from the HTML content
+                //const blob = new Blob([htmlContent], { type: "text/html" });
+
+                // Create an object URL and open it in a new tab
+                //const url = URL.createObjectURL(blob);
+                //window.open(url, "_blank");
+
+                // Sanitize HTML to remove potentially dangerous content
+                const sanitizedHtml = DOMPurify.sanitize(htmlContent);
+
+                // Get the iframe element
+                const iframe = document.getElementById("previewFrame");
+                try {
+                    editor2 = document.getElementById("editor").innerHTML = sanitizedHtml;
+                } catch (error) {
+                    console.log(error)
+                }
+
+                // Access iframe's document to inject the sanitized HTML
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+                // Open iframe document and write sanitized HTML content
+                iframeDoc.open();
+                iframeDoc.write(sanitizedHtml);
+                iframeDoc.close();
+
+                $(document).ready(function () {
+                    document.getElementById("previewFrame").style.display = 'block'
+                    document.getElementById("editor").style.display = 'none'
+                    $("#modalPreviewDocuments").modal("show");
+                });
+            };
+          
             document.getElementById('contentOrigin').addEventListener('change', (e) => {
 
                 if (e.target.value === 'file') {
@@ -511,6 +750,7 @@
                     `;
                 }
             })
+
 
             function validateVideoSize(file, sizeMB) {
                 // Validate file size (example: max 2MB) 
@@ -628,8 +868,45 @@
                             document.getElementById('download-box').innerHTML = downloadDocxLink
                             document.getElementById('error-message').textContent = '';
                             document.getElementById('success-message').textContent = resp.message;
+
+                            let json_object = {}
+                            if (resp.json) {
+                                var newObjParsed = JSON.parse(String(resp.json).replace(/\n/g, ''));
+
+                                let cv_optimised_html = newObjParsed.cv_in_html_format
+
+                                // Create button element
+                                const buttonPreview = document.createElement("button");
+                                // Create icon element
+                                const icon = document.createElement("i");
+                                //icon.className = "bi bi-eye"; // Bootstrap eye icon
+                                icon.className = "bi bi-box-arrow-up-right"
+
+                                // Append icon and text to button
+                                buttonPreview.appendChild(icon);
+                                // Add classes and attributes
+                                buttonPreview.type = "button";
+                                buttonPreview.className = "btn btn-outline-success";
+                                buttonPreview.textContent = "Preview";
+
+                                // Append the button to the body (or any specific element)
+                                document.getElementById('download-box').appendChild(buttonPreview);
+
+                                // Add click event listener
+                                buttonPreview.addEventListener("click", function () {
+
+                                    // Convert to lowercase for a case-insensitive check
+                                    if (!cv_optimised_html.toLowerCase().includes('<meta charset="utf-8">')) {
+                                        // Insert the meta tag after <head>
+                                        cv_optimised_html = cv_optimised_html.replace('<head>', '<head>\n    <meta charset="UTF-8">');
+                                        console.log("Meta charset added successfully.");
+                                    }
+                                    previewPage(cv_optimised_html)
+                                });
+
+                            }
                         }
-                        console.log(resp)
+                        //console.log(resp)
                         document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
 
                     })
@@ -643,6 +920,65 @@
 
             });
         });
+
+        document.getElementById('btn-show-alternative-editor').addEventListener('click', () => {
+            document.getElementById("previewFrame").style.display = 'none'
+            document.getElementById("editor").style.display = 'block'
+        })
+
+        document.getElementById('btn-show-editor').addEventListener('click', () => {
+            document.getElementById("previewFrame").style.display = 'block'
+            document.getElementById("editor").style.display = 'none'
+        })
+
+        // the method to convert HTML to DOCX
+        function htmlToDocx(htmlContent) { alert("Download DOCX... "+htmlContent)
+            if(!htmlContent){
+                throw new Error("Not content received")
+            }
+            const doc = new PizZip(); 
+            const docxTemplate = doc.file("word/document.xml", htmlContent); // Use a DOCX template
+
+            const zip = doc.generate();
+            const blob = new Blob([zip], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "cv_optimised.docx";
+            link.click();
+        }
+
+        // method to save HTML as a PDF
+        function saveHtmlAsPdf(element) {
+            alert("Download PDF... "+element)
+            //const element = document.getElementById("content"); // The element to be converted to PDF
+            if(!element){
+                throw new Error("Not content received")
+            }
+            html2pdf()
+                .from(element)
+                .save("cv_optimised.pdf");
+        }
+
+
+        function execCommand(command, value = null) {
+            document.execCommand(command, false, value);
+        }
+
+        function clearEditor() {
+            document.getElementById("editor").innerHTML = "";
+        }
+
+        // Function to handle the download action for both Docx and PDF
+        function handleDownload(buttonId, contentGetter, conversionFunction) {
+            document.getElementById(buttonId).addEventListener('click', function () {
+                const content = contentGetter();
+                conversionFunction(content);
+            });
+        }
+
+        // Example usage for docx and pdf buttons
+        handleDownload('btn-download-docx', () => document.getElementById("editor").innerHTML, htmlToDocx);
+        handleDownload('btn-download-pdf', () => document.getElementById("editor").innerHTML, saveHtmlAsPdf);
 
     </script>
 

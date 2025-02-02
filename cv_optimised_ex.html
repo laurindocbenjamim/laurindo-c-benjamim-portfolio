@@ -1,69 +1,135 @@
-<html>
-
-<head><style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
         body {
-             font-family: Arial, sans-serif;
-            
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
         }
-
-        .header {
-             font-size: 24px;
-             font-weight:
-                bold;
-             color: #2C3E50;
-            
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            background: white;
+            padding: 8px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
         }
-
-        .section-title {
-             font-size: 18px;
-             font-weight: bold;
-             margin-top: 20px;
-             color: #2980B9;
-            
+        .toolbar button, select {
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            font-size: 16px;
         }
-
-        .content {
-             margin-left: 20px;
-            
+        .toolbar button:hover {
+            background: #ddd;
         }
+        .editor-container {
+            margin-top: 10px;
+            background: white;
+            border: 1px solid #ccc;
+            min-height: 300px;
+            padding: 10px;
+            overflow-y: auto;
+            border-radius: 5px;
+        }
+        .editor-container[contenteditable="true"]:focus {
+            outline: none;
+            border: 2px solid #007bff;
+        }
+    </style>
+</head>
+<body>
 
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <button onclick="execCommand('bold')"><i class="fas fa-bold"></i></button>
+        <button onclick="execCommand('italic')"><i class="fas fa-italic"></i></button>
+        <button onclick="execCommand('underline')"><i class="fas fa-underline"></i></button>
+        <button onclick="execCommand('strikeThrough')"><i class="fas fa-strikethrough"></i></button>
+        <button onclick="execCommand('justifyLeft')"><i class="fas fa-align-left"></i></button>
+        <button onclick="execCommand('justifyCenter')"><i class="fas fa-align-center"></i></button>
+        <button onclick="execCommand('justifyRight')"><i class="fas fa-align-right"></i></button>
+        <button onclick="execCommand('justifyFull')"><i class="fas fa-align-justify"></i></button>
+        <button onclick="execCommand('insertUnorderedList')"><i class="fas fa-list-ul"></i></button>
+        <button onclick="execCommand('insertOrderedList')"><i class="fas fa-list-ol"></i></button>
+        <button onclick="execCommand('outdent')"><i class="fas fa-outdent"></i></button>
+        <button onclick="execCommand('indent')"><i class="fas fa-indent"></i></button>
+        <input type="color" onchange="execCommand('foreColor', this.value)">
+        <input type="color" onchange="execCommand('hiliteColor', this.value)">
+        <select onchange="execCommand('fontSize', this.value)">
+            <option value="1">Small</option>
+            <option value="3" selected>Normal</option>
+            <option value="5">Large</option>
+            <option value="7">Huge</option>
+        </select>
+        <select onchange="execCommand('fontName', this.value)">
+            <option value="Arial">Arial</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Verdana">Verdana</option>
+        </select>
+        <button onclick="execCommand('undo')"><i class="fas fa-undo"></i></button>
+        <button onclick="execCommand('redo')"><i class="fas fa-redo"></i></button>
+        <button onclick="clearEditor()"><i class="fas fa-eraser"></i> Clear</button>
+    </div>
+
+    <!-- Editable CV Container -->
+    <div id="editor" class="editor-container" contenteditable="true">
+        <h1>Laurindo C. Benjamim</h1>
+        <p><strong>Location:</strong> Porto, Portugal | <strong>Phone:</strong> (+351) 93-344-3506</p>
+        <p><strong>Email:</strong> laurindocbenjamim@gmail.com | <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/laurindocbenjamim/" target="_blank">Profile</a></p>
+        <h2>Summary</h2>
+        <p>Data Engineer with over 3 years of experience in designing, implementing, and managing data solutions. Proficient in ETL processes, data modeling, and cloud tools.</p>
+        <h2>Core Skills</h2>
+        <ul>
+            <li>Data Engineering: ETL processes, Data modeling, Data pipelines</li>
+            <li>Programming: Python, SQL, JavaScript, Flask, Angular</li>
+            <li>Cloud Platforms: Azure, AWS, Google Cloud</li>
+        </ul>
+        <h2>Education</h2>
+        <ul>
+            <li>Master's in Biomedical Engineering, Universidade Católica Portuguesa do Porto (2023 – Present)</li>
+            <li>Bachelor’s in Computer Engineering, Universidade José Eduardo dos Santos (2017)</li>
+        </ul>
+    </div>
+
+    <script>
+
+let string = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>`;
+
+// Convert to lowercase for a case-insensitive check
+if (!string.toLowerCase().includes('<meta charset="utf-8">')) {
+    // Insert the meta tag after <head>
+    string = string.replace('<head>', '<head>\n    <meta charset="UTF-8">');
+    console.log("Meta charset added successfully.");
+    alert("Meta charset added successfully.")
+}
+
+console.log(string);
         
-    </style></head>
+        function execCommand(command, value = null) {
+            document.execCommand(command, false, value);
+        }
 
-<body><div class="header"> Laurindo C. Benjamim <br> Porto, Portugal | (+351) 93-344-3506 |
-        laurindocbenjamim@gmail.com<br> <a href="https://www.linkedin.com/in/laurindocbenjamim/">LinkedIn
-            Profile</a></div><div class="section-title">Summary</div><div class="content"> Enthusiastic Data
-        Engineer with over 3 years of experience, specializing in designing, implementing, and managing data solutions
-        leveraging technologies such as Talend, DBT, and Azure tools. Proven ability to create scalable data pipelines
-        and maintain data quality in fast-paced environments. Fluent in Portuguese and English with a strong capacity
-        for collaboration within multicultural teams.</div><div class="section-title">Core Skills</div><div
-        class="content"> <ul> <li>Data Engineering: ETL processes, Data modeling, Data pipelines, Talend, DBT</li>
-             <li>Cloud Platforms: Azure (Databricks, Data Factory), AWS, Google Cloud Platform (GCP)</li> <li>
-                Programming: Python, SQL, JavaScript, Flask, Angular</li> <li>DevOps: CI/CD, Git, Jenkins</li> <li>
-                Tools: Apache Airflow, Talend, Apache Kafka, shell scripting</li> </ul></div><div
-        class="section-title">Professional Experience</div><div class="content"> <b>Data Engineer</b><br />
-        Self-Initiated & Academic Projects | January 2024 - Present<br /> <ul> <li>Designed an ETL pipeline using
-                Talend to normalize multi-source data for dashboard integration, improving data processing efficiency by
-                25%.</li> <li>Developed a sentiment analysis application achieving 90% accuracy by leveraging IBM
-                Watson NLP API.</li> <li>Implemented data monitoring tools, enhancing data quality oversight by 30%.
-            </li> </ul> <b>Python and Web Development Trainer</b><br /> Charkcoders, Gaia, Portugal | September
-        2023 � Present<br /> <ul> <li>Facilitated Python and web development courses, achieving a 75-90% improvement
-                in student skills.</li> </ul> <b>Full-Stack Developer</b><br /> Instituto Polit�cnico Privado
-        Esperan�a do Lubango, Angola | January 2018 - November 2021<br /> <ul> <li>Delivered a file management
-                system, achieving a 98% fulfillment of requirements, enhancing document retrieval processes.</li>
-        </ul> ELT - Contas, Lda, Lubango, Angola | March 2019 - September 2021<br /> <ul> <li>Engineered a
-                shopping web application with Laravel, fulfilling 70% of project objectives.</li> </ul></div><div
-        class="section-title">Education</div><div class="content"> <ul> <li>Master's in Biomedical
-                Engineering, Universidade Cat�lica Portuguesa do Porto, Portugal (In Progress, 2023 � Present)</li>
-            <li>Tecnologo em Analise e Desenvolvimento de Sistemas, AIEC Brasil (2021)</li> <li>Bachelor�s in Computer
-                Engineering, Universidade Jos� Eduardo dos Santos, Angola (2017)</li> </ul></div><div
-        class="section-title">Certifications</div><div class="content"> <ul> <li>IBM Data Engineering
-                Professional Certificate, Coursera (2024 � Present)</li> <li>IBM Full Stack Software Developer
-                Professional Certificate, Coursera (2024)</li> </ul></div><div class="section-title">Languages
-    </div><div class="content"> <ul> <li>Portuguese � Native</li> <li>English � Fluent</li> <li>Spanish �
-                Basic</li> </ul></div><div class="section-title">Portfolio</div><div class="content"> For
-        project examples and additional work, please visit: <a
-            href="https://www.d-tuning.com/profile/laurindo-c-benjamim">
-            Portfolio</a></div></body>
+        function clearEditor() {
+            document.getElementById("editor").innerHTML = "";
+        }
+    </script>
 
+</body>
 </html>
