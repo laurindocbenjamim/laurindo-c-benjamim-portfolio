@@ -29,10 +29,22 @@ json_string = re.sub(r',\s*}', '}', json_string)  # For commas before closing cu
 json_string = re.sub(r',\s*]', ']', json_string)  # For commas before closing square brackets
 
 
+
+# Define users as a dictionary for better key-value access
+users = [{
+  "username": "admin",
+  "password": "password123"
+}]
+
+# Check if the username and password match
+if users.get("username") == "admin" and users.get("password") == "password123":
+  print("Estou la")
+else:
+  print("Invalid credentials")
+
 # Parse JSON safely
 try:
     data = json.loads(json_string)
     print(data)
 except json.JSONDecodeError as e:
     print(f"JSON Decode Error: {e}")
-
