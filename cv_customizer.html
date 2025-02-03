@@ -548,48 +548,44 @@
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <!--<div class="modal-header">-->
-
-
-
-                <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" id="exampleModalLabel" href="#" style="background-color: transparent;border: none;">
-                            
-                            Windows Preview</a>
-
-                        <div class="collapse navbar-collapse" id="navbarText">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item">
-
-                                    <a class=" btn btn-outline-dark btn-sm active" id="btn-show-editor"
-                                        aria-current="page" href="#">
-                                        <i class="fas fa-edit"></i>
-                                        Editor.01</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class=" btn btn-outline-warning btn-sm" href="#"
-                                        id="btn-show-alternative-editor">
-                                        <i class="fas fa-edit"></i> Editor.02</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="btn btn-outline-dark btn-sm" href="#"
-                                        id="btn-download-docx">
-                                        <i class="fas fa-download"></i> DOCX</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="btn btn-outline-primary btn-sm" href="#"
-                                        id="btn-download-docx">
-                                        <i class="fas fa-download"></i>PDF</a>
-                                </li>
+                    <nav class="navbar navbar-expand-lg bg-body-tertiary rounded" aria-label="Thirteenth navbar example">
+                        <div class="container-fluid">
+                          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample11" aria-controls="navbarsExample11" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                          </button>
+                  
+                          <div class="collapse navbar-collapse navbar-dark bg-dark d-lg-flex rounded" id="navbarsExample11">
+                            <a class="navbar-brand col-lg-3 me-0" href="#" style="background-color: transparent; color: #fff;">CV Customiser</a>
+                            <ul class="navbar-nav col-lg-6 justify-content-lg-center">
+                              <li class="nav-item">
+                                <a class="nav-link active"  aria-current="page" href="#">
+                                    <button class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i> Editor.01</button>
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link">
+                                    <button class="btn btn-outline-warning btn-sm"><i class="fas fa-edit"></i> Editor.02</button>                                    
+                                </a>
+                              </li>
+                              
+                              <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Download</a>
+                                <ul class="dropdown-menu">
+                                  <li><a class="dropdown-item btn btn-outline-success btn-sm" href="#"><i class="fas fa-download"></i> Docx</a></li>
+                                  <li><a class="dropdown-item btn btn-outline-success btn-sm" href="#"><i class="fas fa-download"></i> Pdf</a></li>
+                                </ul>
+                              </li>
                             </ul>
-                            <span class="navbar-text">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </span>
+                            <div class="d-lg-flex col-lg-1 justify-content-lg-end">
+                                <button type="button" class="btn btn-outline-danger rounded-circle p-3 lh-1 shadow" data-bs-dismiss="modal">
+                                <i class="fas fa-close fa-lg text-light"></i>
+                            </button>
+                            </div>
+                          </div>
                         </div>
-                    </div>
-                </nav>
-                <!--</div>-->
+                      </nav>
+
+                
                 <div class="modal-body" id="modal-body-PreviewDocuments">
 
                     <div class="toolbar">
@@ -723,7 +719,11 @@
                     $("#modalPreviewDocuments").modal("show");
                 });
             };
-          
+          $(document).ready(function () {
+                    document.getElementById("previewFrame").style.display = 'block'
+                    document.getElementById("editor").style.display = 'none'
+                    $("#modalPreviewDocuments").modal("show");
+                });
             document.getElementById('contentOrigin').addEventListener('change', (e) => {
 
                 if (e.target.value === 'file') {

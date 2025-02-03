@@ -453,8 +453,8 @@
                                         <div class="mb-2">
                                             <div class="col-12">
                                                 <div class="form-floating mb-3">
-                                                    <input type="email" class="form-control rounded-3" id="username"
-                                                        name="username" placeholder="name@example.com" required>
+                                                    <input type="text" class="form-control rounded-3" id="username"
+                                                        name="username" placeholder="username or name@example.com" required>
                                                     <label for="username">Username</label>
                                                     <div class="invalid-feedback">
                                                         Valid username is required.
@@ -565,6 +565,11 @@
                 this.csrfToken = this.getCSRFToken('csrf_access_token');
             }
 
+            getHostDomain(){
+                let current_domain=window.location.origin
+                //current_domain=`${current_domain}/laurindo-c-benjamim-portfolio`;
+                return current_domain;
+            }
             getCSRFToken(cookieName) {
                 return document.cookie
                     .split('; ')
@@ -752,9 +757,19 @@
             try {
                 const response = await auth.login(username, password);
                 console.log(response);
-                //window.location.href = '/profile';
-                document.getElementById('error-message').textContent = '';
-                document.getElementById('success-message').textContent = `${response}`;
+
+                const user = response.user? response.user : 0;
+                console.log(response.user)
+                
+                if(user==0){
+                    document.getElementById('error-message').textContent = `Username or password wrong!`;
+                    document.getElementById('success-message').textContent = '';
+                    return;
+                }
+                
+                //localStorage.setItem('userID', response.user.user_id)
+                //window.location.href = `${auth.getHostDomain()}/index.html?userID=${userID}`;               
+
             } catch (error) {
                 console.log(error)
                 document.getElementById('error').textContent = `${error}`;

@@ -31,10 +31,10 @@ json_string = re.sub(r',\s*]', ']', json_string)  # For commas before closing sq
 
 
 # Define users as a dictionary for better key-value access
-users = [{
+users = {
   "username": "admin",
   "password": "password123"
-}]
+}
 
 # Check if the username and password match
 if users.get("username") == "admin" and users.get("password") == "password123":
@@ -48,3 +48,20 @@ try:
     print(data)
 except json.JSONDecodeError as e:
     print(f"JSON Decode Error: {e}")
+
+
+from werkzeug.security import generate_password_hash, check_password_hash
+
+print(f"HASH Password: {generate_password_hash('1234')}")
+class User:
+  def get_user_test(self):
+        return {
+            'id': 1,
+            'username': 'Admin',
+            'email': 'admin@datatuning.io',
+            'password_hash': 'scrypt:32768:8:1$JOho73zuSUMoMVC2$355834fe2dc1808bc855f9134a068175744e3a4e8acc4250f52e84d68f475c828631764c1185432453ee7ed3dd5da737467d2634e7119c1fa95433672c6b83d1'
+        }
+
+user=User().get_user_test()
+print("USER: "+ user['username'])
+
