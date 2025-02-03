@@ -1,5 +1,4 @@
-
-  <!doctype html>
+<!doctype html>
 <html lang="en" data-bs-theme="auto">
 
 <head>
@@ -310,17 +309,17 @@
     <link href="assets/css/dashboard.css" rel="stylesheet">
     <link href="assets/css/sidebars.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
-    
 
 
- <!-- ------- Libraries to Convert HTML to DOCX in JavaScript -->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.0.6/pizzip.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.21.0/docxtemplater.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
- <!---------- Libraries to Convert HTML to PDF in JavaScript-->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+    <!-- ------- Libraries to Convert HTML to DOCX in JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.0.6/pizzip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.21.0/docxtemplater.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <!---------- Libraries to Convert HTML to PDF in JavaScript-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
     <script src="assets/pages_component.js"></script>
     <style>
@@ -421,11 +420,11 @@
 
     <div class="container-fluid">
         <div class="row">
-            
+
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
                 <div class="container">
-                   
+
                     <style>
                         #form {
                             color: #000;
@@ -442,70 +441,85 @@
                     <div class="px-1 pt-1 my-2 text-center">
                         <div class="col-lg-6 mx-auto">
                             <!--<div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5" >-->
-                                
-                                    <div class="modal-content rounded-4 shadow mt-5" id="form">
-                                        <div class="modal-header p-4 pb-4 border-bottom-0">
-                                          <h1 class="fw-bold mb-0 fs-2">Sign In</h1>
-                                          
+
+                            <div class="modal-content rounded-4 shadow mt-5" id="form">
+                                <div class="modal-header p-4 pb-4 border-bottom-0">
+                                    <h1 class="fw-bold mb-0 fs-2">Sign In</h1>
+
+                                </div>
+
+                                <div class="modal-body p-5 pt-0">
+                                    <form id="loginForm" class="needs-validation" novalidate
+                                        enctype="multipart/form-data">
+
+                                        <div class="mb-2">
+                                            <div class="col-12">
+                                                <div class="form-floating mb-3">
+                                                    <input type="email" class="form-control rounded-3" id="username"
+                                                        name="username" placeholder="name@example.com" required>
+                                                    <label for="username">Username</label>
+                                                    <div class="invalid-feedback">
+                                                        Valid username is required.
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                  
-                                        <div class="modal-body p-5 pt-0">
-                                          <form id="loginForm" class="needs-validation" novalidate enctype="multipart/form-data">
 
-                                            <div class="mb-2">
-                                                <div class="col-12">
-                                                    <div class="form-floating mb-3">
-                                                        <input type="email" class="form-control rounded-3" id="username" name="username" placeholder="name@example.com" required>
-                                                        <label for="username">Username</label>
-                                                        <div class="invalid-feedback">
-                                                            Valid username is required.
-                                                        </div>
-                                                      </div>                                                    
+                                        <div class="mb-2">
+                                            <div class="col-12">
+                                                <div class="form-floating mb-3">
+                                                    <input type="password" class="form-control rounded-3" id="password"
+                                                        name="password" placeholder="********" required>
+                                                    <label for="password">Password</label>
+                                                    <div class="invalid-feedback">
+                                                        Valid password is required.
+                                                    </div>
                                                 </div>
                                             </div>
-
-                                            <div class="mb-2">
-                                                <div class="col-12">
-                                                    <div class="form-floating mb-3">
-                                                        <input type="password" class="form-control rounded-3" id="password" name="password" placeholder="********" required>
-                                                        <label for="password">password</label>
-                                                        <div class="invalid-feedback">
-                                                            Valid password is required.
-                                                        </div>
-                                                      </div>                                                    
-                                                </div>
-                                            </div>
-                                            
-
-                                            <div class="mb-2">
-                                                <div class="col-12">
-                                                    <div class="success-message text-success" id="success-message"></div>
-                                                    <div class="error-message text-danger" id="error-message"></div>
-                                                </div>
-                                            </div>
-
-
-                                            <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit" id="btnSubmit">Sign up</button>
-
-                                            <small class="text-body-secondary">By clicking Sign up, you agree to the terms of use.</small>
-                                            <hr class="my-4">
-                                            <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
-                                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="submit">
-                                              <svg class="bi me-1" width="16" height="16"><use xlink:href="#twitter"/></svg>
-                                              Sign up with Twitter
-                                            </button>
-                                            <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="submit">
-                                              <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
-                                              Sign up with Facebook
-                                            </button>
-                                            <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="submit">
-                                              <svg class="bi me-1" width="16" height="16"><use xlink:href="#github"/></svg>
-                                              Sign up with GitHub
-                                            </button>
-                                          </form>
                                         </div>
-                                      </div>
-                           
+
+
+                                        <div class="mb-2">
+                                            <div class="col-12">
+                                                <div class="success-message text-success" id="success-message"></div>
+                                                <div class="error-message text-danger" id="error-message"></div>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" id="testProtectedRoute"
+                                            class="btn btn-outline-danger">Test protected Endpoint</button>
+
+                                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit"
+                                            id="btnSubmit">Sign up</button>
+
+                                        <small class="text-body-secondary">By clicking Sign up, you agree to the terms
+                                            of use.</small>
+                                        <hr class="my-4">
+                                        <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
+                                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3"
+                                            type="submit">
+                                            <svg class="bi me-1" width="16" height="16">
+                                                <use xlink:href="#twitter" />
+                                            </svg>
+                                            Sign up with Twitter
+                                        </button>
+                                        <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="submit">
+                                            <svg class="bi me-1" width="16" height="16">
+                                                <use xlink:href="#facebook" />
+                                            </svg>
+                                            Sign up with Facebook
+                                        </button>
+                                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3"
+                                            type="submit">
+                                            <svg class="bi me-1" width="16" height="16">
+                                                <use xlink:href="#github" />
+                                            </svg>
+                                            Sign up with GitHub
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>
@@ -540,13 +554,196 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.4/dist/purify.min.js"></script>
 
 
-   
+
 
     <script>
 
+        let domain = 'http://127.0.0.1:5000';
 
 
-        document.addEventListener('DOMContentLoaded', () => {
+        class AuthClient {
+    constructor() {
+        this.baseUrl = 'http://localhost:5000';
+        this.csrfToken = this.getCSRFToken('csrf_access_token');
+    }
+
+    getCSRFToken(cookieName) {
+        return document.cookie
+            .split('; ')
+            .find(row => row.startsWith(`${cookieName}=`))
+            ?.split('=')[1];
+    }
+
+    async handleResponse(response) {
+        if (response.status === 401) {
+            try {
+                await this.refreshToken();
+                return null; // Signal to retry original request
+            } catch (refreshError) {
+                this.logout();
+                throw new Error('Session expired. Please login again.');
+            }
+        }
+        return response.json();
+    }
+
+    async login(username, password) {
+        const response = await fetch(`${this.baseUrl}/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
+            },
+            body: JSON.stringify({ username, password }),
+            mode: "cors", //Enables CORS
+            credentials: "include"  // ✅ Ensures cookies are sent automatically
+        });
+        return this.handleResponse(response);
+    }
+
+    async refreshToken() {
+        const response = await fetch(`${this.baseUrl}/refresh`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'X-CSRF-TOKEN': this.getCSRFToken('csrf_refresh_token')
+            }
+        });
+        return this.handleResponse(response);
+    }
+
+    async logout() {
+        await fetch(`${this.baseUrl}/logout`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
+            }
+        });
+        window.location.href = '/login';
+    }
+
+    async fetchProtectedData() {
+        let response = await fetch(`${this.baseUrl}/api/protected`, {
+            credentials: 'include',
+            headers: {
+                'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
+            }
+        });
+        
+        const result = await this.handleResponse(response);
+        if (!result) {
+            return this.fetchProtectedData(); // Retry after refresh
+        }
+        return result;
+    }
+}
+
+
+
+
+        function testProtectedEndpoint() {
+
+            fetch("http://localhost:5000/api-auth/protected", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                mode: "cors", //Enables CORS
+                credentials: "include"  // ✅ Ensures cookies are sent automatically
+            })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error("Error:", error));
+
+        }
+
+        async function login(username, password) {
+
+
+            const response = await fetch(`${domain}/api-auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': getCSRFToken('csrf_access_token')
+                },
+                body: JSON.stringify({ username, password }),
+                mode: "cors", //Enables CORS
+                credentials: "include"  // ✅ Ensures cookies are sent automatically
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message);
+            }
+
+            return response.json();
+        }
+
+        // Helper to get CSRF token from cookies
+        function getCSRFToken(cookieName) {
+            return document.cookie
+                .split('; ')
+                .find(row => row.startsWith(`${cookieName}=`))
+                ?.split('=')[1];
+        }
+
+
+        async function fetchProtectedData() {
+            const response = await fetch(`${domain}/api-auth/protected`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'X-CSRF-TOKEN': getCSRFToken('csrf_access_token')
+                }
+            });
+
+            if (response.status === 401) {
+                // Handle token refresh
+                await refreshToken();
+                return fetchProtectedData();
+            }
+
+            return response.json();
+        }
+
+        const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                <span role="status">Loading...</span>`;
+        const form = document.getElementById('loginForm')
+
+        document.getElementById('testProtectedRoute').addEventListener('click', async ()=>{
+            const response = await fetchProtectedData()
+            console.log(response)
+        })
+
+        const auth = new AuthClient();
+        // Submiting the form 
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault()
+            document.getElementById('error-message').textContent = '';
+            document.getElementById('success-message').textContent = '';
+
+            if (!form.checkValidity()) {
+                event.stopPropagation();
+                form.classList.add("was-validated");
+                return;
+            }
+
+            const formData = new FormData(event.target)
+            const username = formData.get('username')
+            const password = formData.get('password')
+
+            document.getElementById('btnSubmit').innerHTML = spinnerHtml
+            try {
+                await auth.login(username, password);
+                window.location.href = '/profile';
+            } catch (error) {
+                document.getElementById('error').textContent = error.message;
+            }
+            ///const response = await login(username, password)
+
+            //console.log(response)
+
+        });
+        /*document.addEventListener('DOMContentLoaded', () => {
             //const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
             const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
                 <span role="status">Loading...</span>`;
@@ -566,23 +763,25 @@
                 let csrfToken = ''
                 // Fetch CSRF token from the server
                 let domain = 'http://127.0.0.1:5000'
-                
+
 
                 let endpoint = window.location.origin + '';
                 document.getElementById('btnSubmit').innerHTML = spinnerHtml
                 const headers = new Headers()
-                headers.append( 'Content-Type', 'application/json')
-                
+                headers.append('Content-Type', 'application/json')
+
                 const formData = new FormData(event.target)
                 const username = formData.get('username')
                 const password = formData.get('password')
-                
+
                 document.getElementById('btnSubmit').innerHTML = spinnerHtml
 
                 fetch(`${domain}/api-auth/login`, {
                     method: 'POST',
-                    body: JSON.stringify({ username, password }),
-                    headers: headers
+                    headers: headers,
+                    body: JSON.stringify({ username, password }),                    
+                    mode: "cors", //Enables CORS
+                    credentials: "include"  // ✅ Ensures cookies are sent automatically
                 })
                     .then(response => {
                         if (response.ok) {
@@ -600,9 +799,9 @@
                         } else {
                             form.reset();
                             document.getElementById('error-message').textContent = '';
-                            document.getElementById('success-message').textContent = resp.message;                            
+                            document.getElementById('success-message').textContent = resp.message;
                         }
-                        
+
                         document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
 
                     })
@@ -616,7 +815,9 @@
             });
         });
 
-       
+        */
+
+
 
     </script>
 
