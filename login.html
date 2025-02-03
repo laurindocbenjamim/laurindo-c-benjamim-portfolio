@@ -13,8 +13,6 @@
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
 
-
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -562,82 +560,84 @@
 
 
         class AuthClient {
-    constructor() {
-        this.baseUrl = 'http://localhost:5000';
-        this.csrfToken = this.getCSRFToken('csrf_access_token');
-    }
+            constructor() {
+                this.baseUrl = 'http://localhost:5000';
+                this.csrfToken = this.getCSRFToken('csrf_access_token');
+            }
 
-    getCSRFToken(cookieName) {
-        return document.cookie
-            .split('; ')
-            .find(row => row.startsWith(`${cookieName}=`))
-            ?.split('=')[1];
-    }
+            getCSRFToken(cookieName) {
+                return document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith(`${cookieName}=`))
+                    ?.split('=')[1];
+            }
 
-    async handleResponse(response) {
-        if (response.status === 401) {
-            try {
-                await this.refreshToken();
-                return null; // Signal to retry original request
-            } catch (refreshError) {
-                this.logout();
-                throw new Error('Session expired. Please login again.');
+            async handleResponse(response) {
+                if (response.status === 401) {
+                    try {
+                        await this.refreshToken();
+                        return null; // Signal to retry original request
+                    } catch (refreshError) {
+                        this.logout();
+                        throw new Error('Session expired. Please login again.');
+                    }finally{
+                        
+                    }
+                }
+                return response.json();
+            }
+
+            async login(username, password) {
+                const response = await fetch(`${this.baseUrl}/api-auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
+                    },
+                    body: JSON.stringify({ username, password }),
+                    mode: "cors", //Enables CORS
+                    credentials: "include"  // ✅ Ensures cookies are sent automatically
+                });
+                return this.handleResponse(response);
+            }
+
+            async refreshToken() {
+                const response = await fetch(`${this.baseUrl}/api-auth/refresh`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'X-CSRF-TOKEN': this.getCSRFToken('csrf_refresh_token')
+                    }
+                });
+                return this.handleResponse(response);
+            }
+
+            async logout() {
+                await fetch(`${this.baseUrl}/api-auth/logout`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
+                    }
+                });
+                window.location.href = '/login';
+            }
+
+            async fetchProtectedData() {
+                let response = await fetch(`${this.baseUrl}/api-auth/protected`, {
+                    credentials: 'include',
+                    headers: {
+                        'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
+                    }
+                });
+
+                const result = await this.handleResponse(response);
+                if (!result) {
+                    return this.fetchProtectedData(); // Retry after refresh
+                }
+                return result;
             }
         }
-        return response.json();
-    }
-
-    async login(username, password) {
-        const response = await fetch(`${this.baseUrl}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
-            },
-            body: JSON.stringify({ username, password }),
-            mode: "cors", //Enables CORS
-            credentials: "include"  // ✅ Ensures cookies are sent automatically
-        });
-        return this.handleResponse(response);
-    }
-
-    async refreshToken() {
-        const response = await fetch(`${this.baseUrl}/refresh`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'X-CSRF-TOKEN': this.getCSRFToken('csrf_refresh_token')
-            }
-        });
-        return this.handleResponse(response);
-    }
-
-    async logout() {
-        await fetch(`${this.baseUrl}/logout`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
-            }
-        });
-        window.location.href = '/login';
-    }
-
-    async fetchProtectedData() {
-        let response = await fetch(`${this.baseUrl}/api/protected`, {
-            credentials: 'include',
-            headers: {
-                'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
-            }
-        });
-        
-        const result = await this.handleResponse(response);
-        if (!result) {
-            return this.fetchProtectedData(); // Retry after refresh
-        }
-        return result;
-    }
-}
 
 
 
@@ -647,7 +647,7 @@
             fetch("http://localhost:5000/api-auth/protected", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
-                mode: "cors", //Enables CORS
+                mode: "no-cors", //Enables CORS
                 credentials: "include"  // ✅ Ensures cookies are sent automatically
             })
                 .then(response => response.json())
@@ -666,7 +666,7 @@
                     'X-CSRF-TOKEN': getCSRFToken('csrf_access_token')
                 },
                 body: JSON.stringify({ username, password }),
-                mode: "cors", //Enables CORS
+                mode: "no-cors", //Enables CORS
                 credentials: "include"  // ✅ Ensures cookies are sent automatically
             });
 
@@ -709,7 +709,7 @@
                 <span role="status">Loading...</span>`;
         const form = document.getElementById('loginForm')
 
-        document.getElementById('testProtectedRoute').addEventListener('click', async ()=>{
+        document.getElementById('testProtectedRoute').addEventListener('click', async () => {
             const response = await fetchProtectedData()
             console.log(response)
         })
@@ -718,12 +718,14 @@
         // Submiting the form 
         form.addEventListener('submit', async (event) => {
             event.preventDefault()
+            document.getElementById('btnSubmit').innerHTML = spinnerHtml
             document.getElementById('error-message').textContent = '';
             document.getElementById('success-message').textContent = '';
 
             if (!form.checkValidity()) {
                 event.stopPropagation();
                 form.classList.add("was-validated");
+                document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
                 return;
             }
 
@@ -731,13 +733,20 @@
             const username = formData.get('username')
             const password = formData.get('password')
 
-            document.getElementById('btnSubmit').innerHTML = spinnerHtml
+            
             try {
-                await auth.login(username, password);
-                window.location.href = '/profile';
+                const response = await auth.login(username, password);
+                console.log(response);
+                //window.location.href = '/profile';
+                document.getElementById('error-message').textContent = '';
+                document.getElementById('success-message').textContent = `${response}`;
             } catch (error) {
-                document.getElementById('error').textContent = error.message;
+                console.log(error)
+                document.getElementById('error').textContent = `${error}`;
+                document.getElementById('success-message').textContent = '';
             }
+            document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+                        
             ///const response = await login(username, password)
 
             //console.log(response)
