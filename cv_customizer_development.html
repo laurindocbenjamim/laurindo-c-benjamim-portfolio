@@ -1,0 +1,1500 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="csrf-token" content="22222">
+    <meta name="author" content="Laurindo C.Benjamim">
+    <meta name="generator" content="Laurindo C.Benjamim">
+    <title>CV Customizer - Home</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .btn-bd-primary {
+            --bd-violet-bg: #712cf9;
+            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+            --bs-btn-font-weight: 600;
+            --bs-btn-color: var(--bs-white);
+            --bs-btn-bg: var(--bd-violet-bg);
+            --bs-btn-border-color: var(--bd-violet-bg);
+            --bs-btn-hover-color: var(--bs-white);
+            --bs-btn-hover-bg: #6528e0;
+            --bs-btn-hover-border-color: #6528e0;
+            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+            --bs-btn-active-color: var(--bs-btn-hover-color);
+            --bs-btn-active-bg: #5a23c8;
+            --bs-btn-active-border-color: #5a23c8;
+        }
+
+        .bd-mode-toggle {
+            z-index: 1500;
+        }
+
+        .bd-mode-toggle .dropdown-menu .active .bi {
+            display: block !important;
+        }
+
+
+        .bi {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+        }
+
+        /*
+       * Sidebar
+       */
+
+        @media (min-width: 768px) {
+            .sidebar .offcanvas-lg {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 48px;
+            }
+
+            .navbar-search {
+                display: block;
+            }
+        }
+
+        .sidebar .nav-link {
+            font-size: .875rem;
+            font-weight: 500;
+        }
+
+        .sidebar .nav-link.active {
+            color: #2470dc;
+        }
+
+        .sidebar-heading {
+            font-size: .75rem;
+        }
+
+        /*
+       * Navbar
+       */
+
+        .navbar-brand {
+            padding-top: .75rem;
+            padding-bottom: .75rem;
+            background-color: rgba(0, 0, 0, .25);
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+        }
+
+        .navbar .form-control {
+            padding: .75rem 1rem;
+        }
+
+        .nav .submenu {
+            display: none;
+            list-style-type: none;
+            margin-left: 2%;
+
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .nav .submenu.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .form-label {
+            font-size: 1.2rem;
+        }
+
+        .card {
+            background-color: rgba(2, 51, 59, 0.1);
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: #969494;
+        }
+
+        .form-control {
+            background-color: #cfd5db;
+            color: rgb(8, 8, 8);
+            border: 1px solid #444;
+            border-radius: 0px;
+        }
+
+        .form-control:focus {
+            background-color: #3b3f45;
+            color: #FFF;
+            border-color: #5a5e65;
+        }
+
+
+        .btn-outline-light:hover {
+            background-color: #5a5e65;
+        }
+
+        .dynamic-field {
+            display: flex;
+            align-items: center;
+        }
+
+        .dynamic-field .remove-btn {
+            margin-left: 10px;
+        }
+
+        .form-feedback {
+            margin-top: 10px;
+        }
+
+        .dynamic-field button {
+            height: 38px;
+            margin-top: 0.4%;
+            border-radius: 0px;
+        }
+
+        .loading {
+            display: none
+        }
+
+        iframe {
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            border: none;
+            border-radius: 8px;
+        }
+
+
+        .upload-form {
+            background-color: rgba(55, 43, 161, 0.5);
+            /* Semi-transparent */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .upload-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 20px;
+        }
+
+
+        .upload-form {
+            background-color: rgba(19, 39, 80, 0.8);
+            /* Semi-transparent */
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        header {
+            background-color: #020511e3;
+            color: #cac8c8;
+        }
+
+        .navbar-brand {
+            margin-left: 2%;
+            background-color: transparent;
+            color: #000;
+            border-radius: 3px;
+        }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="assets/css/dashboard.css" rel="stylesheet">
+    <link href="assets/css/sidebars.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    
+
+
+ <!-- ------- Libraries to Convert HTML to DOCX in JavaScript -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.0.6/pizzip.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.21.0/docxtemplater.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+ <!---------- Libraries to Convert HTML to PDF in JavaScript-->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+
+    <script src="assets/pages_component.js"></script>
+    <style>
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            background: white;
+            padding: 8px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toolbar button,
+        select {
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .toolbar button:hover {
+            background: #ddd;
+        }
+
+        iframe {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .preview-frame,
+        .editor-container {
+            margin-top: 10px;
+            background: white;
+            border: 1px solid #ccc;
+            min-height: 340px;
+            padding: 10px;
+            overflow-y: auto;
+            border-radius: 5px;
+            color: #333;
+            /* Darker text color for better contrast */
+            font-family: Arial, sans-serif;
+            /* Clear and readable font */
+            font-size: 16px;
+            /* Adjust text size for better visibility */
+        }
+
+        .preview-frame[contenteditable="true"]:focus {
+            outline: none;
+            border: 2px solid #aabad6;
+        }
+
+        .editor-container[contenteditable="true"]:focus {
+            outline: none;
+            border: 2px solid #aabad6;
+        }
+
+        #editor {
+            color: #333;
+            /* Darker text color for better contrast */
+            font-family: Arial, sans-serif;
+            /* Clear and readable font */
+            font-size: 16px;
+            /* Adjust text size for better visibility */
+        }
+    </style>
+
+</head>
+
+<body style="background: #00010a; color:#cac8c8">
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+        <symbol id="check2" viewBox="0 0 16 16">
+            <path
+                d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+        </symbol>
+        <symbol id="circle-half" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z" />
+        </symbol>
+        <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+            <path
+                d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
+            <path
+                d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z" />
+        </symbol>
+        <symbol id="sun-fill" viewBox="0 0 16 16">
+            <path
+                d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
+        </symbol>
+    </svg>
+
+
+
+    <header id="navbar" class="navbar sticky-top bg-ligh flex-md-nowrap p-0 shadow" data-bs-theme="ligh">
+
+    </header>
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div id="sidebar"
+                class="sidebar border border-secondary border-right col-md-3 col-lg-2 p-0 bg-body-tertiar">
+
+            </div>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+                <div class="container">
+                    <div class="header">
+                        <h1 class="text-light"><i class="fas fa-file-alt"></i> CV Customization Tool</h1>
+                        <p class="text-muted text-light-emphasis">Adjust your CV to match job requirements effortlessly
+                        </p>
+                    </div>
+                    <style>
+                        #form {
+                            color: #000;
+                            padding: 2rem;
+                            /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);*/
+                            box-shadow: 4px 4px 8px 12px rgba(100, 98, 98, 0.089);
+                            /* Increased shadow */
+                            border-radius: 8px;
+                            overflow: hidden;
+                            background-color: rgba(255, 255, 255, 0.87);
+                        }
+                    </style>
+
+                    <div class="px-1 pt-1 my-2 text-center">
+                        <div class="col-lg-8 mx-auto">
+                            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5" id="form">
+                                <form id="cvForm" class="needs-validation" novalidate enctype="multipart/form-data">
+
+                                    <div class="row g-3" style="text-align: left;">
+
+                                        <div class="mb-2">
+                                            <div class="col-12">
+                                                <label for="cvUpload" class="form-label">Upload your CV (Word or
+                                                    PDF):</label>
+                                                <input class="form-control" type="file" name="cvUpload" id="cvUpload"
+                                                    accept=".pdf, .doc, .docx">
+                                                <div class="invalid-feedback">
+                                                    Valid CV is required.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <div class="col-12">
+                                                <label for="contentOrigin" class="form-label">JOB content
+                                                    origin:</label>
+                                                <select name="contentOrigin" class="form-control" id="contentOrigin"
+                                                    required>
+                                                    <option value="">Select the ontent origin...</option>
+                                                    <option value="file">File</option>
+                                                    <option value="url">URL</option>
+                                                    <option value="normal-text">Normal Text</option>
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    Valid job content origin is required.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <div class="col-12">
+                                                <span id="jobRequirement"></span>
+                                                <div class="invalid-feedback">
+                                                    Valid course name is required.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <div class="col-12">
+                                                <div id="download-box"></div>
+                                                <div class="success-message text-success" id="success-message"></div>
+                                                <div class="error-message text-danger" id="error-message"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-9 mb-2">
+                                            <button type="submit" id="btnSubmit"
+                                                class="btn btn-primary btn-lg px-4 me-sm-3">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="card p-4 mt-4 d-none" id="resultCard">
+                        <h4 class="mb-3">Adjusted CV:</h4>
+                        <div id="cvPreview" class="mb-4"
+                            style="white-space: pre-wrap; background: #e9ecef; padding: 15px; border-radius: 5px; overflow-x: auto;">
+                            Your adjusted CV will appear here...</div>
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-success me-2" id="downloadWord"><i class="fas fa-file-word"></i>
+                                Download as Word</button>
+                            <button class="btn btn-danger" id="downloadPDF"><i class="fas fa-file-pdf"></i> Download as
+                                PDF</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <footer id="footer"
+                    class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+
+                </footer>
+            </main>
+        </div>
+
+
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalPreviewDocuments" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <!-- Full screen modal -->
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <!--<div class="modal-header">-->
+                    <!--<nav class="navbar navbar-expand-lg bg-body-tertiary rounded" aria-label="Thirteenth navbar example">
+                        <div class="container-fluid">
+                          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample11" aria-controls="navbarsExample11" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                          </button>
+                  
+                          <div class="collapse navbar-collapse navbar-dark bg-dark d-lg-flex rounded" id="navbarsExample11">
+                            <a class="navbar-brand col-lg-3 me-0" href="#" style="background-color: transparent; color: #fff;">CV Customiser</a>
+                            <ul class="navbar-nav col-lg-6 justify-content-lg-center">
+                              <li class="nav-item">
+                                <a class="nav-link active"  aria-current="page" href="#">
+                                    <button class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i> Editor.01</button>
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link">
+                                    <button class="btn btn-outline-warning btn-sm"><i class="fas fa-edit"></i> Editor.02</button>                                    
+                                </a>
+                              </li>
+                              
+                              <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Download</a>
+                                <ul class="dropdown-menu">
+                                  <li><a class="dropdown-item btn btn-outline-info btn-sm" href="#"><i class="fas fa-download"></i> Docx</a></li>
+                                  <li><a class="dropdown-item btn btn-outline-info btn-sm" href="#"><i class="fas fa-download"></i> Pdf</a></li>
+                                </ul>
+                              </li>
+                            </ul>
+                            <div class="d-lg-flex col-lg-1 justify-content-lg-end">
+                                <button type="button" class="btn btn-outline-danger rounded-circle p-3 lh-1 shadow" data-bs-dismiss="modal">
+                                <i class="fas fa-close fa-lg text-light"></i>
+                            </button>
+                            </div>
+                          </div>
+                        </div>
+                      </nav>-->
+
+                <section id="cv_navbar_section"></section>
+
+                <div class="modal-body" id="modal-body-PreviewDocuments">
+
+                    <section id="cv_body_section"></section>
+                    <!--<div class="toolbar">
+                        <button onclick="execCommand('bold')"><i class="fas fa-bold"></i></button>
+                        <button onclick="execCommand('italic')"><i class="fas fa-italic"></i></button>
+                        <button onclick="execCommand('underline')"><i class="fas fa-underline"></i></button>
+                        <button onclick="execCommand('strikeThrough')"><i class="fas fa-strikethrough"></i></button>
+                        <button onclick="execCommand('justifyLeft')"><i class="fas fa-align-left"></i></button>
+                        <button onclick="execCommand('justifyCenter')"><i class="fas fa-align-center"></i></button>
+                        <button onclick="execCommand('justifyRight')"><i class="fas fa-align-right"></i></button>
+                        <button onclick="execCommand('justifyFull')"><i class="fas fa-align-justify"></i></button>
+                        <button onclick="execCommand('insertUnorderedList')"><i class="fas fa-list-ul"></i></button>
+                        <button onclick="execCommand('insertOrderedList')"><i class="fas fa-list-ol"></i></button>
+                        <button onclick="execCommand('outdent')"><i class="fas fa-outdent"></i></button>
+                        <button onclick="execCommand('indent')"><i class="fas fa-indent"></i></button>
+                        <input type="color" onchange="execCommand('foreColor', this.value)">
+                        <input type="color" onchange="execCommand('hiliteColor', this.value)">
+                        <select onchange="execCommand('fontSize', this.value)">
+                            <option value="1">Small</option>
+                            <option value="3" selected>Normal</option>
+                            <option value="5">Large</option>
+                            <option value="7">Huge</option>
+                        </select>
+                        <select onchange="execCommand('fontName', this.value)">
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Courier New">Courier New</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
+                        <button onclick="execCommand('undo')"><i class="fas fa-undo"></i></button>
+                        <button onclick="execCommand('redo')"><i class="fas fa-redo"></i></button>
+                        <button onclick="clearEditor()"><i class="fas fa-eraser"></i> Clear</button>
+                    </div>
+
+                    <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-same-origin"
+                        style=""></iframe>-->
+
+                    <!-- Toolbar -->
+
+
+                    <!-- Editable CV Container -->
+                    <!--<div id="editor" class="editor-container" contenteditable="true">
+                        <h1>Laurindo C. Benjamim</h1>
+                        <p><strong>Location:</strong> Porto, Portugal | <strong>Phone:</strong> (+351) 93-344-3506</p>
+                        <p><strong>Email:</strong> laurindocbenjamim@gmail.com | <strong>LinkedIn:</strong> <a
+                                href="https://www.linkedin.com/in/laurindocbenjamim/" target="_blank">Profile</a></p>
+                        <h2>Summary</h2>
+                        <p>Data Engineer with over 3 years of experience in designing, implementing, and managing data
+                            solutions. Proficient in ETL processes, data modeling, and cloud tools.</p>
+                        <h2>Core Skills</h2>
+                        <ul>
+                            <li>Data Engineering: ETL processes, Data modeling, Data pipelines</li>
+                            <li>Programming: Python, SQL, JavaScript, Flask, Angular</li>
+                            <li>Cloud Platforms: Azure, AWS, Google Cloud</li>
+                        </ul>
+                        <h2>Education</h2>
+                        <ul>
+                            <li>Master's in Biomedical Engineering, Universidade Católica Portuguesa do Porto (2023 –
+                                Present)</li>
+                            <li>Bachelor’s in Computer Engineering, Universidade José Eduardo dos Santos (2017)</li>
+                        </ul>
+                    </div>-->
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="assets/js/sidebars.js"></script>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <!---- Include DOMPurify (for sanitizing HTML) in my html preview -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.4/dist/purify.min.js"></script>
+
+
+   
+
+    <script>
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            //const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+            const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                <span role="status">Loading...</span>`;
+            const form = document.getElementById('cvForm')
+
+            const jobRequirement = document.getElementById('jobRequirement')
+
+            function previewPage(htmlContent) {
+                // Create a Blob from the HTML content
+                //const blob = new Blob([htmlContent], { type: "text/html" });
+
+                // Create an object URL and open it in a new tab
+                //const url = URL.createObjectURL(blob);
+                //window.open(url, "_blank");
+
+                // Sanitize HTML to remove potentially dangerous content
+                const sanitizedHtml = DOMPurify.sanitize(htmlContent);
+
+                // Get the iframe element
+                const iframe = document.getElementById("previewFrame");
+                try {
+                    editor2 = document.getElementById("editor").innerHTML = sanitizedHtml;
+                } catch (error) {
+                    console.log(error)
+                }
+
+                // Access iframe's document to inject the sanitized HTML
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+                // Open iframe document and write sanitized HTML content
+                iframeDoc.open();
+                iframeDoc.write(sanitizedHtml);
+                iframeDoc.close();
+
+                $(document).ready(function () {
+                    document.getElementById("previewFrame").style.display = 'block'
+                    document.getElementById("editor").style.display = 'none'
+                    $("#modalPreviewDocuments").modal("show");
+                });
+            };
+          $(document).ready(function () {
+                    //document.getElementById("previewFrame").style.display = 'block'
+                    //document.getElementById("editor").style.display = 'none'
+                    $("#modalPreviewDocuments").modal("show");
+                });
+            document.getElementById('contentOrigin').addEventListener('change', (e) => {
+
+                if (e.target.value === 'file') {
+                    jobRequirement.innerHTML = `
+                    <label for="jobRequirements" class="form-label">Provide Job
+                                            Requirements:</label>
+                <input class="form-control mb-2" type="file" name="jobRequirements" id="jobRequirementsFile" accept=".pdf, .doc, .docx"  required>
+                                    
+                    `;
+
+                } else if (e.target.value === 'url') {
+                    jobRequirement.innerHTML = `
+                    <label for="jobRequirements" class="form-label">Provide Job
+                                            Requirements:</label>
+                    <input class="form-control mb-2" type="text" name="jobRequirements" id="jobRequirementsFile" required>
+                                   
+                    `;
+                } else if (e.target.value === 'normal-text') {
+                    jobRequirement.innerHTML = ` 
+                    <label for="jobRequirements" class="form-label">Provide Job
+                                            Requirements:</label>                 
+                    <textarea class="form-control" name="jobRequirements" id="jobRequirementsTextarea" rows="4" placeholder="Or input requirements manually..." required></textarea>
+                                   
+                    `;
+                }
+            })
+
+
+            function validateVideoSize(file, sizeMB) {
+                // Validate file size (example: max 2MB) 
+
+                //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
+                if (file.size > sizeMB * 1024 * 1024) {
+                    document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+                    throw new Error('File size must be less than or equal 16MB')
+                }
+            }
+            // Submiting the form 
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault()
+                document.getElementById('error-message').textContent = '';
+                document.getElementById('success-message').textContent = '';
+                document.getElementById('download-box').innerHTML = '';
+
+                if (!form.checkValidity()) {
+                    event.stopPropagation();
+                    form.classList.add("was-validated");
+                    return;
+                }
+                let csrfToken = ''
+                // Fetch CSRF token from the server
+                let domain = 'http://127.0.0.1:5000'
+                try {
+                    const response = await fetch(`${domain}/api/csrf-token/get`, { method: 'GET' });
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`HTTP error! Status: ${response.status}. Response: ${errorText}`);
+                    }
+                    const data = await response.json();
+                    csrfToken = data.csrf_token;  // Set the global variable
+                    //console.log('CSRF token fetched:', globalCsrfToken);
+                } catch (err) {
+                    console.error('Error fetching CSRF token:', err);
+                    return;
+                }
+
+                let endpoint = window.location.origin + '';
+                document.getElementById('btnSubmit').innerHTML = spinnerHtml
+                const headers = new Headers()
+                //headers.append('X-CSRF-Token', csrfToken)
+                //headers.append("Authorization", ` Bearer ${csrfToken}`);
+
+                const formData = new FormData(event.target)
+
+                // Validate document File
+                const jobRequirements = document.getElementById("jobRequirements");
+                let jobRequirementsFile = ""
+
+                if (formData.get('contentOrigin') === 'file') {
+                    try {
+                        jobRequirementsFile = jobRequirements.files[0];
+                        if (!jobRequirementsFile) {
+                            throw Error("File not found or not selected!")
+                        }
+                    } catch (err) { }
+                    // Validate file size (example: max 2MB) 
+
+                    const file = formData.get('jobRequirements');
+                    //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
+
+                    try {
+                        validateVideoSize(file, 16)
+                    } catch (error) {
+                        document.getElementById('error-message').textContent = error;
+                        return error
+                    }
+                }
+
+                document.getElementById('btnSubmit').innerHTML = spinnerHtml
+
+                fetch(`${domain}/api/cv-customizer`, {
+                    method: 'POST',
+                    body: formData,//JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
+                    headers: headers
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.text();
+                        } else {
+                            throw new Error(`${response.status} - ${response.statusText} - ${response.url}`);
+                        }
+                    })
+                    .then(data => {
+                        const resp = JSON.parse(data);
+                        if (resp.error) {
+                            document.getElementById('error-message').textContent = resp.error;
+                            document.getElementById('success-message').textContent = '';
+                            document.getElementById('download-box').innerHTML = '';
+                        } else {
+                            form.reset();
+
+                            var downloadDocxLink = '';
+
+                            if (resp.docx_file_path) {
+                                downloadDocxLink += `<ul><li><a class="icon-link border" href='${domain}/${resp.docx_file_path}' target="top">Optimised CV.docx
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                                </svg></a></li>`;
+                            }
+
+                            if (resp.pdf_file_path) {
+                                downloadDocxLink += `
+                                <li><a class="icon-link border" href='${domain}/${resp.pdf_file_path}' target="top">Optimised CV.pdf
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                                </svg></a></li><ul>
+                                `;
+                            }
+
+                            document.getElementById('download-box').innerHTML = downloadDocxLink
+                            document.getElementById('error-message').textContent = '';
+                            document.getElementById('success-message').textContent = resp.message;
+
+                            let json_object = {}
+                            if (resp.json) {
+                                var newObjParsed = JSON.parse(String(resp.json).replace(/\n/g, ''));
+
+                                let cv_optimised_html = newObjParsed.cv_in_html_format
+
+                                // Create button element
+                                const buttonPreview = document.createElement("button");
+                                // Create icon element
+                                const icon = document.createElement("i");
+                                //icon.className = "bi bi-eye"; // Bootstrap eye icon
+                                icon.className = "bi bi-box-arrow-up-right"
+
+                                // Append icon and text to button
+                                buttonPreview.appendChild(icon);
+                                // Add classes and attributes
+                                buttonPreview.type = "button";
+                                buttonPreview.className = "btn btn-outline-success";
+                                buttonPreview.textContent = "Preview";
+
+                                // Append the button to the body (or any specific element)
+                                document.getElementById('download-box').appendChild(buttonPreview);
+
+                                // Add click event listener
+                                buttonPreview.addEventListener("click", function () {
+
+                                    // Convert to lowercase for a case-insensitive check
+                                    if (!cv_optimised_html.toLowerCase().includes('<meta charset="utf-8">')) {
+                                        // Insert the meta tag after <head>
+                                        cv_optimised_html = cv_optimised_html.replace('<head>', '<head>\n    <meta charset="UTF-8">');
+                                        console.log("Meta charset added successfully.");
+                                    }
+                                    previewPage(cv_optimised_html)
+                                });
+
+                            }
+                        }
+                        //console.log(resp)
+                        document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+
+                    })
+                    .catch((error) => {
+                        document.getElementById('download-box').innerHTML = '';
+                        document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+                        document.getElementById('error-message').textContent = error
+                        document.getElementById('success-message').textContent = ''
+                        console.log(error)
+                    });
+
+            });
+        });
+
+        document.getElementById('btn-show-alternative-editor').addEventListener('click', () => {
+            document.getElementById("previewFrame").style.display = 'none'
+            document.getElementById("editor").style.display = 'block'
+        })
+
+        document.getElementById('btn-show-editor').addEventListener('click', () => {
+            document.getElementById("previewFrame").style.display = 'block'
+            document.getElementById("editor").style.display = 'none'
+        })
+
+
+        /*
+        
+        // the method to convert HTML to DOCX
+        function htmlToDocx(htmlContent) { alert("Download DOCX... "+htmlContent)
+            if(!htmlContent){
+                throw new Error("Not content received")
+            }
+            const doc = new PizZip(); 
+            const docxTemplate = doc.file("word/document.xml", htmlContent); // Use a DOCX template
+
+            const zip = doc.generate();
+            const blob = new Blob([zip], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "cv_optimised.docx";
+            link.click();
+        }
+
+        // method to save HTML as a PDF
+        function saveHtmlAsPdf(element) {
+            alert("Download PDF... "+element)
+            //const element = document.getElementById("content"); // The element to be converted to PDF
+            if(!element){
+                throw new Error("Not content received")
+            }
+            html2pdf()
+                .from(element)
+                .save("cv_optimised.pdf");
+        }
+
+
+        function execCommand(command, value = null) {
+            document.execCommand(command, false, value);
+        }
+
+        function clearEditor() {
+            document.getElementById("editor").innerHTML = "";
+        }
+
+        // Function to handle the download action for both Docx and PDF
+        function handleDownload(buttonId, contentGetter, conversionFunction) {
+            document.getElementById(buttonId).addEventListener('click', function () {
+                const content = contentGetter();
+                conversionFunction(content);
+            });
+        }
+
+        // Example usage for docx and pdf buttons
+        handleDownload('btn-download-docx', () => document.getElementById("editor").innerHTML, htmlToDocx);
+        handleDownload('btn-download-pdf', () => document.getElementById("editor").innerHTML, saveHtmlAsPdf);
+*/
+    </script>
+
+    <script>
+/*        // Initialize editor with sample content
+        const editor = document.getElementById('editorContent');
+        const preview = document.getElementById('preview');
+        
+        editor.innerHTML = `
+            <h1 style="color: #2c3e50; font-family: Arial">John Doe</h1>
+            <p style="text-align: center; font-family: Arial">
+                📧 john@example.com | 📱 (555) 123-4567 | 📍 New York, NY
+            </p>
+            <h2 style="color: #34495e; font-family: Arial">Professional Summary</h2>
+            <p style="font-family: Arial"><strong>Experienced software developer</strong> with expertise in:</p>
+            <ul style="font-family: Arial">
+                <li>Web development</li>
+                <li>Cloud technologies</li>
+                <li>Team leadership</li>
+            </ul>
+        `;
+
+        // Update preview in real-time
+        function updatePreview() {
+            preview.srcdoc = `
+                <html>
+                <head>
+                    <style>
+                        body { 
+                            font-family: Arial, sans-serif; 
+                            max-width: 800px; 
+                            margin: 0 auto; 
+                            padding: 20px;
+                        }
+                        h1 { color: #2c3e50; }
+                        h2 { color: #34495e; border-bottom: 2px solid #3498db; }
+                        ul { margin-left: 20px; }
+                    </style>
+                </head>
+                <body>${editor.innerHTML}</body>
+                </html>
+            `;
+        }
+
+        // Formatting functions
+        function formatText(command, value = null) {
+            document.execCommand(command, false, value);
+            editor.focus();
+            updatePreview();
+        }
+
+        // Color conversion helper
+        function rgbToHex(rgb) {
+            try {
+                const parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+                if (!parts) return '000000';
+                
+                const r = parseInt(parts[1], 10).toString(16).padStart(2, '0');
+                const g = parseInt(parts[2], 10).toString(16).padStart(2, '0');
+                const b = parseInt(parts[3], 10).toString(16).padStart(2, '0');
+                
+                return r + g + b;
+            } catch {
+                return '000000';
+            }
+        }
+
+        // Fixed DOCX Export Function
+        async function exportDOCX() {
+            try {
+                const docx = window.docx;
+                const { Document, Packer, Paragraph, TextRun, HeadingLevel } = docx;
+                
+                const doc = new Document({
+                    sections: [{
+                        children: await convertToDocxNodes(editor)
+                    }],
+                    styles: {
+                        paragraphStyles: [{
+                            id: 'Heading1',
+                            name: 'Heading 1',
+                            basedOn: 'Normal',
+                            next: 'Normal',
+                            quickFormat: true,
+                            run: { 
+                                size: 32, 
+                                bold: true, 
+                                color: '2c3e50',
+                                font: 'Arial'
+                            },
+                            paragraph: { spacing: { after: 120 } }
+                        }]
+                    }
+                });
+
+                const blob = await Packer.toBlob(doc);
+                saveAs(blob, 'cv.docx');
+            } catch (error) {
+                console.error('DOCX Export Error:', error);
+                alert('Error generating DOCX file. Please check the console for details.');
+            }
+        }
+
+        async function convertToDocxNodes(element) {
+            const docx = window.docx;
+            const { Document, Paragraph, TextRun, HeadingLevel } = docx;
+            const nodes = [];
+            
+            for (const node of element.childNodes) {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    const tag = node.tagName.toLowerCase();
+                    const style = window.getComputedStyle(node);
+                    
+                    // Handle color conversion
+                    let color = '000000';
+                    try {
+                        const styleColor = style.color;
+                        color = styleColor.startsWith('#') 
+                            ? styleColor.replace('#', '')
+                            : rgbToHex(styleColor);
+                    } catch {
+                        color = '000000';
+                    }
+                    
+                    switch(tag) {
+                        case 'h1':
+                            nodes.push(new Paragraph({
+                                text: node.textContent,
+                                heading: HeadingLevel.HEADING_1,
+                                bold: true,
+                                size: 32,
+                                font: style.fontFamily,
+                                color: color
+                            }));
+                            break;
+                        case 'h2':
+                            nodes.push(new Paragraph({
+                                text: node.textContent,
+                                heading: HeadingLevel.HEADING_2,
+                                bold: true,
+                                size: 24,
+                                font: style.fontFamily,
+                                color: color
+                            }));
+                            break;
+                        case 'p':
+                            nodes.push(new Paragraph({
+                                children: await processInlineStyles(node)
+                            }));
+                            break;
+                        case 'ul':
+                        case 'ol':
+                            nodes.push(...await processList(node));
+                            break;
+                        default:
+                            nodes.push(new Paragraph({
+                                text: node.textContent,
+                                font: style.fontFamily,
+                                color: color,
+                                size: parseFloat(style.fontSize) * 0.75
+                            }));
+                    }
+                }
+            }
+            
+            return nodes;
+        }
+
+        async function processInlineStyles(element) {
+            const docx = window.docx;
+            const { TextRun } = docx;
+            const runs = [];
+            
+            for (const child of element.childNodes) {
+                if (child.nodeType === Node.TEXT_NODE) {
+                    const style = window.getComputedStyle(element);
+                    const color = style.color.startsWith('#') 
+                        ? style.color.replace('#', '')
+                        : rgbToHex(style.color);
+                    
+                    runs.push(new TextRun({
+                        text: child.textContent,
+                        font: style.fontFamily,
+                        size: parseFloat(style.fontSize) * 0.75,
+                        color: color
+                    }));
+                } else if (child.nodeType === Node.ELEMENT_NODE) {
+                    const style = window.getComputedStyle(child);
+                    const color = style.color.startsWith('#') 
+                        ? style.color.replace('#', '')
+                        : rgbToHex(style.color);
+                    
+                    runs.push(new TextRun({
+                        text: child.textContent,
+                        bold: style.fontWeight === 'bold',
+                        italic: style.fontStyle === 'italic',
+                        underline: style.textDecoration.includes('underline'),
+                        color: color,
+                        font: style.fontFamily,
+                        size: parseFloat(style.fontSize) * 0.75
+                    }));
+                }
+            }
+            return runs;
+        }
+
+        async function processList(list) {
+            const docx = window.docx;
+            const { Paragraph } = docx;
+            const style = window.getComputedStyle(list);
+            const items = [];
+            const color = style.color.startsWith('#') 
+                ? style.color.replace('#', '')
+                : rgbToHex(style.color);
+            
+            for (const li of list.children) {
+                items.push(new Paragraph({
+                    text: li.textContent,
+                    bullet: { level: 0 },
+                    font: style.fontFamily,
+                    size: parseFloat(style.fontSize) * 0.75,
+                    color: color
+                }));
+            }
+            return items;
+        }
+
+        function exportPDF() {
+            html2pdf().from(preview.contentDocument.documentElement).set({
+                margin: [10, 10],
+                filename: 'cv.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save();
+        }
+
+        function exportHTML() {
+            const blob = new Blob([editor.innerHTML], { type: 'text/html' });
+            saveAs(blob, 'cv.html');
+        }
+
+        function saveAs(blob, filename) {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+        // Initialize preview and event listeners
+        editor.addEventListener('input', updatePreview);
+        updatePreview();
+        */
+    </script>
+ <!-----------Script of the advanced CV editor -->
+
+ <script>
+    // Initialize editor with sample content
+    const editor = document.getElementById('editorContent');
+    const preview = document.getElementById('preview');
+    
+    editor.innerHTML = `
+        <h1 style="color: #2c3e50; font-family: Arial">John Doe</h1>
+        <p style="text-align: center; font-family: Arial">
+            📧 john@example.com | 📱 (555) 123-4567 | 📍 New York, NY
+        </p>
+        <h2 style="color: #34495e; font-family: Arial">Professional Summary</h2>
+        <p style="font-family: Arial"><strong>Experienced software developer</strong> with expertise in:</p>
+        <ul style="font-family: Arial">
+            <li>Web development</li>
+            <li>Cloud technologies</li>
+            <li>Team leadership</li>
+        </ul>
+    `;
+
+    // Update preview in real-time
+    function updatePreview() {
+        preview.srcdoc = `
+            <html>
+            <head>
+                <style>
+                    body { 
+                        font-family: Arial, sans-serif; 
+                        max-width: 800px; 
+                        margin: 0 auto; 
+                        padding: 20px;
+                    }
+                    h1 { color: #2c3e50; }
+                    h2 { color: #34495e; border-bottom: 2px solid #3498db; }
+                    ul { margin-left: 20px; }
+                </style>
+            </head>
+            <body>${editor.innerHTML}</body>
+            </html>
+        `;
+    }
+
+    // Formatting functions
+    function formatText(command, value = null) {
+        document.execCommand(command, false, value);
+        editor.focus();
+        updatePreview();
+    }
+
+    // Color conversion helper
+    function rgbToHex(rgb) {
+        try {
+            const parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+            if (!parts) return '000000';
+            
+            const r = parseInt(parts[1], 10).toString(16).padStart(2, '0');
+            const g = parseInt(parts[2], 10).toString(16).padStart(2, '0');
+            const b = parseInt(parts[3], 10).toString(16).padStart(2, '0');
+            
+            return r + g + b;
+        } catch {
+            return '000000';
+        }
+    }
+
+    // Fixed DOCX Export Function
+    async function exportDOCX() {
+        try {
+            const docx = window.docx;
+            const { Document, Packer, Paragraph, TextRun, HeadingLevel } = docx;
+            
+            const doc = new Document({
+                sections: [{
+                    children: await convertToDocxNodes(editor)
+                }],
+                styles: {
+                    paragraphStyles: [{
+                        id: 'Heading1',
+                        name: 'Heading 1',
+                        basedOn: 'Normal',
+                        next: 'Normal',
+                        quickFormat: true,
+                        run: { 
+                            size: 32, 
+                            bold: true, 
+                            color: '2c3e50',
+                            font: 'Arial'
+                        },
+                        paragraph: { spacing: { after: 120 } }
+                    }]
+                }
+            });
+
+            const blob = await Packer.toBlob(doc);
+            saveAs(blob, 'cv.docx');
+        } catch (error) {
+            console.error('DOCX Export Error:', error);
+            alert('Error generating DOCX file. Please check the console for details.');
+        }
+    }
+
+    async function convertToDocxNodes(element) {
+        const docx = window.docx;
+        const { Document, Paragraph, TextRun, HeadingLevel } = docx;
+        const nodes = [];
+        
+        for (const node of element.childNodes) {
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                const tag = node.tagName.toLowerCase();
+                const style = window.getComputedStyle(node);
+                
+                // Handle color conversion
+                let color = '000000';
+                try {
+                    const styleColor = style.color;
+                    color = styleColor.startsWith('#') 
+                        ? styleColor.replace('#', '')
+                        : rgbToHex(styleColor);
+                } catch {
+                    color = '000000';
+                }
+                
+                switch(tag) {
+                    case 'h1':
+                        nodes.push(new Paragraph({
+                            text: node.textContent,
+                            heading: HeadingLevel.HEADING_1,
+                            bold: true,
+                            size: 32,
+                            font: style.fontFamily,
+                            color: color
+                        }));
+                        break;
+                    case 'h2':
+                        nodes.push(new Paragraph({
+                            text: node.textContent,
+                            heading: HeadingLevel.HEADING_2,
+                            bold: true,
+                            size: 24,
+                            font: style.fontFamily,
+                            color: color
+                        }));
+                        break;
+                    case 'p':
+                        nodes.push(new Paragraph({
+                            children: await processInlineStyles(node)
+                        }));
+                        break;
+                    case 'ul':
+                    case 'ol':
+                        nodes.push(...await processList(node));
+                        break;
+                    default:
+                        nodes.push(new Paragraph({
+                            text: node.textContent,
+                            font: style.fontFamily,
+                            color: color,
+                            size: parseFloat(style.fontSize) * 0.75
+                        }));
+                }
+            }
+        }
+        
+        return nodes;
+    }
+
+    async function processInlineStyles(element) {
+        const docx = window.docx;
+        const { TextRun } = docx;
+        const runs = [];
+        
+        for (const child of element.childNodes) {
+            if (child.nodeType === Node.TEXT_NODE) {
+                const style = window.getComputedStyle(element);
+                const color = style.color.startsWith('#') 
+                    ? style.color.replace('#', '')
+                    : rgbToHex(style.color);
+                
+                runs.push(new TextRun({
+                    text: child.textContent,
+                    font: style.fontFamily,
+                    size: parseFloat(style.fontSize) * 0.75,
+                    color: color
+                }));
+            } else if (child.nodeType === Node.ELEMENT_NODE) {
+                const style = window.getComputedStyle(child);
+                const color = style.color.startsWith('#') 
+                    ? style.color.replace('#', '')
+                    : rgbToHex(style.color);
+                
+                runs.push(new TextRun({
+                    text: child.textContent,
+                    bold: style.fontWeight === 'bold',
+                    italic: style.fontStyle === 'italic',
+                    underline: style.textDecoration.includes('underline'),
+                    color: color,
+                    font: style.fontFamily,
+                    size: parseFloat(style.fontSize) * 0.75
+                }));
+            }
+        }
+        return runs;
+    }
+
+    async function processList(list) {
+        const docx = window.docx;
+        const { Paragraph } = docx;
+        const style = window.getComputedStyle(list);
+        const items = [];
+        const color = style.color.startsWith('#') 
+            ? style.color.replace('#', '')
+            : rgbToHex(style.color);
+        
+        for (const li of list.children) {
+            items.push(new Paragraph({
+                text: li.textContent,
+                bullet: { level: 0 },
+                font: style.fontFamily,
+                size: parseFloat(style.fontSize) * 0.75,
+                color: color
+            }));
+        }
+        return items;
+    }
+
+    function exportPDF() {
+        html2pdf().from(preview.contentDocument.documentElement).set({
+            margin: [10, 10],
+            filename: 'cv.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        }).save();
+    }
+
+    function exportHTML() {
+        const blob = new Blob([editor.innerHTML], { type: 'text/html' });
+        saveAs(blob, 'cv.html');
+    }
+
+    function saveAs(blob, filename) {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(link.href);
+    }
+
+    // Initialize preview and event listeners
+    editor.addEventListener('input', updatePreview);
+    updatePreview();
+</script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

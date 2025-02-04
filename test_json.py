@@ -64,4 +64,5 @@ class User:
 
 user=User().get_user_test()
 print("USER: "+ user['username'])
+rep=check_password_hash(user['username'], '1234')
 

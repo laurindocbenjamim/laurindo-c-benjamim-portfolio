@@ -624,6 +624,7 @@
             async refreshToken() {
                 const response = await fetch(`${this.baseUrl}/api-auth/refresh`, {
                     method: 'POST',
+                    mode: "cors", //Enables CORS
                     credentials: 'include',
                     headers: {
                         'X-CSRF-TOKEN': this.getCSRFToken('csrf_refresh_token')
@@ -635,6 +636,7 @@
             async logout() {
                 await fetch(`${this.baseUrl}/api-auth/logout`, {
                     method: 'POST',
+                    mode: "cors", //Enables CORS
                     credentials: 'include',
                     headers: {
                         'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
@@ -645,6 +647,7 @@
 
             async fetchProtectedData() {
                 let response = await fetch(`${this.baseUrl}/api-auth/protected`, {
+                    mode: "cors", //Enables CORS
                     credentials: 'include',
                     headers: {
                         'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
@@ -667,7 +670,7 @@
             fetch("http://localhost:5000/api-auth/protected", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
-                mode: "no-cors", //Enables CORS
+                mode: "cors", //Enables CORS
                 credentials: "include"  // ✅ Ensures cookies are sent automatically
             })
                 .then(response => response.json())
@@ -730,7 +733,10 @@
         const form = document.getElementById('loginForm')
 
         document.getElementById('testProtectedRoute').addEventListener('click', async () => {
-            const response = await fetchProtectedData()
+            //const response = await fetchProtectedData()
+            //console.log(response)
+            console.log('Fetching protected Data...')
+            const response = await auth.fetchProtectedData()
             console.log(response)
         })
 
@@ -759,23 +765,28 @@
                 console.log(response);
 
                 const user = response.user? response.user : 0;
-                console.log(response.user)
-                
+                                
                 if(user==0){
                     document.getElementById('error-message').textContent = `Username or password wrong!`;
                     document.getElementById('success-message').textContent = '';
                     return;
                 }
-                
-                //localStorage.setItem('userID', response.user.user_id)
-                //window.location.href = `${auth.getHostDomain()}/index.html?userID=${userID}`;               
+                // Test protected route
+                console.log("Testing protected Route...")
+                const resp = await auth.fetchProtectedData()
+                console.log(resp)
+                console.log('..... Protectedroute tested...')
+                localStorage.setItem('user', response.user)
+                localStorage.setItem('userID', response.user.id)
+                window.location.href = `${auth.getHostDomain()}/index.html?userID=${response.user.id}`;               
 
             } catch (error) {
                 console.log(error)
                 document.getElementById('error').textContent = `${error}`;
                 document.getElementById('success-message').textContent = '';
+            }finally{
+                document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
             }
-            document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
 
             ///const response = await login(username, password)
 
