@@ -454,7 +454,8 @@
                                             <div class="col-12">
                                                 <div class="form-floating mb-3">
                                                     <input type="text" class="form-control rounded-3" id="username"
-                                                        name="username" placeholder="username or name@example.com" required>
+                                                        name="username" placeholder="username or name@example.com"
+                                                        required>
                                                     <label for="username">Username</label>
                                                     <div class="invalid-feedback">
                                                         Valid username is required.
@@ -562,13 +563,15 @@
         class AuthClient {
             constructor() {
                 this.baseUrl = 'http://localhost:5000';
+                let current_domain = window.location.origin
+                this.retryCount = 0;
+                this.maxRetries = 2;
                 this.csrfToken = this.getCSRFToken('csrf_access_token');
             }
 
-            getHostDomain(){
-                let current_domain=window.location.origin
-                //current_domain=`${current_domain}/laurindo-c-benjamim-portfolio`;
-                return current_domain;
+            getHostDomain() {                
+                //return `${this.current_domain}/laurindo-c-benjamim-portfolio`;
+                return window.location.origin;
             }
             getCSRFToken(cookieName) {
                 return document.cookie
@@ -587,21 +590,27 @@
                 };
 
                 if (errorMessages[response.status]) {
-                    try {
-                        await this.refreshToken();
-                        return null; // Signal to retry original request
-                    } catch (refreshError) {
-                        this.logout();
-                        const message = errorMessages[response.status]
-                        document.getElementById('error-message').textContent = message;
-                        document.getElementById('success-message').textContent = '';
-                        throw new Error(message);
-                    } finally {
-                        document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+                    if (response.status === 401 && this.retryCount < this.maxRetries) {
+                        this.retryCount++;
+                        try {
+                            await this.refreshToken();
+                            return null; // Signal to retry original request
+                        } catch (refreshError) {
+                            this.logout();
+                            const message = errorMessages[response.status]
+                            document.getElementById('error-message').textContent = message;
+                            document.getElementById('success-message').textContent = '';
+                            throw new Error(message);
+                        } finally {
+                            document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+                        }
                     }
                 }
-
-                console.log(response);               
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Request failed');
+                }
+                console.log(response);
 
                 return response.json();
 
@@ -630,6 +639,12 @@
                         'X-CSRF-TOKEN': this.getCSRFToken('csrf_refresh_token')
                     }
                 });
+
+                if (response.status === 400) {
+                    // Handle invalid refresh token
+                    this.logout();
+                    throw new Error('Invalid refresh token');
+                }
                 return this.handleResponse(response);
             }
 
@@ -642,23 +657,24 @@
                         'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
                     }
                 });
-                window.location.href = '/login';
+                //window.location.href = `${this.current_domain}/login.html`;
             }
 
             async fetchProtectedData() {
-                let response = await fetch(`${this.baseUrl}/api-auth/protected`, {
-                    mode: "cors", //Enables CORS
-                    credentials: 'include',
-                    headers: {
-                        'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
-                    }
-                });
-
-                const result = await this.handleResponse(response);
-                if (!result) {
-                    return this.fetchProtectedData(); // Retry after refresh
+                try {
+                    let response = await fetch('http://localhost:5000/api-auth/protected', {
+                        credentials: 'include',
+                        headers: {
+                            'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
+                        }
+                    });
+                    console.log(response)
+                    const result = await this.handleResponse(response);
+                    return result || this.fetchProtectedData(); // Single retry
+                } catch (error) {
+                    this.logout();
+                    throw error;
                 }
-                return result;
             }
         }
 
@@ -741,6 +757,29 @@
         })
 
         const auth = new AuthClient();
+        let isRefreshing = false;
+        async function handleProtectedRequest() {
+            try {
+                if (isRefreshing) {
+                    // Wait for existing refresh to complete
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    return handleProtectedRequest();
+                }
+
+                const data = await auth.fetchProtectedData();
+                console.log('Protected data:', data);
+            } catch (error) {
+                console.error('Authentication failed:', error);
+                if(auth.getHostDomain() && auth.getHostDomain() !== undefined){
+                    //window.location.href = `${auth.getHostDomain()}/login.html`;
+                }
+                
+            }
+        }
+
+        // Initial protected data fetch
+        handleProtectedRequest();
+
         // Submiting the form 
         form.addEventListener('submit', async (event) => {
             event.preventDefault()
@@ -764,9 +803,9 @@
                 const response = await auth.login(username, password);
                 console.log(response);
 
-                const user = response.user? response.user : 0;
-                                
-                if(user==0){
+                const user = response.user ? response.user : 0;
+
+                if (user == 0) {
                     document.getElementById('error-message').textContent = `Username or password wrong!`;
                     document.getElementById('success-message').textContent = '';
                     return;
@@ -778,13 +817,13 @@
                 console.log('..... Protectedroute tested...')
                 localStorage.setItem('user', response.user)
                 localStorage.setItem('userID', response.user.id)
-                window.location.href = `${auth.getHostDomain()}/index.html?userID=${response.user.id}`;               
+                window.location.href = `${auth.getHostDomain()}/index.html?userID=${response.user.id}`;
 
             } catch (error) {
                 console.log(error)
                 document.getElementById('error').textContent = `${error}`;
                 document.getElementById('success-message').textContent = '';
-            }finally{
+            } finally {
                 document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
             }
 

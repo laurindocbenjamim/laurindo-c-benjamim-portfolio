@@ -1,0 +1,22 @@
+myapp/
+├── app.py
+├── config.py
+├── extensions.py
+├── blueprints/
+│   ├── auth/
+│   │   ├── __init__.py
+│   │   ├── routes.py
+│   │   └── schemas.py
+│   └── api/
+│       ├── __init__.py
+│       └── routes.py
+├── models/
+│   ├── __init__.py
+│   ├── user.py
+│   └── token.py
+├── templates/
+│   └── login.html
+├── static/
+│   └── js/
+│       └── auth.js
+└── requirements.txt

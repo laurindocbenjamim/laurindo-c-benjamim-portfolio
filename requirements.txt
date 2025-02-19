@@ -4,6 +4,8 @@ Werkzeug
 Flask-WTF
 Flask-SQLAlchemy
 Flask-CORS
+flask-login
+
 sphinx
 PyPDF2
 WTForms

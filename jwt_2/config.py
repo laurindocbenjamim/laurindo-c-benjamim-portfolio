@@ -1,12 +1,11 @@
+
 import os
-from datetime import timedelta
 
 class Config:
-    SECRET_KEY=os.getenv('JWT_SECRET_KEY', 'XVnI^ls~%vZD4"Q5Fz?Gj)zKJ=3#N,(@')
+
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///db.sqlite')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
-
     UPLOAD_VIDEO_FOLDER= 'video_uploads'
     UPLOAD_DOCS_FOLDER= 'doc_uploads'
     DECRYPTED_FOLDER = 'decrypted'
@@ -18,22 +17,12 @@ class Config:
     UPLOAD_EXTENSIONS_IMAGE_ALLOWED = ['.jpg','.jpeg', '.png', '.gif']
     UPLOAD_EXTENSIONS_VIDEO_ALLOWED = ['.mp4', '.mkv', '.wave']
     #@property
-    
+    #def UPLOAD_VIDEO_FOLDER(self): return 'video_uploads'
+    SECRET_KEY='Nlc0cf9D3bqRxI5SDPajVkiEymrcrOmaOld1nl5Nlk1iH8asrJBknpLJ0pItCB7D8zJ59ikcbEn7RdsiUVjHdw'
+    #
     # JWT Configuration
-    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'GvkxD-8YsYKKpwZOODi9pBKtm3wr_0TP5enjETS6ZC8')
- 
-    # JWT Configuration
-    JWT_TOKEN_LOCATION = ['cookies']
-    JWT_ACCESS_COOKIE_NAME = 'access_token'
-    JWT_REFRESH_COOKIE_NAME = 'refresh_token'
-    JWT_COOKIE_SECURE = False  # True in production
-    JWT_COOKIE_HTTPONLY = True
-    JWT_COOKIE_SAMESITE = 'Lax'
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
-    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)
-    JWT_CSRF_CHECK_FORM = False  # Disable for API testing
-    JWT_CSRF_IN_COOKIES = True
-    
+    JWT_SECRET_KEY =SECRET_KEY# os.getenv('JWT_SECRET_KEY', 'GvkxD-8YsYKKpwZOODi9pBKtm3wr_0TP5enjETS6ZC8')
+    JWT_ALGORITHM = "HS256"
     # CORS Configuration
     CORS_ORIGINS = [
         "http://localhost:5000",
@@ -41,11 +30,8 @@ class Config:
         "http://localhost:52330"
     ]
     CORS_SUPPORTS_CREDENTIALS = True
-    
-    # Rate Limiting
-    RATELIMIT_DEFAULT = "200 per day;50 per hour"
 
-
+#
 class TestingConfig(Config):
         
     def __init__(self):
@@ -63,3 +49,5 @@ class TestingConfig(Config):
     @property
     def DEBUG(self): return True
     
+    
+
