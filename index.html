@@ -607,19 +607,41 @@
             logoutLink.style.display='block'
             usernameSpan.textContent=`${fullName} [${userName}]`;
         }else{
-            alert(userName)
+            //alert("Username: "+userName)
         }
 
+
+        
         loginLink.addEventListener('click', function (event) {
             event.preventDefault();
             alert("OOiii")
             //loadComponent('login.html', 'body-content');
         });
 
-        logoutLink.addEventListener('click', function (event) {
-            event.preventDefault();
-            //loadComponent('logout.html', 'body-content');
-        });
+        /*document.getElementById('logout-link').addEventListener('click', async () =>{
+            event.preventDefault()
+            const options = {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: JSON.stringify({"action": "logout"}),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                    },
+                };
+            console.log("Logout process with cookies tarting...")
+            const endpoint = 'logout_with_cookies';
+            const response = await auth.makeRequest(options, endpoint)
+            console.log(response)
+            if(!response.ok){
+                const message = await auth.handlingErrors(response)
+                console.log(message)  
+                console.error("Logout process failed!")                
+            }else{
+                console.log("Logout process done successfully!")
+            }             
+            console.log('Process  finished!')
+        });*/
 
         function logout() {
         localStorage.removeItem('jwtToken');

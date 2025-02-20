@@ -1,7 +1,7 @@
 class AuthJWTNoCookies{
     constructor(){
         this.baseURL = window.location.origin;
-        this.serverEndpoint = 'http://localhost:5000';
+        this.serverDomain = 'http://localhost:5000';
     }
 
     async getOptionJWT(method, body){
@@ -25,7 +25,7 @@ class AuthJWTNoCookies{
     };
 
     async login(endpoint, formData){ 
-        const route = `${this.serverEndpoint}/${endpoint}`;
+        const route = `${this.serverDomain}/${endpoint}`;
         const options = this.getOptionJWT('POST', formData)
         console.log("Options...")
         console.log(options)
@@ -43,13 +43,13 @@ class AuthJWTNoCookies{
 
     async callProtectedRoute(endpoint, formData){
         if(formData){
-            const response = await fetch(this.serverEndpoint + '/'+endpoint, 
+            const response = await fetch(this.serverDomain + '/'+endpoint, 
         this.getOptionJWT('GET', formData))
         .then(response => response.json())
         return ;
         }
 
-        const response = await fetch(this.serverEndpoint + '/'+endpoint, 
+        const response = await fetch(this.serverDomain + '/'+endpoint, 
         this.getOptionJWT('GET', formData))
         .then(response => response.json())
         return response.json();
@@ -62,20 +62,21 @@ class AuthJWTNoCookies{
 class AuthUser {
     constructor() {
         this.baseURL = window.location.origin;
-        this.serverEndpoint = 'https://www.d-tuning.com'//'http://localhost:5000';
+        //this.serverDomain = 'https://www.d-tuning.com';
+        this.serverDomain ='http://localhost:5000';
     }
     async login(options) {
-        const response = await fetch(`${this.serverEndpoint}/login-w-cookies`, options);
+        const response = await fetch(`${this.serverDomain}/login-w-cookies`, options);
         return response.json();
     }
 
     async makeRequest(options, endpoint) {
-        const response = await fetch(`${this.serverEndpoint}/${endpoint}`, options);
+        const response = await fetch(`${this.serverDomain}/${endpoint}`, options);
         return response.json();
     }
 
     async logout(options) {
-        const response = fetch(`${this.serverEndpoint}/logout_with_cookies`, options);
+        const response = fetch(`${this.serverDomain}/logout_with_cookies`, options);
         return response.json();
     }
 
@@ -129,7 +130,7 @@ class AuthUser {
                 'X-CSRF-TOKEN': await this.getCookie('csrf_access_token'),
             },
         };
-        const response = await fetch(`${this.serverEndpoint}/protected`, options);
+        const response = await fetch(`${this.serverDomain}/protected`, options);
         const result = await response.json();
         return result;
     };
