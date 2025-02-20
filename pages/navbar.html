@@ -28,9 +28,9 @@
 <div id="navbarSearch" class="navbar-search w-100 collapse">
     <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
 </div>
-<a href="login.html"
+<a href="login_with_cookies.html"
         class="nav-link text-light text-decoration-none"
-         aria-expanded="false">
+         aria-expanded="false" id="login-link">
         <strong>Login</strong>
     </a>
 <div class="dropdown border-top dropstart">
@@ -41,12 +41,12 @@
         <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" class="rounded-circle">
     </a>
     <ul class="dropdown-menu text-small shadow">
-        <li><a class="dropdown-item" href="#">New project...</a></li>
+        <li><a class="dropdown-item" href="#"><span id="username">Username</span></a></li>
         <li><a class="dropdown-item" href="#">Settings</a></li>
         <li><a class="dropdown-item" href="#">Profile</a></li>
         <li>
             <hr class="dropdown-divider">
         </li>
-        <li><a class="dropdown-item" href="#">Sign out</a></li>
+        <li><a class="dropdown-item" id="logout-link" href="#" style="display: none;">Sign out</a></li>
     </ul>
 </div>

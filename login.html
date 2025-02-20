@@ -425,14 +425,23 @@
 
                     <style>
                         #form {
-                            color: #000;
+                            color: #c9c9c9;
                             padding: 2rem;
                             /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);*/
                             box-shadow: 4px 4px 8px 12px rgba(100, 98, 98, 0.089);
                             /* Increased shadow */
                             border-radius: 8px;
                             overflow: hidden;
-                            background-color: rgba(255, 255, 255, 0.87);
+                            background-color: rgba(14, 13, 13, 0.87);
+                        }
+                        #form input{
+                            border: 1px solid #7c7c7c;
+                            color: #d4d4d4;
+                            background-color: rgba(26, 26, 26, 0.87);
+                        }
+                        #form input:focus{
+                            color: #ffffff;
+                            background-color: #141414;
                         }
                     </style>
 
@@ -484,10 +493,7 @@
                                                 <div class="error-message text-danger" id="error-message"></div>
                                             </div>
                                         </div>
-
-                                        <button type="button" id="testProtectedRoute"
-                                            class="btn btn-outline-danger">Test protected Endpoint</button>
-
+                                        
                                         <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit"
                                             id="btnSubmit">Sign up</button>
 

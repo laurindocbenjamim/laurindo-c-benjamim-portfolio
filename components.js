@@ -62,7 +62,7 @@ class AuthJWTNoCookies{
 class AuthUser {
     constructor() {
         this.baseURL = window.location.origin;
-        this.serverEndpoint = 'http://localhost:5000';
+        this.serverEndpoint = 'https://www.d-tuning.com'//'http://localhost:5000';
     }
     async login(options) {
         const response = await fetch(`${this.serverEndpoint}/login-w-cookies`, options);

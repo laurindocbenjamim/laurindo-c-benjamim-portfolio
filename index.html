@@ -298,6 +298,7 @@
             color: #000;
             border-radius: 3px;
         }
+        
     </style>
 
 
@@ -310,7 +311,7 @@
     <link href="assets/css/sidebars.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
     <script src="assets/pages_component.js"></script>
-    
+    <script src="components.js"></script>
 </head>
 
 <body style="background: #00010a; color:#cac8c8
@@ -589,6 +590,41 @@
 
         const menuToggle = document.querySelector('.menu-toggle');
         const customControls = document.querySelector('.custom-controls');
+
+
+
+        const auth = new AuthJWTNoCookies()
+
+        const usernameSpan = document.getElementById('username')
+        const loginLink = document.getElementById('login-link')
+        const logoutLink = document.getElementById('logout-link')
+        const userID = localStorage.getItem('user_id')
+        const userName= localStorage.getItem('username')
+        const fullName = localStorage.getItem('fullname')
+
+        if(userName){
+            loginLink.style.display='none'
+            logoutLink.style.display='block'
+            usernameSpan.textContent=`${fullName} [${userName}]`;
+        }else{
+            alert(userName)
+        }
+
+        loginLink.addEventListener('click', function (event) {
+            event.preventDefault();
+            alert("OOiii")
+            //loadComponent('login.html', 'body-content');
+        });
+
+        logoutLink.addEventListener('click', function (event) {
+            event.preventDefault();
+            //loadComponent('logout.html', 'body-content');
+        });
+
+        function logout() {
+        localStorage.removeItem('jwtToken');
+        }
+
 
         function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
