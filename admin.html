@@ -391,6 +391,7 @@
             const options = {
                 method: 'get',
                 credentials: 'include',
+                mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
