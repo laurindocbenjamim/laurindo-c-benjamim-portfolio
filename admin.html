@@ -406,8 +406,9 @@
                 const message = await auth.handlingErrors(response)
                 console.log(message)
                 setTimeout(() => {
-                        window.location.href = auth.baseURL + '/login.html'
-                    }, 400)
+                        //window.location.href = auth.baseURL + '/login.html'
+                    }, 1000)
+                    return;
             } else {
                 if (response.status_code === 200) {
                     localStorage.setItem('user_id', response.id)
@@ -421,8 +422,9 @@
                 } else if (response.status_code === 401 || response.status_code === 422) {
                     alert("Ups! Something went wrong. Redirecting to login...")
                     setTimeout(() => {
-                        window.location.href = auth.baseURL + '/login.html'
+                        //window.location.href = auth.baseURL + '/login.html'
                     }, 1000)
+                    return;
                 }
 
             }
