@@ -641,8 +641,9 @@
                 const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
                 console.log(message)
                 console.error("Login failed! " + sms)
-                errorMessage.textContent = sms;
+                errorMessage.textContent = message;
                 successMessage.textContent = '';
+                return;
             } else {
                 const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
                 console.log(sms)
