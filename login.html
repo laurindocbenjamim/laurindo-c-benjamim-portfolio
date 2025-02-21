@@ -320,6 +320,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
     <script src="assets/pages_component.js"></script>
+    <script src="components.js"></script>
     <style>
         .toolbar {
             display: flex;
@@ -434,12 +435,14 @@
                             overflow: hidden;
                             background-color: rgba(14, 13, 13, 0.87);
                         }
-                        #form input{
+
+                        #form input {
                             border: 1px solid #7c7c7c;
                             color: #d4d4d4;
                             background-color: rgba(26, 26, 26, 0.87);
                         }
-                        #form input:focus{
+
+                        #form input:focus {
                             color: #ffffff;
                             background-color: #141414;
                         }
@@ -456,8 +459,7 @@
                                 </div>
 
                                 <div class="modal-body p-5 pt-0">
-                                    <form id="loginForm" class="needs-validation" novalidate
-                                        enctype="multipart/form-data">
+                                    <form id="loginForm" class="needs-validation" novalidate>
 
                                         <div class="mb-2">
                                             <div class="col-12">
@@ -476,8 +478,8 @@
                                         <div class="mb-2">
                                             <div class="col-12">
                                                 <div class="form-floating mb-3">
-                                                    <input type="password" class="form-control rounded-3" id="password"
-                                                        name="password" placeholder="********" required>
+                                                    <input type="password" class="form-control rounded-3"
+                                                        name="password" id="password" placeholder="********" required>
                                                     <label for="password">Password</label>
                                                     <div class="invalid-feedback">
                                                         Valid password is required.
@@ -489,13 +491,15 @@
 
                                         <div class="mb-2">
                                             <div class="col-12">
-                                                <div class="success-message text-success" id="success-message"></div>
+                                                <div class="password-strength" id="password-strength"></div>
                                                 <div class="error-message text-danger" id="error-message"></div>
+                                                <div class="info-message text-info" id="info-message"></div>
+                                                <div class="success-message text-success" id="success-message"></div>
                                             </div>
                                         </div>
-                                        
+
                                         <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit"
-                                            id="btnSubmit">Sign up</button>
+                                            id="btnSubmit">Login</button>
 
                                         <small class="text-body-secondary">By clicking Sign up, you agree to the terms
                                             of use.</small>
@@ -558,365 +562,228 @@
     <!---- Include DOMPurify (for sanitizing HTML) in my html preview -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.4/dist/purify.min.js"></script>
 
-
-
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
 
-        let domain = 'http://127.0.0.1:5000';
 
+        const auth = new AuthUser();
+        const form = document.getElementById('loginForm');
+        const infoMessage = document.getElementById('info-message')
+        const successMessage = document.getElementById('success-message')
+        const errorMessage = document.getElementById('error-message')
+        const passwordStrength = document.getElementById('password-strength');
 
-        class AuthClient {
-            constructor() {
-                this.baseUrl = 'http://localhost:5000';
-                let current_domain = window.location.origin
-                this.retryCount = 0;
-                this.maxRetries = 2;
-                this.csrfToken = this.getCSRFToken('csrf_access_token');
-            }
-
-            getHostDomain() {                
-                //return `${this.current_domain}/laurindo-c-benjamim-portfolio`;
-                return window.location.origin;
-            }
-            getCSRFToken(cookieName) {
-                return document.cookie
-                    .split('; ')
-                    .find(row => row.startsWith(`${cookieName}=`))
-                    ?.split('=')[1];
-            }
-
-            async handleResponse(response) {
-                const errorMessages = {
-                    400: "Bad Request. Please check your input.",
-                    401: "Unauthorized. Your session may have expired.",
-                    403: "Forbidden. You don’t have permission to access this resource.",
-                    404: "Not Found. The requested resource could not be found.",
-                    500: "Internal Server Error. Please try again later."
-                };
-
-                if (errorMessages[response.status]) {
-                    if (response.status === 401 && this.retryCount < this.maxRetries) {
-                        this.retryCount++;
-                        try {
-                            await this.refreshToken();
-                            return null; // Signal to retry original request
-                        } catch (refreshError) {
-                            this.logout();
-                            const message = errorMessages[response.status]
-                            document.getElementById('error-message').textContent = message;
-                            document.getElementById('success-message').textContent = '';
-                            throw new Error(message);
-                        } finally {
-                            document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-                        }
-                    }
-                }
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.message || 'Request failed');
-                }
-                console.log(response);
-
-                return response.json();
-
-            }
-
-            async login(username, password) {
-                const response = await fetch(`${this.baseUrl}/api-auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
-                    },
-                    body: JSON.stringify({ username, password }),
-                    mode: "cors", //Enables CORS
-                    credentials: "include"  // ✅ Ensures cookies are sent automatically
-                });
-                return this.handleResponse(response);
-            }
-
-            async refreshToken() {
-                const response = await fetch(`${this.baseUrl}/api-auth/refresh`, {
-                    method: 'POST',
-                    mode: "cors", //Enables CORS
-                    credentials: 'include',
-                    headers: {
-                        'X-CSRF-TOKEN': this.getCSRFToken('csrf_refresh_token')
-                    }
-                });
-
-                if (response.status === 400) {
-                    // Handle invalid refresh token
-                    this.logout();
-                    throw new Error('Invalid refresh token');
-                }
-                return this.handleResponse(response);
-            }
-
-            async logout() {
-                await fetch(`${this.baseUrl}/api-auth/logout`, {
-                    method: 'POST',
-                    mode: "cors", //Enables CORS
-                    credentials: 'include',
-                    headers: {
-                        'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
-                    }
-                });
-                //window.location.href = `${this.current_domain}/login.html`;
-            }
-
-            async fetchProtectedData() {
-                try {
-                    let response = await fetch('http://localhost:5000/api-auth/protected', {
-                        credentials: 'include',
-                        headers: {
-                            'X-CSRF-TOKEN': this.getCSRFToken('csrf_access_token')
-                        }
-                    });
-                    console.log(response)
-                    const result = await this.handleResponse(response);
-                    return result || this.fetchProtectedData(); // Single retry
-                } catch (error) {
-                    this.logout();
-                    throw error;
-                }
-            }
-        }
-
-
-
-
-        function testProtectedEndpoint() {
-
-            fetch("http://localhost:5000/api-auth/protected", {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-                mode: "cors", //Enables CORS
-                credentials: "include"  // ✅ Ensures cookies are sent automatically
-            })
-                .then(response => response.json())
-                .then(data => console.log(data))
-                .catch(error => console.error("Error:", error));
-
-        }
-
-        async function login(username, password) {
-
-
-            const response = await fetch(`${domain}/api-auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': getCSRFToken('csrf_access_token')
-                },
-                body: JSON.stringify({ username, password }),
-                mode: "no-cors", //Enables CORS
-                credentials: "include"  // ✅ Ensures cookies are sent automatically
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message);
-            }
-
-            return response.json();
-        }
-
-        // Helper to get CSRF token from cookies
-        function getCSRFToken(cookieName) {
-            return document.cookie
-                .split('; ')
-                .find(row => row.startsWith(`${cookieName}=`))
-                ?.split('=')[1];
-        }
-
-
-        async function fetchProtectedData() {
-            const response = await fetch(`${domain}/api-auth/protected`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'X-CSRF-TOKEN': getCSRFToken('csrf_access_token')
-                }
-            });
-
-            if (response.status === 401) {
-                // Handle token refresh
-                await refreshToken();
-                return fetchProtectedData();
-            }
-
-            return response.json();
-        }
-
-        const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
-                <span role="status">Loading...</span>`;
-        const form = document.getElementById('loginForm')
-
-        document.getElementById('testProtectedRoute').addEventListener('click', async () => {
-            //const response = await fetchProtectedData()
-            //console.log(response)
-            console.log('Fetching protected Data...')
-            const response = await auth.fetchProtectedData()
-            console.log(response)
-        })
-
-        const auth = new AuthClient();
-        let isRefreshing = false;
-        async function handleProtectedRequest() {
-            try {
-                if (isRefreshing) {
-                    // Wait for existing refresh to complete
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    return handleProtectedRequest();
-                }
-
-                const data = await auth.fetchProtectedData();
-                console.log('Protected data:', data);
-            } catch (error) {
-                console.error('Authentication failed:', error);
-                if(auth.getHostDomain() && auth.getHostDomain() !== undefined){
-                    //window.location.href = `${auth.getHostDomain()}/login.html`;
-                }
-                
-            }
-        }
-
-        // Initial protected data fetch
-        handleProtectedRequest();
-
-        // Submiting the form 
         form.addEventListener('submit', async (event) => {
-            event.preventDefault()
-            document.getElementById('btnSubmit').innerHTML = spinnerHtml
-            document.getElementById('error-message').textContent = '';
-            document.getElementById('success-message').textContent = '';
-
+            event.preventDefault();
             if (!form.checkValidity()) {
                 event.stopPropagation();
                 form.classList.add("was-validated");
-                document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+                return;
+            }
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Reset previous error message
+            errorMessage.textContent = '';
+            passwordStrength.textContent = '';
+
+            const formD = new FormData(event.target)
+
+            // Basic validation
+            if (!formD.get('username') || !formD.get('password')) {
+                errorMessage.textContent = 'Username and password are required!';
                 return;
             }
 
-            const formData = new FormData(event.target)
-            const username = formData.get('username')
-            const password = formData.get('password')
-
-
-            try {
-                const response = await auth.login(username, password);
-                console.log(response);
-
-                const user = response.user ? response.user : 0;
-
-                if (user == 0) {
-                    document.getElementById('error-message').textContent = `Username or password wrong!`;
-                    document.getElementById('success-message').textContent = '';
-                    return;
-                }
-                // Test protected route
-                console.log("Testing protected Route...")
-                const resp = await auth.fetchProtectedData()
-                console.log(resp)
-                console.log('..... Protectedroute tested...')
-                localStorage.setItem('user', response.user)
-                localStorage.setItem('userID', response.user.id)
-                window.location.href = `${auth.getHostDomain()}/index.html?userID=${response.user.id}`;
-
-            } catch (error) {
-                console.log(error)
-                document.getElementById('error').textContent = `${error}`;
-                document.getElementById('success-message').textContent = '';
-            } finally {
-                document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
+            if (formD.get('username').length < 4) {
+                errorMessage.textContent = 'Username must be at least 4 characters long.';
+                return;
             }
 
-            ///const response = await login(username, password)
+            // Prevent SQL Injection - Allow only letters, numbers, and underscores
+            const sqlInjectionPattern = /^[a-zA-Z0-9_]+$/;
+            if (!sqlInjectionPattern.test(formD.get('username'))) {
+                errorMessage.textContent = 'Invalid username! Use only letters, numbers, and underscores.';
+                return;
+            }
 
-            //console.log(response)
+            // Password strength validation
+            const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-        });
-        /*document.addEventListener('DOMContentLoaded', () => {
-            //const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-            const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
-                <span role="status">Loading...</span>`;
-            const form = document.getElementById('loginForm')
+            /*if (!strongPasswordPattern.test(password)) {
+                passwordStrength.textContent = 'Weak password! Must include at least 8 characters, one uppercase, one lowercase, one number, and one special character.';
+                passwordStrength.style.color = 'red';
+                return;
+            } else {
+                passwordStrength.textContent = 'Strong password!';
+                passwordStrength.style.color = 'green';
+            }*/
 
-            // Submiting the form 
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault()
-                document.getElementById('error-message').textContent = '';
-                document.getElementById('success-message').textContent = '';
 
-                if (!form.checkValidity()) {
-                    event.stopPropagation();
-                    form.classList.add("was-validated");
-                    return;
+            const formData = JSON.stringify({ "username": formD.get('username'), "password": formD.get('password') });
+
+            const options = {
+                method: 'post',
+                body: formData,
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                },
+            };
+            console.log("Login with cookies tarting...")
+            //const response = await auth.login(options)
+            const response = await auth.makeRequest(options, 'api/v1/auth/login')
+            console.log(response)
+            if (!response.ok && !response.status_code) {
+                const message = await auth.handlingErrors(response)
+
+                const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
+                console.log(message)
+                console.error("Login failed! " + sms)
+                errorMessage.textContent = sms;
+                successMessage.textContent = '';
+            } else {
+                const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
+                console.log(sms)
+
+                if (response.status_code === 201) {
+                    infoMessage.textContent = response.message || 'Login failed. Please try again.';
+                    errorMessage.textContent = '';
+                    successMessage.textContent = '';
+                } else if (response.status_code === 400 || response.status_code === 403 || response.status_code === 401) {
+                    infoMessage.textContent = '';
+                    errorMessage.textContent = response.error || 'Login failed. Please try again.';
+                    successMessage.textContent = '';
+                } else if (response.status_code === 200) {
+                    infoMessage.textContent = '';
+                    successMessage.textContent = 'Login successful! Redirecting...';
+                    errorMessage.textContent = '';
+                    setTimeout(() => {
+                        window.location.href = auth.baseURL + '/admin.html';
+                    }, 1000);
+                } else {
+                    errorMessage.textContent = 'An unexpected error occurred. Please try again.' + sms;
+                    successMessage.textContent = '';
                 }
-                let csrfToken = ''
-                // Fetch CSRF token from the server
-                let domain = 'http://127.0.0.1:5000'
-
-
-                let endpoint = window.location.origin + '';
-                document.getElementById('btnSubmit').innerHTML = spinnerHtml
-                const headers = new Headers()
-                headers.append('Content-Type', 'application/json')
-
-                const formData = new FormData(event.target)
-                const username = formData.get('username')
-                const password = formData.get('password')
-
-                document.getElementById('btnSubmit').innerHTML = spinnerHtml
-
-                fetch(`${domain}/api-auth/login`, {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify({ username, password }),                    
-                    mode: "cors", //Enables CORS
-                    credentials: "include"  // ✅ Ensures cookies are sent automatically
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.text();
-                        } else {
-                            throw new Error(`${response.status} - ${response.statusText} - ${response.url}`);
-                        }
-                    })
-                    .then(data => {
-                        const resp = JSON.parse(data);
-                        console.log(resp)
-                        if (resp.error) {
-                            document.getElementById('error-message').textContent = resp.error;
-                            document.getElementById('success-message').textContent = '';
-                        } else {
-                            form.reset();
-                            document.getElementById('error-message').textContent = '';
-                            document.getElementById('success-message').textContent = resp.message;
-                        }
-
-                        document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-
-                    })
-                    .catch((error) => {
-                        document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-                        document.getElementById('error-message').textContent = error
-                        document.getElementById('success-message').textContent = ''
-                        console.log(error)
-                    });
-
-            });
+            }
+            console.log('Process  finished!')
         });
 
-        */
+        document.getElementById('logoutButton').addEventListener('click', async () => {
+            event.preventDefault()
+            const options = {
+                method: 'POST',
+                credentials: 'include',
+                body: JSON.stringify({ "action": "logout" }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                },
+            };
+            console.log("Logout process with cookies tarting...")
+            const endpoint = 'logout_with_cookies';
+            const response = await auth.makeRequest(options, endpoint)
+            console.log(response)
+            if (!response.ok) {
+                const message = await auth.handlingErrors(response)
+                console.log(message)
+                console.error("Logout process failed!")
+            } else {
+                console.log("Logout process done successfully!")
+            }
+            console.log('Process  finished!')
+        });
+
+        document.getElementById('testProtectionButton').addEventListener('click', async (event) => {
+            event.preventDefault()
+            accessProtectedRoute();
+        })
+
+
+        async function accessProtectedRoute() {
+            const options = {
+                method: 'get',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                },
+            };
+            console.log("Accessing protected route with cookies tarting...")
+            const endpoint = 'protected';
+            const response = await auth.makeRequest(options, endpoint)
+            console.log(response)
+
+            if (!response.ok && !response.status_code) {
+                const message = await auth.handlingErrors(response)
+                console.log(message)
+            } else {
+                if (response.status_code === 200) {
+                    localStorage.setItem('user_id', response.id)
+                    localStorage.setItem('username', response.username)
+                    localStorage.setItem('fullname', response.full_name)
+                    window.location.href = auth.baseURL + '/admin.html'
+                    console.log("Accessed protected successfully!")
+                }
+
+            }
+            console.log('Process  finished!')
+        }
+
+        function showAdminArea() {
+            const token = localStorage.getItem('jwtToken');
+            if (token) {
+                document.getElementById('adminArea').style.display = 'block';
+                //fetchUserData(token);
+            }
+        }
+
+        function fetchUserDat(token) {
+            // Simulate fetching user data
+            const userData = {
+                username: 'admin',
+                email: 'admin@example.com'
+            };
+
+            document.getElementById('userData').textContent = JSON.stringify(userData, null, 2);
+        }
 
 
 
+        function fetchUserData(method, endpoint, formData, headers) {
+            const request = method === 'POST' ? {
+                method: method,
+                body: formData,
+                headers: headers
+            } : {
+                method: method,
+                headers: headers
+            };
+
+            fetch(endpoint, request)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    if (data.access_token) {
+                        localStorage.setItem('jwtToken', data.access_token)
+                        document.getElementById('token').value = data.access_token;
+                    } else if (data.id) {
+                        localStorage.setItem('user_id', data.id)
+                        localStorage.setItem('username', data.username)
+                        localStorage.setItem('fullname', data.full_name)
+
+                        //alert(`ID: ${data.id}_ Username: ${data.username}__" Fullname: ${data.full_name}`)
+                        window.location.href = '/admin.html'
+                    }
+                    document.getElementById('userData').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                });
+        }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

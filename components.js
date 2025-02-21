@@ -1,7 +1,8 @@
 class AuthJWTNoCookies{
     constructor(){
         this.baseURL = window.location.origin;
-        this.serverDomain = 'http://localhost:5000';
+        this.serverDomain = 'https://www.d-tuning.com';
+        //this.serverDomain = 'http://localhost:5000';
     }
 
     async getOptionJWT(method, body){
