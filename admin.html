@@ -419,9 +419,10 @@
                     
                     console.log("Accessed protected successfully!")
                 } else if (response.status_code === 401 || response.status_code === 422) {
+                    alert("Ups! Something went wrong. Redirecting to login...")
                     setTimeout(() => {
                         window.location.href = auth.baseURL + '/login.html'
-                    }, 400)
+                    }, 1000)
                 }
 
             }
