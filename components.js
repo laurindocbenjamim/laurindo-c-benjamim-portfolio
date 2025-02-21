@@ -1,6 +1,7 @@
 class AuthJWTNoCookies{
     constructor(){
-        this.baseURL = window.location.origin;
+        //this.baseURL = window.location.origin;
+        this.baseURL = window.location.origin + '/laurindo-c-benjamim-portfolio';
         this.serverDomain = 'https://www.d-tuning.com';
         //this.serverDomain = 'http://localhost:5000';
     }
