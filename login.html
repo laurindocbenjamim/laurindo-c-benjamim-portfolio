@@ -568,13 +568,17 @@
 
         const auth = new AuthUser();
         const form = document.getElementById('loginForm');
+        const btnSubmit = document.getElementById('btnSubmit')
         const infoMessage = document.getElementById('info-message')
         const successMessage = document.getElementById('success-message')
         const errorMessage = document.getElementById('error-message')
         const passwordStrength = document.getElementById('password-strength');
+        const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                <span role="status">Loading...</span>`;
 
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
+            btnSubmit.innerHTML = spinnerHtml;
             if (!form.checkValidity()) {
                 event.stopPropagation();
                 form.classList.add("was-validated");
@@ -668,6 +672,7 @@
                     successMessage.textContent = '';
                 }
             }
+            btnSubmit.innerHTML = '<span>Login</span>';
             console.log('Process  finished!')
         });
 
