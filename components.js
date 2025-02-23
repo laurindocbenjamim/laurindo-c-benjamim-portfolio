@@ -28,7 +28,7 @@ class AuthUser {
     }
 
     async getOptions2(method, formData) {
-        if(!method || !formData){ return null;};
+        if (!method || !formData) { return null; };
 
         const headers = {
             'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ class AuthUser {
         return options;
     };
 
-    async getOptions(method, formData){
+    async getOptions(method, formData) {
         const csrfToken = await this.getCookie('csrf_access_token');
         const headers = {
             'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ class AuthUser {
         return result;
     };
 
-    async handlingErrors(response){
+    async handlingErrors(response) {
         if (!response.ok) {
             const errorMessages = {
                 400: 'Bad Request',
@@ -91,7 +91,7 @@ class AuthUser {
         }
     };
 
-    async getErrorsSuccessMessage(message = 'Message', status_code){
+    async getErrorsSuccessMessage(message = 'Message', status_code) {
         if (status_code) {
             const errorMessages = {
                 200: message,
@@ -107,3 +107,28 @@ class AuthUser {
     };
 };
 
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const user_id = localStorage.getItem('user_id')
+    const username = localStorage.getItem('username')
+    const fullname = localStorage.getItem('fullname')
+    const loginLink = document.querySelector('#login-link');
+    const logoutLink = document.querySelector('#logout-link');
+
+    if (user_id) {
+
+
+        if (loginLink) {
+            loginLink.style.display = 'none';
+            if (logoutLink) {
+                logoutLink.style.display = 'block';
+            }
+        } else {
+            console.log("login-link not found");
+        }
+
+    } else {
+        alert("Bad")
+    }
+})

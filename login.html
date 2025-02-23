@@ -647,6 +647,7 @@
                 console.error("Login failed! " + sms)
                 errorMessage.textContent = message;
                 successMessage.textContent = '';
+                btnSubmit.innerHTML = '<span>Login</span>';
                 return;
             } else {
                 const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
@@ -676,35 +677,7 @@
             console.log('Process  finished!')
         });
 
-        document.getElementById('logoutButton').addEventListener('click', async () => {
-            event.preventDefault()
-            const options = {
-                method: 'POST',
-                credentials: 'include',
-                body: JSON.stringify({ "action": "logout" }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
-                },
-            };
-            console.log("Logout process with cookies tarting...")
-            const endpoint = 'logout_with_cookies';
-            const response = await auth.makeRequest(options, endpoint)
-            console.log(response)
-            if (!response.ok) {
-                const message = await auth.handlingErrors(response)
-                console.log(message)
-                console.error("Logout process failed!")
-            } else {
-                console.log("Logout process done successfully!")
-            }
-            console.log('Process  finished!')
-        });
-
-        document.getElementById('testProtectionButton').addEventListener('click', async (event) => {
-            event.preventDefault()
-            accessProtectedRoute();
-        })
+        
 
 
         async function accessProtectedRoute() {

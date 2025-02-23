@@ -309,13 +309,7 @@
     <link href="assets/css/dashboard.css" rel="stylesheet">
     <link href="assets/css/sidebars.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
-    
-    
-    <script>
-        const usernameSpan = document.getElementById('username');
-        const loginLink = document.getElementById('login_link');
-        const logoutLink = document.getElementById('logout_link');
-    </script>
+
 </head>
 
 <body style="background: #00010a; color:#cac8c8
@@ -350,18 +344,20 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div id="sidebar" class="sidebar border border-secondary border-right col-md-3 col-lg-2 p-0 bg-body-tertiar" style="">
-                
+            <div id="sidebar" class="sidebar border border-secondary border-right col-md-3 col-lg-2 p-0 bg-body-tertiar"
+                style="">
+
             </div>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                
-                
+
+
                 <div class="container"></div>
 
 
-                <footer id="footer" class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-                    
+                <footer id="footer"
+                    class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+
                 </footer>
             </main>
         </div>
@@ -374,146 +370,157 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
-    
+
     <script src="components.js"></script>
     <script src="assets/pages_component.js"></script>
     <script>
 
-
-        document.getElementById('login-link').addEventListener('click', (e)=>{
-            e.preventDefault()
-            alert("Ola Login")
-        })
-        
+        document.addEventListener('DOMContentLoaded', () => {
 
 
-        const auth = new AuthUser();
-
-        async function getUserData() {
-
-            const options = {
-                method: 'get',
-                credentials: 'include',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
-                },
-            };
-            
-            console.log("Accessing protected route with cookies tarting...")
-            const endpoint = 'api/v1/admin/user'; //'protected';
-            const response = await auth.makeRequest(options, endpoint)
-            console.log(response)
-
-            if (!response.ok && !response.status_code) {
-                const message = await auth.handlingErrors(response)
-                console.log(message)
-                setTimeout(() => {
-                        //window.location.href = auth.baseURL + '/login.html'
-                    }, 1000)
-                    return;
-            } else {
-                if (response.status_code === 200) {
-                    localStorage.setItem('user_id', response.id)
-                    localStorage.setItem('username', response.username)
-                    localStorage.setItem('fullname', response.full_name)
-                    loginLink.style.display = 'none'
-                    logoutLink.style.display = 'block'
-                    usernameSpan.textContent = `${response.full_name} [${response.username}]`;
-                    
-                    console.log("Accessed protected successfully!")
-                } else if (response.status_code === 401 || response.status_code === 422) {
-                    alert("Ups! Something went wrong. Redirecting to login...")
-                    setTimeout(() => {
-                        //window.location.href = auth.baseURL + '/login.html'
-                    }, 1000)
-                    return;
-                }
-
-            }
-            console.log('Process  finished!')
-
-        }
-        getUserData();
-
-        const userID = localStorage.getItem('user_id')
-        const userName = localStorage.getItem('username')
-        const fullName = localStorage.getItem('fullname')
-
-        if (userName) { 
-            if (loginLink) {
-                loginLink.style.display = 'none';
-            } else {
-                console.warn("Element with ID 'yourElementId' not found.");
-            }
-            loginLink.style.display = 'none'
-            logoutLink.style.display = 'block'
-            usernameSpan.textContent = `${fullName} [${userName}]`;
-        } else {
-
-        }
-
-        logoutLink.addEventListener('click', async (event) => {
-            event.preventDefault();
-            localStorage.clear()
-            const options = {
-                method: 'get',
-                credentials: 'include',
-                //body: JSON.stringify({"action": "logout"}),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
-                },
-            };
-            console.log("Logout process with cookies tarting...")
-            const endpoint = 'api/v1/auth/logout';//'logout_with_cookies';
-            const response = await auth.makeRequest(options, endpoint)
-            console.log(response)
-            if (!response.ok) {
-                const message = await auth.handlingErrors(response)
-                console.log(message)
-                console.error("Logout process failed!")
-            } else {
-                console.log("Logout process done successfully!")
-            }
-            setTimeout(() => {
-                console.log("Accessing login page...")
-                window.location.href = auth.baseURL + '/login.html'
-            }, 400)
-            console.log('Process  finished!')
-        });
+            const usernameSpan = document.getElementById('username');
+            const loginLink = document.getElementById('login_link');
+            const logoutLink = document.getElementById('logout_link');
 
 
-        /* logoutLink.addEventListener('click', async (event) => {
-            event.preventDefault();
-            localStorage.clear()
-            const options = {
-                    method: 'POST',
+            const auth = new AuthUser();
+
+            async function getUserData() {
+
+                const options = {
+                    method: 'get',
                     credentials: 'include',
-                    body: JSON.stringify({"action": "logout"}),
+                    mode: 'cors',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
                     },
                 };
-            console.log("Logout process with cookies tarting...")
-            const endpoint = 'logout_with_cookies';
-            const response = await auth.makeRequest(options, endpoint)
-            console.log(response)
-            if(!response.ok){
-                const message = await auth.handlingErrors(response)
-                console.log(message)  
-                console.error("Logout process failed!")                
-            }else{
-                console.log("Logout process done successfully!")
-            }   
-            window.location.href = auth.baseURL + '/login_with_cookies.html'          
-            console.log('Process  finished!')
-        });*/
 
+                console.log("Accessing protected route with cookies starting...")
+                const endpoint = 'api/v1/admin/user'; //'protected';
+                const response = await auth.makeRequest(options, endpoint)
+                console.log("Response...")
+                console.log(response)
+
+                if (!response.ok && !response.status_code) {
+                    const message = await auth.handlingErrors(response)
+                    console.log(message)
+                    setTimeout(() => {
+                        window.location.href = auth.baseURL + '/login.html'
+                    }, 1000)
+                    return;
+                } else {
+                    if (response.status_code === 200) {
+                        localStorage.setItem('user_id', response.id)
+                        localStorage.setItem('username', response.username)
+                        localStorage.setItem('fullname', response.full_name)
+                        if (loginLink) {
+                            loginLink.style.display = 'none';
+                            logoutLink.style.display = 'block'
+                        }
+                        if(usernameSpan){
+                            usernameSpan.textContent = `${response.full_name} [${response.username}]`;
+                        }
+                        
+
+                        console.log("Accessed protected successfully!")
+                    } else if (response.status_code === 401 || response.status_code === 422) {
+                        alert("Ups! Something went wrong. Redirecting to login...")
+                        setTimeout(() => {
+                            //window.location.href = auth.baseURL + '/login.html'
+                        }, 1000)
+                        return;
+                    }else{
+
+                    }
+
+                }
+                console.log('Process  finished!')
+
+            }
+            getUserData();
+            console.log("Process has finished...")
+            const userID = localStorage.getItem('user_id')
+            const userName = localStorage.getItem('username')
+            const fullName = localStorage.getItem('fullname')
+
+            if (userName) {
+                if (loginLink) {
+                    loginLink.style.display = 'none';
+                    logoutLink.style.display = 'block'
+                } else {
+                    console.warn("Element with ID 'yourElementId' not found.");
+                }
+                if (usernameSpan) {
+                    usernameSpan.textContent = `${fullName} [${userName}]`;
+                }
+
+            }
+
+            if (logoutLink) {
+                logoutLink.addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    localStorage.clear()
+                    const options = {
+                        method: 'get',
+                        credentials: 'include',
+                        //body: JSON.stringify({"action": "logout"}),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                        },
+                    };
+                    console.log("Logout process with cookies tarting...")
+                    const endpoint = 'api/v1/auth/logout';//'logout_with_cookies';
+                    const response = await auth.makeRequest(options, endpoint)
+                    console.log(response)
+                    if (!response.ok) {
+                        const message = await auth.handlingErrors(response)
+                        console.log(message)
+                        console.error("Logout process failed!")
+                    } else {
+                        console.log("Logout process done successfully!")
+                    }
+                    setTimeout(() => {
+                        console.log("Accessing login page...")
+                        window.location.href = auth.baseURL + '/login.html'
+                    }, 400)
+                    console.log('Process  finished!')
+                });
+
+            }
+
+
+            /* logoutLink.addEventListener('click', async (event) => {
+                event.preventDefault();
+                localStorage.clear()
+                const options = {
+                        method: 'POST',
+                        credentials: 'include',
+                        body: JSON.stringify({"action": "logout"}),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                        },
+                    };
+                console.log("Logout process with cookies tarting...")
+                const endpoint = 'logout_with_cookies';
+                const response = await auth.makeRequest(options, endpoint)
+                console.log(response)
+                if(!response.ok){
+                    const message = await auth.handlingErrors(response)
+                    console.log(message)  
+                    console.error("Logout process failed!")                
+                }else{
+                    console.log("Logout process done successfully!")
+                }   
+                window.location.href = auth.baseURL + '/login_with_cookies.html'          
+                console.log('Process  finished!')
+            });*/
+        });
     </script>
-    
+
 </body>
 
 </html>
