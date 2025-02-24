@@ -129,8 +129,8 @@ async function getUserData() {
     } catch (error) {
         throw new Error("Error to get the user data! " + error);
     }
-    console.log("Response...")
-    console.log(response)
+    //console.log("Response...")
+    //console.log(response)
 
     if (!response.ok && !response.status_code) {
         const message = await auth.handlingErrors(response)
