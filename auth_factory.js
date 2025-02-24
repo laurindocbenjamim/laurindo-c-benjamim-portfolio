@@ -109,8 +109,8 @@ class AuthUser {
 
 async function getUserData() {
 
-    const response = null;
-    let auth = new AuthUser()
+    let response = null;
+    const auth = new AuthUser()
 
     const options = {
         method: 'get',
