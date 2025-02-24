@@ -1,4 +1,3 @@
-
 const loadHTML = (url, elementId) => {
     fetch(url)
         .then(response => {
@@ -11,6 +10,10 @@ const loadHTML = (url, elementId) => {
             const element = document.getElementById(elementId);
             if (element) {
                 element.innerHTML = data;
+                // Dispatch event only for the navbar after it's loaded
+                if (elementId === 'navbar') {
+                    window.dispatchEvent(new Event('navbarLoaded'));
+                }
             } else {
                 console.warn(`Element with ID '${elementId}' not found. Skipping content injection.`);
             }

@@ -129,6 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     } else {
-        alert("Bad")
+       
     }
 })
