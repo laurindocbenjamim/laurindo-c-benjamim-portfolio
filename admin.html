@@ -483,8 +483,7 @@
             
             if (localStorage.getItem('user_id')) { alert(localStorage.getItem('fullname'))
                 userInfo.style.display='block';
-                document.getElementById('sidebar').style.display = 'block';;
-                document.querySelector('user-info').style.display = 'block';
+                document.getElementById('sidebar').style.display = 'block';
                 document.getElementById('username').textContent = `${localStorage.getItem('fullname')} [${localStorage.getItem('username')}]`;
                 document.getElementById('login-link').style.display = 'none';
                 document.getElementById('logout-link').style.display = 'block';
