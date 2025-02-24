@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="22222">
     <meta name="author" content="Laurindo C.Benjamim">
     <meta name="generator" content="Laurindo C.Benjamim">
-    <title>Login - Data Tuning</title>
+    <title>Register - Data Tuning</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
 
@@ -17,14 +17,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 
-    
+
 
 
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-   
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 
 
@@ -40,32 +40,35 @@
 
     <script src="assets/pages_component.js"></script>
 
-     <!-- Custom styles for this template -->
-     <link href="assets/css/dashboard.css" rel="stylesheet">
-     <link href="assets/css/sidebars.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="assets/css/dashboard.css" rel="stylesheet">
+    <link href="assets/css/sidebars.css" rel="stylesheet">
     <link rel="stylesheet" href="style_login_form.css">
 
 </head>
 
 <body style="background: #00010a; color:#cac8c8">
-    
 
-    <header class=" sticky-top bg-ligh flex-md-nowrap p-3 shadow" style="border-bottom: 1px solid #222222;" data-bs-theme="ligh">
+
+    <header class=" sticky-top bg-ligh flex-md-nowrap p-3 shadow" style="border-bottom: 1px solid #222222;"
+        data-bs-theme="ligh">
         <a class="navbar-brand col-md-2 col-lg-2 me-0 px-2 fs-7 bg-ligh" href="index.html">
             <b class="text-light">Data Tuning</b></a>
-        
+
         <ul class="navbar-nav flex-row d-md-none">
             <li class="nav-item text-nowrap">
-                <button class="nav-link px-3 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSearch"
-                    aria-controls="navbarSearch" aria-expanded="false" aria-label="Toggle search">
+                <button class="nav-link px-3 text-white" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSearch" aria-controls="navbarSearch" aria-expanded="false"
+                    aria-label="Toggle search">
                     <svg class="bi">
                         <use xlink:href="#search" />
                     </svg>
                 </button>
             </li>
             <li class="nav-item text-nowrap">
-                <button class="nav-link px-3 text-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu"
-                    aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="nav-link px-3 text-dark" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <!--<svg class="bi">
                 <use xlink:href="#list" />
               </svg>-->
@@ -73,7 +76,7 @@
                 </button>
             </li>
         </ul>
-      
+
     </header>
 
 
@@ -84,100 +87,167 @@
 
                 <div class="container">
 
-
+                   
                     <div class="px-1 pt-1 my-2 ">
-                        <div class="col-lg-7 mx-auto">
+                        <div class="col-lg-8 mx-auto">
                             <!--<div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5" >-->
 
                             <div class="modal-content rounded-4 shadow mt-5 " id="form">
                                 <div class="modal-header p-4 pb-4 border-bottom-0 justify-content-center">
-                                    <h1 class="fw-bold mb-0 fs-2">Sign In</h1>
+                                    <h1 class="fw-bold mb-0 fs-2">Sign Up</h1>
                                 </div>
 
                                 <div class="modal-body p-5 pt-0">
-                                    <form id="loginForm" class="needs-validation" novalidate>
+                                    <form id="registerorm" class="needs-validation" novalidate>
 
-                                        <div class="mb-2">
-                                            <div class="col-12">
-                                                <div class="form-floating mb-3">
-                                                    <input type="text" class="form-control rounded-3" id="username"
-                                                        name="username" placeholder="username or name@example.com"
-                                                        required>
-                                                    <label for="username">Username</label>
-                                                    <div class="invalid-feedback">
-                                                        Valid username is required.
-                                                    </div>
+                                        <div class="row g-3 " style="text-align: left;">
+
+                                            <div class="col-sm-6 ">
+                                                <label for="firstName" class="form-label">First name</label>
+                                                <input type="text" class="form-control" name="firstName" id="firstName"
+                                                    placeholder="first name" value="" required>
+                                                <div class="invalid-feedback">
+                                                    Valid first name is required.
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <label for="lastName" class="form-label">Last name</label>
+                                                <input type="text" class="form-control" id="lastName"
+                                                    name="lastName" placeholder="last name"
+                                                    value="" required>
+                                                <div class=" invalid-feedback">
+                                                Valid last name is required.
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label for="username" class="form-label">Username</label>
+                                            <div class="input-group has-validation">
+                                                <span class="input-group-text">@</span>
+                                                <input type="text" class="form-control" name="username" id="username"
+                                                    placeholder="Username" required>
+                                                <div class="invalid-feedback">
+                                                    Your username is required.
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="mb-2">
-                                            <div class="col-12">
-                                                <div class="form-floating mb-3">
-                                                    <input type="password" class="form-control rounded-3"
-                                                        name="password" id="password" placeholder="********" required>
-                                                    <label for="password">Password</label>
-                                                    <div class="invalid-feedback">
-                                                        Valid password is required.
-                                                    </div>
-                                                </div>
+                                        <div class="col-12">
+                                            <label for="email" class="form-label">Email <span
+                                                    class="text-body-danger">*</span></label>
+                                            <input type="email" class="form-control" name="email" id="email"
+                                                placeholder="you@example.com">
+                                            <div class="invalid-feedback">
+                                                Please enter a valid email address for shipping updates.
                                             </div>
                                         </div>
 
-
-                                        <div class="mb-2">
-                                            <div class="col-12">
-                                                <div class="password-strength" id="password-strength"></div>
-                                                <div class="error-message text-danger" id="error-message"></div>
-                                                <div class="info-message text-info" id="info-message"></div>
-                                                <div class="success-message text-success" id="success-message"></div>
+                                        <div class="col-md-4">
+                                            <label for="country" class="form-label">Country</label>
+                                            <select class="form-select" id="country" required>
+                                                <option value="">Choose...</option>
+                                                <option>United States</option>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                Please select a valid country.
                                             </div>
                                         </div>
 
-                                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit"
-                                            id="btnSubmit">Login</button>
-
-                                        <small class="text-light-emphasis">By clicking Sign up, you agree to the terms
-                                            of use.</small>
-                                        <hr class="my-4">
-                                        <h2 class="fs-5 fw-bold mb-3">Or use</h2>
-                                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3"
-                                            type="submit">
-                                            <svg class="bi me-1" width="16" height="16">
-                                                <use xlink:href="#twitter" />
-                                            </svg>
-                                            Sign in with Twitter
-                                        </button>
-                                        <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="submit">
-                                            <svg class="bi me-1" width="16" height="16">
-                                                <use xlink:href="#facebook" />
-                                            </svg>
-                                            Sign in with Facebook
-                                        </button>
-
-                                        <small class="text-light">
-                                            New to our platform? <a class="link-offset-2 link-underline link-underline-opacity-25" href="register.html"><strong>Sign Up</strong></a>
-                                        </small>
-                                        <hr class="my-4">
-                                    </form>
+                                        <div class="col-md-4">
+                                            <label for="phoneNumber" class="form-label">Phone</label>
+                                            <input type="text" class="form-control" name="phoneNumber" id="phoneNumber"
+                                                placeholder="91 242 4507" required>
+                                            <div class="invalid-feedback">
+                                                Phone number required.
+                                            </div>
+                                        </div>
                                 </div>
-                            </div>
 
+                                <hr class="my-4">
+
+                                <div class="row g-3 " style="text-align: left;">
+
+                                    <div class="col-md-6">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" name="password" id="password"
+                                            placeholder="" required>
+                                        <div class="invalid-feedback">
+                                            Password required.
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-md-6">
+                                        <label for="confirmPassword" class="form-label">Confirm password</label>
+                                        <input type="text" class="form-control" name="confirmPassword"
+                                            id="confirmPassword" placeholder="" required>
+                                        <div class="invalid-feedback">
+                                            Cnfirm password required.
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+
+
+
+                                <div class="mb-2">
+                                    <div class="col-12">
+                                        <div class="password-strength" id="password-strength"></div>
+                                        <div class="error-message text-danger" id="error-message"></div>
+                                        <div class="info-message text-info" id="info-message"></div>
+                                        <div class="success-message text-success" id="success-message"></div>
+                                    </div>
+                                </div>
+
+                                <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit"
+                                    id="btnSubmit">Submit</button>
+
+                                <small class="text-light-emphasis">By clicking Sign up, you agree to the terms
+                                    of use.</small>
+                                <hr class="my-4">
+                                <h2 class="fs-5 fw-bold mb-3">Or Register with</h2>
+                                <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="submit">
+                                    <svg class="bi me-1" width="16" height="16">
+                                        <use xlink:href="#twitter" />
+                                    </svg>
+                                    Sign up with Twitter
+                                </button>
+                                <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="submit">
+                                    <svg class="bi me-1" width="16" height="16">
+                                        <use xlink:href="#facebook" />
+                                    </svg>
+                                    Sign up with Facebook
+                                </button>
+
+
+                                <small class="text-light">
+                                    I already have an account. <a
+                                        class="link-offset-2 link-underline link-underline-opacity-25"
+                                        href="login.html"><strong>Sign In</strong></a>
+                                </small>
+                                </form>
+                            </div>
                         </div>
 
                     </div>
 
-
                 </div>
 
 
-
-                <footer id="footer"
-                    class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-
-                </footer>
-            </main>
         </div>
+
+
+
+        <footer id="footer" class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+
+        </footer>
+        </main>
+    </div>
 
 
     </div>
@@ -200,7 +270,7 @@
     <script src="auth_factory.js"></script>
     <script>
 
-        
+
         const auth = new AuthUser();
         const form = document.getElementById('loginForm');
         const btnSubmit = document.getElementById('btnSubmit')
