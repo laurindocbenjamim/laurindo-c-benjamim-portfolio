@@ -412,7 +412,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link logout-link d-flex align-items-center gap-2" href="#">
+                                <a class="nav-link logout-link d-flex align-items-center gap-2" onclick="logout(e)" href="#">
                                     <svg class="bi">
                                         <use xlink:href="#door-closed" />
                                     </svg>
@@ -596,6 +596,37 @@
     <script src="assets/pages_component.js"></script>
     <script>
 
+
+async function logout(e){
+    e.preventDefault()
+    const auth = new AuthUser();
+                    localStorage.clear()
+                    const options = {
+                        method: 'get',
+                        credentials: 'include',
+                        //body: JSON.stringify({"action": "logout"}),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                        },
+                    };
+                    console.log("Logout process with cookies tarting...")
+                    const endpoint = 'api/v1/auth/logout';//'logout_with_cookies';
+                    const response = await auth.makeRequest(options, endpoint)
+                    console.log(response)
+                    if (!response.ok) {
+                        const message = await auth.handlingErrors(response)
+                        console.log(message)
+                        console.error("Logout process failed!")
+                    } else {
+                        console.log("Logout process done successfully!")
+                    }
+                    setTimeout(() => {
+                        console.log("Accessing login page...")
+                        window.location.href = auth.baseURL + '/login.html'
+                    }, 400)
+                    console.log('Process  finished!')
+}
         document.addEventListener('DOMContentLoaded', () => {
 
 
@@ -736,6 +767,8 @@
                 });
 
             }
+
+            
 
 
             /* logoutLink.addEventListener('click', async (event) => {
