@@ -163,22 +163,21 @@ async function getUserData() {
 
 
 async function logout(e) {
-
-    const auth = new AuthUser();
     localStorage.clear()
+    const auth = new AuthUser();
+    
     const options = {
         method: 'get',
         credentials: 'include',
-        //body: JSON.stringify({"action": "logout"}),
         headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
         },
     };
     console.log("Logout process with cookies tarting...")
-    const endpoint = 'api/v1/auth/logout';//'logout_with_cookies';
+    const endpoint = 'api/v1/auth/logout';
     const response = await auth.makeRequest(options, endpoint)
-    console.log(response)
+    //console.log(response)
     if (!response.ok) {
         const message = await auth.handlingErrors(response)
         console.log(message)
