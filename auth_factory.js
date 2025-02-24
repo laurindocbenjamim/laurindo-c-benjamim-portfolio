@@ -195,7 +195,7 @@ async function logout(e) {
     }
     setTimeout(() => {
         console.log("Accessing login page...")
-        //window.location.href = auth.baseURL + '/login.html'
+        window.location.href = auth.baseURL + '/login.html'
     }, 400)
     console.log('Process  finished!')
 }

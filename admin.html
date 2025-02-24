@@ -403,7 +403,7 @@
                 </div>
             </div>
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <main id="main-content" style="display: none;" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Dashboard</h1>
@@ -476,6 +476,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
 
+            const mainContent = document.getElementById('main-content');
             const usernameSpan = document.getElementById('username');
             const loginLink = document.getElementById('login-link');
             const logoutLink = document.getElementById('logout-link');
@@ -489,6 +490,7 @@
 
 
             if (localStorage.getItem('user_id')) {
+                mainContent.style.display = 'block';
                 userInfo.style.display = 'block';
                 document.getElementById('sidebar').style.display = 'block';
                 document.getElementById('username').textContent = `${localStorage.getItem('fullname')} [${localStorage.getItem('username')}]`;
