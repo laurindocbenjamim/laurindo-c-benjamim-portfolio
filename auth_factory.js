@@ -107,28 +107,89 @@ class AuthUser {
     };
 };
 
+async function getUserData() {
 
+    const auth = new AuthUser()
 
-document.addEventListener('DOMContentLoaded', () => {
-    const user_id = localStorage.getItem('user_id')
-    const username = localStorage.getItem('username')
-    const fullname = localStorage.getItem('fullname')
-    const loginLink = document.querySelector('#login-link');
-    const logoutLink = document.querySelector('#logout-link');
+    const options = {
+        method: 'get',
+        credentials: 'include',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+        },
+    };
 
-    if (user_id) {
+    console.log("Accessing protected route with cookies starting...")
+    const endpoint = 'api/v1/admin/user'; //'protected';
+   try {
+    const response = await auth.makeRequest(options, endpoint)
+   } catch (error) {
+    throw new Error("Error to get the user data! "+ error);
+   }
+    console.log("Response...")
+    console.log(response)
 
+    if (!response.ok && !response.status_code) {
+        const message = await auth.handlingErrors(response)
+        console.log(message)
+        setTimeout(() => {
+            window.location.href = auth.baseURL + '/login.html'
+        }, 1000)
+        return;
+    } else {
+        if (response.status_code === 200) {
+            localStorage.setItem('user_id', response.id)
+            localStorage.setItem('username', response.username)
+            localStorage.setItem('fullname', response.full_name)
+            //localStorage.setItem('is_administrator', response.is_administrator)
 
-        if (loginLink) {
-            loginLink.style.display = 'none';
-            if (logoutLink) {
-                logoutLink.style.display = 'block';
-            }
+            console.log("Accessed protected successfully!")
+        } else if (response.status_code === 401 || response.status_code === 422) {
+            alert("Ups! Something went wrong. Redirecting to login...")
+            setTimeout(() => {
+                window.location.href = auth.baseURL + '/login.html'
+            }, 1000)
+            return;
         } else {
-            console.log("login-link not found");
+
         }
 
-    } else {
-       
     }
-})
+    console.log('Process  finished!')
+
+}
+
+
+async function logout(e) {
+
+    const auth = new AuthUser();
+    localStorage.clear()
+    const options = {
+        method: 'get',
+        credentials: 'include',
+        //body: JSON.stringify({"action": "logout"}),
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+        },
+    };
+    console.log("Logout process with cookies tarting...")
+    const endpoint = 'api/v1/auth/logout';//'logout_with_cookies';
+    const response = await auth.makeRequest(options, endpoint)
+    console.log(response)
+    if (!response.ok) {
+        const message = await auth.handlingErrors(response)
+        console.log(message)
+        console.error("Logout process failed!")
+    } else {
+        console.log("Logout process done successfully!")
+    }
+    setTimeout(() => {
+        console.log("Accessing login page...")
+        window.location.href = auth.baseURL + '/login.html'
+    }, 400)
+    console.log('Process  finished!')
+}
+

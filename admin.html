@@ -106,7 +106,10 @@
     <link href="assets/css/dashboard.css" rel="stylesheet">
     <link href="assets/css/sidebars.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <script src="auth_factory.js"></script>
+    <script src="assets/pages_component.js"></script>
 
+    
 </head>
 
 <body style="background: #00010a; color:#cac8c8
@@ -131,55 +134,6 @@
                 d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
         </symbol>
     </svg>
-
-    <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
-        <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button"
-            aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
-            <svg class="bi my-1 theme-icon-active" width="1em" height="1em">
-                <use href="#circle-half"></use>
-            </svg>
-            <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
-            <li>
-                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light"
-                    aria-pressed="false">
-                    <svg class="bi me-2 opacity-50" width="1em" height="1em">
-                        <use href="#sun-fill"></use>
-                    </svg>
-                    Light
-                    <svg class="bi ms-auto d-none" width="1em" height="1em">
-                        <use href="#check2"></use>
-                    </svg>
-                </button>
-            </li>
-            <li>
-                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark"
-                    aria-pressed="false">
-                    <svg class="bi me-2 opacity-50" width="1em" height="1em">
-                        <use href="#moon-stars-fill"></use>
-                    </svg>
-                    Dark
-                    <svg class="bi ms-auto d-none" width="1em" height="1em">
-                        <use href="#check2"></use>
-                    </svg>
-                </button>
-            </li>
-            <li>
-                <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto"
-                    aria-pressed="true">
-                    <svg class="bi me-2 opacity-50" width="1em" height="1em">
-                        <use href="#circle-half"></use>
-                    </svg>
-                    Auto
-                    <svg class="bi ms-auto d-none" width="1em" height="1em">
-                        <use href="#check2"></use>
-                    </svg>
-                </button>
-            </li>
-        </ul>
-    </div>
-
 
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
         <symbol id="calendar3" viewBox="0 0 16 16">
@@ -270,33 +224,43 @@
             </li>
         </ul>
 
-        <div id="navbarSearch" class="navbar-search w-100 collapse">
-            <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
-        </div>
-        <div class="dropdown border-top dropstart">
-            <a href="login.html" id="login-link" class="nav-link text-light text-decoration-none" aria-expanded="false">
-                <strong>Login</strong>
+        
+        
+        <div class="d-flex">
+            <a href="login.html" id="login-link" class="btn btn-outline-info btn-sm me-3" aria-expanded="false">
+                <strong>Login </strong> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                  </svg>
             </a>
-            <a href="#" id="user-info"
-                class="d-flex align-items-center justify-content-center p-3 link-body-emphasis text-decoration-none dropdown-toggle"
+        </div>
+        <div class="dropdown border-top dropstart" id="user-info" style="display: none;">
+            
+            <a href="#" class="d-flex align-items-center justify-content-center p-3 link-body-emphasis text-decoration-none dropdown-toggle"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" class="rounded-circle">
             </a>
-            <ul class="dropdown-menu text-small shadow">
+            <ul class="dropdown-menu text-small shadow user-info" >
                 <li><a class="dropdown-item" href="#"><span id="username">Username</span></a></li>
                 <li><a class="dropdown-item" href="#">Settings</a></li>
                 <li><a class="dropdown-item" href="#">Profile</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item logout-link" href="#" style="display: none;">Sign out</a></li>
+                <li>
+                    <a class="dropdown-item logout-link" id="logout-link" onclick="logout(this)" href="#" style="display: none;">
+                        <span class="btn btn-outline-danger text-light btn-sm"><svg class="bi">
+                            <use xlink:href="#door-closed" />
+                        </svg> Sign out</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </header>
 
     <div class="container-fluid">
         <div class="row">
-            <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <div style="display: none;" id="sidebar" class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
                 <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu"
                     aria-labelledby="sidebarMenuLabel">
                     <div class="offcanvas-header">
@@ -411,12 +375,13 @@
                                     Settings
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link logout-link d-flex align-items-center gap-2" onclick="logout(this)" href="#">
-                                    <svg class="bi">
+                            <li class="nav-item" id="logout-link-2" style="display: none;"> 
+                                <a class="nav-link logout-link d-flex align-items-center gap-2" onclick="logout(this)"
+                                    href="#">
+                                    
+                                    <span class="btn btn-outline-danger text-black btn-sm"><svg class="bi">
                                         <use xlink:href="#door-closed" />
-                                    </svg>
-                                    Sign out
+                                    </svg> Sign out</span>
                                 </a>
                             </li>
                         </ul>
@@ -459,117 +424,13 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>1,001</td>
-                                <td>random</td>
-                                <td>data</td>
-                                <td>placeholder</td>
-                                <td>text</td>
-                            </tr>
-                            <tr>
-                                <td>1,002</td>
-                                <td>placeholder</td>
-                                <td>irrelevant</td>
-                                <td>visual</td>
-                                <td>layout</td>
-                            </tr>
-                            <tr>
                                 <td>1,003</td>
                                 <td>data</td>
                                 <td>rich</td>
                                 <td>dashboard</td>
                                 <td>tabular</td>
                             </tr>
-                            <tr>
-                                <td>1,003</td>
-                                <td>information</td>
-                                <td>placeholder</td>
-                                <td>illustrative</td>
-                                <td>data</td>
-                            </tr>
-                            <tr>
-                                <td>1,004</td>
-                                <td>text</td>
-                                <td>random</td>
-                                <td>layout</td>
-                                <td>dashboard</td>
-                            </tr>
-                            <tr>
-                                <td>1,005</td>
-                                <td>dashboard</td>
-                                <td>irrelevant</td>
-                                <td>text</td>
-                                <td>placeholder</td>
-                            </tr>
-                            <tr>
-                                <td>1,006</td>
-                                <td>dashboard</td>
-                                <td>illustrative</td>
-                                <td>rich</td>
-                                <td>data</td>
-                            </tr>
-                            <tr>
-                                <td>1,007</td>
-                                <td>placeholder</td>
-                                <td>tabular</td>
-                                <td>information</td>
-                                <td>irrelevant</td>
-                            </tr>
-                            <tr>
-                                <td>1,008</td>
-                                <td>random</td>
-                                <td>data</td>
-                                <td>placeholder</td>
-                                <td>text</td>
-                            </tr>
-                            <tr>
-                                <td>1,009</td>
-                                <td>placeholder</td>
-                                <td>irrelevant</td>
-                                <td>visual</td>
-                                <td>layout</td>
-                            </tr>
-                            <tr>
-                                <td>1,010</td>
-                                <td>data</td>
-                                <td>rich</td>
-                                <td>dashboard</td>
-                                <td>tabular</td>
-                            </tr>
-                            <tr>
-                                <td>1,011</td>
-                                <td>information</td>
-                                <td>placeholder</td>
-                                <td>illustrative</td>
-                                <td>data</td>
-                            </tr>
-                            <tr>
-                                <td>1,012</td>
-                                <td>text</td>
-                                <td>placeholder</td>
-                                <td>layout</td>
-                                <td>dashboard</td>
-                            </tr>
-                            <tr>
-                                <td>1,013</td>
-                                <td>dashboard</td>
-                                <td>irrelevant</td>
-                                <td>text</td>
-                                <td>visual</td>
-                            </tr>
-                            <tr>
-                                <td>1,014</td>
-                                <td>dashboard</td>
-                                <td>illustrative</td>
-                                <td>rich</td>
-                                <td>data</td>
-                            </tr>
-                            <tr>
-                                <td>1,015</td>
-                                <td>random</td>
-                                <td>tabular</td>
-                                <td>information</td>
-                                <td>text</td>
-                            </tr>
+                            
                         </tbody>
                     </table>
                 </div>
@@ -592,117 +453,44 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 
-    <script src="components.js"></script>
-    <script src="assets/pages_component.js"></script>
+    
+    
     <script>
 
 
-async function logout(e){
-    
-    const auth = new AuthUser();
-                    localStorage.clear()
-                    const options = {
-                        method: 'get',
-                        credentials: 'include',
-                        //body: JSON.stringify({"action": "logout"}),
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
-                        },
-                    };
-                    console.log("Logout process with cookies tarting...")
-                    const endpoint = 'api/v1/auth/logout';//'logout_with_cookies';
-                    const response = await auth.makeRequest(options, endpoint)
-                    console.log(response)
-                    if (!response.ok) {
-                        const message = await auth.handlingErrors(response)
-                        console.log(message)
-                        console.error("Logout process failed!")
-                    } else {
-                        console.log("Logout process done successfully!")
-                    }
-                    setTimeout(() => {
-                        console.log("Accessing login page...")
-                        window.location.href = auth.baseURL + '/login.html'
-                    }, 400)
-                    console.log('Process  finished!')
-}
-        document.addEventListener('DOMContentLoaded', () => {
 
+        
+        document.addEventListener('DOMContentLoaded', () => {
 
             const usernameSpan = document.getElementById('username');
             const loginLink = document.getElementById('login-link');
-            const logoutLink = document.querySelector('logout-link');
-            const userInfo = document.querySelector('user-info');
-
-
+            const logoutLink = document.getElementById('logout-link');
+            const logoutLink2= document.getElementById('logout-link-2');
+            const userInfo = document.getElementById('user-info');
+            
+            
+            
             const auth = new AuthUser();
 
-            async function getUserData() {
 
-                const options = {
-                    method: 'get',
-                    credentials: 'include',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
-                    },
-                };
-
-                console.log("Accessing protected route with cookies starting...")
-                const endpoint = 'api/v1/admin/user'; //'protected';
-                const response = await auth.makeRequest(options, endpoint)
-                console.log("Response...")
-                console.log(response)
-
-                if (!response.ok && !response.status_code) {
-                    const message = await auth.handlingErrors(response)
-                    console.log(message)
-                    setTimeout(() => {
-                        window.location.href = auth.baseURL + '/login.html'
-                    }, 1000)
-                    return;
-                } else {
-                    if (response.status_code === 200) {
-                        localStorage.setItem('user_id', response.id)
-                        localStorage.setItem('username', response.username)
-                        localStorage.setItem('fullname', response.full_name)
-                        window.addEventListener('navbarLoaded', () => {
-                            if (loginLink) {
-                                loginLink.style.display = 'none';
-                                userInfo.style.display = 'block';
-                                logoutLink.style.display = 'block'
-                            } else {
-                                loginLink.style.display = 'block';
-                                userInfo.style.display = 'none';
-                                logoutLink.style.display = 'none'
-                                console.warn("Element with ID 'yourElementId' not found.");
-                            }
-                        });
-
-                        if (usernameSpan) {
-                            usernameSpan.textContent = `${response.full_name} [${response.username}]`;
-                        }
-
-
-                        console.log("Accessed protected successfully!")
-                    } else if (response.status_code === 401 || response.status_code === 422) {
-                        alert("Ups! Something went wrong. Redirecting to login...")
-                        setTimeout(() => {
-                            window.location.href = auth.baseURL + '/login.html'
-                        }, 1000)
-                        return;
-                    } else {
-
-                    }
-
-                }
-                console.log('Process  finished!')
-
+            try {
+                getUserData();
+            } catch (error) {
+                console.error("Error: "+ error)
+                return;
+                
             }
-            getUserData();
-
+            
+            if (localStorage.getItem('user_id')) { alert(localStorage.getItem('fullname'))
+                userInfo.style.display='block';
+                document.getElementById('sidebar').style.display = 'block';;
+                document.querySelector('user-info').style.display = 'block';
+                document.getElementById('username').textContent = `${localStorage.getItem('fullname')} [${localStorage.getItem('username')}]`;
+                document.getElementById('login-link').style.display = 'none';
+                document.getElementById('logout-link').style.display = 'block';
+                document.getElementById('logout-link-2').style.display = 'block';
+            
+            }
 
             window.addEventListener('navbarLoaded', () => {
                 const usernameSpan = document.getElementById('username');
@@ -768,7 +556,7 @@ async function logout(e){
 
             }
 
-            
+
 
 
             /* logoutLink.addEventListener('click', async (event) => {
