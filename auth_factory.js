@@ -185,7 +185,10 @@ async function logout(e) {
     //console.log(response)
     if (!response.ok) {
         const message = await auth.handlingErrors(response)
-        console.log(message)
+        if(message.logout || message.msg){
+            console.info(message.logout + ". "+ message.msg)
+        }
+        
         console.error("Logout process failed!")
     } else {
         console.log("Logout process done successfully!")
