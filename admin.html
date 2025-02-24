@@ -107,7 +107,7 @@
     <link href="assets/css/sidebars.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
     <script src="auth_factory.js"></script>
-    <script src="assets/pages_component.js"></script>
+    <!--<script src="assets/pages_component.js"></script>-->
 
     
 </head>
@@ -481,7 +481,7 @@
                 
             }
             
-            if (localStorage.getItem('user_id')) { alert(localStorage.getItem('fullname'))
+            if (localStorage.getItem('user_id')) { 
                 userInfo.style.display='block';
                 document.getElementById('sidebar').style.display = 'block';
                 document.getElementById('username').textContent = `${localStorage.getItem('fullname')} [${localStorage.getItem('username')}]`;

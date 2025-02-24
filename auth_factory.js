@@ -144,7 +144,9 @@ async function getUserData() {
             localStorage.setItem('user_id', response.id)
             localStorage.setItem('username', response.username)
             localStorage.setItem('fullname', response.full_name)
-            //localStorage.setItem('is_administrator', response.is_administrator)
+            localStorage.setItem('typeOfUser', response.claims.type_of_user)
+            localStorage.setItem('isAdminUser', response.claims.is_administrator)
+            localStorage.setItem('isCeoUser', response.claims.is_ceo_user)
 
             console.log("Accessed protected successfully!")
         } else if (response.status_code === 401 || response.status_code === 422) {
