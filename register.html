@@ -98,12 +98,12 @@
                                 </div>
 
                                 <div class="modal-body p-5 pt-0">
-                                    <form id="registerorm" class="needs-validation" novalidate>
+                                    <form id="registerForm" class="needs-validation" novalidate>
 
                                         <div class="row g-3 " style="text-align: left;">
 
                                             <div class="col-sm-6 ">
-                                                <label for="firstName" class="form-label">First name</label>
+                                                <label for="firstName" class="form-label" style="color: #b4b3b3;">First name</label>
                                                 <input type="text" class="form-control" name="firstName" id="firstName"
                                                     placeholder="first name" value="" required>
                                                 <div class="invalid-feedback">
@@ -112,7 +112,7 @@
                                             </div>
 
                                             <div class="col-sm-6">
-                                                <label for="lastName" class="form-label">Last name</label>
+                                                <label for="lastName" class="form-label" style="color: #b4b3b3;">Last name</label>
                                                 <input type="text" class="form-control" id="lastName"
                                                     name="lastName" placeholder="last name"
                                                     value="" required>
@@ -122,7 +122,7 @@
                                         </div>
 
                                         <div class="col-12">
-                                            <label for="username" class="form-label">Username</label>
+                                            <label for="username" class="form-label" style="color: #b4b3b3;">Username</label>
                                             <div class="input-group has-validation">
                                                 <span class="input-group-text">@</span>
                                                 <input type="text" class="form-control" name="username" id="username"
@@ -134,8 +134,8 @@
                                         </div>
 
                                         <div class="col-12">
-                                            <label for="email" class="form-label">Email <span
-                                                    class="text-body-danger">*</span></label>
+                                            <label for="email" class="form-label" style="color: #b4b3b3;">Email <span
+                                                    class="text-danger">*</span></label>
                                             <input type="email" class="form-control" name="email" id="email"
                                                 placeholder="you@example.com">
                                             <div class="invalid-feedback">
@@ -144,7 +144,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="country" class="form-label">Country</label>
+                                            <label for="country" class="form-label" style="color: #b4b3b3;">Country</label>
                                             <select class="form-select" id="country" required>
                                                 <option value="">Choose...</option>
                                                 <option>United States</option>
@@ -155,7 +155,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="phoneNumber" class="form-label">Phone</label>
+                                            <label for="phoneNumber" class="form-label" style="color: #b4b3b3;">Phone</label>
                                             <input type="text" class="form-control" name="phoneNumber" id="phoneNumber"
                                                 placeholder="91 242 4507" required>
                                             <div class="invalid-feedback">
@@ -169,7 +169,7 @@
                                 <div class="row g-3 " style="text-align: left;">
 
                                     <div class="col-md-6">
-                                        <label for="password" class="form-label">Password</label>
+                                        <label for="password" class="form-label" style="color: #b4b3b3;">Password</label>
                                         <input type="password" class="form-control" name="password" id="password"
                                             placeholder="" required>
                                         <div class="invalid-feedback">
@@ -180,7 +180,7 @@
 
 
                                     <div class="col-md-6">
-                                        <label for="confirmPassword" class="form-label">Confirm password</label>
+                                        <label for="confirmPassword" class="form-label" style="color: #b4b3b3;">Confirm password</label>
                                         <input type="text" class="form-control" name="confirmPassword"
                                             id="confirmPassword" placeholder="" required>
                                         <div class="invalid-feedback">
@@ -272,7 +272,7 @@
 
 
         const auth = new AuthUser();
-        const form = document.getElementById('loginForm');
+        const form = document.getElementById('registerForm');
         const btnSubmit = document.getElementById('btnSubmit')
         const infoMessage = document.getElementById('info-message')
         const successMessage = document.getElementById('success-message')
@@ -283,12 +283,14 @@
 
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
-            btnSubmit.innerHTML = spinnerHtml;
+            
             if (!form.checkValidity()) {
                 event.stopPropagation();
                 form.classList.add("was-validated");
                 return;
             }
+
+            btnSubmit.innerHTML = spinnerHtml;
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 

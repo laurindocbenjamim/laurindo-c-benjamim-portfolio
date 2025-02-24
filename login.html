@@ -213,12 +213,15 @@
 
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
-            btnSubmit.innerHTML = spinnerHtml;
+            
             if (!form.checkValidity()) {
                 event.stopPropagation();
                 form.classList.add("was-validated");
                 return;
             }
+
+            btnSubmit.innerHTML = spinnerHtml;
+            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
