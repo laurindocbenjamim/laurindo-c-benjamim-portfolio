@@ -133,6 +133,9 @@ async function getUserData() {
     //console.log(response)
 
     if (!response.ok && !response.status_code) {
+
+        localStorage.clear()
+
         const message = await auth.handlingErrors(response)
         console.log(message)
         setTimeout(() => {
@@ -150,14 +153,13 @@ async function getUserData() {
 
             console.log("Accessed protected successfully!")
         } else if (response.status_code === 401 || response.status_code === 422) {
+            localStorage.clear()
             alert("Ups! Something went wrong. Redirecting to login...")
             setTimeout(() => {
                 window.location.href = auth.baseURL + '/login.html'
             }, 1000)
             return;
-        } else {
-
-        }
+        } 
 
     }
     console.log('Process  finished!')
@@ -190,7 +192,7 @@ async function logout(e) {
     }
     setTimeout(() => {
         console.log("Accessing login page...")
-        window.location.href = auth.baseURL + '/login.html'
+        //window.location.href = auth.baseURL + '/login.html'
     }, 400)
     console.log('Process  finished!')
 }
