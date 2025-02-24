@@ -11,10 +11,11 @@
 
 #form input {
     border: 1px solid #00011b;
+    color: #000;
 }
 
 #form input:focus {
-
+    color: #000;
     background-color: #dfdfdf;
 }
 
