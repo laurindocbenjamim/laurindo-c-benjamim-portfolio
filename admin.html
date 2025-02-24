@@ -637,10 +637,19 @@
                         localStorage.setItem('user_id', response.id)
                         localStorage.setItem('username', response.username)
                         localStorage.setItem('fullname', response.full_name)
-                        if (loginLink) {
-                            loginLink.style.display = 'none';
-                            logoutLink.style.display = 'block'
-                        }
+                        window.addEventListener('navbarLoaded', () => {
+                            if (loginLink) {
+                                loginLink.style.display = 'none';
+                                userInfo.style.display = 'block';
+                                logoutLink.style.display = 'block'
+                            } else {
+                                loginLink.style.display = 'block';
+                                userInfo.style.display = 'none';
+                                logoutLink.style.display = 'none'
+                                console.warn("Element with ID 'yourElementId' not found.");
+                            }
+                        });
+
                         if (usernameSpan) {
                             usernameSpan.textContent = `${response.full_name} [${response.username}]`;
                         }
@@ -666,10 +675,10 @@
 
             window.addEventListener('navbarLoaded', () => {
                 const usernameSpan = document.getElementById('username');
-            const loginLink = document.getElementById('login-link');
-            const logoutLink = document.querySelector('logout-link');
-            const userInfo = document.querySelector('user-info');
-                
+                const loginLink = document.getElementById('login-link');
+                const logoutLink = document.querySelector('logout-link');
+                const userInfo = document.querySelector('user-info');
+
                 console.log("Process has finished...")
                 const userID = localStorage.getItem('user_id')
                 const userName = localStorage.getItem('username')
@@ -677,7 +686,7 @@
 
                 if (userName) {
                     if (loginLink) {
-                        
+
                         loginLink.style.display = 'none';
                         userInfo.style.display = 'block';
                         logoutLink.style.display = 'block'
