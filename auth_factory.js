@@ -109,6 +109,7 @@ class AuthUser {
 
 async function getUserData() {
 
+    const response = null;
     const auth = new AuthUser()
 
     const options = {
@@ -123,11 +124,11 @@ async function getUserData() {
 
     console.log("Accessing protected route with cookies starting...")
     const endpoint = 'api/v1/admin/user'; //'protected';
-   try {
-    const response = await auth.makeRequest(options, endpoint)
-   } catch (error) {
-    throw new Error("Error to get the user data! "+ error);
-   }
+    try {
+        response = await auth.makeRequest(options, endpoint)
+    } catch (error) {
+        throw new Error("Error to get the user data! " + error);
+    }
     console.log("Response...")
     console.log(response)
 
@@ -165,7 +166,7 @@ async function getUserData() {
 async function logout(e) {
     localStorage.clear()
     const auth = new AuthUser();
-    
+
     const options = {
         method: 'get',
         credentials: 'include',
