@@ -498,6 +498,9 @@
                 document.getElementById('logout-link').style.display = 'block';
                 document.getElementById('logout-link-2').style.display = 'block';
 
+                setTimeout(function () {
+                    location.reload();
+                }, 5000); // Refreshes the page after 5 seconds
             }
 
             window.addEventListener('navbarLoaded', () => {
