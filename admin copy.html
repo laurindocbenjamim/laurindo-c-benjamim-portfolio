@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="csrf-token" content="22222">
+    <meta name="author" content="Laurindo C.Benjamim">
+    <meta name="generator" content="Laurindo C.Benjamim">
+    <title>Home</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .btn-bd-primary {
+            --bd-violet-bg: #712cf9;
+            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+            --bs-btn-font-weight: 600;
+            --bs-btn-color: var(--bs-white);
+            --bs-btn-bg: var(--bd-violet-bg);
+            --bs-btn-border-color: var(--bd-violet-bg);
+            --bs-btn-hover-color: var(--bs-white);
+            --bs-btn-hover-bg: #6528e0;
+            --bs-btn-hover-border-color: #6528e0;
+            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+            --bs-btn-active-color: var(--bs-btn-hover-color);
+            --bs-btn-active-bg: #5a23c8;
+            --bs-btn-active-border-color: #5a23c8;
+        }
+
+        .bd-mode-toggle {
+            z-index: 1500;
+        }
+
+        .bd-mode-toggle .dropdown-menu .active .bi {
+            display: block !important;
+        }
+
+
+        .bi {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+        }
+
+        /*
+       * Sidebar
+       */
+
+        @media (min-width: 768px) {
+            .sidebar .offcanvas-lg {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 48px;
+            }
+
+            .navbar-search {
+                display: block;
+            }
+        }
+
+        .sidebar .nav-link {
+            font-size: .875rem;
+            font-weight: 500;
+        }
+
+        .sidebar .nav-link.active {
+            color: #2470dc;
+        }
+
+        .sidebar-heading {
+            font-size: .75rem;
+        }
+
+        /*
+       * Navbar
+       */
+
+        .navbar-brand {
+            padding-top: .75rem;
+            padding-bottom: .75rem;
+            background-color: rgba(0, 0, 0, .25);
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+        }
+
+        .navbar .form-control {
+            padding: .75rem 1rem;
+        }
+
+        .nav .submenu {
+            display: none;
+            list-style-type: none;
+            margin-left: 2%;
+
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .nav .submenu.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .form-label {
+            font-size: 1.2rem;
+        }
+
+        .card {
+            background-color: rgba(2, 51, 59, 0.1);
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: #969494;
+        }
+
+        .form-control {
+            background-color: #cfd5db;
+            color: rgb(8, 8, 8);
+            border: 1px solid #444;
+            border-radius: 0px;
+        }
+
+        .form-control:focus {
+            background-color: #3b3f45;
+            color: #FFF;
+            border-color: #5a5e65;
+        }
+
+
+        .btn-outline-light:hover {
+            background-color: #5a5e65;
+        }
+
+        .dynamic-field {
+            display: flex;
+            align-items: center;
+        }
+
+        .dynamic-field .remove-btn {
+            margin-left: 10px;
+        }
+
+        .form-feedback {
+            margin-top: 10px;
+        }
+
+        .dynamic-field button {
+            height: 38px;
+            margin-top: 0.4%;
+            border-radius: 0px;
+        }
+
+        .loading {
+            display: none
+        }
+
+        iframe {
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            border: none;
+            border-radius: 8px;
+        }
+
+
+        .upload-form {
+            background-color: rgba(55, 43, 161, 0.5);
+            /* Semi-transparent */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .upload-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 20px;
+        }
+
+
+        .upload-form {
+            background-color: rgba(19, 39, 80, 0.8);
+            /* Semi-transparent */
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        header {
+            background-color: #020511e3;
+            color: #cac8c8;
+        }
+
+        .navbar-brand {
+            margin-left: 2%;
+            background-color: transparent;
+            color: #000;
+            border-radius: 3px;
+        }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="assets/css/dashboard.css" rel="stylesheet">
+    <link href="assets/css/sidebars.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+
+</head>
+
+<body style="background: #00010a; color:#cac8c8
+">
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+        <symbol id="check2" viewBox="0 0 16 16">
+            <path
+                d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+        </symbol>
+        <symbol id="circle-half" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z" />
+        </symbol>
+        <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+            <path
+                d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
+            <path
+                d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z" />
+        </symbol>
+        <symbol id="sun-fill" viewBox="0 0 16 16">
+            <path
+                d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
+        </symbol>
+    </svg>
+
+
+
+    <header id="navbar" class="navbar sticky-top bg-ligh flex-md-nowrap p-0 shadow" data-bs-theme="ligh">
+
+    </header>
+
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div id="sidebar" class="sidebar border border-secondary border-right col-md-3 col-lg-2 p-0 bg-body-tertiar"
+                style="">
+
+            </div>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+
+                <div class="container"></div>
+
+
+                <footer id="footer"
+                    class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+
+                </footer>
+            </main>
+        </div>
+
+
+    </div>
+
+    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
+    <script src="components.js"></script>
+    <script src="assets/pages_component.js"></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+
+            const usernameSpan = document.getElementById('username');
+            const loginLink = document.getElementById('login_link');
+            const logoutLink = document.getElementById('logout_link');
+
+
+            const auth = new AuthUser();
+
+            async function getUserData() {
+
+                const options = {
+                    method: 'get',
+                    credentials: 'include',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                    },
+                };
+
+                console.log("Accessing protected route with cookies starting...")
+                const endpoint = 'api/v1/admin/user'; //'protected';
+                const response = await auth.makeRequest(options, endpoint)
+                console.log("Response...")
+                console.log(response)
+
+                if (!response.ok && !response.status_code) {
+                    const message = await auth.handlingErrors(response)
+                    console.log(message)
+                    setTimeout(() => {
+                        //window.location.href = auth.baseURL + '/login.html'
+                    }, 1000)
+                    return;
+                } else {
+                    if (response.status_code === 200) {
+                        localStorage.setItem('user_id', response.id)
+                        localStorage.setItem('username', response.username)
+                        localStorage.setItem('fullname', response.full_name)
+                        if (loginLink) {
+                            loginLink.style.display = 'none';
+                            logoutLink.style.display = 'block'
+                        }
+                        if(usernameSpan){
+                            usernameSpan.textContent = `${response.full_name} [${response.username}]`;
+                        }
+                        
+
+                        console.log("Accessed protected successfully!")
+                    } else if (response.status_code === 401 || response.status_code === 422) {
+                        alert("Ups! Something went wrong. Redirecting to login...")
+                        setTimeout(() => {
+                            //window.location.href = auth.baseURL + '/login.html'
+                        }, 1000)
+                        return;
+                    }else{
+
+                    }
+
+                }
+                console.log('Process  finished!')
+
+            }
+            getUserData();
+            console.log("Process has finished...")
+            const userID = localStorage.getItem('user_id')
+            const userName = localStorage.getItem('username')
+            const fullName = localStorage.getItem('fullname')
+
+            if (userName) {
+                if (loginLink) {
+                    loginLink.style.display = 'none';
+                    logoutLink.style.display = 'block'
+                } else {
+                    console.warn("Element with ID 'yourElementId' not found.");
+                }
+                if (usernameSpan) {
+                    usernameSpan.textContent = `${fullName} [${userName}]`;
+                }
+
+            }
+
+            if (logoutLink) {
+                logoutLink.addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    localStorage.clear()
+                    const options = {
+                        method: 'get',
+                        credentials: 'include',
+                        //body: JSON.stringify({"action": "logout"}),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                        },
+                    };
+                    console.log("Logout process with cookies tarting...")
+                    const endpoint = 'api/v1/auth/logout';//'logout_with_cookies';
+                    const response = await auth.makeRequest(options, endpoint)
+                    console.log(response)
+                    if (!response.ok) {
+                        const message = await auth.handlingErrors(response)
+                        console.log(message)
+                        console.error("Logout process failed!")
+                    } else {
+                        console.log("Logout process done successfully!")
+                    }
+                    setTimeout(() => {
+                        console.log("Accessing login page...")
+                        window.location.href = auth.baseURL + '/login.html'
+                    }, 400)
+                    console.log('Process  finished!')
+                });
+
+            }
+
+
+            /* logoutLink.addEventListener('click', async (event) => {
+                event.preventDefault();
+                localStorage.clear()
+                const options = {
+                        method: 'POST',
+                        credentials: 'include',
+                        body: JSON.stringify({"action": "logout"}),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                        },
+                    };
+                console.log("Logout process with cookies tarting...")
+                const endpoint = 'logout_with_cookies';
+                const response = await auth.makeRequest(options, endpoint)
+                console.log(response)
+                if(!response.ok){
+                    const message = await auth.handlingErrors(response)
+                    console.log(message)  
+                    console.error("Logout process failed!")                
+                }else{
+                    console.log("Logout process done successfully!")
+                }   
+                window.location.href = auth.baseURL + '/login_with_cookies.html'          
+                console.log('Process  finished!')
+            });*/
+        });
+    </script>
+
+</body>
+
+</html>
