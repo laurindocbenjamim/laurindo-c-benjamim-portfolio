@@ -110,7 +110,7 @@ class AuthUser {
 async function getUserData() {
 
     const response = null;
-    const auth = new AuthUser()
+    let auth = new AuthUser()
 
     const options = {
         method: 'get',
@@ -166,7 +166,7 @@ async function getUserData() {
 async function logout(e) {
     localStorage.clear()
     const auth = new AuthUser();
-
+    let response = null;
     const options = {
         method: 'get',
         credentials: 'include',
@@ -177,7 +177,7 @@ async function logout(e) {
     };
     console.log("Logout process with cookies tarting...")
     const endpoint = 'api/v1/auth/logout';
-    const response = await auth.makeRequest(options, endpoint)
+    response = await auth.makeRequest(options, endpoint)
     //console.log(response)
     if (!response.ok) {
         const message = await auth.handlingErrors(response)
