@@ -513,7 +513,7 @@
             const logoutLink = document.getElementById('logout-link');
             const logoutLink2 = document.getElementById('logout-link-2');
             const userInfo = document.getElementById('user-info');
-            pageRefreshed = sessionStorage.getItem("pageRefreshed");
+            pageRefreshed = localStorage.getItem("pageRefreshed");
             userId = localStorage.getItem('user_id');
 
 
@@ -521,9 +521,9 @@
 
             //setTimeout(() => {
                 
-                if (userId && pageRefreshed !=='true') {
+                if (userId && pageRefreshed ==="false") {
                     
-                    sessionStorage.setItem("pageRefreshed", "true");
+                    localStorage.setItem("pageRefreshed", "true");
                     location.reload();
 
                     mainContent.style.display = 'block';
