@@ -520,8 +520,8 @@
             const auth = new AuthUser();
 
             //setTimeout(() => {
-                alert(userId + '--'+pageRefreshed)
-                if (userId && !pageRefreshed) {
+                
+                if (userId && pageRefreshed !=='true') {
                     
                     sessionStorage.setItem("pageRefreshed", "true");
                     location.reload();
