@@ -150,6 +150,8 @@ async function getUserData() {
             localStorage.setItem('typeOfUser', response.claims.type_of_user)
             localStorage.setItem('isAdminUser', response.claims.is_administrator)
             localStorage.setItem('isCeoUser', response.claims.is_ceo_user)
+            sessionStorage.setItem("pageRefreshed", "false");
+            window.dispatchEvent(new Event('userDataLoaded'))
 
             console.log("Accessed protected successfully!")
         } else if (response.status_code === 401 || response.status_code === 422) {
@@ -200,3 +202,12 @@ async function logout(e) {
     console.log('Process  finished!')
 }
 
+window.addEventListener('userDataLoaded', ()=>{
+    const username = localStorage.getItem("username");
+    const hasRefreshed = sessionStorage.getItem("pageRefreshed");
+
+    if (username && !hasRefreshed) {
+        sessionStorage.setItem("pageRefreshed", "true");
+        location.reload();
+    }
+})
