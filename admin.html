@@ -354,7 +354,7 @@
                                 </a>
                 
                             </li>
-                            
+
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2" href="#">
                                     <svg class="bi">
@@ -534,7 +534,20 @@
 
     <script>
 
-let response =null;
+
+
+
+        document.addEventListener('DOMContentLoaded', async () => {
+
+            const mainContent = document.getElementById('main-content');
+            const usernameSpan = document.getElementById('username');
+            const loginLink = document.getElementById('login-link');
+            const logoutLink = document.getElementById('logout-link');
+            const logoutLink2 = document.getElementById('logout-link-2');
+            const userInfo = document.getElementById('user-info');
+            
+
+            let response =null;
 try {
             response = await getUserData();
         } catch (error) {
@@ -565,19 +578,6 @@ try {
                 }
                 document.querySelector(".spinner-container").style.display = "none";
             //}, 2000);
-
-
-        document.addEventListener('DOMContentLoaded', () => {
-
-            const mainContent = document.getElementById('main-content');
-            const usernameSpan = document.getElementById('username');
-            const loginLink = document.getElementById('login-link');
-            const logoutLink = document.getElementById('logout-link');
-            const logoutLink2 = document.getElementById('logout-link-2');
-            const userInfo = document.getElementById('user-info');
-            
-
-
 
 
             window.addEventListener('navbarLoaded', () => {
