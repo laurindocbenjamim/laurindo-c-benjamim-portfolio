@@ -520,8 +520,8 @@
             const auth = new AuthUser();
 
             setTimeout(() => {
-                
-                //if (userId && !pageRefreshed) {
+                alert(userID + '--'+pageRefreshed)
+                if (userId && !pageRefreshed) {
                     
                     sessionStorage.setItem("pageRefreshed", "true");
                     location.reload();
@@ -534,7 +534,7 @@
                     document.getElementById('logout-link').style.display = 'block';
                     document.getElementById('logout-link-2').style.display = 'block';
                     
-                //}
+                }
                 document.querySelector(".spinner-container").style.display = "none";
             }, 2000);
 
