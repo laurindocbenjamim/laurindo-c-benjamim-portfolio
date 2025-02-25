@@ -114,6 +114,7 @@
             align-items: center;
             z-index: 9999;
         }
+
         .spinner {
             border: 8px solid #44475a;
             border-top: 8px solid #50fa7b;
@@ -122,9 +123,15 @@
             height: 50px;
             animation: spin 1s linear infinite;
         }
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
     <!-- Custom styles for this template -->
@@ -136,7 +143,7 @@
     <script>
 
 
-       
+
 
 
     </script>
@@ -299,41 +306,42 @@
     </header>
 
     <style>
-        
-
         #sidebar {
-    display: none;
-    height: 700px;
-    overflow: auto;
-    border-left: 1px solid #8a8a8a;
-  }
+            display: none;
+            height: 600px;
+            overflow: auto;
+            border-left: 1px solid #8a8a8a;
+        }
 
-  /* Styling the scrollbar */
-  #sidebar::-webkit-scrollbar {
-    width: 8px; /* Set the width of the scrollbar */
-  }
+        /* Styling the scrollbar */
+        #sidebar::-webkit-scrollbar {
+            width: 8px;
+            /* Set the width of the scrollbar */
+        }
 
-  #sidebar::-webkit-scrollbar-thumb {
-    background-color: #1d337a; /* Set the color of the scrollbar */
-    border-radius: 4px; /* Optional: to make the scrollbar thumb rounded */
-  }
+        #sidebar::-webkit-scrollbar-thumb {
+            background-color: #050c24;
+            /* Set the color of the scrollbar */
+            border-radius: 4px;
+            /* Optional: to make the scrollbar thumb rounded */
+        }
 
-  #sidebar::-webkit-scrollbar-thumb:hover {
-    background-color: #555; /* Color on hover */
-  }
+        #sidebar::-webkit-scrollbar-thumb:hover {
+            background-color: #929191;
+            /* Color on hover */
+        }
 
-  #sidebar::-webkit-scrollbar-track {
-    background-color: #f1f1f1; /* Set the background color of the scrollbar track */
-    border-radius: 4px; /* Optional: to make the track rounded */
-  }
-
-
+        #sidebar::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+            /* Set the background color of the scrollbar track */
+            border-radius: 4px;
+            /* Optional: to make the track rounded */
+        }
     </style>
 
     <div class="container-fluid">
         <div class="row">
-            <div style="" id="sidebar"
-                class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <div style="" id="sidebar" class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
                 <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu"
                     aria-labelledby="sidebarMenuLabel">
                     <div class="offcanvas-header">
@@ -353,38 +361,43 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="pages/market_dash.html">
+                                <a class="nav-link d-flex align-items-center gap-2" aria-current="page"
+                                    href="pages/market_dash.html">
                                     <i class="fas fa-chart-line"></i>
                                     Market Analyse
                                 </a>
                             </li>
                             <li class="nav-item"></li>
-                            <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="cv_customizer.html">
+                            <a class="nav-link d-flex align-items-center gap-2" aria-current="page"
+                                href="cv_customizer.html">
                                 <i class="fa-regular fa-circle-user"></i>
                                 CV Customizer
                             </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="upload-videos.html" onclick="">
+                                <a class="nav-link d-flex align-items-center gap-2" href="upload-videos.html"
+                                    onclick="">
                                     <i class="fa fa-upload"></i>
                                     Upload Video
                                 </a>
-                
+
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="pdf-unlock-edition.html" onclick="">
+                                <a class="nav-link d-flex align-items-center gap-2" href="pdf-unlock-edition.html"
+                                    onclick="">
                                     <i class="fa fa-upload"></i>
                                     Unlock PDF
                                 </a>
-                
+
                             </li>
-                
+
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="workflow_by_deepseek.html" onclick="">
+                                <a class="nav-link d-flex align-items-center gap-2" href="workflow_by_deepseek.html"
+                                    onclick="">
                                     <i class="fa fa-cogs"></i>
                                     Workflow
                                 </a>
-                
+
                             </li>
 
                             <li class="nav-item">
@@ -577,15 +590,15 @@
             const logoutLink = document.getElementById('logout-link');
             const logoutLink2 = document.getElementById('logout-link-2');
             const userInfo = document.getElementById('user-info');
-            
 
-            let response =null;
-try {
-            response = await getUserData();
-        } catch (error) {
-            console.error("Error: " + error);
-        }
-        
+
+            let response = null;
+            try {
+                response = await getUserData();
+            } catch (error) {
+                console.error("Error: " + error);
+            }
+
             pageRefreshed = localStorage.getItem("pageRefreshed");
             userId = localStorage.getItem('user_id');
 
@@ -593,22 +606,22 @@ try {
             const auth = new AuthUser();
 
             //setTimeout(() => {
-                
-                if (response) {
-                    
-                    localStorage.setItem("pageRefreshed", "true");
-                    //location.reload();
 
-                    document.getElementById('main-content').style.display = 'block';
-                    document.getElementById('user-info').style.display = 'block';
-                    document.getElementById('sidebar').style.display = 'block';
-                    document.getElementById('username').textContent = `${localStorage.getItem('fullname')} [${localStorage.getItem('username')}]`;
-                    document.getElementById('login-link').style.display = 'none';
-                    document.getElementById('logout-link').style.display = 'block';
-                    document.getElementById('logout-link-2').style.display = 'block';
-                    
-                }
-                document.querySelector(".spinner-container").style.display = "none";
+            if (response) {
+
+                localStorage.setItem("pageRefreshed", "true");
+                //location.reload();
+
+                document.getElementById('main-content').style.display = 'block';
+                document.getElementById('user-info').style.display = 'block';
+                document.getElementById('sidebar').style.display = 'block';
+                document.getElementById('username').textContent = `${localStorage.getItem('fullname')} [${localStorage.getItem('username')}]`;
+                document.getElementById('login-link').style.display = 'none';
+                document.getElementById('logout-link').style.display = 'block';
+                document.getElementById('logout-link-2').style.display = 'block';
+
+            }
+            document.querySelector(".spinner-container").style.display = "none";
             //}, 2000);
 
 
