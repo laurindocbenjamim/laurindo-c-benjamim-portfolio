@@ -161,7 +161,7 @@ async function getUserData() {
                 window.location.href = auth.baseURL + '/login.html'
             }, 1000)
             return;
-        } 
+        }
 
     }
     console.log('Process  finished!')
@@ -187,10 +187,10 @@ async function logout(e) {
     //console.log(response)
     if (!response.ok) {
         const message = await auth.handlingErrors(response)
-        if(message.logout || message.msg){
-            console.info(message.logout + ". "+ message.msg)
+        if (message.logout || message.msg) {
+            console.info(message.logout + ". " + message.msg)
         }
-        
+
         console.error("Logout process failed!")
     } else {
         console.log("Logout process done successfully!")
@@ -200,14 +200,26 @@ async function logout(e) {
         window.location.href = auth.baseURL + '/login.html'
     }, 400)
     console.log('Process  finished!')
+};
+
+async function filterDataFormLevel1(value, key, alertObject) {
+    // Prevent SQL Injection - Allow only letters, numbers, and underscores
+    const sqlInjectionPattern = /^[a-zA-Z0-9_@.]+$/;
+    if (key !== 'password' && key !== 'confirmPassword') {
+        if (!sqlInjectionPattern.test(value)) { alert(value + '-'+key)
+            alertObject.textContent = 'Invalid username! Use only letters, numbers, and underscores.';
+            return false;
+        }
+    }
+    return true;
 }
 
-window.addEventListener('userDataLoaded', ()=>{
+window.addEventListener('userDataLoaded', () => {
     const username = localStorage.getItem("username");
     const hasRefreshed = sessionStorage.getItem("pageRefreshed");
 
     if (username && !hasRefreshed) {
-        sessionStorage.setItem("pageRefreshed", "true");
-        location.reload();
+        //sessionStorage.setItem("pageRefreshed", "true");
+        //location.reload();
     }
 })

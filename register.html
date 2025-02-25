@@ -87,7 +87,7 @@
 
                 <div class="container">
 
-                   
+
                     <div class="px-1 pt-1 my-2 ">
                         <div class="col-lg-8 mx-auto">
                             <!--<div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5" >-->
@@ -103,7 +103,8 @@
                                         <div class="row g-3 " style="text-align: left;">
 
                                             <div class="col-sm-6 ">
-                                                <label for="firstName" class="form-label" style="color: #b4b3b3;">First name</label>
+                                                <label for="firstName" class="form-label" style="color: #b4b3b3;">First
+                                                    name</label>
                                                 <input type="text" class="form-control" name="firstName" id="firstName"
                                                     placeholder="first name" value="" required>
                                                 <div class="invalid-feedback">
@@ -112,142 +113,149 @@
                                             </div>
 
                                             <div class="col-sm-6">
-                                                <label for="lastName" class="form-label" style="color: #b4b3b3;">Last name</label>
-                                                <input type="text" class="form-control" id="lastName"
-                                                    name="lastName" placeholder="last name"
-                                                    value="" required>
+                                                <label for="lastName" class="form-label" style="color: #b4b3b3;">Last
+                                                    name</label>
+                                                <input type="text" class="form-control" id="lastName" name="lastName"
+                                                    placeholder="last name" value="" required>
                                                 <div class=" invalid-feedback">
-                                                Valid last name is required.
+                                                    Valid last name is required.
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-12">
-                                            <label for="username" class="form-label" style="color: #b4b3b3;">Username</label>
-                                            <div class="input-group has-validation">
-                                                <span class="input-group-text">@</span>
-                                                <input type="text" class="form-control" name="username" id="username"
-                                                    placeholder="Username" required>
+                                            <div class="col-12">
+                                                <label for="username" class="form-label"
+                                                    style="color: #b4b3b3;">Username</label>
+                                                <div class="input-group has-validation">
+                                                    <span class="input-group-text">@</span>
+                                                    <input type="text" class="form-control" name="username"
+                                                        id="username" placeholder="Username" required>
+                                                    <div class="invalid-feedback">
+                                                        Your username is required.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <label for="email" class="form-label" style="color: #b4b3b3;">Email
+                                                    <span class="text-danger">*</span></label>
+                                                <input type="email" class="form-control" name="email" id="email"
+                                                    placeholder="you@example.com">
                                                 <div class="invalid-feedback">
-                                                    Your username is required.
+                                                    Please enter a valid email address for shipping updates.
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="country" class="form-label"
+                                                    style="color: #b4b3b3;">Country</label>
+                                                <select class="form-select" id="country" required>
+                                                    <option value="">Choose...</option>
+                                                    <option>United States</option>
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    Please select a valid country.
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="phoneNumber" class="form-label"
+                                                    style="color: #b4b3b3;">Phone</label>
+                                                <input type="text" class="form-control" name="phoneNumber"
+                                                    id="phoneNumber" placeholder="91 242 4507" required>
+                                                <div class="invalid-feedback">
+                                                    Phone number required.
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-12">
-                                            <label for="email" class="form-label" style="color: #b4b3b3;">Email <span
-                                                    class="text-danger">*</span></label>
-                                            <input type="email" class="form-control" name="email" id="email"
-                                                placeholder="you@example.com">
-                                            <div class="invalid-feedback">
-                                                Please enter a valid email address for shipping updates.
+                                        <hr class="my-4">
+
+                                        <div class="row g-3 " style="text-align: left;">
+
+                                            <div class="col-md-6">
+                                                <label for="password" class="form-label"
+                                                    style="color: #b4b3b3;">Password</label>
+                                                <input type="password" class="form-control" name="password"
+                                                    id="password" placeholder="" required>
+                                                <div class="invalid-feedback">
+                                                    Password required.
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="col-md-6">
+                                                <label for="confirmPassword" class="form-label"
+                                                    style="color: #b4b3b3;">Confirm password</label>
+                                                <input type="password" class="form-control" name="confirmPassword"
+                                                    id="confirmPassword" placeholder="" required>
+                                                <div class="invalid-feedback">
+                                                    Cnfirm password required.
+                                                </div>
+                                            </div>
+                                            <div class="password-strength mt-0 py-2" id="password-strength"></div>
+
+                                        </div>
+
+
+
+
+
+                                        <div class="mb-2">
+                                            <div class="col-12">
+
+                                                <div class="error-message text-danger" id="error-message"></div>
+                                                <div class="info-message text-info" id="info-message"></div>
+                                                <div class="success-message text-success" id="success-message"></div>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4">
-                                            <label for="country" class="form-label" style="color: #b4b3b3;">Country</label>
-                                            <select class="form-select" id="country" required>
-                                                <option value="">Choose...</option>
-                                                <option>United States</option>
-                                            </select>
-                                            <div class="invalid-feedback">
-                                                Please select a valid country.
-                                            </div>
-                                        </div>
+                                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit"
+                                            id="btnSubmit">Submit</button>
 
-                                        <div class="col-md-4">
-                                            <label for="phoneNumber" class="form-label" style="color: #b4b3b3;">Phone</label>
-                                            <input type="text" class="form-control" name="phoneNumber" id="phoneNumber"
-                                                placeholder="91 242 4507" required>
-                                            <div class="invalid-feedback">
-                                                Phone number required.
-                                            </div>
-                                        </div>
+                                        <small class="text-light-emphasis">By clicking Sign up, you agree to the terms
+                                            of use.</small>
+                                        <hr class="my-4">
+                                        <h2 class="fs-5 fw-bold mb-3">Or Register with</h2>
+                                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3"
+                                            type="submit">
+                                            <svg class="bi me-1" width="16" height="16">
+                                                <use xlink:href="#twitter" />
+                                            </svg>
+                                            Sign up with Twitter
+                                        </button>
+                                        <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="submit">
+                                            <svg class="bi me-1" width="16" height="16">
+                                                <use xlink:href="#facebook" />
+                                            </svg>
+                                            Sign up with Facebook
+                                        </button>
+
+
+                                        <small class="text-light">
+                                            I already have an account. <a
+                                                class="link-offset-2 link-underline link-underline-opacity-25"
+                                                href="login.html"><strong>Sign In</strong></a>
+                                        </small>
+                                    </form>
                                 </div>
-
-                                <hr class="my-4">
-
-                                <div class="row g-3 " style="text-align: left;">
-
-                                    <div class="col-md-6">
-                                        <label for="password" class="form-label" style="color: #b4b3b3;">Password</label>
-                                        <input type="password" class="form-control" name="password" id="password"
-                                            placeholder="" required>
-                                        <div class="invalid-feedback">
-                                            Password required.
-                                        </div>
-                                    </div>
-
-
-
-                                    <div class="col-md-6">
-                                        <label for="confirmPassword" class="form-label" style="color: #b4b3b3;">Confirm password</label>
-                                        <input type="text" class="form-control" name="confirmPassword"
-                                            id="confirmPassword" placeholder="" required>
-                                        <div class="invalid-feedback">
-                                            Cnfirm password required.
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-
-
-
-
-                                <div class="mb-2">
-                                    <div class="col-12">
-                                        <div class="password-strength" id="password-strength"></div>
-                                        <div class="error-message text-danger" id="error-message"></div>
-                                        <div class="info-message text-info" id="info-message"></div>
-                                        <div class="success-message text-success" id="success-message"></div>
-                                    </div>
-                                </div>
-
-                                <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit"
-                                    id="btnSubmit">Submit</button>
-
-                                <small class="text-light-emphasis">By clicking Sign up, you agree to the terms
-                                    of use.</small>
-                                <hr class="my-4">
-                                <h2 class="fs-5 fw-bold mb-3">Or Register with</h2>
-                                <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="submit">
-                                    <svg class="bi me-1" width="16" height="16">
-                                        <use xlink:href="#twitter" />
-                                    </svg>
-                                    Sign up with Twitter
-                                </button>
-                                <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="submit">
-                                    <svg class="bi me-1" width="16" height="16">
-                                        <use xlink:href="#facebook" />
-                                    </svg>
-                                    Sign up with Facebook
-                                </button>
-
-
-                                <small class="text-light">
-                                    I already have an account. <a
-                                        class="link-offset-2 link-underline link-underline-opacity-25"
-                                        href="login.html"><strong>Sign In</strong></a>
-                                </small>
-                                </form>
                             </div>
+
                         </div>
 
                     </div>
 
+
                 </div>
 
 
+
+                <footer id="footer"
+                    class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+
+                </footer>
+            </main>
         </div>
-
-
-
-        <footer id="footer" class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-
-        </footer>
-        </main>
-    </div>
 
 
     </div>
@@ -281,9 +289,49 @@
         const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
                 <span role="status">Loading...</span>`;
 
+
+        // Get input element
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirmPassword");
+
+        // Listen for typing events
+        password.addEventListener("input", (event) => {
+            passwordStrength.textContent = event.target.value; // Update span with input value
+            console.log("User typed:", event.target.value); // Log to console
+
+            // Password strength validation
+            const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#$])[A-Za-z\d@$!%*?&#$]{8,}$/;
+
+            // Check if the password matches the strong pattern
+            if (strongPasswordPattern.test(event.target.value)) {
+                passwordStrength.textContent = 'Strong password!';
+                passwordStrength.style.color = 'green';
+            } else if (event.target.value.length >= 6) {
+                // If password length is at least 6 but doesn't match the full criteria
+                passwordStrength.textContent = 'Medium password. Add more complexity for strength.';
+                passwordStrength.style.color = 'orange';
+            } else {
+                passwordStrength.textContent = 'Weak password! Must include at least 8 characters, one uppercase, one lowercase, one number, and one special character (@, $, !, %, *, ?, &, #).';
+                passwordStrength.style.color = 'red';
+            }
+
+        });
+
+        confirmPassword.addEventListener('input', (event) => {
+            if (event.target.value !== password.value) {
+                infoMessage.textContent = '';
+                errorMessage.textContent = `Password doesn't match.`;
+                successMessage.textContent = '';
+            } else {
+                infoMessage.textContent = '';
+                errorMessage.textContent = '';
+                successMessage.textContent = '';
+            }
+        });
+
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
-            
+
             if (!form.checkValidity()) {
                 event.stopPropagation();
                 form.classList.add("was-validated");
@@ -300,35 +348,16 @@
 
             const formD = new FormData(event.target)
 
-            // Basic validation
-            if (!formD.get('username') || !formD.get('password')) {
-                errorMessage.textContent = 'Username and password are required!';
-                return;
+            for (const [key, value] of formD.entries()) {
+                // Await the asynchronous validation function
+                if (!await filterDataFormLevel1(value, key, errorMessage)) {
+                    return; // Stop further validation
+                }
             }
+            
 
-            if (formD.get('username').length < 4) {
-                errorMessage.textContent = 'Username must be at least 4 characters long.';
-                return;
-            }
-
-            // Prevent SQL Injection - Allow only letters, numbers, and underscores
-            const sqlInjectionPattern = /^[a-zA-Z0-9_]+$/;
-            if (!sqlInjectionPattern.test(formD.get('username'))) {
-                errorMessage.textContent = 'Invalid username! Use only letters, numbers, and underscores.';
-                return;
-            }
-
-            // Password strength validation
-            const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-            /*if (!strongPasswordPattern.test(password)) {
-                passwordStrength.textContent = 'Weak password! Must include at least 8 characters, one uppercase, one lowercase, one number, and one special character.';
-                passwordStrength.style.color = 'red';
-                return;
-            } else {
-                passwordStrength.textContent = 'Strong password!';
-                passwordStrength.style.color = 'green';
-            }*/
+            alert("Ready to save data")
+            return;
 
 
             const formData = JSON.stringify({ "username": formD.get('username'), "password": formD.get('password') });
