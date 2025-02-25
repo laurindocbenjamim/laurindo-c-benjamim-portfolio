@@ -151,30 +151,23 @@ async function getUserData() {
             localStorage.setItem('isAdminUser', response.claims.is_administrator)
             localStorage.setItem('isCeoUser', response.claims.is_ceo_user)
             localStorage.setItem("pageRefreshed", "false");
-
-            document.getElementById('main-content').style.display = 'block';
-            document.getElementById('user-info').style.display = 'block';
-            document.getElementById('sidebar').style.display = 'block';
-            document.getElementById('username').textContent = `${localStorage.getItem('fullname')} [${localStorage.getItem('username')}]`;
-            document.getElementById('login-link').style.display = 'none';
-            document.getElementById('logout-link').style.display = 'block';
-            document.getElementById('logout-link-2').style.display = 'block';
             
             window.dispatchEvent(new Event('userDataLoaded'))
 
             console.log("Accessed protected successfully!")
+            return true;
         } else if (response.status_code === 401 || response.status_code === 422) {
             localStorage.clear()
             alert("Ups! Something went wrong. Redirecting to login...")
             setTimeout(() => {
                 window.location.href = auth.baseURL + '/login.html'
             }, 1000)
-            return;
+            return false; 
         }
 
     }
     console.log('Process  finished!')
-
+    return false;
 }
 
 
@@ -215,8 +208,7 @@ async function filterDataFormLevel1(value, key, alertObject) {
     // Prevent SQL Injection - Allow only letters, numbers, and underscores
     const sqlInjectionPattern = /^[a-zA-Z0-9_@.]+$/;
     if (key !== 'password' && key !== 'confirmPassword') {
-        if (!sqlInjectionPattern.test(value)) {
-            alert(value + '-' + key)
+        if (!sqlInjectionPattern.test(value)) { alert(value + '-'+key)
             alertObject.textContent = 'Invalid username! Use only letters, numbers, and underscores.';
             return false;
         }
