@@ -136,11 +136,7 @@
     <script>
 
 
-        try {
-            getUserData();
-        } catch (error) {
-            console.error("Error: " + error);
-        }
+       
 
 
     </script>
@@ -502,17 +498,12 @@
 
     <script>
 
-
-
-
-        document.addEventListener('DOMContentLoaded', () => {
-
-            const mainContent = document.getElementById('main-content');
-            const usernameSpan = document.getElementById('username');
-            const loginLink = document.getElementById('login-link');
-            const logoutLink = document.getElementById('logout-link');
-            const logoutLink2 = document.getElementById('logout-link-2');
-            const userInfo = document.getElementById('user-info');
+try {
+            getUserData();
+        } catch (error) {
+            console.error("Error: " + error);
+        }
+        
             pageRefreshed = localStorage.getItem("pageRefreshed");
             userId = localStorage.getItem('user_id');
 
@@ -526,8 +517,8 @@
                     localStorage.setItem("pageRefreshed", "true");
                     location.reload();
 
-                    mainContent.style.display = 'block';
-                    userInfo.style.display = 'block';
+                    document.getElementById('main-content').style.display = 'block';
+                    document.getElementById('user-info').style.display = 'block';
                     document.getElementById('sidebar').style.display = 'block';
                     document.getElementById('username').textContent = `${localStorage.getItem('fullname')} [${localStorage.getItem('username')}]`;
                     document.getElementById('login-link').style.display = 'none';
@@ -537,6 +528,17 @@
                 }
                 document.querySelector(".spinner-container").style.display = "none";
             //}, 2000);
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const mainContent = document.getElementById('main-content');
+            const usernameSpan = document.getElementById('username');
+            const loginLink = document.getElementById('login-link');
+            const logoutLink = document.getElementById('logout-link');
+            const logoutLink2 = document.getElementById('logout-link-2');
+            const userInfo = document.getElementById('user-info');
+            
 
 
 
