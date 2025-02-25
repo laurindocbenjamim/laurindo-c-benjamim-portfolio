@@ -521,7 +521,7 @@
 
             setTimeout(() => {
                 
-                if (!userId && !pageRefreshed) {
+                if (userId && !pageRefreshed) {
                     
                     sessionStorage.setItem("pageRefreshed", "true");
                     location.reload();
