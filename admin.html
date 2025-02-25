@@ -512,10 +512,10 @@ try {
 
             //setTimeout(() => {
                 
-                if (userId && pageRefreshed ==="false") {
+                if (userId) {
                     
                     localStorage.setItem("pageRefreshed", "true");
-                    location.reload();
+                    //location.reload();
 
                     document.getElementById('main-content').style.display = 'block';
                     document.getElementById('user-info').style.display = 'block';
