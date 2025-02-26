@@ -97,7 +97,7 @@
                                     <h1 class="fw-bold mb-0 fs-2">Sign Up</h1>
                                 </div>
 
-                                <div class="modal-body p-5 pt-0">
+                                <div class="modal-body p-1 pt-0">
                                     <form id="registerForm" class="needs-validation" novalidate>
 
                                         <div class="row g-3 " style="text-align: left;">
@@ -148,7 +148,7 @@
                                             <div class="col-md-4">
                                                 <label for="country" class="form-label"
                                                     style="color: #b4b3b3;">Country</label>
-                                                <select class="form-select" id="country" required>
+                                                <select class="form-select" id="country" name="country" required>
                                                     <option value="">Choose...</option>
                                                     <option>United States</option>
                                                 </select>
@@ -354,17 +354,16 @@
                     return; // Stop further validation
                 }
             }
-            
 
-            alert("Ready to save data")
-            return;
+            const userData = Object.fromEntries(formD.entries()); // Convert FormData to an object
 
+            console.log(userData); // Debugging: Check the extracted data
 
-            const formData = JSON.stringify({ "username": formD.get('username'), "password": formD.get('password') });
+            // Submit data using fetch
 
             const options = {
                 method: 'post',
-                body: formData,
+                body: JSON.stringify(userData),
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
