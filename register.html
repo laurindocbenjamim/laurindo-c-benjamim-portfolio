@@ -380,7 +380,11 @@
                 const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
                 console.log(message)
                 console.error("User registration failed! " + sms)
-                errorMessage.textContent = message;
+                if(message.message){
+                    errorMessage.textContent = message.message;
+                }else if(message.error){
+                    errorMessage.textContent = message.error;
+                }
                 successMessage.textContent = '';
                 btnSubmit.innerHTML = '<span>Submit</span>';
                 return;
@@ -389,7 +393,7 @@
                 console.log(sms)
 
                 if (response.status_code === 201) {
-                    infoMessage.textContent = response.message || 'Login failed. Please try again.';
+                    infoMessage.textContent = response.message || 'Registration failed. Please try again.';
                     errorMessage.textContent = '';
                     successMessage.textContent = '';
                 } else if (response.status_code === 400 || response.status_code === 403 || response.status_code === 401) {
