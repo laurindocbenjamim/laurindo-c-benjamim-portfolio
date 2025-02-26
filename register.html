@@ -370,7 +370,7 @@
                     'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
                 },
             };
-            console.log("Login with cookies tarting...")
+            console.log("Registration with cookies starting...")
             //const response = await auth.login(options)
             const response = await auth.makeRequest(options, 'api/v1/user/dao')
             console.log(response)
@@ -379,10 +379,10 @@
 
                 const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
                 console.log(message)
-                console.error("Login failed! " + sms)
+                console.error("User registration failed! " + sms)
                 errorMessage.textContent = message;
                 successMessage.textContent = '';
-                btnSubmit.innerHTML = '<span>Login</span>';
+                btnSubmit.innerHTML = '<span>Submit</span>';
                 return;
             } else {
                 const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
@@ -398,10 +398,15 @@
                     successMessage.textContent = '';
                 } else if (response.status_code === 200) {
                     infoMessage.textContent = '';
-                    successMessage.textContent = 'Login successful! Redirecting...';
+                    successMessage.textContent = 'Registration successful! Redirecting...';
                     errorMessage.textContent = '';
                     setTimeout(() => {
-                        window.location.href = auth.baseURL + '/admin.html';
+                        try {
+                            send_email_for_confirmation({"email": formD.get('email')})
+                        } catch (error) {
+                            console.error('Error to send the email for confirmation. '+error)
+                        }
+                        //window.location.href = auth.baseURL + '/admin.html';
                     }, 1000);
                 } else {
                     errorMessage.textContent = 'An unexpected error occurred. Please try again.' + sms;

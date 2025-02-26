@@ -225,3 +225,22 @@ window.addEventListener('userDataLoaded', () => {
         //location.reload();
     }
 })
+
+
+
+async function send_email_for_confirmation(dataForm){
+    const auth = new AuthUser();
+
+    const options = {
+        method: 'post',
+        body: JSON.stringify(dataForm),
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+        },
+    };
+    console.log("Send email starting...")
+    //const response = await auth.login(options)
+    return await auth.makeRequest(options, 'api/v1/email/send-confirm-to-new-user')
+}
