@@ -400,13 +400,14 @@
                     infoMessage.textContent = '';
                     successMessage.textContent = 'Registration successful! Redirecting...';
                     errorMessage.textContent = '';
-                    setTimeout(() => {
+                    setTimeout(async() => {
                         try {
-                            send_email_for_confirmation({"email": formD.get('email')})
+                            const response = await send_email_for_confirmation({"email": formD.get('email')})
+                            window.location.href = auth.baseURL + '/registration_alert.html';
                         } catch (error) {
                             console.error('Error to send the email for confirmation. '+error)
                         }
-                        //window.location.href = auth.baseURL + '/admin.html';
+                        
                     }, 1000);
                 } else {
                     errorMessage.textContent = 'An unexpected error occurred. Please try again.' + sms;
