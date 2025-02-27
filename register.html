@@ -373,7 +373,7 @@
             console.log("Registration with cookies starting...")
             //const response = await auth.login(options)
             const response = await auth.makeRequest(options, 'api/v1/user/dao')
-            console.log(response)
+            console.log("MEssage: " +response.message)
             if (!response.ok && !response.status_code) {
                 const message = await auth.handlingErrors(response)
 
@@ -398,7 +398,7 @@
                     successMessage.textContent = '';
                 } else if (response.status_code === 400 || response.status_code === 403 || response.status_code === 401) {
                     infoMessage.textContent = '';
-                    errorMessage.textContent = response.error || 'Login failed. Please try again.';
+                    errorMessage.textContent = response.error || 'Registration failed. Please try again.';
                     successMessage.textContent = '';
                 } else if (response.status_code === 200) {
                     infoMessage.textContent = '';
