@@ -318,7 +318,7 @@
         // Listen for typing events
         password.addEventListener("input", (event) => {
             passwordStrength.textContent = event.target.value; // Update span with input value
-            console.log("User typed:", event.target.value); // Log to console
+            //console.log("User typed:", event.target.value); // Log to console
 
             // Password strength validation
             const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#$])[A-Za-z\d@$!%*?&#$]{8,}$/;
@@ -372,13 +372,14 @@
             for (const [key, value] of formD.entries()) {
                 // Await the asynchronous validation function
                 if (!await filterDataFormLevel1(value, key, errorMessage)) {
+                    btnSubmit.innerHTML = '<span>Submit</span>';
                     return; // Stop further validation
                 }
             }
 
             const userData = Object.fromEntries(formD.entries()); // Convert FormData to an object
 
-            console.log(userData); // Debugging: Check the extracted data
+            //console.log(userData); // Debugging: Check the extracted data
 
             // Submit data using fetch
 
@@ -394,7 +395,7 @@
             console.log("Registration with cookies starting...")
             //const response = await auth.login(options)
             const response = await auth.makeRequest(options, 'api/v1/user/dao')
-            console.log("MEssage: " + response.message)
+            //console.log("MEssage: " + response.message)
             if (!response.ok && !response.status_code) {
                 const message = await auth.handlingErrors(response)
 
@@ -411,7 +412,7 @@
                 return;
             } else {
                 const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
-                console.log(sms)
+                //console.log(sms)
 
                 if (response.status_code === 201) {
                     infoMessage.textContent = response.message || 'Registration failed. Please try again.';
@@ -439,7 +440,7 @@
                     successMessage.textContent = '';
                 }
             }
-            btnSubmit.innerHTML = '<span>Login</span>';
+            btnSubmit.innerHTML = '<span>Submit</span>';
             console.log('Process  finished!')
         });
 
