@@ -433,7 +433,7 @@
             try {
                 response = await country.getCountries();
             } catch (error) {
-                throw new Error("Error to load countries. "+ response);
+                throw new Error("Error to load countries. "+ error);
             }
             if (!response.ok) {
                 const message = await auth.handlingErrors(response);
