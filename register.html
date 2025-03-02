@@ -448,11 +448,15 @@
             const code = event.target.value;
             const codeC = selectCountry(country);
 
+            if (codeC) {
+                while (object.firstChild) {
+                    object.removeChild(object.firstChild);
+                }
+            }
             const option = document.createElement('option');
             option.value = `+${codeC}`;
             option.textContent = `+${codeC}`;
             countryCode.appendChild(option);
-
 
         });
 
@@ -494,8 +498,18 @@
                 .filter(item => item.Country.startsWith(country))
                 .map(item => item.CountryCode);
 
-            console.log(filteredCountryCode);
+            //console.log(filteredCountryCode);
             return filteredCountryCode;
+        }
+
+        function clearObjectSelect(object) {
+            while (object.firstChild) {
+                object.removeChild(object.firstChild);
+            }
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = "Choose...";
+            object.appendChild(defaultOption);
         }
 
 
