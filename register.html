@@ -436,7 +436,7 @@
             } catch (error) {
                 throw new Error("Error to load countries. " + error);
             }
-            console.log("Response: " + !response.ok)
+            console.log("Response: " + !response.ok + "--"+ + response.ok)
             if (!response.ok) {
                 const message = await auth.handlingErrors(response);
                 console.error(message)
