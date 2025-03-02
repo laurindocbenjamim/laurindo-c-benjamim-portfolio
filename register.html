@@ -291,6 +291,7 @@
         const successMessage = document.getElementById('success-message')
         const errorMessage = document.getElementById('error-message')
         const passwordStrength = document.getElementById('password-strength');
+        const countrySelect = document.getElementById('country');
         const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
                 <span role="status">Loading...</span>`;
 
@@ -378,16 +379,16 @@
             console.log("Registration with cookies starting...")
             //const response = await auth.login(options)
             const response = await auth.makeRequest(options, 'api/v1/user/dao')
-            console.log("MEssage: " +response.message)
+            console.log("MEssage: " + response.message)
             if (!response.ok && !response.status_code) {
                 const message = await auth.handlingErrors(response)
 
                 const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
                 console.log(message)
                 console.error("User registration failed! " + sms)
-                if(message.message){
+                if (message.message) {
                     errorMessage.textContent = message.message;
-                }else if(message.error){
+                } else if (message.error) {
                     errorMessage.textContent = message.error;
                 }
                 successMessage.textContent = '';
@@ -409,14 +410,14 @@
                     infoMessage.textContent = '';
                     successMessage.textContent = 'Registration successful! Redirecting...';
                     errorMessage.textContent = '';
-                    setTimeout(async() => {
+                    setTimeout(async () => {
                         try {
-                            const response = await send_email_for_confirmation({"email": formD.get('email')})
+                            const response = await send_email_for_confirmation({ "email": formD.get('email') })
                             window.location.href = auth.baseURL + '/registration_alert.html';
                         } catch (error) {
-                            console.error('Error to send the email for confirmation. '+error)
+                            console.error('Error to send the email for confirmation. ' + error)
                         }
-                        
+
                     }, 1000);
                 } else {
                     errorMessage.textContent = 'An unexpected error occurred. Please try again.' + sms;
@@ -433,18 +434,30 @@
             try {
                 response = await country.getCountries();
             } catch (error) {
-                throw new Error("Error to load countries. "+ error);
+                throw new Error("Error to load countries. " + error);
             }
             if (!response.ok) {
                 const message = await auth.handlingErrors(response);
                 console.error(message)
-            }else{
+            } else {
                 console.log(response.OBJECTS)
-                response.OBJECTS.forEach(element => {
-                    console.log("Country: "+element)
-                });
+                const countryData = response.OBJECTS.map(item => ({
+                    Country: item.Country,
+                    CountryCode: item.CountryCode
+                }));
+                //countrySelect
+                console.log(countryData);
+                if(countryData.length > 0){
+                    countryData.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.Country;
+                        option.textContent = item.Country;
+                        countrySelect.appendChild(option);
+                    });
+                }
+
             }
-            
+
         }
 
 
