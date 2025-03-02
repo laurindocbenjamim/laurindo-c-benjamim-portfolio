@@ -160,7 +160,8 @@
                                             <div class="col-md-4">
                                                 <label for="country" class="form-label"
                                                     style="color: #b4b3b3;">Code</label>
-                                                <select class="form-select" id="country_code" name="country_code" required>
+                                                <select class="form-select" id="country_code" name="country_code"
+                                                    required>
                                                     <option value="">Choose...</option>
                                                     <option>+244</option>
                                                 </select>
@@ -446,12 +447,12 @@
             const country = countrySelect.value;
             const code = event.target.value;
             const codeC = selectCountry(country);
-            
+
             const option = document.createElement('option');
-                        option.value = `+${codeC}`;
-                        option.textContent = `+${codeC}`;
-                        countryCode.appendChild(option);
-            
+            option.value = `+${codeC}`;
+            option.textContent = `+${codeC}`;
+            countryCode.appendChild(option);
+
 
         });
 
@@ -488,13 +489,13 @@
 
 
         function selectCountry(country) {
-            if(!country) return;
-            const filteredCountries = countriesData
+            if (!country) return;
+            const filteredCountryCode = countriesData
                 .filter(item => item.Country.startsWith(country))
-                .map(item => item.Country);
+                .map(item => item.CountryCode);
 
-            console.log(filteredCountries);
-            return filteredCountries;
+            console.log(filteredCountryCode);
+            return filteredCountryCode;
         }
 
 
