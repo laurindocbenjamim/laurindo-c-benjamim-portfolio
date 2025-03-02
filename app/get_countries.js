@@ -14,6 +14,7 @@ class Country{
         };
     
         const response = fetch(this.api, options);
+        console.log(response)
         return response.json();
     }
 }
