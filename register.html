@@ -436,17 +436,18 @@
             } catch (error) {
                 throw new Error("Error to load countries. " + error);
             }
+            console.log("Response: " + !response.ok)
             if (!response.ok) {
                 const message = await auth.handlingErrors(response);
                 console.error(message)
             } else {
-                //console.log(response.OBJECTS)
+                console.log(response.OBJECTS[0].Country);
                 const countryData = response.OBJECTS.map(item => ({
                     Country: item.Country,
                     CountryCode: item.CountryCode
                 }));
                 
-                console.log(countryData);
+                //console.log(countryData);
                 if(countryData.length > 0){
                     countryData.forEach(item => {
                         const option = document.createElement('option');
