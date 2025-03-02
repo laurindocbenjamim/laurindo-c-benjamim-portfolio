@@ -440,12 +440,12 @@
                 const message = await auth.handlingErrors(response);
                 console.error(message)
             } else {
-                console.log(response.OBJECTS)
+                //console.log(response.OBJECTS)
                 const countryData = response.OBJECTS.map(item => ({
                     Country: item.Country,
                     CountryCode: item.CountryCode
                 }));
-                //countrySelect
+                
                 console.log(countryData);
                 if(countryData.length > 0){
                     countryData.forEach(item => {
