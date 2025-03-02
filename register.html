@@ -431,7 +431,7 @@
         async function loadCountries() {
             let response = null;
             try {
-                response = country.getCountries();
+                response = await country.getCountries();
             } catch (error) {
                 throw new Error("Error to load countries. "+ response);
             }
