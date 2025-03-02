@@ -436,11 +436,12 @@
             } catch (error) {
                 throw new Error("Error to load countries. " + error);
             }
-            console.log("Response: " + !response.ok + "--"+ + response.ok)
+            
             if (!response.ok) {
                 const message = await auth.handlingErrors(response);
                 console.error(message)
-            } else {
+            }
+            if(response.OBJECTS){
                 console.log(response.OBJECTS[0].Country);
                 const countryData = response.OBJECTS.map(item => ({
                     Country: item.Country,
@@ -456,7 +457,6 @@
                         countrySelect.appendChild(option);
                     });
                 }
-
             }
 
         }
