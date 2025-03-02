@@ -158,6 +158,18 @@
                                             </div>
 
                                             <div class="col-md-4">
+                                                <label for="country" class="form-label"
+                                                    style="color: #b4b3b3;">Code</label>
+                                                <select class="form-select" id="country_code" name="country_code" required>
+                                                    <option value="">Choose...</option>
+                                                    <option>+244</option>
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    Please select a valid country code.
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
                                                 <label for="phoneNumber" class="form-label"
                                                     style="color: #b4b3b3;">Phone</label>
                                                 <input type="text" class="form-control" name="phoneNumber"
@@ -292,9 +304,11 @@
         const errorMessage = document.getElementById('error-message')
         const passwordStrength = document.getElementById('password-strength');
         const countrySelect = document.getElementById('country');
+        const countryCode = document.getElementById('country_code');
         const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
                 <span role="status">Loading...</span>`;
 
+        let countriesData = [];
 
         // Get input element
         const password = document.getElementById("password");
@@ -428,6 +442,18 @@
             console.log('Process  finished!')
         });
 
+        countrySelect.addEventListener('change', (event) => {
+            const country = countrySelect.value;
+            const code = event.target.value;
+            const codeC = selectCountry(country);
+            
+            const option = document.createElement('option');
+                        option.value = `+${codeC}`;
+                        option.textContent = `+${codeC}`;
+                        countryCode.appendChild(option);
+            
+
+        });
 
         async function loadCountries() {
             let response = null;
@@ -436,21 +462,20 @@
             } catch (error) {
                 throw new Error("Error to load countries. " + error);
             }
-            
+
             if (!response.ok) {
                 const message = await auth.handlingErrors(response);
                 console.error(message)
             }
-            if(response.OBJECTS){
-                console.log(response.OBJECTS[0].Country);
-                const countryData = response.OBJECTS.map(item => ({
+            if (response.OBJECTS) {
+                //console.log(response.OBJECTS[0].Country);
+                countriesData = response.OBJECTS.map(item => ({
                     Country: item.Country,
                     CountryCode: item.CountryCode
                 }));
-                
-                //console.log(countryData);
-                if(countryData.length > 0){
-                    countryData.forEach(item => {
+
+                if (countriesData.length > 0) {
+                    countriesData.forEach(item => {
                         const option = document.createElement('option');
                         option.value = item.Country;
                         option.textContent = item.Country;
@@ -459,6 +484,17 @@
                 }
             }
 
+        }
+
+
+        function selectCountry(country) {
+            if(!country) return;
+            const filteredCountries = countriesData
+                .filter(item => item.Country.startsWith(country))
+                .map(item => item.Country);
+
+            console.log(filteredCountries);
+            return filteredCountries;
         }
 
 
