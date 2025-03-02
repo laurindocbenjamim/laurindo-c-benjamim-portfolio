@@ -449,8 +449,8 @@
             const codeC = selectCountry(country);
 
             if (codeC) {
-                while (object.firstChild) {
-                    object.removeChild(object.firstChild);
+                while (countryCode.firstChild) {
+                    countryCode.removeChild(countryCode.firstChild);
                 }
             }
             const option = document.createElement('option');
