@@ -400,12 +400,12 @@
                 const message = await auth.handlingErrors(response)
 
                 const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
-                console.log(message)
+                //console.log(message)
                 console.error("User registration failed! " + sms)
-                if (message.message) {
-                    errorMessage.textContent = message.message;
+                if (response.message) {
+                    errorMessage.textContent = response.message;
                 } else if (message.error) {
-                    errorMessage.textContent = message.error;
+                    errorMessage.textContent = response.error;
                 }
                 successMessage.textContent = '';
                 btnSubmit.innerHTML = '<span>Submit</span>';
