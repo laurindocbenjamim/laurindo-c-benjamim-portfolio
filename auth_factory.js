@@ -206,9 +206,9 @@ async function logout(e) {
 
 async function filterDataFormLevel1(value, key, alertObject) {
     // Prevent SQL Injection - Allow only letters, numbers, and underscores
-    const sqlInjectionPattern = /^[a-zA-Z0-9_@.]+$/;
+    const sqlInjectionPattern = /^[a-zA-Z0-9_@.+]+$/;
     if (key !== 'password' && key !== 'confirmPassword') {
-        if (!sqlInjectionPattern.test(value)) { alert(value + '-'+key)
+        if (!sqlInjectionPattern.test(value)) { // Check if the value has only letters, numbers, and underscores
             alertObject.textContent = `Invalid ${key.replace('_',' ')}! Use only letters, numbers, and underscores.`;
             return false;
         }
