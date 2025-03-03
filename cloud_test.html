@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechLearn - Master Technology From Scratch</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- AOS Animation Library -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c63ff;
+            --secondary: #4a40e2;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        .navbar {
+            background-color: rgba(10, 10, 10, 0.95) !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+        
+        .navbar.scrolled {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            margin: 0 10px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 15px rgba(108, 99, 255, 0.2);
+        }
+        
+        .hero-section {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, rgba(108, 99, 255, 0.1) 0%, rgba(10, 10, 10, 0) 70%);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, #a599ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            color: #ced4da;
+        }
+        
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .card {
+            border-radius: 12px;
+            overflow: hidden;
+            border: none;
+            background-color: #1e1e1e;
+            transition: all 0.4s ease;
+            margin-bottom: 30px;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .card-text {
+            color: #adb5bd;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-box {
+            padding: 30px;
+            border-radius: 12px;
+            background-color: #1e1e1e;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .feature-box:hover {
+            background-color: #292929;
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .team-member {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .team-img {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .team-img img {
+            transition: all 0.5s ease;
+        }
+        
+        .team-member:hover .team-img img {
+            transform: scale(1.05);
+        }
+        
+        .team-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+            border-radius: 0 0 12px 12px;
+        }
+        
+        .team-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .team-position {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+        
+        .testimonial-box {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .testimonial-box:after {
+            content: '\201D';
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 5rem;
+            font-family: Georgia, serif;
+            color: rgba(108, 99, 255, 0.1);
+            line-height: 0;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #ced4da;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .testimonial-author img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+        
+        .author-info h5 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .author-info p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+        
+        .contact-info {
+            margin-bottom: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-right: 15px;
+            padding-top: 3px;
+        }
+        
+        .contact-details h5 {
+            margin: 0 0 5px 0;
+            font-weight: 600;
+        }
+        
+        .contact-details p {
+            margin: 0;
+            color: #adb5bd;
+        }
+        
+        .form-control {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+        }
+        
+        .form-control:focus {
+            background-color: #272727;
+            border-color: var(--primary);
+            color: #fff;
+            box-shadow: none;
+        }
+        
+        .footer {
+            background-color: var(--darker);
+            padding: 70px 0 30px;
+        }
+        
+        .footer-logo {
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+        
+        .footer-text {
+            color: #adb5bd;
+            margin-bottom: 30px;
+        }
+        
+        .footer-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+        
+        .social-links {
+            display: flex;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin-right: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 30px;
+            margin-top: 50px;
+        }
+        
+        .copyright {
+            color: #adb5bd;
+            text-align: center;
+        }
+        
+        /* ETL Process Animation */
+        .etl-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            margin-top: 30px;
+        }
+        
+        .etl-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 16px;
+            backdrop-filter: blur(5px);
+            z-index: 1;
+        }
+        
+        .etl-process {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            padding: 40px;
+            height: 100%;
+        }
+        
+        .etl-step {
+            text-align: center;
+            padding: 20px;
+            width: 25%;
+            position: relative;
+        }
+        
+        .etl-step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transform: translate(40%, -50%);
+        }
+        
+        .etl-step:last-child::after {
+            display: none;
+        }
+        
+        .etl-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            position: relative;
+            border: 2px solid var(--primary);
+            transition: all 0.5s ease;
+        }
+        
+        .etl-icon i {
+            font-size: 2rem;
+            color: var(--primary);
+            transition: all 0.5s ease;
+        }
+        
+        .etl-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .etl-desc {
+            font-size: 0.9rem;
+            color: #adb5bd;
+        }
+        
+        /* Scroll Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stagger-delay-1 {
+            transition-delay: 0.1s;
+        }
+        
+        .stagger-delay-2 {
+            transition-delay: 0.2s;
+        }
+        
+        .stagger-delay-3 {
+            transition-delay: 0.3s;
+        }
+        
+        .stagger-delay-4 {
+            transition-delay: 0.4s;
+        }
+        
+        /* ETL Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes flow {
+            0% { width: 0; opacity: 0.5; }
+            100% { width: 100%; opacity: 1; }
+        }
+        
+        .etl-animation .etl-icon {
+            animation: pulse 2s infinite;
+        }
+        
+        .etl-animation .etl-step:nth-child(1) .etl-icon {
+            animation-delay: 0s;
+        }
+        
+        .etl-animation .etl-step:nth-child(2) .etl-icon {
+            animation-delay: 0.4s;
+        }
+        
+        .etl-animation .etl-step:nth-child(3) .etl-icon {
+            animation-delay: 0.8s;
+        }
+        
+        .etl-animation .etl-step:nth-child(4) .etl-icon {
+            animation-delay: 1.2s;
+        }
+        
+        .etl-animation .etl-step::after {
+            animation: flow 2s infinite;
+            animation-delay: calc(0.4s * var(--i));
+        }
+        
+        .etl-step:nth-child(1) {
+            --i: 1;
+        }
+        
+        .etl-step:nth-child(2) {
+            --i: 2;
+        }
+        
+        .etl-step:nth-child(3) {
+            --i: 3;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 991px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .etl-process {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .etl-step {
+                width: 100%;
+                margin-bottom: 30px;
+            }
+            
+            .etl-step::after {
+                width: 3px;
+                height: 40px;
+                top: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .etl-container {
+                height: auto;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .section {
+                padding: 70px 0;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">TechLearn</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#courses">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#team">Team</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#testimonials">Testimonials</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+                <a href="#courses" class="btn btn-primary ms-lg-4">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                    <h1 class="hero-title" data-aos="fade-up">Master Technology From Scratch</h1>
+                    <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">Transform your career with our cutting-edge tech courses designed for beginners and professionals alike.</p>
+                    <div data-aos="fade-up" data-aos-delay="200">
+                        <a href="#courses" class="btn btn-primary me-3">Explore Courses</a>
+                        <a href="#about" class="btn btn-outline-light">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
+                    <div class="etl-container">
+                        <div class="etl-bg"></div>
+                        <div class="etl-process etl-animation">
+                            <div class="etl-step">
+                                <div class="etl-icon">
+                                    <i class="bi bi-database"></i>
+                                </div>
+                                <h4 class="etl-title">Extract</h4>
+                                <p class="etl-desc">Collect raw data from various sources</p>
+                            </div>
+                            <div class="etl-step">
+                                <div class="etl-icon">
+                                    <i class="bi bi-gear"></i>
+                                </div>
+                                <h4 class="etl-title">Transform</h4>
+                                <p class="etl-desc">Process and clean data for analysis</p>
+                            </div>
+                            <div class="etl-step">
+                                <div class="etl-icon">
+                                    <i class="bi bi-server"></i>
+                                </div>
+                                <h4 class="etl-title">Load</h4>
+                                <p class="etl-desc">Store data in target systems</p>
+                            </div>
+                            <div class="etl-step">
+                                <div class="etl-icon">
+                                    <i class="bi bi-bar-chart"></i>
+                                </div>
+                                <h4 class="etl-title">Analyze</h4>
+                                <p class="etl-desc">Gain insights from processed data</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
+                    <h2 class="section-title">About Us</h2>
+                    <p>At TechLearn, we believe that technology education should be accessible to everyone. Our mission is to empower individuals with the skills they need to thrive in the digital era.</p>
+                    <p>Founded in 2025 by industry professionals, we've helped thousands of students transition into tech careers and upskill their existing knowledge. Our hands-on approach focuses on practical, real-world applications that prepare you for success.</p>
+                    <div class="mt-4 d-flex">
+                        <div class="me-4">
+                            <h3 class="display-4 fw-bold text-primary">5K+</h3>
+                            <p>Students Trained</p>
+                        </div>
+                        <div class="me-4">
+                            <h3 class="display-4 fw-bold text-primary">50+</h3>
+                            <p>Expert Instructors</p>
+                        </div>
+                        <div>
+                            <h3 class="display-4 fw-bold text-primary">100+</h3>
+                            <p>Online Courses</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="rounded overflow-hidden">
+                        <img src="/api/placeholder/700/500" alt="About Us" class="img-fluid rounded-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section bg-dark">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="section-title">Our Services</h2>
+                <p class="lead">Comprehensive solutions to accelerate your tech journey</p>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="bi bi-laptop"></i>
+                        </div>
+                        <h4>Online Learning</h4>
+                        <p>Access our courses anytime, anywhere. Learn at your own pace with our flexible online platform.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h4>Live Mentoring</h4>
+                        <p>Connect with industry experts who will guide you through your learning journey with personalized support.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="bi bi-briefcase"></i>
+                        </div>
+                        <h4>Career Support</h4>
+                        <p>Benefit from resume reviews, interview preparation, and job placement assistance for graduates.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="bi bi-building"></i>
+                        </div>
+                        <h4>Corporate Training</h4>
+                        <p>Tailored training programs for teams and organizations looking to upskill their workforce.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="bi bi-tools"></i>
+                        </div>
+                        <h4>Project-Based Learning</h4>
+                        <p>Apply your knowledge to real-world projects that build your portfolio and demonstrate your skills.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="bi bi-award"></i>
+                        </div>
+                        <h4>Certification</h4>
+                        <p>Earn industry-recognized certificates upon completion to validate your expertise in the job market.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section id="courses" class="section">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="section-title">Popular Courses</h2>
+                <p class="lead">Master in-demand skills with our comprehensive tech courses</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100">
+                        <img src="/api/placeholder/600/400" class="card-img-top" alt="Web Development">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-primary">Beginner</span>
+                                <span class="text-warning">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                    <small class="text-light ms-1">4.8</small>
+                                </span>
+                            </div>
+                            <h5 class="card-title">Full-Stack Web Development</h5>
+                            <p class="card-text">Learn to build dynamic websites and web applications from scratch with HTML, CSS, JavaScript, and popular frameworks.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-primary">$199.99</span>
+                                <a href="#" class="btn btn-outline-primary">Enroll Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100">
+                        <img src="/api/placeholder/600/400" class="card-img-top" alt="Data Science">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-warning">Intermediate</span>
+                                <span class="text-warning">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <small class="text-light ms-1">5.0</small>
+                                </span>
+                            </div>
+                            <h5 class="card-title">Data Science Fundamentals</h5>
+                            <p class="card-text">Master the essential tools and techniques for data analysis, visualization, and machine learning with Python.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-primary">$249.99</span>
+                                <a href="#" class="btn btn-outline-primary">Enroll Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-
+Last edited 3 minutes ago
+
+

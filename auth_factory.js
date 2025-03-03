@@ -209,7 +209,7 @@ async function filterDataFormLevel1(value, key, alertObject) {
     const sqlInjectionPattern = /^[a-zA-Z0-9_@.]+$/;
     if (key !== 'password' && key !== 'confirmPassword') {
         if (!sqlInjectionPattern.test(value)) { alert(value + '-'+key)
-            alertObject.textContent = 'Invalid username! Use only letters, numbers, and underscores.';
+            alertObject.textContent = `Invalid ${key}! Use only letters, numbers, and underscores.`;
             return false;
         }
     }
