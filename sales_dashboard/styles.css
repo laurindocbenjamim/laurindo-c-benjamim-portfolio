@@ -1,0 +1,42 @@
+/* css/styles.css */
+body {
+    background-color: #121212; /* Modern dark background */
+    color: #e0e0e0;
+  }
+  
+  .card {
+    background-color: #1e1e1e;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    color: #e0e0e0;
+  }
+  
+  .navbar {
+    background-color: #1e1e1e;
+  }
+  
+  .navbar-brand,
+  .nav-link {
+    color: #e0e0e0 !important;
+  }
+
+  .dropdown-item {
+    color: #1e1e1e !important;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #333;
+  }
+  
+  .btn-outline-secondary,
+  .btn-outline-primary {
+    color: #e0e0e0;
+    border-color: #e0e0e0;
+  }
+  
+  .btn-outline-secondary:hover,
+  .btn-outline-primary:hover {
+    background-color: #333;
+    border-color: #e0e0e0;
+  }
+  
