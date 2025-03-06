@@ -155,6 +155,7 @@
                                                 <div class="invalid-feedback">
                                                     Please select a valid country.
                                                 </div>
+                                                <p id="alert-countries" class="text-danger"></p>
                                             </div>
 
                                             <div class="col-md-2">
@@ -471,8 +472,13 @@
 
             if (!response.ok) {
                 const message = await auth.handlingErrors(response);
-                console.error(message)
+                console.error("Error to load countries. " + message);
+                document.getElementById('alert-countries').textContent = "Failed to load countries. ";
+                alert("Failed to load countries. " + message);
+                return;
             }
+            document.getElementById('alert-countries').textContent = "";
+
             if (response.OBJECTS) {
                 //console.log(response.OBJECTS[0].Country);
                 countriesData = response.OBJECTS.map(item => ({
