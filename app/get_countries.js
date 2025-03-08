@@ -2,6 +2,7 @@
 class Country{
     constructor(){
         this.api='https://www.d-tuning.com/api/v1/web-scrapping/countries';
+        //this.api='http://localhost:5000/api/v1/web-scrapping/countries';
     }
 
     async getCountries() {
@@ -12,8 +13,15 @@ class Country{
                 'Content-Type': 'application/json'
             },
         };
-    
-        const response = await fetch(this.api, options);
-        return response.json();
+        let response = null;
+
+        try {
+            response = await fetch(this.api, options);
+            return await response.json();
+        } catch (error) {
+            console.error("Request failed to get countries:", error);
+            console.error("Failed to connect to the server. Please try again later.");
+            return response;
+        }
     }
 }

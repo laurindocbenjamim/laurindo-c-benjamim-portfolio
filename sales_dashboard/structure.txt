@@ -1,0 +1,10 @@
+sales-dashboard/
+├── index.html
+├── css/
+│   └── styles.css
+├── js/
+│   ├── app.js         // Main initialization and orchestration
+│   ├── data.js        // Data fetching (from public API/dataset or mock data)
+│   ├── charts.js      // Chart.js visualizations (line, bar, pie/donut, sparklines)
+│   └── ui.js          // UI logic (KPIs, filters, export, auto-refresh)
+└── README.md          // Documentation with instructions and data source details

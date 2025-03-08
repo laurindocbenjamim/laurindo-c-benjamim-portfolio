@@ -12,8 +12,16 @@ class AuthUser {
     }
 
     async makeRequest(options, endpoint) {
-        const response = await fetch(`${this.serverDomain}/${endpoint}`, options);
-        return response.json();
+        let response = null;
+
+        try {
+            response = await fetch(`${this.serverDomain}/${endpoint}`, options);
+            return await response.json();
+        } catch (error) {
+            console.error("Request failed:", error);
+            console.error("Failed to connect to the server. Please try again later.");
+            return response;
+        }
     }
 
     async logout(options) {
@@ -79,12 +87,14 @@ class AuthUser {
     async handlingErrors(response) {
         if (!response.ok) {
             const errorMessages = {
-                400: 'Bad Request',
-                401: 'Unauthorized',
-                415: 'Unsupported Media Type',
-                422: 'Unprocessable Entity',
-                423: 'Locked',
-                500: 'Internal Server Error'
+                200: message,
+                201: message,
+                400: 'Bad Request. ' + message,
+                401: message,
+                415: 'Unsupported Media Type. ' + message,
+                422: 'Unprocessable Entity. ' + message,
+                423: 'Locked. ' + message,
+                500: 'Internal Server Error. ' + message
             };
             
             return errorMessages[response.status] || `HTTP error! status: ${response}`;
@@ -95,8 +105,10 @@ class AuthUser {
         if (status_code) {
             const errorMessages = {
                 200: message,
+                201: message,
                 400: 'Bad Request. ' + message,
-                401: 'Unauthorized. ' + message,
+                401: message,
+                404: message,
                 415: 'Unsupported Media Type. ' + message,
                 422: 'Unprocessable Entity. ' + message,
                 423: 'Locked. ' + message,
