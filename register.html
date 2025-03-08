@@ -161,10 +161,9 @@
                                             <div class="col-md-2">
                                                 <label for="country" class="form-label"
                                                     style="color: #b4b3b3;">Code</label>
-                                                <select class="form-select" id="country_tel_code" name="country_tel_code"
-                                                    required>
+                                                <select class="form-select" id="country_tel_code"
+                                                    name="country_tel_code" required>
                                                     <option value="">Choose...</option>
-                                                    <option>+244</option>
                                                 </select>
                                                 <div class="invalid-feedback">
                                                     Please select a valid country code.
@@ -186,27 +185,35 @@
 
                                         <div class="row g-3 " style="text-align: left;">
 
-                                            <div class="col-md-6">
-                                                <label for="password" class="form-label"
-                                                    style="color: #b4b3b3;">Password</label>
-                                                <input type="password" class="form-control" name="password"
-                                                    id="password" placeholder="" required>
-                                                <div class="invalid-feedback">
-                                                    Password required.
+                                            
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 position-relative">
+                                                        <input type="password" class="form-control rounded-3"
+                                                            name="password" id="password" placeholder="********"
+                                                            required>
+                                                        <label for="password">Password</label>
+                                                        <div class="invalid-feedback">Valid password is required.</div>
+                                                        <i class="fa-solid fa-eye position-absolute" id="togglePassword"
+                                                            style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;color:#4e4e4e;"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                           
 
-
-
-                                            <div class="col-md-6">
-                                                <label for="confirmPassword" class="form-label"
-                                                    style="color: #b4b3b3;">Confirm password</label>
-                                                <input type="password" class="form-control" name="confirmPassword"
-                                                    id="confirmPassword" placeholder="" required>
-                                                <div class="invalid-feedback">
-                                                    Cnfirm password required.
+                                            
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 position-relative">
+                                                        <input type="password" class="form-control rounded-3"
+                                                            name="confirmPassword" id="confirmPassword" placeholder="********"
+                                                            required>
+                                                        <label for="confirmPassword">Confirm password</label>
+                                                        <div class="invalid-feedback">Cnfirm password required.</div>
+                                                        
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            
+
+
+
                                             <div class="password-strength mt-0 py-2" id="password-strength"></div>
 
                                         </div>
@@ -316,6 +323,19 @@
         const password = document.getElementById("password");
         const confirmPassword = document.getElementById("confirmPassword");
 
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordField = document.getElementById("password");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                this.classList.remove("fa-eye");
+                this.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                this.classList.remove("fa-eye-slash");
+                this.classList.add("fa-eye");
+            }
+        });
+
         // Listen for typing events
         password.addEventListener("input", (event) => {
             passwordStrength.textContent = event.target.value; // Update span with input value
@@ -353,14 +373,15 @@
 
         async function cleanAlerts() {
             infoMessage.textContent = '';
-                successMessage.textContent = '';
-                errorMessage.textContent = '';
-                btnSubmit.innerHTML = '<span>Submit</span>';
+            successMessage.textContent = '';
+            errorMessage.textContent = '';
+            btnSubmit.innerHTML = '<span>Submit</span>';
         }
 
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
 
+            cleanAlerts()
             if (!form.checkValidity()) {
                 event.stopPropagation();
                 form.classList.add("was-validated");
@@ -384,7 +405,7 @@
                     return; // Stop further validation
                 }
             }
-
+            
             const userData = Object.fromEntries(formD.entries()); // Convert FormData to an object
 
             //console.log(userData); // Debugging: Check the extracted data
@@ -404,8 +425,8 @@
             //const response = await auth.login(options)
             const response = await auth.makeRequest(options, 'api/v1/user/dao')
             
-            console.log(response.message)
-            if(response===null){
+            
+            if (response === null) {
                 cleanAlerts()
                 errorMessage.textContent = 'Failed to login! Please try again later.';
                 return;
@@ -414,10 +435,11 @@
                 //const message = await auth.handlingErrors(response)
 
                 const message = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
-                if(response.status_code===201){
+                if (response.status_code === 201) {
                     infoMessage.textContent = message;
-                }else{
-                    errorMessage.textContent = message;
+                } else {
+                    const error = await auth.handlingFieldErrors(response)
+                    errorMessage.textContent = error === null ? message : error;
                 }
             } else {
 
@@ -434,12 +456,13 @@
                         }
 
                     }, 1000);
-                } 
+                }
             }
             successMessage.textContent = '';
             //infoMessage.textContent = '';
             btnSubmit.innerHTML = '<span>Submit</span>';
             document.getElementById('password').value = '';
+            document.getElementById('confirmPassword').value = '';
             console.log('Process  finished!')
         });
 
@@ -454,6 +477,7 @@
                 }
             }
             const option = document.createElement('option');
+            
             option.value = !codeC ? '+244' : `+${codeC}`;
             option.textContent = !codeC ? '+244' : `+${codeC}`;
             countryCode.appendChild(option);
@@ -462,7 +486,7 @@
 
         async function loadCountries() {
             let response = null;
-            try { 
+            try {
                 response = await country.getCountries();
             } catch (error) {
                 throw new Error("Error to load countries. " + error);
@@ -504,7 +528,7 @@
                 .map(item => item.CountryCode);
 
             //console.log(filteredCountryCode);
-            return filteredCountryCode;
+            return filteredCountryCode.length > 0 ? filteredCountryCode : null;
         }
 
         function clearObjectSelect(object) {

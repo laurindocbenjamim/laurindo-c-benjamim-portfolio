@@ -1,10 +1,10 @@
 
 class AuthUser {
     constructor() {
-        //this.baseURL = window.location.origin;
-        this.baseURL = window.location.origin + '/laurindo-c-benjamim-portfolio';
-        this.serverDomain = 'https://www.d-tuning.com';
-        //this.serverDomain = 'http://localhost:5000';
+        this.baseURL = window.location.origin;
+        //this.baseURL = window.location.origin + '/laurindo-c-benjamim-portfolio';
+        //this.serverDomain = 'https://www.d-tuning.com';
+        this.serverDomain = 'http://localhost:5000';
     }
     async login(options) {
         const response = await fetch(`${this.serverDomain}/login-w-cookies`, options);
@@ -96,7 +96,7 @@ class AuthUser {
                 423: 'Locked. ' + message,
                 500: 'Internal Server Error. ' + message
             };
-            
+
             return errorMessages[response.status] || `HTTP error! status: ${response}`;
         }
     };
@@ -117,6 +117,30 @@ class AuthUser {
             return errorMessages[status_code] || `HTTP error! status: ${status_code}`;
         }
     };
+
+    async handlingFieldErrors(response) {
+        alert("Handling field errors..." + response.message.country)
+
+        if (response.message.username) {
+            return response.message.username;
+        } else if (response.message.email) {
+            return response.message.email;
+        } else if (response.message.password) {
+            return response.message.password;
+        } else if (response.message.firstName) {
+            return response.message.firstName;
+        } else if (response.message.lastName) {
+            return response.message.lastName;
+        } else if (response.message.country) {
+            return response.message.country;
+        } else if (response.message.country_tel_code) {
+            return response.message.country_tel_code;
+        } else if (response.message.phoneNumber) {
+            return response.message.phoneNumber;
+        }
+
+        return null;
+    }
 };
 
 async function getUserData() {
@@ -163,7 +187,7 @@ async function getUserData() {
             localStorage.setItem('isAdminUser', response.claims.is_administrator)
             localStorage.setItem('isCeoUser', response.claims.is_ceo_user)
             localStorage.setItem("pageRefreshed", "false");
-            
+
             window.dispatchEvent(new Event('userDataLoaded'))
 
             console.log("Accessed protected successfully!")
@@ -174,7 +198,7 @@ async function getUserData() {
             setTimeout(() => {
                 window.location.href = auth.baseURL + '/login.html'
             }, 1000)
-            return false; 
+            return false;
         }
 
     }
@@ -221,7 +245,7 @@ async function filterDataFormLevel1(value, key, alertObject) {
     const sqlInjectionPattern = /^[a-zA-Z0-9_@.+ ]+$/;
     if (key !== 'password' && key !== 'confirmPassword') {
         if (!sqlInjectionPattern.test(value)) { // Check if the value has only letters, numbers, and underscores
-            alertObject.textContent = `Invalid ${key.replace('_',' ')}! Use only letters, numbers, and underscores.`;
+            alertObject.textContent = `Invalid ${key.replace('_', ' ')}! Use only letters, numbers, and underscores.`;
             return false;
         }
     }
@@ -240,7 +264,7 @@ window.addEventListener('userDataLoaded', () => {
 
 
 
-async function send_email_for_confirmation(dataForm){
+async function send_email_for_confirmation(dataForm) {
     const auth = new AuthUser();
 
     const options = {
