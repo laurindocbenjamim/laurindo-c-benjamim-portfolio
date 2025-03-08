@@ -185,32 +185,31 @@
 
                                         <div class="row g-3 " style="text-align: left;">
 
-                                            
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3 position-relative">
-                                                        <input type="password" class="form-control rounded-3"
-                                                            name="password" id="password" placeholder="********"
-                                                            required>
-                                                        <label for="password">Password</label>
-                                                        <div class="invalid-feedback">Valid password is required.</div>
-                                                        <i class="fa-solid fa-eye position-absolute" id="togglePassword"
-                                                            style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;color:#4e4e4e;"></i>
-                                                    </div>
-                                                </div>
-                                           
 
-                                            
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3 position-relative">
-                                                        <input type="password" class="form-control rounded-3"
-                                                            name="confirmPassword" id="confirmPassword" placeholder="********"
-                                                            required>
-                                                        <label for="confirmPassword">Confirm password</label>
-                                                        <div class="invalid-feedback">Cnfirm password required.</div>
-                                                        
-                                                    </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3 position-relative">
+                                                    <input type="password" class="form-control rounded-3"
+                                                        name="password" id="password" placeholder="********" required>
+                                                    <label for="password">Password</label>
+                                                    <div class="invalid-feedback">Valid password is required.</div>
+                                                    <i class="fa-solid fa-eye position-absolute" id="togglePassword"
+                                                        style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;color:#4e4e4e;"></i>
                                                 </div>
-                                            
+                                            </div>
+
+
+
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3 position-relative">
+                                                    <input type="password" class="form-control rounded-3"
+                                                        name="confirmPassword" id="confirmPassword"
+                                                        placeholder="********" required>
+                                                    <label for="confirmPassword">Confirm password</label>
+                                                    <div class="invalid-feedback">Cnfirm password required.</div>
+
+                                                </div>
+                                            </div>
+
 
 
 
@@ -378,6 +377,20 @@
             btnSubmit.innerHTML = '<span>Submit</span>';
         }
 
+        async function redirectToConfirmPage(form) {
+            infoMessage.textContent = '';
+            successMessage.textContent = 'Registration successful! Redirecting...';
+            errorMessage.textContent = '';
+            setTimeout(async () => {
+                try {
+                    const response = await send_email_for_confirmation({ "email": form.get('email') })
+                    window.location.href = auth.baseURL + '/registration_alert.html';
+                } catch (error) {
+                    console.error('Error to send the email for confirmation. ' + error)
+                }
+
+            }, 1000);
+        }
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
 
@@ -389,8 +402,6 @@
             }
 
             btnSubmit.innerHTML = spinnerHtml;
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
 
             // Reset previous error message
             errorMessage.textContent = '';
@@ -405,7 +416,7 @@
                     return; // Stop further validation
                 }
             }
-            
+
             const userData = Object.fromEntries(formD.entries()); // Convert FormData to an object
 
             //console.log(userData); // Debugging: Check the extracted data
@@ -424,38 +435,36 @@
             console.log("Registration with cookies starting...")
             //const response = await auth.login(options)
             const response = await auth.makeRequest(options, 'api/v1/user/dao')
-            
-            
+
+
             if (response === null) {
                 cleanAlerts()
                 errorMessage.textContent = 'Failed to login! Please try again later.';
                 return;
             }
             if (!response.ok) {
-                //const message = await auth.handlingErrors(response)
+                
+                console.log(response)
 
                 const message = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
-                if (response.status_code === 201) {
-                    infoMessage.textContent = message;
-                } else {
+                if(!response.status_code)   {
                     const error = await auth.handlingFieldErrors(response)
                     errorMessage.textContent = error === null ? message : error;
+                } else
+                if (response.status_code === 201) {
+                    infoMessage.textContent = message;
+                } else if (response.status_code === 200) {
+                    redirectToConfirmPage(formD)
+                }else {
+                    
+                    const error = await auth.handlingErrors(response) 
+                    console.error("Error to register user. " + error)
+                    errorMessage.textContent = error;
                 }
             } else {
 
                 if (response.status_code === 200) {
-                    infoMessage.textContent = '';
-                    successMessage.textContent = 'Registration successful! Redirecting...';
-                    errorMessage.textContent = '';
-                    setTimeout(async () => {
-                        try {
-                            const response = await send_email_for_confirmation({ "email": formD.get('email') })
-                            window.location.href = auth.baseURL + '/registration_alert.html';
-                        } catch (error) {
-                            console.error('Error to send the email for confirmation. ' + error)
-                        }
-
-                    }, 1000);
+                    redirectToConfirmPage(formD)
                 }
             }
             successMessage.textContent = '';
@@ -477,7 +486,7 @@
                 }
             }
             const option = document.createElement('option');
-            
+
             option.value = !codeC ? '+244' : `+${codeC}`;
             option.textContent = !codeC ? '+244' : `+${codeC}`;
             countryCode.appendChild(option);

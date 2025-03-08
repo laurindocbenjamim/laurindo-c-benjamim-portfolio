@@ -302,14 +302,24 @@
                 return;
             } if (!response.ok) {
                 //const message = await auth.handlingErrors(response)
-
+                console.error("Login failed! " + response)
                 const message = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
-                
-                console.error("Login failed! " + message)
+                if(!response.status_code)   {
+                    const error = await auth.handlingFieldErrors(response)
+                    errorMessage.textContent = error === null ? message : error;
+                } else
                 if(response.status_code===201){
                     infoMessage.textContent = message;
-                }else{
-                    errorMessage.textContent = message;
+                }else if (response.status_code === 200) {
+                    successMessage.textContent = response.message;
+                    setTimeout(() => {
+                        window.location.href = auth.baseURL + '/admin.html';
+                    }, 1000);
+                }else {
+                    
+                    const error = await auth.handlingErrors(response) 
+                    console.error("Error to register user. " + error)
+                    errorMessage.textContent = error;
                 }
                 
                 

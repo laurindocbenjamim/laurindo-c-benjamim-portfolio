@@ -87,17 +87,16 @@ class AuthUser {
     async handlingErrors(response) {
         if (!response.ok) {
             const errorMessages = {
-                200: message,
-                201: message,
-                400: 'Bad Request. ' + message,
-                401: message,
-                415: 'Unsupported Media Type. ' + message,
-                422: 'Unprocessable Entity. ' + message,
-                423: 'Locked. ' + message,
-                500: 'Internal Server Error. ' + message
+                400: response.error || 'Bad Request.',
+                401: response.error || 'Unauthorized.',
+                404: response.error || 'Not Found.',
+                415: response.error || 'Unsupported Media Type.',
+                422: response.error || 'Unprocessable Entity.',
+                423: response.error || 'Locked.',
+                500: response.error || 'Internal Server Error.'
             };
 
-            return errorMessages[response.status] || `HTTP error! status: ${response}`;
+            return errorMessages[response.status_code] || `HTTP error! status: ${response}`;
         }
     };
 
@@ -119,7 +118,6 @@ class AuthUser {
     };
 
     async handlingFieldErrors(response) {
-        alert("Handling field errors..." + response.message.country)
 
         if (response.message.username) {
             return response.message.username;
