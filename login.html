@@ -313,7 +313,7 @@
                 cleanAlerts()
                 errorMessage.textContent = 'Failed to login! Please try again later.';
                 return;
-            }else if (!response.ok) {
+            } if (!response.ok) {
                 //const message = await auth.handlingErrors(response)
 
                 const message = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
