@@ -17,14 +17,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 
-    
+
 
 
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-   
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 
 
@@ -40,32 +40,35 @@
 
     <script src="assets/pages_component.js"></script>
 
-     <!-- Custom styles for this template -->
-     <link href="assets/css/dashboard.css" rel="stylesheet">
-     <link href="assets/css/sidebars.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="assets/css/dashboard.css" rel="stylesheet">
+    <link href="assets/css/sidebars.css" rel="stylesheet">
     <link rel="stylesheet" href="style_login_form.css">
 
 </head>
 
 <body style="background: #00010a; color:#cac8c8">
-    
 
-    <header class=" sticky-top bg-ligh flex-md-nowrap p-3 shadow" style="border-bottom: 1px solid #222222;" data-bs-theme="ligh">
+
+    <header class=" sticky-top bg-ligh flex-md-nowrap p-3 shadow" style="border-bottom: 1px solid #222222;"
+        data-bs-theme="ligh">
         <a class="navbar-brand col-md-2 col-lg-2 me-0 px-2 fs-7 bg-ligh" href="index.html">
             <b class="text-light">Data Tuning</b></a>
-        
+
         <ul class="navbar-nav flex-row d-md-none">
             <li class="nav-item text-nowrap">
-                <button class="nav-link px-3 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSearch"
-                    aria-controls="navbarSearch" aria-expanded="false" aria-label="Toggle search">
+                <button class="nav-link px-3 text-white" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSearch" aria-controls="navbarSearch" aria-expanded="false"
+                    aria-label="Toggle search">
                     <svg class="bi">
                         <use xlink:href="#search" />
                     </svg>
                 </button>
             </li>
             <li class="nav-item text-nowrap">
-                <button class="nav-link px-3 text-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu"
-                    aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="nav-link px-3 text-dark" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <!--<svg class="bi">
                 <use xlink:href="#list" />
               </svg>-->
@@ -73,7 +76,7 @@
                 </button>
             </li>
         </ul>
-      
+
     </header>
 
 
@@ -111,7 +114,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="mb-2">
+                                        <!--<div class="mb-2">
                                             <div class="col-12">
                                                 <div class="form-floating mb-3">
                                                     <input type="password" class="form-control rounded-3"
@@ -120,6 +123,19 @@
                                                     <div class="invalid-feedback">
                                                         Valid password is required.
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>-->
+
+                                        <div class="mb-2">
+                                            <div class="col-12">
+                                                <div class="form-floating mb-3 position-relative">
+                                                    <input type="password" class="form-control rounded-3"
+                                                        name="password" id="password" placeholder="********" required>
+                                                    <label for="password">Password</label>
+                                                    <div class="invalid-feedback">Valid password is required.</div>
+                                                    <i class="fa-solid fa-eye position-absolute" id="togglePassword"
+                                                        style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
                                                 </div>
                                             </div>
                                         </div>
@@ -156,7 +172,9 @@
                                         </button>
 
                                         <small class="text-light">
-                                            New to our platform? <a class="link-offset-2 link-underline link-underline-opacity-25" href="register.html"><strong>Sign Up</strong></a>
+                                            New to our platform? <a
+                                                class="link-offset-2 link-underline link-underline-opacity-25"
+                                                href="register.html"><strong>Sign Up</strong></a>
                                         </small>
                                         <hr class="my-4">
                                     </form>
@@ -198,10 +216,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="auth_factory.js"></script>
-    
+
     <script>
 
-        
+
         const auth = new AuthUser();
         const form = document.getElementById('loginForm');
         const btnSubmit = document.getElementById('btnSubmit')
@@ -212,17 +230,39 @@
         const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
                 <span role="status">Loading...</span>`;
 
+
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordField = document.getElementById("password");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                this.classList.remove("fa-eye");
+                this.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                this.classList.remove("fa-eye-slash");
+                this.classList.add("fa-eye");
+            }
+        });
+
+        async function cleanAlerts() {
+            infoMessage.textContent = '';
+                successMessage.textContent = '';
+                errorMessage.textContent = '';
+                btnSubmit.innerHTML = '<span>Login</span>';
+        }
+
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
-            
+            cleanAlerts()
             if (!form.checkValidity()) {
                 event.stopPropagation();
                 form.classList.add("was-validated");
+                cleanAlerts()
                 return;
             }
 
             btnSubmit.innerHTML = spinnerHtml;
-            
+
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
@@ -239,7 +279,7 @@
             }
 
             if (formD.get('username').length < 4) {
-                errorMessage.textContent = 'Username must be at least 4 characters long.';
+                errorMessage.textContent = 'Username must have at least 4 characters long.';
                 return;
             }
 
@@ -252,15 +292,6 @@
 
             // Password strength validation
             const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-            /*if (!strongPasswordPattern.test(password)) {
-                passwordStrength.textContent = 'Weak password! Must include at least 8 characters, one uppercase, one lowercase, one number, and one special character.';
-                passwordStrength.style.color = 'red';
-                return;
-            } else {
-                passwordStrength.textContent = 'Strong password!';
-                passwordStrength.style.color = 'green';
-            }*/
 
 
             const formData = JSON.stringify({ "username": formD.get('username'), "password": formD.get('password') });
@@ -277,42 +308,40 @@
             console.log("Login with cookies tarting...")
             //const response = await auth.login(options)
             const response = await auth.makeRequest(options, 'api/v1/auth/login')
-            console.log(response)
-            if (!response.ok && !response.status_code) {
-                const message = await auth.handlingErrors(response)
-
-                const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
-                console.log(message)
-                console.error("Login failed! " + sms)
-                errorMessage.textContent = message;
-                successMessage.textContent = '';
-                btnSubmit.innerHTML = '<span>Login</span>';
+            
+            if(response===null){
+                cleanAlerts()
+                errorMessage.textContent = 'Failed to login! Please try again later.';
                 return;
-            } else {
-                const sms = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
-                console.log(sms)
+            }else if (!response.ok) {
+                //const message = await auth.handlingErrors(response)
 
-                if (response.status_code === 201) {
-                    infoMessage.textContent = response.message || 'Login failed. Please try again.';
-                    errorMessage.textContent = '';
-                    successMessage.textContent = '';
-                } else if (response.status_code === 400 || response.status_code === 403 || response.status_code === 401) {
-                    infoMessage.textContent = '';
-                    errorMessage.textContent = response.error || 'Login failed. Please try again.';
-                    successMessage.textContent = '';
-                } else if (response.status_code === 200) {
-                    infoMessage.textContent = '';
+                const message = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
+                
+                console.error("Login failed! " + message)
+                if(response.status_code===201){
+                    infoMessage.textContent = message;
+                }else{
+                    errorMessage.textContent = message;
+                }
+                
+                
+            } else {
+                
+                infoMessage.textContent = '';
+                successMessage.textContent = '';
+                errorMessage.textContent = '';
+                if (response.status_code === 200) {
                     successMessage.textContent = 'Login successful! Redirecting...';
-                    errorMessage.textContent = '';
                     setTimeout(() => {
                         window.location.href = auth.baseURL + '/admin.html';
                     }, 1000);
-                } else {
-                    errorMessage.textContent = 'An unexpected error occurred. Please try again.' + sms;
-                    successMessage.textContent = '';
-                }
+                } 
             }
+            successMessage.textContent = '';
+            //infoMessage.textContent = '';
             btnSubmit.innerHTML = '<span>Login</span>';
+            document.getElementById('password').value = '';
             console.log('Process  finished!')
         });
 
