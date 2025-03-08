@@ -163,8 +163,8 @@ async function getUserData() {
     } catch (error) {
         throw new Error("Error to get the user data! " + error);
     }
-    //console.log("Response...")
-    //console.log(response)
+    console.log("Response...")
+    console.log(response)
 
     if (!response.ok && !response.status_code) {
 
@@ -174,16 +174,16 @@ async function getUserData() {
         console.log(message)
         setTimeout(() => {
             window.location.href = auth.baseURL + '/login.html'
-        }, 1000)
+        }, 2000)
         return;
     } else {
         if (response.status_code === 200) {
             localStorage.setItem('user_id', response.id)
             localStorage.setItem('username', response.username)
             localStorage.setItem('fullname', response.full_name)
-            localStorage.setItem('typeOfUser', response.claims.type_of_user)
-            localStorage.setItem('isAdminUser', response.claims.is_administrator)
-            localStorage.setItem('isCeoUser', response.claims.is_ceo_user)
+            localStorage.setItem('typeOfUser', response.type_of_user)
+            localStorage.setItem('isAdminUser', response.is_administrator)
+            localStorage.setItem('isCeoUser', response.is_ceo_user)
             localStorage.setItem("pageRefreshed", "false");
 
             window.dispatchEvent(new Event('userDataLoaded'))
@@ -195,7 +195,7 @@ async function getUserData() {
             alert("Ups! Something went wrong. Redirecting to login...")
             setTimeout(() => {
                 window.location.href = auth.baseURL + '/login.html'
-            }, 1000)
+            }, 2000)
             return false;
         }
 

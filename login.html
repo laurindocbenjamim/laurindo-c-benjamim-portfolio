@@ -311,6 +311,8 @@
                 if(response.status_code===201){
                     infoMessage.textContent = message;
                 }else if (response.status_code === 200) {
+                    console.error("Login success! ")
+                    console.log(response)
                     successMessage.textContent = response.message;
                     setTimeout(() => {
                         window.location.href = auth.baseURL + '/admin.html';
