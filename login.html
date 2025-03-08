@@ -114,19 +114,6 @@
                                             </div>
                                         </div>
 
-                                        <!--<div class="mb-2">
-                                            <div class="col-12">
-                                                <div class="form-floating mb-3">
-                                                    <input type="password" class="form-control rounded-3"
-                                                        name="password" id="password" placeholder="********" required>
-                                                    <label for="password">Password</label>
-                                                    <div class="invalid-feedback">
-                                                        Valid password is required.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>-->
-
                                         <div class="mb-2">
                                             <div class="col-12">
                                                 <div class="form-floating mb-3 position-relative">
@@ -135,7 +122,7 @@
                                                     <label for="password">Password</label>
                                                     <div class="invalid-feedback">Valid password is required.</div>
                                                     <i class="fa-solid fa-eye position-absolute" id="togglePassword"
-                                                        style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
+                                                        style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;color:#4e4e4e;"></i>
                                                 </div>
                                             </div>
                                         </div>
@@ -315,14 +302,26 @@
                 return;
             } if (!response.ok) {
                 //const message = await auth.handlingErrors(response)
-
+                console.error("Login failed! " + response)
                 const message = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
-                
-                console.error("Login failed! " + message)
+                if(!response.status_code)   {
+                    const error = await auth.handlingFieldErrors(response)
+                    errorMessage.textContent = error === null ? message : error;
+                } else
                 if(response.status_code===201){
                     infoMessage.textContent = message;
-                }else{
-                    errorMessage.textContent = message;
+                }else if (response.status_code === 200) {
+                    console.error("Login success! ")
+                    console.log(response)
+                    successMessage.textContent = response.message;
+                    setTimeout(() => {
+                        window.location.href = auth.baseURL + '/admin.html';
+                    }, 1000);
+                }else {
+                    
+                    const error = await auth.handlingErrors(response) 
+                    console.error("Error to register user. " + error)
+                    errorMessage.textContent = error;
                 }
                 
                 

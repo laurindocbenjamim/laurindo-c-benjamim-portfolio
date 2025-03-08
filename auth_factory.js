@@ -87,17 +87,16 @@ class AuthUser {
     async handlingErrors(response) {
         if (!response.ok) {
             const errorMessages = {
-                200: message,
-                201: message,
-                400: 'Bad Request. ' + message,
-                401: message,
-                415: 'Unsupported Media Type. ' + message,
-                422: 'Unprocessable Entity. ' + message,
-                423: 'Locked. ' + message,
-                500: 'Internal Server Error. ' + message
+                400: response.error || 'Bad Request.',
+                401: response.error || 'Unauthorized.',
+                404: response.error || 'Not Found.',
+                415: response.error || 'Unsupported Media Type.',
+                422: response.error || 'Unprocessable Entity.',
+                423: response.error || 'Locked.',
+                500: response.error || 'Internal Server Error.'
             };
-            
-            return errorMessages[response.status] || `HTTP error! status: ${response}`;
+
+            return errorMessages[response.status_code] || `HTTP error! status: ${response}`;
         }
     };
 
@@ -117,6 +116,29 @@ class AuthUser {
             return errorMessages[status_code] || `HTTP error! status: ${status_code}`;
         }
     };
+
+    async handlingFieldErrors(response) {
+
+        if (response.message.username) {
+            return response.message.username;
+        } else if (response.message.email) {
+            return response.message.email;
+        } else if (response.message.password) {
+            return response.message.password;
+        } else if (response.message.firstName) {
+            return response.message.firstName;
+        } else if (response.message.lastName) {
+            return response.message.lastName;
+        } else if (response.message.country) {
+            return response.message.country;
+        } else if (response.message.country_tel_code) {
+            return response.message.country_tel_code;
+        } else if (response.message.phoneNumber) {
+            return response.message.phoneNumber;
+        }
+
+        return null;
+    }
 };
 
 async function getUserData() {
@@ -141,8 +163,8 @@ async function getUserData() {
     } catch (error) {
         throw new Error("Error to get the user data! " + error);
     }
-    //console.log("Response...")
-    //console.log(response)
+    console.log("Response...")
+    console.log(response)
 
     if (!response.ok && !response.status_code) {
 
@@ -152,18 +174,18 @@ async function getUserData() {
         console.log(message)
         setTimeout(() => {
             window.location.href = auth.baseURL + '/login.html'
-        }, 1000)
+        }, 2000)
         return;
     } else {
         if (response.status_code === 200) {
             localStorage.setItem('user_id', response.id)
             localStorage.setItem('username', response.username)
             localStorage.setItem('fullname', response.full_name)
-            localStorage.setItem('typeOfUser', response.claims.type_of_user)
-            localStorage.setItem('isAdminUser', response.claims.is_administrator)
-            localStorage.setItem('isCeoUser', response.claims.is_ceo_user)
+            localStorage.setItem('typeOfUser', response.type_of_user)
+            localStorage.setItem('isAdminUser', response.is_administrator)
+            localStorage.setItem('isCeoUser', response.is_ceo_user)
             localStorage.setItem("pageRefreshed", "false");
-            
+
             window.dispatchEvent(new Event('userDataLoaded'))
 
             console.log("Accessed protected successfully!")
@@ -173,8 +195,8 @@ async function getUserData() {
             alert("Ups! Something went wrong. Redirecting to login...")
             setTimeout(() => {
                 window.location.href = auth.baseURL + '/login.html'
-            }, 1000)
-            return false; 
+            }, 2000)
+            return false;
         }
 
     }
@@ -221,7 +243,7 @@ async function filterDataFormLevel1(value, key, alertObject) {
     const sqlInjectionPattern = /^[a-zA-Z0-9_@.+ ]+$/;
     if (key !== 'password' && key !== 'confirmPassword') {
         if (!sqlInjectionPattern.test(value)) { // Check if the value has only letters, numbers, and underscores
-            alertObject.textContent = `Invalid ${key.replace('_',' ')}! Use only letters, numbers, and underscores.`;
+            alertObject.textContent = `Invalid ${key.replace('_', ' ')}! Use only letters, numbers, and underscores.`;
             return false;
         }
     }
@@ -240,7 +262,7 @@ window.addEventListener('userDataLoaded', () => {
 
 
 
-async function send_email_for_confirmation(dataForm){
+async function send_email_for_confirmation(dataForm) {
     const auth = new AuthUser();
 
     const options = {
