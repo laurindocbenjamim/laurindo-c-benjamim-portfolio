@@ -500,12 +500,14 @@
             } catch (error) {
                 throw new Error("Error to load countries. " + error);
             }
-
+            console.log("Loading countries...")
+            console.log(response)
+            console.log("Finished to load countries.")
             if (!response.ok) {
                 const message = await auth.handlingErrors(response);
                 console.error("Error to load countries. " + message);
                 document.getElementById('alert-countries').textContent = "Failed to load countries. ";
-                alert("Failed to load countries. " + message);
+                //alert("Failed to load countries. " + message);
                 return;
             }
             document.getElementById('alert-countries').textContent = "";

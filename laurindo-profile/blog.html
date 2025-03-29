@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Technical blog by Laurindo C. Benjamim - Data Engineer & Software Developer">
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Laurindo C. Benjamim | Tech Blog">
+    <meta property="og:description" content="Insights on data engineering, software development, and technology">
+    <meta property="og:image" content="https://github.com/laurindocbenjamim/dev-images/blob/main/laurindo.jpg?raw=true">
+    
+    <title>Blog | Laurindo C. Benjamim</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+            --text-color: #f8fafc;
+            --dark-bg: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .profile-img {
+            width: 220px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.03);
+        }
+
+        .nav-pills .nav-link {
+            padding: 0.75rem 1.5rem;
+            color: var(--text-color);
+            background: var(--glass-bg);
+            border-radius: 8px;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pills .nav-link.active {
+            background: rgba(79, 70, 229, 0.2);
+            border: 1px solid var(--primary-color);
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: var(--glass-bg);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: rgba(79, 70, 229, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Blog Articles Grid */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .article-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .article-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px) scale(1.02) !important;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .article-category {
+            display: inline-block;
+            background: rgba(79, 70, 229, 0.2);
+            color: var(--primary-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .article-title {
+            color: #fff;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .article-excerpt {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+
+        .article-date {
+            margin-right: 15px;
+        }
+
+        .article-read-time {
+            display: flex;
+            align-items: center;
+        }
+
+        .article-read-time i {
+            margin-right: 5px;
+        }
+
+        .read-more {
+            color: var(--primary-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
+
+        .read-more:hover {
+            color: var(--secondary-color);
+            transform: translateX(3px);
+        }
+
+        .read-more i {
+            margin-left: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .read-more:hover i {
+            transform: translateX(3px);
+        }
+
+        /* Featured Article */
+        .featured-article {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .featured-article .article-card {
+            padding: 40px;
+        }
+
+        .featured-article .article-title {
+            font-size: 1.8rem;
+        }
+
+        /* Scroll progress indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--primary-color);
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .featured-article {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .article-card {
+                padding: 25px;
+            }
+            
+            .featured-article .article-card {
+                padding: 30px;
+            }
+            
+            .featured-article .article-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Animation delays for staggered effect */
+        .article-card:nth-child(1) { transition-delay: 0.1s; }
+        .article-card:nth-child(2) { transition-delay: 0.2s; }
+        .article-card:nth-child(3) { transition-delay: 0.3s; }
+        .article-card:nth-child(4) { transition-delay: 0.4s; }
+        .article-card:nth-child(5) { transition-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <!-- Scroll progress indicator -->
+    <div class="scroll-progress"></div>
+
+    <div class="container py-5">
+        <header class="text-center mb-5">
+            <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/laurindo.jpg?raw=true" 
+                 alt="Laurindo C. Benjamim Profile Picture" 
+                 class="profile-img mb-4"
+                 loading="lazy">
+            <a href="/" class="text-decoration-none"><h1 class="mb-3">Laurindo C. Benjamim</h1></a>
+            <p class="lead">Data Engineer & Software Developer | Transforming Data into Actionable Insights</p>
+            
+            <div class="social-icons mt-4">
+                <a href="https://github.com/laurindocbenjamim" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://linkedin.com/in/laurindocbenjamim" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://youtube.com/@laurindocbenjamim" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="mailto:laurindocbenjamim@gmail.com" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </header>
+
+        <nav class="nav nav-pills flex-column flex-sm-row mb-4 justify-content-center">
+            <a class="nav-link" aria-current="page" href="about.html">About</a>
+            <a class="nav-link" href="experiences.html">Experience</a>
+            <a class="nav-link" href="projects.html">Projects</a>
+            <a class="nav-link active" href="blog.html">Blog</a>
+        </nav>
+        
+        <div class="content-section">
+            <h2 class="section-title mb-4">Latest Articles</h2>
+            
+            <div class="articles-grid">
+                <!-- Featured Article -->
+                <article class="article-card featured-article">
+                    <div>
+                        <span class="article-category">Data Engineering</span>
+                        <h3 class="article-title">Building Scalable Data Pipelines with Python and Apache Airflow</h3>
+                        <p class="article-excerpt">Learn how to design and implement robust data pipelines that can handle large-scale data processing using Python and Apache Airflow, with practical examples from real-world projects.</p>
+                        <a href="building-scalable-data-pipelines-with-python-and-apache-airflow.html" class="read-more">
+                            Read Article
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <div class="article-meta">
+                            <span class="article-date">June 15, 2023</span>
+                            <span class="article-read-time">
+                                <i class="far fa-clock"></i> 8 min read
+                            </span>
+                        </div>
+                    </div>
+                    <div class="article-image">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="Data Pipeline Visualization" 
+                             class="img-fluid rounded"
+                             loading="lazy">
+                    </div>
+                </article>
+                
+                <!-- Article 2 -->
+                <article class="article-card">
+                    <span class="article-category">Web Development</span>
+                    <h3 class="article-title">Modern JavaScript Patterns for Clean Code</h3>
+                    <p class="article-excerpt">Explore essential JavaScript patterns that will help you write more maintainable and efficient code in your web applications.</p>
+                    <a href="#" class="read-more">
+                        Read Article
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <div class="article-meta">
+                        <span class="article-date">May 28, 2023</span>
+                        <span class="article-read-time">
+                            <i class="far fa-clock"></i> 6 min read
+                        </span>
+                    </div>
+                </article>
+                
+                <!-- Article 3 -->
+                <article class="article-card">
+                    <span class="article-category">AI & Machine Learning</span>
+                    <h3 class="article-title">Getting Started with Natural Language Processing</h3>
+                    <p class="article-excerpt">A beginner's guide to NLP concepts and how to implement basic text processing using Python and NLTK.</p>
+                    <a href="#" class="read-more">
+                        Read Article
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <div class="article-meta">
+                        <span class="article-date">April 12, 2023</span>
+                        <span class="article-read-time">
+                            <i class="far fa-clock"></i> 5 min read
+                        </span>
+                    </div>
+                </article>
+                
+                <!-- Article 4 -->
+                <article class="article-card">
+                    <span class="article-category">Career</span>
+                    <h3 class="article-title">Transitioning from Software Development to Data Engineering</h3>
+                    <p class="article-excerpt">My personal journey and the key skills I developed to successfully transition into data engineering.</p>
+                    <a href="#" class="read-more">
+                        Read Article
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <div class="article-meta">
+                        <span class="article-date">March 5, 2023</span>
+                        <span class="article-read-time">
+                            <i class="far fa-clock"></i> 7 min read
+                        </span>
+                    </div>
+                </article>
+                
+                <!-- Article 5 -->
+                <article class="article-card">
+                    <span class="article-category">Tutorial</span>
+                    <h3 class="article-title">Building a REST API with Flask and PostgreSQL</h3>
+                    <p class="article-excerpt">Step-by-step guide to creating a production-ready REST API using Python, Flask, and PostgreSQL with best practices.</p>
+                    <a href="#" class="read-more">
+                        Read Article
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <div class="article-meta">
+                        <span class="article-date">February 18, 2023</span>
+                        <span class="article-read-time">
+                            <i class="far fa-clock"></i> 10 min read
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    
+    <script>
+        // Scroll progress indicator
+        window.addEventListener('scroll', function() {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollProgress = (scrollTop / scrollHeight) * 100;
+            document.querySelector('.scroll-progress').style.width = scrollProgress + '%';
+        });
+
+        // Scroll animation for article cards
+        function animateOnScroll() {
+            const articleCards = document.querySelectorAll('.article-card');
+            const windowHeight = window.innerHeight;
+            const triggerPoint = windowHeight * 0.8;
+
+            articleCards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                
+                if (cardTop < triggerPoint) {
+                    card.classList.add('visible');
+                }
+            });
+        }
+
+        // Initialize animation on load
+        window.addEventListener('load', animateOnScroll);
+        
+        // Update animation on scroll
+        window.addEventListener('scroll', animateOnScroll);
+
+        // Animate all cards immediately if page is loaded scrolled down
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.scrollY > 0) {
+                animateOnScroll();
+            }
+        });
+    </script>
+</body>
+</html>

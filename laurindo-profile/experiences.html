@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio of Laurindo C. Benjamim - Data Engineer & Software Developer">
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Laurindo C. Benjamim | Data Engineer & Software Developer">
+    <meta property="og:description" content="Portfolio showcasing technical expertise and professional experience">
+    <meta property="og:image" content="https://github.com/laurindocbenjamim/dev-images/blob/main/laurindo.jpg?raw=true">
+    
+    <title>Experiences | Laurindo C. Benjamim</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+            --text-color: #f8fafc;
+            --dark-bg: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .profile-img {
+            width: 220px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.03);
+        }
+
+        .nav-pills .nav-link {
+            padding: 0.75rem 1.5rem;
+            color: var(--text-color);
+            background: var(--glass-bg);
+            border-radius: 8px;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pills .nav-link.active {
+            background: rgba(79, 70, 229, 0.2);
+            border: 1px solid var(--primary-color);
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: var(--glass-bg);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: rgba(79, 70, 229, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Experience Timeline Styles */
+        .experience-timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 50px;
+        }
+
+        .experience-timeline::before {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: var(--primary-color);
+            top: 0;
+            bottom: 0;
+            left: 20px;
+            border-radius: 10px;
+        }
+
+        .experience-item {
+            position: relative;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .experience-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .experience-item:hover {
+            transform: translateY(-5px) !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .experience-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: -10px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            top: 30px;
+            z-index: 1;
+        }
+
+        .experience-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .experience-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(79, 70, 229, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .experience-title h3 {
+            margin: 0;
+            color: #fff;
+            font-size: 1.4rem;
+        }
+
+        .experience-title h4 {
+            margin: 5px 0;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .experience-date {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .experience-accomplishments {
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .experience-accomplishments li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .accomplishment-bullet {
+            color: var(--primary-color);
+            margin-right: 10px;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .skill-badge {
+            background: rgba(79, 70, 229, 0.15);
+            color: #c7d2fe;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .skill-badge i {
+            margin-right: 5px;
+            font-size: 0.9rem;
+        }
+
+        .skill-badge:hover {
+            background: rgba(79, 70, 229, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Scroll progress indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--primary-color);
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .experience-timeline {
+                padding-left: 30px;
+            }
+            
+            .experience-timeline::before {
+                left: 15px;
+            }
+            
+            .experience-item::after {
+                left: -5px;
+            }
+            
+            .experience-header {
+                flex-direction: column;
+            }
+            
+            .experience-icon {
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Animation delays for staggered effect */
+        .experience-item:nth-child(1) { transition-delay: 0.1s; }
+        .experience-item:nth-child(2) { transition-delay: 0.2s; }
+        .experience-item:nth-child(3) { transition-delay: 0.3s; }
+        .experience-item:nth-child(4) { transition-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- Scroll progress indicator -->
+    <div class="scroll-progress"></div>
+
+    <div class="container py-5">
+        <header class="text-center mb-5">
+            <img src="https://github.com/laurindocbenjamim/dev-images/blob/main/laurindo.jpg?raw=true" 
+                 alt="Laurindo C. Benjamim Profile Picture" 
+                 class="profile-img mb-4"
+                 loading="lazy">
+                 <a href="/" class="text-decoration-none"><h1 class="mb-3">Laurindo C. Benjamim</h1></a>
+            <p class="lead">Data Engineer & Software Developer | Transforming Data into Actionable Insights</p>
+            
+            <div class="social-icons mt-4">
+                <a href="https://github.com/laurindocbenjamim" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://linkedin.com/in/laurindocbenjamim" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://youtube.com/@laurindocbenjamim" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="mailto:laurindocbenjamim@gmail.com" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </header>
+
+        <nav class="nav nav-pills flex-column flex-sm-row mb-4 justify-content-center">
+            <a class="nav-link" aria-current="page" href="about.html">About</a>
+            <a class="nav-link active" href="experiences.html">Experience</a>
+            <a class="nav-link" href="projects.html">Projects</a>
+            <a class="nav-link" href="blog.html">Blog</a>
+        </nav>
+    
+        <div class="content-section">
+            <!-- Experience Timeline -->
+            <div class="experience-timeline">
+                
+                <!-- Timeline Item 1 -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="experience-title">
+                            <h3>Trainer</h3>
+                            <h4>Charkcoders, Gaia</h4>
+                            <span class="experience-date">September 2023 – May 2024</span>
+                        </div>
+                    </div>
+                    <div class="experience-content">
+                        <ul class="experience-accomplishments">
+                            <li>
+                                <i class="fas fa-check-circle accomplishment-bullet"></i>
+                                <span>Python Developer trainer for children aged 11 to 17 years old, where 75% of them show good learning.</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle accomplishment-bullet"></i>
+                                <span>Web Developer trainer for children aged 11 to 17 years old, where 90% of them show good learning.</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle accomplishment-bullet"></i>
+                                <span>Game Developer trainer for children aged 8 to 17 years old, where 68% of them show good learning.</span>
+                            </li>
+                        </ul>
+                        <div class="skills-list">
+                            <span class="skill-badge"><i class="fas fa-chalkboard"></i> Pedagogy</span>
+                            <span class="skill-badge"><i class="fab fa-python"></i> Python</span>
+                            <span class="skill-badge"><i class="fab fa-html5"></i> HTML5</span>
+                            <span class="skill-badge"><i class="fab fa-css3-alt"></i> CSS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="experience-title">
+                            <h3>Senior Software Developer</h3>
+                            <h4>Instituto Politécnico Privado Esperança do Lubango (Angola)</h4>
+                            <span class="experience-date">January 2018 - November 2021</span>
+                        </div>
+                    </div>
+                    <div class="experience-content">
+                        <div class="experience-description">
+                            <p>Developed a desktop file management application, with around 98% of the requirements implemented, and 89% of acceptance from the company.</p>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-badge"><i class="fab fa-java"></i> Java</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 3 -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="experience-title">
+                            <h3>Senior Software Developer</h3>
+                            <h4>Instituto Politécnico Privado Esperança do Lubango (Angola)</h4>
+                            <span class="experience-date">January 2018 - November 2021</span>
+                        </div>
+                    </div>
+                    <div class="experience-content">
+                        <div class="experience-description">
+                            <p>In the same period I worked in parallel on other project where I developed a Web application with academic management purpose, using the pure PHP for backend and HTML, CSS, Bootstrap, JQuery and Ajax for Frontend with around 75% of acceptance from the company.</p>
+                            <p>This project was part of the new technologies implementation program from the company that was using books and excels to make the whole payments registration operation.</p>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-badge"><i class="fab fa-java"></i> Java</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 4 -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="experience-title">
+                            <h3>Full Stack Developer</h3>
+                            <h4>ELT - Contas, lda - Lubango (Angola)</h4>
+                            <span class="experience-date">March 2019 - September 2021</span>
+                        </div>
+                    </div>
+                    <div class="experience-content">
+                        <div class="experience-description">
+                            <p>Developed a Shopping web application to run as a desktop where we get around 70% of all requirements implemented but the project was discontinued.</p>
+                        </div>
+                        <div class="skills-list">
+                            <span class="skill-badge"><i class="fab fa-html5"></i> HTML5</span>
+                            <span class="skill-badge"><i class="fab fa-css3-alt"></i> CSS</span>
+                            <span class="skill-badge"><i class="fab fa-bootstrap"></i> Bootstrap</span>
+                            <span class="skill-badge"><i class="fab fa-php"></i> PHP</span>
+                            <span class="skill-badge"><i class="fab fa-laravel"></i> Laravel</span>
+                            <span class="skill-badge"><i class="fab fa-js"></i> JQuery</span>
+                            <span class="skill-badge"><i class="fas fa-sync-alt"></i> Ajax</span>
+                            <span class="skill-badge"><i class="fas fa-database"></i> SQL</span>
+                            <span class="skill-badge"><i class="fas fa-database"></i> MySQL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    
+    <script>
+        // Scroll progress indicator
+        window.addEventListener('scroll', function() {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollProgress = (scrollTop / scrollHeight) * 100;
+            document.querySelector('.scroll-progress').style.width = scrollProgress + '%';
+        });
+
+        // Scroll animation for experience items
+        function animateOnScroll() {
+            const experienceItems = document.querySelectorAll('.experience-item');
+            const windowHeight = window.innerHeight;
+            const triggerPoint = windowHeight * 0.8;
+
+            experienceItems.forEach(item => {
+                const itemTop = item.getBoundingClientRect().top;
+                
+                if (itemTop < triggerPoint) {
+                    item.classList.add('visible');
+                }
+            });
+        }
+
+        // Initialize animation on load
+        window.addEventListener('load', animateOnScroll);
+        
+        // Update animation on scroll
+        window.addEventListener('scroll', animateOnScroll);
+
+        // Animate all items immediately if page is loaded scrolled down
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.scrollY > 0) {
+                animateOnScroll();
+            }
+        });
+    </script>
+</body>
+</html>
