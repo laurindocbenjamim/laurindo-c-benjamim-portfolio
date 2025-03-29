@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how to build scalable data pipelines with Python and Apache Airflow">
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Building Scalable Data Pipelines with Python and Apache Airflow">
+    <meta property="og:description" content="Comprehensive guide to designing and implementing robust data pipelines using Python and Apache Airflow">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
+    
+    <title>Building Scalable Data Pipelines with Python and Apache Airflow | Laurindo C. Benjamim</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+            --text-color: #f8fafc;
+            --dark-bg: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --code-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--dark-bg);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            margin: 0 0.2rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background: rgba(79, 70, 229, 0.2);
+            color: var(--primary-color);
+        }
+
+        /* Mobile Menu Toggle Button */
+        .mobile-sidebar-toggle {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            cursor: pointer;
+        }
+
+        /* Article Styles */
+        .article-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .article-category {
+            display: inline-block;
+            background: rgba(79, 70, 229, 0.2);
+            color: var(--primary-color);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .article-date {
+            margin-right: 20px;
+        }
+
+        .article-read-time {
+            display: flex;
+            align-items: center;
+        }
+
+        .article-read-time i {
+            margin-right: 5px;
+        }
+
+        .article-image {
+            margin: 40px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .article-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .article-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            margin: 50px 0 20px;
+            color: #fff;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .article-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            margin: 40px 0 15px;
+            color: #fff;
+        }
+
+        .article-content p {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        .article-content ul, 
+        .article-content ol {
+            margin-bottom: 25px;
+            padding-left: 30px;
+        }
+
+        .article-content li {
+            margin-bottom: 10px;
+        }
+
+        .article-content code {
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .article-content pre {
+            background: var(--code-bg);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 30px 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 20px;
+            margin: 30px 0;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .article-footer {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tag {
+            background: rgba(79, 70, 229, 0.15);
+            color: #c7d2fe;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .tag:hover {
+            background: rgba(79, 70, 229, 0.3);
+        }
+
+        /* Sidebar Menu */
+        .sidebar {
+            width: 280px;
+            padding: 30px 20px;
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 5px;
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #fff;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .article-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .article-list li {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .article-list li:last-child {
+            border-bottom: none;
+        }
+
+        .article-list a {
+            color: #94a3b8;
+            text-decoration: none;
+            display: block;
+            transition: all 0.2s ease;
+        }
+
+        .article-list a:hover {
+            color: var(--primary-color);
+        }
+
+        .article-list .article-meta {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .article-list .article-meta i {
+            margin-right: 5px;
+        }
+
+        /* Mobile Sidebar */
+        .mobile-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background: var(--dark-bg);
+            border-left: 1px solid var(--glass-border);
+            padding: 20px;
+            overflow-y: auto;
+            transition: right 0.3s ease;
+            z-index: 999;
+        }
+
+        .mobile-sidebar.active {
+            right: 0;
+        }
+
+        .mobile-sidebar-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        .main-footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-section {
+            flex: 1;
+            padding: 0 20px;
+        }
+
+        .footer-title {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .footer-social a {
+            color: #94a3b8;
+            font-size: 1.2rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-social a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid var(--glass-border);
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 240px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .article-title {
+                font-size: 2rem;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+
+            .mobile-sidebar-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 1.8rem;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .article-date {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+
+            .footer-section {
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">Laurindo C. Benjamim</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="experiences.html">Experience</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="projects.html">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="blog.html">Blog</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <div class="row">
+            <!-- Desktop Sidebar Menu -->
+            <aside class="col-lg-3 d-none d-lg-block">
+                <div class="sidebar">
+                    <h3 class="sidebar-title">Related Articles</h3>
+                    <ul class="article-list">
+                        <li>
+                            <a href="#">
+                                <strong>Modern Data Warehousing with Snowflake</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-calendar"></i> May 28, 2023</span>
+                                    <span><i class="far fa-clock"></i> 6 min read</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <strong>ETL vs ELT: Choosing the Right Approach</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-calendar"></i> April 15, 2023</span>
+                                    <span><i class="far fa-clock"></i> 5 min read</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <strong>Data Quality Monitoring with Great Expectations</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-calendar"></i> March 22, 2023</span>
+                                    <span><i class="far fa-clock"></i> 7 min read</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <strong>Stream Processing with Apache Kafka</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-calendar"></i> February 10, 2023</span>
+                                    <span><i class="far fa-clock"></i> 8 min read</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <strong>Data Orchestration Best Practices</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-calendar"></i> January 5, 2023</span>
+                                    <span><i class="far fa-clock"></i> 6 min read</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h3 class="sidebar-title mt-5">Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Data Engineering</a></li>
+                        <li><a href="#">Python</a></li>
+                        <li><a href="#">Data Pipelines</a></li>
+                        <li><a href="#">ETL</a></li>
+                        <li><a href="#">Big Data</a></li>
+                    </ul>
+                </div>
+            </aside>
+            
+            <!-- Mobile Sidebar Menu (Hidden by default) -->
+            <aside class="mobile-sidebar">
+                <button class="mobile-sidebar-close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h3 class="sidebar-title">Related Articles</h3>
+                <ul class="article-list">
+                    <li>
+                        <a href="#">
+                            <strong>Modern Data Warehousing with Snowflake</strong>
+                            <div class="article-meta">
+                                <span><i class="far fa-calendar"></i> May 28, 2023</span>
+                                <span><i class="far fa-clock"></i> 6 min read</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <strong>ETL vs ELT: Choosing the Right Approach</strong>
+                            <div class="article-meta">
+                                <span><i class="far fa-calendar"></i> April 15, 2023</span>
+                                <span><i class="far fa-clock"></i> 5 min read</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <strong>Data Quality Monitoring with Great Expectations</strong>
+                            <div class="article-meta">
+                                <span><i class="far fa-calendar"></i> March 22, 2023</span>
+                                <span><i class="far fa-clock"></i> 7 min read</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <strong>Stream Processing with Apache Kafka</strong>
+                            <div class="article-meta">
+                                <span><i class="far fa-calendar"></i> February 10, 2023</span>
+                                <span><i class="far fa-clock"></i> 8 min read</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <strong>Data Orchestration Best Practices</strong>
+                            <div class="article-meta">
+                                <span><i class="far fa-calendar"></i> January 5, 2023</span>
+                                <span><i class="far fa-clock"></i> 6 min read</span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+
+                <h3 class="sidebar-title mt-5">Categories</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Data Engineering</a></li>
+                    <li><a href="#">Python</a></li>
+                    <li><a href="#">Data Pipelines</a></li>
+                    <li><a href="#">ETL</a></li>
+                    <li><a href="#">Big Data</a></li>
+                </ul>
+            </aside>
+            
+            <!-- Mobile Toggle Button -->
+            <button class="mobile-sidebar-toggle d-lg-none">
+                <i class="fas fa-book-open"></i>
+            </button>
+            
+            <!-- Main Article Content -->
+            <div class="col-lg-9">
+                <article class="article-content">
+                    <header class="article-header">
+                        <span class="article-category">Data Engineering</span>
+                        <h1 class="article-title">Building Scalable Data Pipelines with Python and Apache Airflow</h1>
+                        <div class="article-meta">
+                            <span class="article-date">Published: June 15, 2023</span>
+                            <span class="article-read-time">
+                                <i class="far fa-clock"></i> 8 min read
+                            </span>
+                        </div>
+                    </header>
+                    
+                    <div class="article-image">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="Data Pipeline Visualization" 
+                             class="img-fluid rounded"
+                             loading="lazy">
+                    </div>
+                    
+                    <section id="introduction">
+                        <h2>Introduction</h2>
+                        <p>In today's data-driven world, the ability to efficiently process and transform data is crucial for any organization. As data volumes grow exponentially, traditional batch processing methods often fall short. This is where data pipelines come into play, and when combined with powerful tools like Apache Airflow, they become scalable, maintainable, and reliable.</p>
+                        <p>In this comprehensive guide, I'll walk you through the process of building production-grade data pipelines using Python and Apache Airflow, drawing from my experience implementing these solutions in real-world scenarios.</p>
+                    </section>
+                    
+                    <!-- Rest of the article content remains the same -->
+                    <!-- ... -->
+                    
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">About</h3>
+                <p>Laurindo C. Benjamim is a Data Engineer & Software Developer passionate about building scalable data solutions and sharing knowledge.</p>
+                <div class="footer-social">
+                    <a href="https://github.com/laurindocbenjamim" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com/in/laurindocbenjamim" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://youtube.com/@laurindocbenjamim" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="mailto:laurindocbenjamim@gmail.com"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="about.html">About Me</a></li>
+                    <li><a href="experiences.html">Experience</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Categories</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Data Engineering</a></li>
+                    <li><a href="#">Python</a></li>
+                    <li><a href="#">JavaScript</a></li>
+                    <li><a href="#">AI & ML</a></li>
+                    <li><a href="#">Web Development</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2023 Laurindo C. Benjamim. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Mobile sidebar toggle
+        const mobileSidebarToggle = document.querySelector('.mobile-sidebar-toggle');
+        const mobileSidebar = document.querySelector('.mobile-sidebar');
+        const mobileSidebarClose = document.querySelector('.mobile-sidebar-close');
+
+        mobileSidebarToggle.addEventListener('click', () => {
+            mobileSidebar.classList.add('active');
+        });
+
+        mobileSidebarClose.addEventListener('click', () => {
+            mobileSidebar.classList.remove('active');
+        });
+
+        // Close mobile sidebar when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileSidebar.contains(e.target) && e.target !== mobileSidebarToggle) {
+                mobileSidebar.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
