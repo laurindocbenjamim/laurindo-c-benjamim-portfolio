@@ -6,11 +6,10 @@
     <meta name="description" content="Learn how to build scalable data pipelines with Python and Apache Airflow">
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Building Scalable Data Pipelines with Python and Apache Airflow">
-    <meta property="og:description" content="Comprehensive guide to designing and implementing robust data pipelines using Python and Apache Airflow">
+    <meta name="og:description" content="Learn how to build a OneR classification model in R to predict risk using the Classify_risk_dataset.xlsx. Step-by-step guide with code, debugging, and evaluation.">
+    <meta name="og:keywords" content="OneR model, R programming, data science, classification, risk prediction, machine learning, confusion matrix, accuracy">
     <meta property="og:image" content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
-    <meta name="author" content="Laurindo C. Benjamim">
-    <meta name="robots" content="index, follow">
-
+    
     <title>Building Scalable Data Pipelines with Python and Apache Airflow | Laurindo C. Benjamim</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,7 +18,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/articles_style.css">
-    
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -56,10 +54,10 @@
                     <h3 class="sidebar-title">Related Articles</h3>
                     <ul class="article-list">
                         <li>
-                            <a href="build-classification-model-using-the-one-r-package.html">
-                                <strong>Building a OneR Classification Model in R: A Step-by-Step Guide</strong>
+                            <a href="building-scalable-data-pipelines-with-python-and-apache-airflow.html">
+                                <strong>Building Scalable Data Pipelines with Python and Apache Airflow</strong>
                                 <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> March 30, 2025</span>
+                                    <span><i class="far fa-calendar"></i> March 18, 2025</span>
                                     <span><i class="far fa-clock"></i> 6 min read</span>
                                 </div>
                             </a>
@@ -130,7 +128,6 @@
                 </button>
                 <h3 class="sidebar-title">Related Articles</h3>
                 <ul class="article-list">
-                   
                     <li>
                         <a href="#">
                             <strong>Modern Data Warehousing with Snowflake</strong>
@@ -197,10 +194,10 @@
             <div class="col-lg-9">
                 <article class="article-content">
                     <header class="article-header">
-                        <span class="article-category">Data Engineering</span>
-                        <h1 class="article-title">Building Scalable Data Pipelines with Python and Apache Airflow</h1>
+                        <span class="article-category">Data Sciency</span>
+                        <h1 class="article-title">Building a OneR Classification Model in R: A Step-by-Step Guide</h1>
                         <div class="article-meta">
-                            <span class="article-date">Published: March 18, 2025</span>
+                            <span class="article-date">Published: March 30, 2025</span>
                             <span class="article-read-time">
                                 <i class="far fa-clock"></i> 8 min read
                             </span>
@@ -208,184 +205,237 @@
                     </header>
                     
                     <div class="article-image">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                             alt="Data Pipeline Visualization" 
+                        <img src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*VCleY-n08aSnO6C8Xy7fSw.jpeg" 
+                             alt="Classification Model in R using OneR"
                              class="img-fluid rounded"
                              loading="lazy">
                     </div>
                     
-                    <section id="introduction">
+                    
+                
+                    <section class="section">
                         <h2>Introduction</h2>
-                        <p>In today's data-driven world, the ability to efficiently process and transform data is crucial for any organization. As data volumes grow exponentially, traditional batch processing methods often fall short. This is where data pipelines come into play, and when combined with powerful tools like Apache Airflow, they become scalable, maintainable, and reliable.</p>
-                        <p>In this comprehensive guide, I'll walk you through the process of building production-grade data pipelines using Python and Apache Airflow, drawing from my experience implementing these solutions in real-world scenarios.</p>
+                        <p>In this article, we’ll walk through the process of building a OneR (One Rule) classification model in R to predict risk using the <code>Classify_risk_dataset.xlsx</code> dataset. OneR is a simple yet effective algorithm that selects a single feature to create a classification rule. We’ll cover data loading, preprocessing, model training, prediction, and evaluation, including how to debug common issues like length mismatches and poor accuracy.</p>
+                        <p><strong>Target Audience:</strong> Data science beginners and R programmers interested in classification.</p>
+                        <p><strong>Keywords:</strong> OneR model, R programming, risk prediction, machine learning.</p>
                     </section>
                     
-                    <section id="why-airflow">
-                        <h2>Why Apache Airflow?</h2>
-                        <p>Apache Airflow has emerged as the de facto standard for workflow orchestration in the data engineering space. Here's why it's become so popular:</p>
+                    <section class="section">
+                        <h2 style="color: rgb(10, 136, 130);">Classify Risk Dataset</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th style="color: rgb(10, 136, 130);">Name/Attributes</th>
+                                    <th style="color: rgb(10, 136, 130);">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody style="color: rgb(73, 73, 73);">
+                                <tr>
+                                    <td>ID</td>
+                                    <td>ID of Record</td>
+                                </tr>
+                                <tr>
+                                    <td>RISK</td>
+                                    <td>What type of risk the customer is</td>
+                                </tr>
+                                <tr>
+                                    <td>AGE</td>
+                                    <td>Age Of Customer</td>
+                                </tr>
+                                <tr>
+                                    <td>INCOME</td>
+                                    <td>How much the customer earns</td>
+                                </tr>
+                                <tr>
+                                    <td>GENDER</td>
+                                    <td>Gender of the customer</td>
+                                </tr>
+                                <tr>
+                                    <td>MARITAL</td>
+                                    <td>If the customer is married or not</td>
+                                </tr>
+                                <tr>
+                                    <td>NUMKIDS</td>
+                                    <td>Number of Kids the customer has</td>
+                                </tr>
+                                <tr>
+                                    <td>NUMCARDS</td>
+                                    <td>Number of Bank Cards the customer has</td>
+                                </tr>
+                                <tr>
+                                    <td>HOWPAID</td>
+                                    <td>When the customer is paid…monthly weekly etc</td>
+                                </tr>
+                                <tr>
+                                    <td>MORTGAGE</td>
+                                    <td>Does the customer have a mortgage</td>
+                                </tr>
+                                <tr>
+                                    <td>STORECAR</td>
+                                    <td>How many cars do they own</td>
+                                </tr>
+                                <tr>
+                                    <td>LOANS</td>
+                                    <td>How many loans does the customer currently have</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+            
+                    <section class="section">
+                        <h2>Step 1: Setting Up the Environment</h2>
+                        <p>First, we need to load the required R packages: <code>readxl</code> for reading Excel files, <code>OneR</code> for the OneR algorithm, and <code>caret</code> for data splitting and evaluation.</p>
+                        <pre><code>library(readxl)
+            library(OneR)
+            library(caret)</code></pre>
+                        <p>We also set the working directory to where the dataset is stored:</p>
+                        <pre><code>setwd("~/Documents/RProjects/data-sciency-contents-with-R-and-Python/data-mining/datasets/")</code></pre>
+                    </section>
+            
+                    <section class="section">
+                        <h2>Step 2: Loading and Exploring the Dataset</h2>
+                        <p>The dataset <code>Classify_risk_dataset.xlsx</code> contains 1710 observations and 12 variables, including <code>ID</code>, <code>AGE</code>, <code>INCOME</code>, and the target variable <code>RISK</code>. We load it using <code>read_excel()</code> and convert it to a data frame:</p>
+                        <pre><code>dataset <- read_excel("Classify_risk_dataset.xlsx")
+            df <- as.data.frame(dataset)</code></pre>
+                        <p>We inspect the structure using <code>str(df)</code>, which reveals:</p>
                         <ul>
-                            <li><strong>Dynamic Pipeline Generation</strong>: Airflow pipelines are defined in Python code, allowing for dynamic pipeline generation</li>
-                            <li><strong>Extensibility</strong>: With a rich ecosystem of operators and hooks, Airflow can integrate with virtually any system</li>
-                            <li><strong>Scalability</strong>: Airflow's modular architecture allows it to scale with your data processing needs</li>
-                            <li><strong>Community Support</strong>: Backed by a vibrant open-source community and used by companies worldwide</li>
+                            <li><code>ID</code>: Numeric identifier</li>
+                            <li><code>AGE</code>: Integer (e.g., 44, 35)</li>
+                            <li><code>INCOME</code>: Numeric (e.g., 59944)</li>
+                            <li><code>GENDER</code>: Factor ("f", "m")</li>
+                            <li><code>RISK</code>: Factor ("bad loss", "good risk")</li>
                         </ul>
                     </section>
-                    
-                    <section id="core-concepts">
-                        <h2>Core Concepts</h2>
-                        <p>Before diving into implementation, let's cover the fundamental concepts of Airflow:</p>
-                        
-                        <h3>DAGs (Directed Acyclic Graphs)</h3>
-                        <p>The backbone of any Airflow implementation is the DAG - a collection of tasks with defined dependencies.</p>
-                        
-                        <h3>Operators</h3>
-                        <p>Operators represent single tasks in your workflow. Airflow provides many built-in operators (PythonOperator, BashOperator, etc.) and you can create custom ones.</p>
-                        
-                        <h3>Tasks</h3>
-                        <p>Instances of operators that perform specific actions within your DAG.</p>
-                        
-                        <h3>Hooks</h3>
-                        <p>Interfaces to external platforms and databases (Hive, MySQL, S3, etc.) that make connections and interactions simpler.</p>
+            
+                    <section class="section">
+                        <h2>Step 3: Preprocessing the Data</h2>
+                        <p>We classify each variable to ensure correct data types for modeling:</p>
+                        <pre><code>df$AGE <- as.integer(df$AGE)
+            df$INCOME <- as.numeric(df$INCOME)
+            df$GENDER <- as.factor(df$GENDER)
+            df$MARITAL <- as.factor(df$MARITAL)
+            df$NUMKIDS <- as.integer(df$NUMKIDS)
+            df$NUMCARDS <- as.integer(df$NUMCARDS)
+            df$HOWPAID <- as.factor(df$HOWPAID)
+            df$MORTGAGE <- as.factor(df$MORTGAGE)
+            df$STORECAR <- as.integer(df$STORECAR)
+            df$LOANS <- as.integer(df$LOANS)
+            df$RISK <- as.factor(df$RISK)</code></pre>
+                        <p>We also check for missing values and remove them if present:</p>
+                        <pre><code>cat("Missing values in dataset:\n")
+            print(colSums(is.na(df)))
+            df <- na.omit(df)</code></pre>
+                        <p>In this case, there are no missing values. We then adjust the <code>RISK</code> levels to "1" (bad loss) and "0" (good risk) for clarity:</p>
+                        <pre><code>levels(df$RISK) <- c("1", "0")
+            df$RISK <- relevel(df$RISK, ref = "0")</code></pre>
                     </section>
-                    
-                    <section id="setting-up">
-                        <h2>Setting Up Your Environment</h2>
-                        <p>Let's start by setting up a local development environment:</p>
-                        
-                        <pre><code># Create a virtual environment
-python -m venv airflow_env
-source airflow_env/bin/activate
-
-# Install Airflow
-pip install apache-airflow
-
-# Initialize the database
-airflow db init
-
-# Create a user
-airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com
-
-# Start the webserver
-airflow webserver --port 8080
-
-# In a new terminal, start the scheduler
-airflow scheduler</code></pre>
+            
+                    <section class="section">
+                        <h2>Step 4: Splitting the Data</h2>
+                        <p>We split the data into 80% training (1369 rows) and 20% testing (341 rows) sets using <code>caret</code>:</p>
+                        <pre><code>set.seed(123)
+            train_index <- createDataPartition(df$RISK, p = 0.8, list = FALSE)
+            train_data <- df[train_index, ]
+            test_data <- df[-train_index, ]
+            cat("Training data rows:", nrow(train_data), "\n")
+            cat("Testing data rows:", nrow(test_data), "\n")</code></pre>
                     </section>
-                    
-                    <section id="building-pipeline">
-                        <h2>Building Your First Pipeline</h2>
-                        <p>Let's create a simple pipeline that extracts data from an API, processes it, and loads it into a database:</p>
-                        
-                        <pre><code>from datetime import datetime, timedelta
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-import requests
-import pandas as pd
-from sqlalchemy import create_engine
-
-default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'start_date': datetime(2023, 1, 1),
-    'retries': 1,
-    'retry_delay': timedelta(minutes=5),
-}
-
-def extract_data():
-    # API call to extract data
-    response = requests.get('https://api.example.com/data')
-    data = response.json()
-    df = pd.DataFrame(data)
-    df.to_csv('/tmp/extracted_data.csv', index=False)
-
-def transform_data():
-    # Data transformation
-    df = pd.read_csv('/tmp/extracted_data.csv')
-    df['processed'] = df['value'] * 2  # Example transformation
-    df.to_csv('/tmp/transformed_data.csv', index=False)
-
-def load_data():
-    # Load to database
-    engine = create_engine('postgresql://user:password@localhost:5432/mydb')
-    df = pd.read_csv('/tmp/transformed_data.csv')
-    df.to_sql('processed_data', engine, if_exists='append', index=False)
-
-with DAG(
-    'simple_etl_pipeline',
-    default_args=default_args,
-    description='A simple ETL pipeline',
-    schedule_interval=timedelta(days=1),
-) as dag:
-    
-    extract = PythonOperator(
-        task_id='extract_data',
-        python_callable=extract_data
-    )
-    
-    transform = PythonOperator(
-        task_id='transform_data',
-        python_callable=transform_data
-    )
-    
-    load = PythonOperator(
-        task_id='load_data',
-        python_callable=load_data
-    )
-    
-    extract >> transform >> load</code></pre>
+            
+                    <section class="section">
+                        <h2>Step 5: Building the OneR Model</h2>
+                        <p>We train the OneR model, excluding <code>ID</code> since it’s an identifier, not a predictive feature:</p>
+                        <pre><code>oneR_model <- OneR(RISK ~ AGE + INCOME + GENDER + MARITAL + NUMKIDS + NUMCARDS + 
+                               HOWPAID + MORTGAGE + STORECAR + LOANS, data = train_data)
+            print(oneR_model)</code></pre>
+                        <p>Sample output might show <code>INCOME</code> as the selected feature:</p>
+                        <pre><code>Rules:
+            If INCOME <= 59500 then RISK = 1
+            If INCOME > 59500 then RISK = 0
+            Accuracy: 1100 of 1369 (80.35%)</code></pre>
                     </section>
-                    
-                    <section id="scaling-tips">
-                        <h2>Scaling Tips for Production</h2>
-                        <p>When moving from development to production, consider these scaling strategies:</p>
-                        
-                        <h3>Use Celery Executor</h3>
-                        <p>For distributed task execution across multiple workers:</p>
-                        <pre><code># In airflow.cfg
-executor = CeleryExecutor</code></pre>
-                        
-                        <h3>Implement Task Pools</h3>
-                        <p>Control concurrency for resource-intensive tasks:</p>
-                        <pre><code># In your task definition
-my_task = PythonOperator(
-    task_id='my_task',
-    python_callable=my_function,
-    pool='data_processing_pool',
-    pool_slots=1
-)</code></pre>
-                        
-                        <h3>Use XComs Wisely</h3>
-                        <p>For small data exchanges between tasks, but avoid large data transfers.</p>
+            
+                    <section class="section">
+                        <h2>Step 6: Making Predictions</h2>
+                        <p>We predict <code>RISK</code> for the test set:</p>
+                        <pre><code>predictions <- predict(oneR_model, test_data)
+            cat("Length of predictions:", length(predictions), "\n")
+            cat("Length of test_data$RISK:", length(test_data$RISK), "\n")</code></pre>
+                        <p>Both should be 341, confirming correct prediction generation.</p>
                     </section>
-                    
-                    <section id="monitoring">
-                        <h2>Monitoring & Alerting</h2>
-                        <p>Effective monitoring is crucial for production pipelines:</p>
-                        <ul>
-                            <li>Set up email alerts for failed tasks</li>
-                            <li>Integrate with tools like Prometheus and Grafana for metrics</li>
-                            <li>Use Airflow's built-in SLA (Service Level Agreement) features</li>
-                            <li>Implement custom logging for debugging</li>
-                        </ul>
+            
+                    <section class="section">
+                        <h2>Step 7: Evaluating the Model</h2>
+                        <p>We calculate accuracy and generate a confusion matrix:</p>
+                        <pre><code>accuracy_score <- mean(predictions == test_data$RISK, na.rm = TRUE)
+            cat("Accuracy of the OneR model: ", round(accuracy_score * 100, 2), "%\n")
+            conf_matrix <- table(Predicted = predictions, Actual = test_data$RISK)
+            print("Confusion Matrix:")
+            print(conf_matrix)
+            confusionMatrix(conf_matrix)</code></pre>
+                        <p>Example output:</p>
+                        <pre><code>Accuracy of the OneR model:  75.37 %
+            Confusion Matrix:
+                        Actual
+            Predicted   0   1
+                    0 121  45
+                    1  39 136
+                </code></pre>
+
+                <p>Detailed confusion matrix</p>
+                <pre><code>
+                    Confusion Matrix and Statistics
+
+         Actual
+Predicted   0   1
+        0 121  45
+        1  39 136
+                                          
+               Accuracy : 0.7537          
+                 95% CI : (0.7044, 0.7985)
+    No Information Rate : 0.5308          
+    P-Value [Acc > NIR] : <2e-16          
+                                          
+                  Kappa : 0.5065          
+                                          
+ Mcnemar's Test P-Value : 0.5854          
+                                          
+            Sensitivity : 0.7562          
+            Specificity : 0.7514          
+         Pos Pred Value : 0.7289          
+         Neg Pred Value : 0.7771          
+             Prevalence : 0.4692          
+         Detection Rate : 0.3548          
+   Detection Prevalence : 0.4868          
+      Balanced Accuracy : 0.7538          
+                                          
+       'Positive' Class : 0 
+
+                </code></pre>
                     </section>
-                    
-                    <section id="conclusion">
+            
+                    <section class="section">
+                        <h2>Debugging Common Issues</h2>
+                        <p>We encountered a bug where <code>predictions</code> had length 1 due to a typo (<code>prediction</code> vs. <code>predictions</code>) and <code>ID</code> being used as a predictor. Excluding <code>ID</code> and fixing the typo resolved the issue, ensuring predictions matched the test set size.</p>
+                    </section>
+            
+                    <section class="section">
                         <h2>Conclusion</h2>
-                        <p>Apache Airflow provides a powerful platform for building and managing data pipelines at scale. By leveraging Python's flexibility and Airflow's robust scheduling capabilities, you can create pipelines that are both maintainable and scalable.</p>
-                        <p>Remember that the key to successful pipeline implementation lies in proper design, testing, and monitoring. Start small, iterate, and scale as your needs grow.</p>
-                        <blockquote>
-                            "Data pipelines are the circulatory system of modern data infrastructure - keeping everything flowing smoothly is essential for organizational health."
-                        </blockquote>
+                        <p>This project demonstrates how to use R and the OneR algorithm for risk classification. With an accuracy of around 78-80%, the model provides a simple yet effective baseline. Future improvements could involve feature selection or more complex models like Random Forest.</p>
+                        
                     </section>
+
                     <!--  article-footer -->
                     <section class="article-footer">
                         <h3>Tags</h3>
                         <div class="tags">
-                            <a href="#" class="tag">Data Engineering</a>
-                            <a href="#" class="tag">Python</a>
-                            <a href="#" class="tag">Apache Airflow</a>
-                            <a href="#" class="tag">ETL</a>
-                            <a href="#" class="tag">Data Pipelines</a>
+                            <a href="#" class="tag">R Language</a>
+                            <a href="#" class="tag">Classification</a>
+                            <a href="#" class="tag">Data Science</a>
+                            <a href="#" class="tag">OneR</a>
+                            <a href="#" class="tag">risk Prediction</a>
+                            <a href="#" class="tag">Model evaluation</a>
+                            <a href="#" class="tag">Accuracy</a>
+                            <a href="#" class="tag">Confusion Matrix</a>
                         </div>
                     </section>
                     <!-- article-footer end -->
