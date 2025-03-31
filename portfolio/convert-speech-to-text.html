@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,11 @@
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Speech to Text Converter">
     <meta property="og:description" content="Upload audio or video files to convert speech to text">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
-    
+    <meta property="og:image"
+        content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
+
     <title>Speech to Text Converter | Laurindo C. Benjamim</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -468,7 +470,7 @@
             .upload-title {
                 font-size: 1.8rem;
             }
-            
+
             .sidebar {
                 display: none;
             }
@@ -509,11 +511,12 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="/">Laurindo C. Benjamim</a>
+            <a class="navbar-brand" href="/">Laurindo C. Benjamim <span style="color: #23acd6;">.PID<span style="color: #38d840;">IO</span></span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -526,10 +529,10 @@
                         <a class="nav-link" href="experiences.html">Experience</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="projects.html">Projects</a>
+                        <a class="nav-link active" href="projects.html">Projects</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="blog.html">Blog</a>
+                        <a class="nav-link" href="blog.html">Blog</a>
                     </li>
                 </ul>
             </div>
@@ -587,7 +590,7 @@
                     </ul>
                 </div>
             </aside>
-            
+
             <!-- Mobile Sidebar Menu (Hidden by default) -->
             <div class="mobile-sidebar-overlay"></div>
             <aside class="mobile-sidebar">
@@ -639,25 +642,28 @@
                     <li><a href="#">API access</a></li>
                 </ul>
             </aside>
-            
+
             <!-- Mobile Toggle Button -->
             <button class="mobile-sidebar-toggle d-lg-none">
                 <i class="fas fa-book-open"></i>
             </button>
-            
+
             <!-- Main Content -->
             <div class="col-lg-9">
                 <div class="upload-container">
                     <div class="upload-header">
                         <h1 class="upload-title">Speech to Text Converter</h1>
-                        <p class="upload-description">Upload your audio or video files to convert speech to text with high accuracy. Our service supports multiple formats and languages.</p>
+                        <p class="upload-description">Upload your audio or video files to convert speech to text with
+                            high accuracy. Our service supports multiple formats and languages.</p>
                     </div>
 
-                    <form id="uploadForm">
+                    <form id="uploadForm" class="needs-validation" enctype="multipart/form-data" novalidate>
+                        
                         <div class="form-group">
                             <label for="fileInput" class="form-label">Select File</label>
                             <div class="file-upload-wrapper">
-                                <input type="file" id="fileInput" class="file-upload-input" accept="audio/*,video/*" required>
+                                <input type="file" id="fileInput" name="fileInput" class="file-upload-input"
+                                    accept="audio/*,video/*" required>
                                 <label for="fileInput" class="file-upload-label">
                                     <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
                                     <span class="file-upload-text">Drag & drop your file here or click to browse</span>
@@ -665,33 +671,6 @@
                                 </label>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="languageSelect" class="form-label">Language</label>
-                            <select id="languageSelect" class="form-select" required>
-                                <option value="">Select language</option>
-                                <option value="en">English</option>
-                                <option value="es">Spanish</option>
-                                <option value="fr">French</option>
-                                <option value="de">German</option>
-                                <option value="pt">Portuguese</option>
-                                <option value="other">Other (auto-detect)</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="outputFormat" class="form-label">Output Format</label>
-                            <select id="outputFormat" class="form-select">
-                                <option value="plain">Plain Text</option>
-                                <option value="srt">SubRip (SRT)</option>
-                                <option value="vtt">WebVTT</option>
-                                <option value="json">JSON</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="btn-submit">
-                            <i class="fas fa-exchange-alt"></i> Convert to Text
-                        </button>
 
                         <div class="supported-formats">
                             <div class="supported-formats-title">Supported formats:</div>
@@ -706,6 +685,48 @@
                                 <span class="format-badge">MKV</span>
                             </div>
                         </div>
+                        
+
+                        <div class="form-group">
+                            <label for="languageSelect" class="form-label">Language</label>
+                            <select id="languageSelect" name="languageSelect" class="form-select" required>
+                                <option value="">Select language</option>
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="de">German</option>
+                                <option value="pt">Portuguese</option>
+                                <option value="other">Other (auto-detect)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="outputFormat" class="form-label">Output Format</label>
+                            <select id="outputFormat" name="outputFormat" class="form-select">
+                                <option value="plain">Plain Text</option>
+                                <!--<option value="srt">SubRip (SRT)</option>
+                                <option value="vtt">WebVTT</option>
+                                <option value="json">JSON</option>-->
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span id="submit-title">Convert to Text</span>
+
+                        </button>
+
+                        <div class="form-group">
+                            <div id="errorMessage" class="text-danger mt-2"></div>
+                            <div id="successMessage" class="text-success mt-2"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                            <div id="spinnerBorder" class="spinner-border" style="display: none;" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+
                     </form>
 
                     <div class="results-container" id="resultsContainer">
@@ -767,16 +788,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    
+    <script src="../app/request_factory.js"></script>
     <script>
+
+        const request = new RequestFactory();
+
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                
+
                 const targetId = this.getAttribute('href');
                 const targetElement = document.querySelector(targetId);
-                
+
                 window.scrollTo({
                     top: targetElement.offsetTop - 100,
                     behavior: 'smooth'
@@ -813,46 +838,109 @@
         });
 
         // File upload form handling
+        const submitTitle = document.getElementById('submit-title');
         const uploadForm = document.getElementById('uploadForm');
         const fileInput = document.getElementById('fileInput');
         const resultsContainer = document.getElementById('resultsContainer');
         const resultsContent = document.getElementById('resultsContent');
         const copyBtn = document.getElementById('copyBtn');
+        const spinnerBorder = document.getElementById('spinnerBorder');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
 
-        uploadForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
+        const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
+
+        uploadForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            if (!uploadForm.checkValidity()) {
+                event.stopPropagation();
+                uploadForm.classList.add("was-validated");
+
+                return;
+            }
+
+            spinnerBorder.style.display = 'block';
+
             // Simulate processing (in a real app, this would be an API call)
             if (fileInput.files.length > 0) {
                 const fileName = fileInput.files[0].name;
-                
+
+                if (fileInput.files[0].size > MAX_FILE_SIZE) {
+                    errorMessage.innerText = 'File is too large! Maximum allowed size is 25MB.';
+                    successMessage.innerText = '';
+                    spinnerBorder.style.display = 'none';
+                    return;
+                }
+                errorMessage.innerText = '';
+                successMessage.innerText = '';
+
+                const formData = new FormData(event.target)
+
                 // Show loading state
                 resultsContent.innerHTML = '<p>Processing your file... Please wait.</p>';
                 resultsContainer.style.display = 'block';
-                
+
                 // Simulate processing delay
-                setTimeout(() => {
+                setTimeout(async () => {
+
+                    //
+                    //const formData = JSON.stringify({ "file": form.get('fileInput'), 
+                    //"language": form.get('languageSelect'), 
+                    //"outputFormat": form.get('outputFormat') });
+
+                    const options = {
+                        method: 'post',
+                        body: formData,
+                        credentials: 'include',
+                        headers: {
+                            //'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': request.getCookie('csrf_access_token'),
+                        },
+                    };
+                    console.log("Login with cookies tarting...")
+
+                    console.log(formData.get('languageSelect'))
+
+                    const response = await request.makeRequest(options, '/api/v1/speech_recognition/convert-audio-speech-into-text')
+                    console.log(response)
+
+                    let message = null;
+
+                    if (response === null) {
+                        alert('Failed to login! Please try again later.');
+                        //cleanAlerts()
+                        //errorMessage.textContent = 'Failed to login! Please try again later.';
+                        return;
+                    } if (!response.ok) {
+
+                        //message = await request.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
+                        resultsContent.innerHTML = !response.error ? response.transcription : `<span class="text-danger">${response.error}</span>`;
+                    }
                     // This is just sample text - in a real app, you would get this from your speech-to-text API
-                    const sampleText = `This is a sample transcription of your audio/video file: ${fileName}\n\n`;
-                    const loremIpsum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.\n\n`;
-                    
-                    resultsContent.innerHTML = sampleText + loremIpsum.repeat(5);
-                    
+                    //const sampleText = `This is a sample transcription of your audio/video file: ${fileName}\n\n`;
+                    //const loremIpsum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.\n\n`;
+
+                    //sampleText + loremIpsum.repeat(5);
+
                     // Scroll to results
                     resultsContainer.scrollIntoView({ behavior: 'smooth' });
+                    spinnerBorder.style.display = 'none';
                 }, 2000);
             }
+            
+
         });
 
         // Copy results to clipboard
-        copyBtn.addEventListener('click', function() {
+        copyBtn.addEventListener('click', function () {
             const range = document.createRange();
             range.selectNode(resultsContent);
             window.getSelection().removeAllRanges();
             window.getSelection().addRange(range);
             document.execCommand('copy');
             window.getSelection().removeAllRanges();
-            
+
             // Show copied feedback
             const originalText = copyBtn.innerHTML;
             copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
@@ -862,10 +950,21 @@
         });
 
         // File input styling
-        fileInput.addEventListener('change', function() {
+        fileInput.addEventListener('change', function () {
             if (this.files.length > 0) {
                 const fileName = this.files[0].name;
                 const fileUploadLabel = document.querySelector('.file-upload-label');
+                
+                if (this.files[0].size > MAX_FILE_SIZE) {
+                    alert('File is too large! Maximum allowed size is 25MB.')
+                    errorMessage.innerText = 'File is too large! Maximum allowed size is 25MB.';
+                    successMessage.innerText = '';
+                    fileInput.value = ''; // Clear the file input
+                    return;
+                }
+                errorMessage.innerText = '';
+                successMessage.innerText = '';
+
                 fileUploadLabel.innerHTML = `
                     <i class="fas fa-file-alt file-upload-icon"></i>
                     <span class="file-upload-text">${fileName}</span>
@@ -876,7 +975,7 @@
 
         // Drag and drop functionality
         const fileUploadWrapper = document.querySelector('.file-upload-wrapper');
-        
+
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             fileUploadWrapper.addEventListener(eventName, preventDefaults, false);
         });
@@ -908,11 +1007,12 @@
             const dt = e.dataTransfer;
             const files = dt.files;
             fileInput.files = files;
-            
+
             // Trigger change event
             const event = new Event('change');
             fileInput.dispatchEvent(event);
         }
     </script>
 </body>
+
 </html>
