@@ -2,7 +2,9 @@
 class RequestFactory {
     constructor() {
         //this.baseURL = window.location.origin;
-        this.baseURL = window.location.origin + '/laurindo-c-benjamim-portfolio';
+        this.baseURL = window.location.origin.includes('laurindocbenjamim.github.io') 
+            ? window.location.origin + '/laurindo-c-benjamim-portfolio' 
+            : window.location.origin;
         this.serverDomain = 'https://www.d-tuning.com';
         //this.serverDomain = 'http://localhost:5000';
     }
@@ -16,6 +18,9 @@ class RequestFactory {
         } catch (error) {
             console.error("Request failed:", error);
             console.error("Failed to connect to the server. Please try again later.");
+            document.getElementById('spinnerBorder').style.display = 'none';
+            document.getElementById('errorMessage').innerText = error;
+            document.getElementById('successMessage') .innerText = '';
             return response;
         }
     }
