@@ -893,6 +893,7 @@
                         method: 'post',
                         body: formData,
                         credentials: 'include',
+                        mode: 'cors',
                         headers: {
                             //'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': request.getCookie('csrf_access_token'),
