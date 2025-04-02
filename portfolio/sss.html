@@ -3,735 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Learn how to build scalable data pipelines with Python and Apache Airflow">
-    <!-- Open Graph Tags -->
-    <meta property="og:title" content="Building Scalable Data Pipelines with Python and Apache Airflow">
-    <meta property="og:description" content="Comprehensive guide to designing and implementing robust data pipelines using Python and Apache Airflow">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
-    
-    <title>Building Scalable Data Pipelines with Python and Apache Airflow | Laurindo C. Benjamim</title>
-    
+    <title>Speech to Text with Streaming</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
-        :root {
-            --primary-color: #4f46e5;
-            --secondary-color: #10b981;
-            --text-color: #f8fafc;
-            --dark-bg: #0f172a;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --code-bg: #1e293b;
-        }
+        /* ... (keep your existing styles) ... */
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--dark-bg);
-            color: var(--text-color);
-            line-height: 1.7;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        main {
-            flex: 1;
-        }
-
-        /* Navigation */
-        .navbar {
-            background: var(--dark-bg);
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .navbar-brand {
-            font-weight: 600;
-            color: var(--text-color);
-        }
-
-        .navbar-nav .nav-link {
-            color: var(--text-color);
-            padding: 0.5rem 1rem;
-            margin: 0 0.2rem;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-nav .nav-link:hover,
-        .navbar-nav .nav-link.active {
-            background: rgba(79, 70, 229, 0.2);
-            color: var(--primary-color);
-        }
-
-        /* Mobile Menu Toggle Button */
-        .mobile-sidebar-toggle {
-            display: none;
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-            cursor: pointer;
-        }
-
-        /* Article Styles */
-        .article-header {
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .article-category {
-            display: inline-block;
-            background: rgba(79, 70, 229, 0.2);
-            color: var(--primary-color);
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .article-title {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            line-height: 1.3;
-        }
-
-        .article-meta {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #94a3b8;
-            font-size: 0.95rem;
-            margin-bottom: 30px;
-        }
-
-        .article-date {
-            margin-right: 20px;
-        }
-
-        .article-read-time {
-            display: flex;
-            align-items: center;
-        }
-
-        .article-read-time i {
-            margin-right: 5px;
-        }
-
-        .article-image {
-            margin: 40px 0;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .article-image img {
+        /* New styles for audio player and streaming options */
+        .audio-player {
             width: 100%;
-            height: auto;
-            display: block;
+            margin: 15px 0;
         }
-
-        .article-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .article-content h2 {
-            font-size: 1.8rem;
-            margin: 50px 0 20px;
-            color: #fff;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .article-content h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: var(--primary-color);
-            border-radius: 3px;
-        }
-
-        .article-content h3 {
-            font-size: 1.4rem;
-            margin: 40px 0 15px;
-            color: #fff;
-        }
-
-        .article-content p {
-            margin-bottom: 25px;
-            font-size: 1.1rem;
-        }
-
-        .article-content ul, 
-        .article-content ol {
-            margin-bottom: 25px;
-            padding-left: 30px;
-        }
-
-        .article-content li {
-            margin-bottom: 10px;
-        }
-
-        .article-content code {
-            background: var(--code-bg);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
-
-        .article-content pre {
-            background: var(--code-bg);
-            padding: 20px;
+        
+        .streaming-options {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 15px;
             border-radius: 8px;
-            overflow-x: auto;
-            margin: 30px 0;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .article-content blockquote {
-            border-left: 4px solid var(--primary-color);
-            padding-left: 20px;
-            margin: 30px 0;
-            color: #94a3b8;
-            font-style: italic;
-        }
-
-        .article-footer {
-            margin-top: 60px;
-            padding-top: 40px;
-            border-top: 1px solid var(--glass-border);
-        }
-
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .tag {
-            background: rgba(79, 70, 229, 0.15);
-            color: #c7d2fe;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-            text-decoration: none;
-        }
-
-        .tag:hover {
-            background: rgba(79, 70, 229, 0.3);
-        }
-
-        /* Sidebar Menu */
-        .sidebar {
-            width: 280px;
-            padding: 30px 20px;
-            position: sticky;
-            top: 100px;
-            height: calc(100vh - 120px);
-            overflow-y: auto;
-            scrollbar-width: thin;
-        }
-
-        .sidebar::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 5px;
-        }
-
-        .sidebar-title {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            color: #fff;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        .article-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .article-list li {
             margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--glass-border);
         }
-
-        .article-list li:last-child {
-            border-bottom: none;
-        }
-
-        .article-list a {
-            color: #94a3b8;
-            text-decoration: none;
-            display: block;
-            transition: all 0.2s ease;
-        }
-
-        .article-list a:hover {
-            color: var(--primary-color);
-        }
-
-        .article-list .article-meta {
+        
+        .chunk-info {
             font-size: 0.8rem;
-            color: #64748b;
+            color: #94a3b8;
             margin-top: 5px;
-            display: flex;
-            align-items: center;
-        }
-
-        .article-list .article-meta i {
-            margin-right: 5px;
-        }
-
-        /* Mobile Sidebar */
-        .mobile-sidebar {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 280px;
-            height: 100vh;
-            background: var(--dark-bg);
-            border-left: 1px solid var(--glass-border);
-            padding: 20px;
-            overflow-y: auto;
-            transition: right 0.3s ease;
-            z-index: 999;
-        }
-
-        .mobile-sidebar.active {
-            right: 0;
-        }
-
-        .mobile-sidebar-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: #94a3b8;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        /* Footer */
-        .main-footer {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 40px 0;
-            margin-top: 60px;
-            border-top: 1px solid var(--glass-border);
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .footer-section {
-            flex: 1;
-            padding: 0 20px;
-        }
-
-        .footer-title {
-            color: #fff;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: 10px;
-        }
-
-        .footer-links a {
-            color: #94a3b8;
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-color);
-        }
-
-        .footer-social {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .footer-social a {
-            color: #94a3b8;
-            font-size: 1.2rem;
-            transition: color 0.2s ease;
-        }
-
-        .footer-social a:hover {
-            color: var(--primary-color);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            margin-top: 30px;
-            border-top: 1px solid var(--glass-border);
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 1200px) {
-            .sidebar {
-                width: 240px;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .article-title {
-                font-size: 2rem;
-            }
-            
-            .sidebar {
-                display: none;
-            }
-
-            .mobile-sidebar-toggle {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .article-title {
-                font-size: 1.8rem;
-            }
-            
-            .article-meta {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .article-date {
-                margin-right: 0;
-                margin-bottom: 10px;
-            }
-
-            .footer-content {
-                flex-direction: column;
-            }
-
-            .footer-section {
-                margin-bottom: 30px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="/">Laurindo C. Benjamim</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="experiences.html">Experience</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="projects.html">Projects</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="blog.html">Blog</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- ... (keep your existing header and navigation) ... -->
 
-    <main class="container py-5">
-        <div class="row">
-            <!-- Desktop Sidebar Menu -->
-            <aside class="col-lg-3 d-none d-lg-block">
-                <div class="sidebar">
-                    <h3 class="sidebar-title">Related Articles</h3>
-                    <ul class="article-list">
-                        <li>
-                            <a href="#">
-                                <strong>Modern Data Warehousing with Snowflake</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> May 28, 2023</span>
-                                    <span><i class="far fa-clock"></i> 6 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>ETL vs ELT: Choosing the Right Approach</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> April 15, 2023</span>
-                                    <span><i class="far fa-clock"></i> 5 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Data Quality Monitoring with Great Expectations</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> March 22, 2023</span>
-                                    <span><i class="far fa-clock"></i> 7 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Stream Processing with Apache Kafka</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> February 10, 2023</span>
-                                    <span><i class="far fa-clock"></i> 8 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Data Orchestration Best Practices</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> January 5, 2023</span>
-                                    <span><i class="far fa-clock"></i> 6 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-
-                    <h3 class="sidebar-title mt-5">Categories</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Data Engineering</a></li>
-                        <li><a href="#">Python</a></li>
-                        <li><a href="#">Data Pipelines</a></li>
-                        <li><a href="#">ETL</a></li>
-                        <li><a href="#">Big Data</a></li>
-                    </ul>
+    <div class="container py-5 main-container">
+        <section class="speech-section">
+            <h2 class="mb-4"><i class="fas fa-microphone-alt me-2"></i>Speech to Text Converter</h2>
+            
+            <div class="streaming-options mb-3">
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="streamingToggle">
+                    <label class="form-check-label" for="streamingToggle">Enable Streaming Conversion</label>
                 </div>
-            </aside>
-            
-            <!-- Mobile Sidebar Menu (Hidden by default) -->
-            <aside class="mobile-sidebar">
-                <button class="mobile-sidebar-close">
-                    <i class="fas fa-times"></i>
-                </button>
-                <h3 class="sidebar-title">Related Articles</h3>
-                <ul class="article-list">
-                    <li>
-                        <a href="#">
-                            <strong>Modern Data Warehousing with Snowflake</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-calendar"></i> May 28, 2023</span>
-                                <span><i class="far fa-clock"></i> 6 min read</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>ETL vs ELT: Choosing the Right Approach</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-calendar"></i> April 15, 2023</span>
-                                <span><i class="far fa-clock"></i> 5 min read</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>Data Quality Monitoring with Great Expectations</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-calendar"></i> March 22, 2023</span>
-                                <span><i class="far fa-clock"></i> 7 min read</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>Stream Processing with Apache Kafka</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-calendar"></i> February 10, 2023</span>
-                                <span><i class="far fa-clock"></i> 8 min read</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>Data Orchestration Best Practices</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-calendar"></i> January 5, 2023</span>
-                                <span><i class="far fa-clock"></i> 6 min read</span>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-
-                <h3 class="sidebar-title mt-5">Categories</h3>
-                <ul class="footer-links">
-                    <li><a href="#">Data Engineering</a></li>
-                    <li><a href="#">Python</a></li>
-                    <li><a href="#">Data Pipelines</a></li>
-                    <li><a href="#">ETL</a></li>
-                    <li><a href="#">Big Data</a></li>
-                </ul>
-            </aside>
-            
-            <!-- Mobile Toggle Button -->
-            <button class="mobile-sidebar-toggle d-lg-none">
-                <i class="fas fa-book-open"></i>
-            </button>
-            
-            <!-- Main Article Content -->
-            <div class="col-lg-9">
-                <article class="article-content">
-                    <header class="article-header">
-                        <span class="article-category">Data Engineering</span>
-                        <h1 class="article-title">Building Scalable Data Pipelines with Python and Apache Airflow</h1>
-                        <div class="article-meta">
-                            <span class="article-date">Published: June 15, 2023</span>
-                            <span class="article-read-time">
-                                <i class="far fa-clock"></i> 8 min read
-                            </span>
-                        </div>
-                    </header>
-                    
-                    <div class="article-image">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                             alt="Data Pipeline Visualization" 
-                             class="img-fluid rounded"
-                             loading="lazy">
+                <div id="streamingOptions" style="display: none;">
+                    <div class="mb-3">
+                        <label class="form-label">Chunk Size (seconds)</label>
+                        <input type="number" id="chunkSize" class="form-control" min="1" max="10" value="5">
                     </div>
-                    
-                    <section id="introduction">
-                        <h2>Introduction</h2>
-                        <p>In today's data-driven world, the ability to efficiently process and transform data is crucial for any organization. As data volumes grow exponentially, traditional batch processing methods often fall short. This is where data pipelines come into play, and when combined with powerful tools like Apache Airflow, they become scalable, maintainable, and reliable.</p>
-                        <p>In this comprehensive guide, I'll walk you through the process of building production-grade data pipelines using Python and Apache Airflow, drawing from my experience implementing these solutions in real-world scenarios.</p>
-                    </section>
-                    
-                    <!-- Rest of the article content remains the same -->
-                    <!-- ... -->
-                    
-                </article>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3 class="footer-title">About</h3>
-                <p>Laurindo C. Benjamim is a Data Engineer & Software Developer passionate about building scalable data solutions and sharing knowledge.</p>
-                <div class="footer-social">
-                    <a href="https://github.com/laurindocbenjamim" target="_blank"><i class="fab fa-github"></i></a>
-                    <a href="https://linkedin.com/in/laurindocbenjamim" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://youtube.com/@laurindocbenjamim" target="_blank"><i class="fab fa-youtube"></i></a>
-                    <a href="mailto:laurindocbenjamim@gmail.com"><i class="fas fa-envelope"></i></a>
+                    <p class="chunk-info">Audio will be sent to backend in chunks for real-time processing</p>
                 </div>
             </div>
             
-            <div class="footer-section">
-                <h3 class="footer-title">Quick Links</h3>
-                <ul class="footer-links">
-                    <li><a href="about.html">About Me</a></li>
-                    <li><a href="experiences.html">Experience</a></li>
-                    <li><a href="projects.html">Projects</a></li>
-                    <li><a href="blog.html">Blog</a></li>
-                </ul>
+            <div class="speech-controls">
+                <div class="flex-grow-1">
+                    <label for="audioFile" class="form-label">Upload Audio File</label>
+                    <input type="file" id="audioFile" class="form-control" accept="audio/*">
+                </div>
+                <div class="d-flex align-items-end gap-2">
+                    <button id="recordBtn" class="btn btn-danger">
+                        <i class="fas fa-microphone me-2"></i>Record
+                    </button>
+                    <button id="stopBtn" class="btn btn-secondary" disabled>
+                        <i class="fas fa-stop me-2"></i>Stop
+                    </button>
+                </div>
+                <div class="recording-indicator">
+                    <div class="pulse"></div>
+                    <span>Recording...</span>
+                </div>
             </div>
             
-            <div class="footer-section">
-                <h3 class="footer-title">Categories</h3>
-                <ul class="footer-links">
-                    <li><a href="#">Data Engineering</a></li>
-                    <li><a href="#">Python</a></li>
-                    <li><a href="#">JavaScript</a></li>
-                    <li><a href="#">AI & ML</a></li>
-                    <li><a href="#">Web Development</a></li>
-                </ul>
+            <audio id="audioPlayer" class="audio-player" controls style="display: none;"></audio>
+            
+            <div class="mb-3">
+                <label for="languageSelect" class="form-label">Language</label>
+                <select id="languageSelect" class="form-select">
+                    <option value="en-US">English (US)</option>
+                    <option value="pt-PT">Portuguese (Portugal)</option>
+                    <option value="es-ES">Spanish (Spain)</option>
+                    <option value="fr-FR">French (France)</option>
+                </select>
             </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2023 Laurindo C. Benjamim. All rights reserved.</p>
-        </div>
-    </footer>
+            
+            <div class="mb-3">
+                <label class="form-label">Transcription Result</label>
+                <div class="speech-result" id="transcriptionResult">
+                    <p class="text-muted mb-0">Your transcribed text will appear here...</p>
+                </div>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button id="copyBtn" class="btn btn-outline-light">
+                    <i class="fas fa-copy me-2"></i>Copy Text
+                </button>
+                <button id="clearBtn" class="btn btn-outline-light">
+                    <i class="fas fa-trash-alt me-2"></i>Clear
+                </button>
+                <button id="saveBtn" class="btn btn-primary ms-auto">
+                    <i class="fas fa-save me-2"></i>Save Recording
+                </button>
+            </div>
+        </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    
+        <!-- ... (rest of your content) ... -->
+    </div>
+
     <script>
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                window.scrollTo({
-                    top: targetElement.offsetTop - 100,
-                    behavior: 'smooth'
-                });
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const recordBtn = document.getElementById('recordBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const audioFileInput = document.getElementById('audioFile');
+            const transcriptionResult = document.getElementById('transcriptionResult');
+            const languageSelect = document.getElementById('languageSelect');
+            const copyBtn = document.getElementById('copyBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const audioPlayer = document.getElementById('audioPlayer');
+            const recordingIndicator = document.querySelector('.recording-indicator');
+            const streamingToggle = document.getElementById('streamingToggle');
+            const streamingOptions = document.getElementById('streamingOptions');
+            const chunkSizeInput = document.getElementById('chunkSize');
+            
+            // Audio recording variables
+            let mediaRecorder;
+            let audioChunks = [];
+            let recognition;
+            let isRecording = false;
+            let isStreaming = false;
+            let chunkInterval;
+            let currentChunk = [];
+            let socket;
+            
+            // Toggle streaming options
+            streamingToggle.addEventListener('change', function() {
+                isStreaming = this.checked;
+                streamingOptions.style.display = isStreaming ? 'block' : 'none';
             });
-        });
-
-        // Mobile sidebar toggle
-        const mobileSidebarToggle = document.querySelector('.mobile-sidebar-toggle');
-        const mobileSidebar = document.querySelector('.mobile-sidebar');
-        const mobileSidebarClose = document.querySelector('.mobile-sidebar-close');
-
-        mobileSidebarToggle.addEventListener('click', () => {
-            mobileSidebar.classList.add('active');
-        });
-
-        mobileSidebarClose.addEventListener('click', () => {
-            mobileSidebar.classList.remove('active');
-        });
-
-        // Close mobile sidebar when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!mobileSidebar.contains(e.target) && e.target !== mobileSidebarToggle) {
-                mobileSidebar.classList.remove('active');
+            
+            // Initialize audio recording
+            async function startRecording() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    
+                    mediaRecorder.ondataavailable = event => {
+                        if (event.data.size > 0) {
+                            audioChunks.push(event.data);
+                            
+                            // If streaming, send chunks to backend
+                            if (isStreaming && isRecording) {
+                                sendAudioChunk(event.data);
+                            }
+                        }
+                    };
+                    
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        audioPlayer.src = audioUrl;
+                        audioPlayer.style.display = 'block';
+                        
+                        if (!isStreaming) {
+                            // Process full recording when not streaming
+                            processAudioBlob(audioBlob);
+                        }
+                    };
+                    
+                    // Start recording with specified chunk size if streaming
+                    const chunkSize = isStreaming ? parseInt(chunkSizeInput.value) * 1000 : 1000;
+                    mediaRecorder.start(chunkSize);
+                    
+                    isRecording = true;
+                    recordBtn.disabled = true;
+                    stopBtn.disabled = false;
+                    recordingIndicator.style.display = 'flex';
+                    
+                    // Initialize speech recognition if not streaming
+                    if (!isStreaming) {
+                        initSpeechRecognition();
+                    }
+                    
+                } catch (error) {
+                    console.error('Error accessing microphone:', error);
+                    alert('Could not access microphone. Please ensure you have granted permission.');
+                }
             }
+            
+            // Stop recording
+            function stopRecording() {
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                    
+                    isRecording = false;
+                    recordBtn.disabled = false;
+                    stopBtn.disabled = true;
+                    recordingIndicator.style.display = 'none';
+                    
+                    if (recognition) {
+                        recognition.stop();
+                    }
+                    
+                    if (chunkInterval) {
+                        clearInterval(chunkInterval);
+                    }
+                }
+            }
+            
+            // Initialize speech recognition (for non-streaming)
+            function initSpeechRecognition() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                
+                if (!SpeechRecognition) {
+                    alert('Speech recognition not supported in your browser. Try Chrome or Edge.');
+                    return;
+                }
+                
+                recognition = new SpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = languageSelect.value;
+                
+                recognition.onresult = function(event) {
+                    let interimTranscript = '';
+                    let finalTranscript = '';
+                    
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        const transcript = event.results[i][0].transcript;
+                        if (event.results[i].isFinal) {
+                            finalTranscript += transcript + ' ';
+                        } else {
+                            interimTranscript += transcript;
+                        }
+                    }
+                    
+                    if (finalTranscript) {
+                        const p = document.createElement('p');
+                        p.textContent = finalTranscript;
+                        transcriptionResult.appendChild(p);
+                    }
+                    
+                    transcriptionResult.scrollTop = transcriptionResult.scrollHeight;
+                };
+                
+                recognition.onerror = function(event) {
+                    console.error('Recognition error:', event.error);
+                };
+                
+                recognition.onend = function() {
+                    if (isRecording) {
+                        recognition.start();
+                    }
+                };
+                
+                recognition.start();
+            }
+            
+            // Send audio chunk to backend (simulated)
+            function sendAudioChunk(chunk) {
+                // In a real implementation, you would:
+                // 1. Use WebSocket for real-time streaming
+                // 2. Or send chunks via HTTP with proper sequencing
+                
+                console.log('Sending audio chunk to backend...', chunk.size);
+                
+                // Simulate processing delay
+                setTimeout(() => {
+                    const p = document.createElement('p');
+                    p.textContent = `[Chunk processed] Partial transcription would appear here...`;
+                    p.className = 'text-info';
+                    transcriptionResult.appendChild(p);
+                    transcriptionResult.scrollTop = transcriptionResult.scrollHeight;
+                }, 1000);
+            }
+            
+            // Process full audio blob (for non-streaming)
+            function processAudioBlob(blob) {
+                console.log('Processing full audio recording...');
+                
+                // Simulate processing delay
+                setTimeout(() => {
+                    const p = document.createElement('p');
+                    p.textContent = `[Full recording processed] Transcription would appear here...`;
+                    transcriptionResult.appendChild(p);
+                    transcriptionResult.scrollTop = transcriptionResult.scrollHeight;
+                }, 2000);
+            }
+            
+            // Save recording to file input
+            saveBtn.addEventListener('click', function() {
+                if (audioChunks.length > 0) {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    
+                    // Create a fake file input for the recording
+                    const file = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    audioFileInput.files = dataTransfer.files;
+                    
+                    alert('Recording has been saved to the upload field');
+                } else {
+                    alert('No recording available to save');
+                }
+            });
+            
+            // Event listeners
+            recordBtn.addEventListener('click', startRecording);
+            stopBtn.addEventListener('click', stopRecording);
+            
+            // ... (keep your existing event listeners for copy, clear, etc) ...
         });
     </script>
 </body>

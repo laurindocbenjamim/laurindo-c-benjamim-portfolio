@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Speech to Text Converter">
-    <meta property="og:description" content="Upload audio or video files to convert speech to text">
+    <meta property="og:description" content="Upload audio or video files and split it">
     <meta property="og:image"
         content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
 
-    <title>Speech to Text Converter | Laurindo C. Benjamim</title>
-    <link rel="icon" type="image/x-icon" href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
+    <title>Audio Splitter | Laurindo C. Benjamim</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
@@ -501,6 +502,14 @@
             font-size: 0.9rem;
         }
 
+        .progress-container {
+            margin-bottom: 15px;
+        }
+
+        .progress-bar-animated {
+            transition: width 0.3s ease;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 1200px) {
             .sidebar {
@@ -541,21 +550,22 @@
                 top: 15px;
                 right: 15px;
             }
-            
+
             .btn-auth {
                 padding: 0.35rem 0.7rem;
                 font-size: 0.8rem;
             }
-            
+
             .btn-auth span {
-                display: none; /* Hide text on small mobile */
+                display: none;
+                /* Hide text on small mobile */
             }
-            
+
             .btn-auth i {
                 margin-right: 0;
                 font-size: 0.9rem;
             }
-            
+
             /* Ensure buttons are visible on mobile */
             .auth-buttons {
                 background: rgba(15, 23, 42, 0.8);
@@ -584,12 +594,13 @@
 <body>
 
     <!-- Auth Buttons - Now positioned top-right -->
-   
+
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="/">Laurindo C. Benjamim <span style="color: #23acd6;">.PID<span style="color: #38d840;">IO</span></span></a>
+            <a class="navbar-brand" href="/">Laurindo C. Benjamim <span style="color: #23acd6;">.PID<span
+                        style="color: #38d840;">IO</span></span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -735,17 +746,16 @@
             <div class="col-lg-9">
                 <div class="upload-container">
                     <div class="upload-header">
-                        <h1 class="upload-title">Speech to Text Converter</h1>
-                        <p class="upload-description">Upload your audio or video files to convert speech to text with
-                            high accuracy. Our service supports multiple formats and languages.</p>
+                        <h1 class="upload-title">Audio Splitter</h1>
+                        <p class="upload-description">Upload your audio or video files to split</p>
                     </div>
 
                     <form id="uploadForm" class="needs-validation" enctype="multipart/form-data" novalidate>
-                        
+
                         <div class="form-group">
-                            <label for="fileInput" class="form-label">Select File</label>
+                            <label for="audioFile" class="form-label">Select File</label>
                             <div class="file-upload-wrapper">
-                                <input type="file" id="fileInput" name="fileInput" class="file-upload-input"
+                                <input type="file" id="audioFile" name="audioFile" class="file-upload-input"
                                     accept="audio/*,video/*" required>
                                 <label for="fileInput" class="file-upload-label">
                                     <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
@@ -768,36 +778,62 @@
                                 <span class="format-badge">MKV</span>
                             </div>
                         </div>
-                        
 
-                        <div class="form-group">
-                            <label for="languageSelect" class="form-label">Output Language</label>
-                            <select id="languageSelect" name="languageSelect" class="form-select" required>
-                                <option value="">Select language</option>
-                                <option value="en">English</option>
-                                <option value="es">Spanish</option>
-                                <option value="fr">French</option>
-                                <option value="de">German</option>
-                                <option value="pt">Portuguese</option>
-                                <option value="other">Other (auto-detect)</option>
-                            </select>
+                        <!-- Add this after the results div but before the status div -->
+                        <div id="decodeProgressContainer" class="progress-container d-none mt-3">
+                            <div class="progress">
+                                <div id="decodeProgress" class="progress-bar progress-bar-striped progress-bar-animated"
+                                    role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small id="decodeProgressText" class="text-muted">Decoding audio: 0%</small>
                         </div>
 
-                        <div class="form-group">
-                            <label for="outputFormat" class="form-label">Output Format</label>
-                            <select id="outputFormat" name="outputFormat" class="form-select">
-                                <option value="plain">Plain Text</option>
-                                <!--<option value="srt">SubRip (SRT)</option>
-                                <option value="vtt">WebVTT</option>
-                                <option value="json">JSON</option>-->
-                            </select>
+
+                        <div id="audioInfo" class="mb-3 d-none">
+                            <h5>Audio Information</h5>
+                            <p id="fileName"></p>
+                            <p id="fileDuration"></p>
+                            <audio id="audioPlayer" controls class="w-100 mb-3"></audio>
                         </div>
 
-                        <button type="submit" class="btn-submit">
-                            <i class="fas fa-exchange-alt"></i>
-                            <span id="submit-title">Convert to Text</span>
+                        <div class="mb-4">
+                            <div class="form-group">
+                                <label for="numberOfChunks" class="form-label">Number of chunks</label>
+                                <select id="numberOfChunks" name="numberOfChunks" class="form-select" required>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
 
-                        </button>
+
+                        <div id="splitControls" class="mb-3 d-none">
+                            <button id="splitBtn" class="btn btn-primary">Split Audio into 3 Parts</button>
+                        </div>
+
+                        <div id="results" class="d-none">
+                            <h5>Split Results</h5>
+                            <div class="row" id="audioParts">
+                                <!-- Parts will be added here dynamically -->
+                            </div>
+                            <div class="mt-3">
+                                <button id="sendToServerBtn" type="submit" class="btn btn-success">Send All to
+                                    Server</button>
+                            </div>
+                        </div>
+
+                        <div id="uploadProgressContainer" class="progress-container d-none mt-3">
+                            <div class="progress">
+                                <div id="uploadProgress" class="progress-bar progress-bar-striped progress-bar-animated"
+                                    role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small id="uploadProgressText" class="text-muted">Uploading to server: 0%</small>
+                        </div>
+
+                        <div id="status" class="mt-3"></div>
 
                         <div class="form-group">
                             <div id="errorMessage" class="text-danger mt-2"></div>
@@ -805,24 +841,13 @@
                         </div>
 
                         <div class="d-flex justify-content-center">
-                            <div id="spinnerBorder" class="spinner-border" style="display: none;" role="status">
+                            <div id="spinnerBorder2" class="spinner-border" style="display: none;" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
                         </div>
 
                     </form>
 
-                    <div class="results-container" id="resultsContainer">
-                        <div class="results-header">
-                            <h3 class="results-title">Transcription Results</h3>
-                            <button class="copy-btn" id="copyBtn">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
-                        </div>
-                        <div class="results-content" id="resultsContent">
-                            <!-- Transcription results will appear here -->
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -871,231 +896,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    <script src="request_factory.js"></script>
-    <script>
-
-        const request = new RequestFactory();
-
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-
-                window.scrollTo({
-                    top: targetElement.offsetTop - 100,
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Mobile sidebar toggle
-        const mobileSidebarToggle = document.querySelector('.mobile-sidebar-toggle');
-        const mobileSidebar = document.querySelector('.mobile-sidebar');
-        const mobileSidebarClose = document.querySelector('.mobile-sidebar-close');
-        const mobileSidebarOverlay = document.querySelector('.mobile-sidebar-overlay');
-
-        function toggleMobileSidebar() {
-            mobileSidebar.classList.toggle('active');
-            mobileSidebarOverlay.classList.toggle('active');
-            document.body.style.overflow = mobileSidebar.classList.contains('active') ? 'hidden' : '';
-        }
-
-        mobileSidebarToggle.addEventListener('click', toggleMobileSidebar);
-        mobileSidebarClose.addEventListener('click', toggleMobileSidebar);
-        mobileSidebarOverlay.addEventListener('click', toggleMobileSidebar);
-
-        // Close sidebar when clicking on a link
-        document.querySelectorAll('.mobile-sidebar a').forEach(link => {
-            link.addEventListener('click', toggleMobileSidebar);
-        });
-
-        // Prevent body scroll when sidebar is open
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && mobileSidebar.classList.contains('active')) {
-                toggleMobileSidebar();
-            }
-        });
-
-        // File upload form handling
-        const submitTitle = document.getElementById('submit-title');
-        const uploadForm = document.getElementById('uploadForm');
-        const fileInput = document.getElementById('fileInput');
-        const resultsContainer = document.getElementById('resultsContainer');
-        const resultsContent = document.getElementById('resultsContent');
-        const copyBtn = document.getElementById('copyBtn');
-        const spinnerBorder = document.getElementById('spinnerBorder');
-        const errorMessage = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessage');
-
-        const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
-
-        uploadForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            if (!uploadForm.checkValidity()) {
-                event.stopPropagation();
-                uploadForm.classList.add("was-validated");
-
-                return;
-            }
-
-            spinnerBorder.style.display = 'block';
-
-            // Simulate processing (in a real app, this would be an API call)
-            if (fileInput.files.length > 0) {
-                const fileName = fileInput.files[0].name;
-
-                if (fileInput.files[0].size > MAX_FILE_SIZE) {
-                    errorMessage.innerText = 'File is too large! Maximum allowed size is 25MB.';
-                    successMessage.innerText = '';
-                    spinnerBorder.style.display = 'none';
-                    return;
-                }
-                errorMessage.innerText = '';
-                successMessage.innerText = '';
-
-                const formData = new FormData(event.target)
-
-                // Show loading state
-                resultsContent.innerHTML = '<p>Processing your file... Please wait.</p>';
-                resultsContainer.style.display = 'block';
-
-                // Simulate processing delay
-                setTimeout(async () => {
-
-                    //
-                    //const formData = JSON.stringify({ "file": form.get('fileInput'), 
-                    //"language": form.get('languageSelect'), 
-                    //"outputFormat": form.get('outputFormat') });
-
-                    const options = {
-                        method: 'post',
-                        body: formData,
-                        credentials: 'include',
-                        mode: 'cors',
-                        headers: {
-                            //'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': request.getCookie('csrf_access_token'),
-                        },
-                    };
-                    console.log("Login with cookies tarting...")
-
-                    console.log(formData.get('languageSelect'))
-
-                    const response = await request.makeRequest(options, '/api/v1/speech_recognition/convert-audio-speech-into-text')
-                    console.log(response)
-
-                    let message = null;
-
-                    if (response === null) {
-                        //cleanAlerts()
-                        //errorMessage.textContent = 'Failed to login! Please try again later.';
-                        return;
-                    } if (!response.ok) {
-
-                        //message = await request.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
-                        resultsContent.innerHTML = !response.error ? response.transcription : `<span class="text-danger">${response.error}</span>`;
-                    }
-                    // This is just sample text - in a real app, you would get this from your speech-to-text API
-                    //const sampleText = `This is a sample transcription of your audio/video file: ${fileName}\n\n`;
-                    //const loremIpsum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.\n\n`;
-
-                    //sampleText + loremIpsum.repeat(5);
-
-                    // Scroll to results
-                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
-                    spinnerBorder.style.display = 'none';
-                }, 2000);
-            }
-            
-
-        });
-
-        // Copy results to clipboard
-        copyBtn.addEventListener('click', function () {
-            const range = document.createRange();
-            range.selectNode(resultsContent);
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
-            document.execCommand('copy');
-            window.getSelection().removeAllRanges();
-
-            // Show copied feedback
-            const originalText = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-            setTimeout(() => {
-                copyBtn.innerHTML = originalText;
-            }, 2000);
-        });
-
-        // File input styling
-        fileInput.addEventListener('change', function () {
-            if (this.files.length > 0) {
-                const fileName = this.files[0].name;
-                const fileUploadLabel = document.querySelector('.file-upload-label');
-                
-                if (this.files[0].size > MAX_FILE_SIZE) {
-                    alert('File is too large! Maximum allowed size is 25MB.')
-                    errorMessage.innerText = 'File is too large! Maximum allowed size is 25MB.';
-                    successMessage.innerText = '';
-                    fileInput.value = ''; // Clear the file input
-                    return;
-                }
-                errorMessage.innerText = '';
-                successMessage.innerText = '';
-
-                fileUploadLabel.innerHTML = `
-                    <i class="fas fa-file-alt file-upload-icon"></i>
-                    <span class="file-upload-text">${fileName}</span>
-                    <span class="file-upload-hint">Click to change file</span>
-                `;
-            }
-        });
-
-        // Drag and drop functionality
-        const fileUploadWrapper = document.querySelector('.file-upload-wrapper');
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            fileUploadWrapper.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            fileUploadWrapper.addEventListener(eventName, highlight, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            fileUploadWrapper.addEventListener(eventName, unhighlight, false);
-        });
-
-        function highlight() {
-            fileUploadWrapper.classList.add('highlight');
-        }
-
-        function unhighlight() {
-            fileUploadWrapper.classList.remove('highlight');
-        }
-
-        fileUploadWrapper.addEventListener('drop', handleDrop, false);
-
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            fileInput.files = files;
-
-            // Trigger change event
-            const event = new Event('change');
-            fileInput.dispatchEvent(event);
-        }
-    </script>
+    <script src="split_audio.js"></script>
 </body>
 
 </html>

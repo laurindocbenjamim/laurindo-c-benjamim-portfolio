@@ -11,9 +11,11 @@
         content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
 
     <title>Speech to Text Converter | Laurindo C. Benjamim</title>
-    <link rel="icon" type="image/x-icon" href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
+    <link rel="icon" type="image/x-icon"
+        href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -501,6 +503,94 @@
             font-size: 0.9rem;
         }
 
+        .wave-container {
+            height: 100px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .wave-bar {
+            background: var(--primary-color);
+            width: 8px;
+            height: 10px;
+            border-radius: 4px;
+            transition: height 0.05s ease-out;
+        }
+
+        .no-audio {
+            position: absolute;
+            color: #64748b;
+        }
+
+        .recording-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            color: #ef4444;
+            margin: 10px 0;
+        }
+
+        .pulse {
+            width: 12px;
+            height: 12px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+        }
+
+        .btn-record {
+            transition: all 0.2s;
+        }
+
+        .upload-section {
+            margin-bottom: 20px;
+        }
+
+        .recording-mode {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .chunk-alert {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            max-width: 300px;
+            display: none;
+            z-index: 1000;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 1200px) {
             .sidebar {
@@ -541,21 +631,22 @@
                 top: 15px;
                 right: 15px;
             }
-            
+
             .btn-auth {
                 padding: 0.35rem 0.7rem;
                 font-size: 0.8rem;
             }
-            
+
             .btn-auth span {
-                display: none; /* Hide text on small mobile */
+                display: none;
+                /* Hide text on small mobile */
             }
-            
+
             .btn-auth i {
                 margin-right: 0;
                 font-size: 0.9rem;
             }
-            
+
             /* Ensure buttons are visible on mobile */
             .auth-buttons {
                 background: rgba(15, 23, 42, 0.8);
@@ -584,12 +675,13 @@
 <body>
 
     <!-- Auth Buttons - Now positioned top-right -->
-   
+
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="/">Laurindo C. Benjamim <span style="color: #23acd6;">.PID<span style="color: #38d840;">IO</span></span></a>
+            <a class="navbar-brand" href="/">Laurindo C. Benjamim <span style="color: #23acd6;">.PID<span
+                        style="color: #38d840;">IO</span></span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -740,20 +832,28 @@
                             high accuracy. Our service supports multiple formats and languages.</p>
                     </div>
 
-                    <form id="uploadForm" class="needs-validation" enctype="multipart/form-data" novalidate>
-                        
-                        <div class="form-group">
-                            <label for="fileInput" class="form-label">Select File</label>
-                            <div class="file-upload-wrapper">
-                                <input type="file" id="fileInput" name="fileInput" class="file-upload-input"
-                                    accept="audio/*,video/*" required>
-                                <label for="fileInput" class="file-upload-label">
-                                    <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
-                                    <span class="file-upload-text">Drag & drop your file here or click to browse</span>
-                                    <span class="file-upload-hint">Max file size: 100MB</span>
-                                </label>
+                    <div id="uploadFor" class="needs-validation" enctype="multipart/form-data" novalidate>
+
+                        <h2 class="card-title"><i class="fas fa-microphone me-2"></i>Audio Recorder</h2>
+
+                        <!-- Recording Mode Selection -->
+                        <div class="recording-mode">
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="streamingToggle">
+                                <label class="form-check-label" for="streamingToggle">Enable Streaming Mode</label>
+                            </div>
+                            <div id="streamingOptions" style="display: none;">
+                                <div class="mb-2">
+                                    <label class="form-label">Chunk Size (seconds)</label>
+                                    <input type="number" id="chunkSize" class="form-control" min="1" max="10" value="2">
+                                </div>
+                                <p class="text-muted small">Audio will be processed in real-time chunks</p>
                             </div>
                         </div>
+
+                        <audio id="uploadedAudioPlayer" class="w-100 mt-2" controls style="display: none;"></audio>
+
+
 
                         <div class="supported-formats">
                             <div class="supported-formats-title">Supported formats:</div>
@@ -768,30 +868,32 @@
                                 <span class="format-badge">MKV</span>
                             </div>
                         </div>
-                        
 
-                        <div class="form-group">
-                            <label for="languageSelect" class="form-label">Output Language</label>
-                            <select id="languageSelect" name="languageSelect" class="form-select" required>
-                                <option value="">Select language</option>
-                                <option value="en">English</option>
-                                <option value="es">Spanish</option>
-                                <option value="fr">French</option>
-                                <option value="de">German</option>
-                                <option value="pt">Portuguese</option>
-                                <option value="other">Other (auto-detect)</option>
-                            </select>
+
+                        <!-- Waveform Display -->
+                        <div class="wave-container">
+                            <div class="wave" id="waveform"></div>
+                            <div class="no-audio" id="noAudio">Microphone is inactive</div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="outputFormat" class="form-label">Output Format</label>
-                            <select id="outputFormat" name="outputFormat" class="form-select">
-                                <option value="plain">Plain Text</option>
-                                <!--<option value="srt">SubRip (SRT)</option>
-                                <option value="vtt">WebVTT</option>
-                                <option value="json">JSON</option>-->
-                            </select>
+                        <!-- Recording Controls -->
+                        <div class="d-flex gap-2 mb-3">
+                            <button id="recordBtn" class="btn btn-danger btn-record flex-grow-1">
+                                <i class="fas fa-microphone me-2"></i>Start Recording
+                            </button>
+                            <button id="stopBtn" class="btn btn-secondary" disabled>
+                                <i class="fas fa-stop me-2"></i>Stop
+                            </button>
                         </div>
+
+                        <div class="recording-indicator">
+                            <div class="pulse"></div>
+                            <span>Recording audio...</span>
+                        </div>
+
+                        <!-- Recorded Audio Player -->
+                        <audio id="recordedAudioPlayer" class="w-100 mt-3" controls style="display: none;"></audio>
+
 
                         <button type="submit" class="btn-submit">
                             <i class="fas fa-exchange-alt"></i>
@@ -810,7 +912,7 @@
                             </div>
                         </div>
 
-                    </form>
+                    </div>
 
                     <div class="results-container" id="resultsContainer">
                         <div class="results-header">
@@ -872,6 +974,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     <script src="request_factory.js"></script>
+    <script src="stream_record.js"></script>
     <script>
 
         const request = new RequestFactory();
@@ -923,7 +1026,7 @@
         // File upload form handling
         const submitTitle = document.getElementById('submit-title');
         const uploadForm = document.getElementById('uploadForm');
-        const fileInput = document.getElementById('fileInput');
+        const audioUpload = document.getElementById('audioUpload');
         const resultsContainer = document.getElementById('resultsContainer');
         const resultsContent = document.getElementById('resultsContent');
         const copyBtn = document.getElementById('copyBtn');
@@ -946,10 +1049,10 @@
             spinnerBorder.style.display = 'block';
 
             // Simulate processing (in a real app, this would be an API call)
-            if (fileInput.files.length > 0) {
-                const fileName = fileInput.files[0].name;
+            if (audioUpload.files.length > 0) {
+                const fileName = audioUpload.files[0].name;
 
-                if (fileInput.files[0].size > MAX_FILE_SIZE) {
+                if (audioUpload.files[0].size > MAX_FILE_SIZE) {
                     errorMessage.innerText = 'File is too large! Maximum allowed size is 25MB.';
                     successMessage.innerText = '';
                     spinnerBorder.style.display = 'none';
@@ -968,7 +1071,7 @@
                 setTimeout(async () => {
 
                     //
-                    //const formData = JSON.stringify({ "file": form.get('fileInput'), 
+                    //const formData = JSON.stringify({ "file": form.get('audioUpload'), 
                     //"language": form.get('languageSelect'), 
                     //"outputFormat": form.get('outputFormat') });
 
@@ -1011,7 +1114,7 @@
                     spinnerBorder.style.display = 'none';
                 }, 2000);
             }
-            
+
 
         });
 
@@ -1033,16 +1136,16 @@
         });
 
         // File input styling
-        fileInput.addEventListener('change', function () {
+        audioUpload.addEventListener('change', function () {
             if (this.files.length > 0) {
                 const fileName = this.files[0].name;
                 const fileUploadLabel = document.querySelector('.file-upload-label');
-                
+
                 if (this.files[0].size > MAX_FILE_SIZE) {
                     alert('File is too large! Maximum allowed size is 25MB.')
                     errorMessage.innerText = 'File is too large! Maximum allowed size is 25MB.';
                     successMessage.innerText = '';
-                    fileInput.value = ''; // Clear the file input
+                    audioUpload.value = ''; // Clear the file input
                     return;
                 }
                 errorMessage.innerText = '';
@@ -1089,11 +1192,11 @@
         function handleDrop(e) {
             const dt = e.dataTransfer;
             const files = dt.files;
-            fileInput.files = files;
+            audioUpload.files = files;
 
             // Trigger change event
             const event = new Event('change');
-            fileInput.dispatchEvent(event);
+            audioUpload.dispatchEvent(event);
         }
     </script>
 </body>
