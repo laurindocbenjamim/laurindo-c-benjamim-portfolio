@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-Browser Audio Recorder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+            --text-color: #f8fafc;
+            --dark-bg: #0f172a;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            padding: 20px 10px;
+        }
+
+        .wave-container {
+            height: 100px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .wave-bar {
+            background: var(--primary-color);
+            width: 6px;
+            height: 10px;
+            border-radius: 3px;
+            transition: height 0.05s ease-out;
+        }
+
+        .no-audio {
+            position: absolute;
+            color: #64748b;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .recording-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            color: #ef4444;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .pulse {
+            width: 10px;
+            height: 10px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        .btn-record {
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .recording-mode {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .browser-warning {
+            display: none;
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 576px) {
+            .btn-record {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.85rem;
+            }
+            
+            .wave-bar {
+                width: 4px;
+                gap: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card bg-dark border-light">
+            <div class="card-body">
+                <h2 class="card-title h5"><i class="fas fa-microphone me-2"></i>Audio Recorder</h2>
+                
+                <!-- Browser warning -->
+                <div class="browser-warning" id="browserWarning">
+                    For best results, use Chrome, Edge, or Firefox on mobile devices. Safari has limited support.
+                </div>
+
+                <!-- Recording Mode Selection -->
+                <div class="recording-mode">
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" id="streamingToggle">
+                        <label class="form-check-label" for="streamingToggle">Streaming Mode</label>
+                    </div>
+                    <div id="streamingOptions" style="display: none;">
+                        <div class="mb-2">
+                            <label class="form-label small">Chunk Size (seconds)</label>
+                            <input type="number" id="chunkSize" class="form-control form-control-sm" min="1" max="10" value="2">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Waveform Display -->
+                <div class="wave-container">
+                    <div class="wave" id="waveform"></div>
+                    <div class="no-audio" id="noAudio">Press record to start microphone</div>
+                </div>
+
+                <!-- Recording Controls -->
+                <div class="d-flex gap-2 mb-3">
+                    <button id="recordBtn" class="btn btn-danger btn-record flex-grow-1">
+                        <i class="fas fa-microphone me-2"></i>Record
+                    </button>
+                    <button id="stopBtn" class="btn btn-secondary btn-record" disabled>
+                        <i class="fas fa-stop me-2"></i>Stop
+                    </button>
+                </div>
+
+                <div class="recording-indicator">
+                    <div class="pulse"></div>
+                    <span>Recording in progress...</span>
+                </div>
+
+                <!-- Audio Players -->
+                <audio id="recordedAudioPlayer" class="w-100 mt-3" controls style="display: none;"></audio>
+                <div class="text-center small text-muted mt-2" id="recordingStatus"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const recordBtn = document.getElementById('recordBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const waveform = document.getElementById('waveform');
+            const noAudio = document.getElementById('noAudio');
+            const recordedAudioPlayer = document.getElementById('recordedAudioPlayer');
+            const recordingIndicator = document.querySelector('.recording-indicator');
+            const streamingToggle = document.getElementById('streamingToggle');
+            const streamingOptions = document.getElementById('streamingOptions');
+            const chunkSizeInput = document.getElementById('chunkSize');
+            const browserWarning = document.getElementById('browserWarning');
+            const recordingStatus = document.getElementById('recordingStatus');
+            
+            // Audio variables
+            let audioContext;
+            let analyser;
+            let microphone;
+            let mediaRecorder;
+            let audioChunks = [];
+            let isRecording = false;
+            let isStreaming = false;
+            let animationId;
+            const barCount = 16; // Reduced for mobile
+            
+            // Check browser compatibility
+            function checkCompatibility() {
+                const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                
+                if (isSafari || isIOS) {
+                    browserWarning.style.display = 'block';
+                    recordingStatus.textContent = "Note: Safari has limited recording capabilities";
+                }
+                
+                // Check for MediaRecorder support
+                if (!window.MediaRecorder) {
+                    browserWarning.style.display = 'block';
+                    browserWarning.innerHTML = "Your browser doesn't support audio recording. Please use Chrome, Edge, or Firefox.";
+                    recordBtn.disabled = true;
+                }
+            }
+            
+            // Create waveform bars
+            function createWaveformBars() {
+                waveform.innerHTML = '';
+                for (let i = 0; i < barCount; i++) {
+                    const bar = document.createElement('div');
+                    bar.className = 'wave-bar';
+                    bar.style.height = '5px';
+                    waveform.appendChild(bar);
+                }
+            }
+            
+            // Get supported mimeType
+            function getSupportedMimeType() {
+                const types = [
+                    'audio/webm;codecs=opus',
+                    'audio/ogg;codecs=opus',
+                    'audio/mp4',
+                    'audio/mpeg'
+                ];
+                
+                for (let type of types) {
+                    if (MediaRecorder.isTypeSupported(type)) {
+                        return type;
+                    }
+                }
+                
+                return '';
+            }
+            
+            // Initialize audio context
+            async function initAudioContext() {
+                try {
+                    // Cross-browser AudioContext
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    audioContext = new AudioContext();
+                    
+                    // Resume context on user interaction (iOS requirement)
+                    if (audioContext.state === 'suspended') {
+                        await audioContext.resume();
+                    }
+                    
+                    analyser = audioContext.createAnalyser();
+                    analyser.fftSize = 32; // Reduced for mobile performance
+                    
+                    createWaveformBars();
+                    return true;
+                } catch (error) {
+                    console.error('AudioContext error:', error);
+                    recordingStatus.textContent = "Audio initialization failed: " + error.message;
+                    return false;
+                }
+            }
+            
+            // Start recording
+            async function startRecording() {
+                try {
+                    if (!audioContext && !(await initAudioContext())) {
+                        throw new Error('Audio context initialization failed');
+                    }
+                    
+                    isStreaming = streamingToggle.checked;
+                    
+                    // Get user media with cross-browser fallbacks
+                    const constraints = {
+                        audio: {
+                            echoCancellation: false,
+                            noiseSuppression: false,
+                            autoGainControl: false,
+                            channelCount: 1 // Mono for better mobile support
+                        },
+                        video: false
+                    };
+                    
+                    const stream = await navigator.mediaDevices.getUserMedia(constraints)
+                        .catch(err => {
+                            // Handle permission errors
+                            if (err.name === 'NotAllowedError') {
+                                throw new Error('Microphone access was denied. Please allow microphone access.');
+                            }
+                            throw err;
+                        });
+                    
+                    // Connect audio nodes
+                    microphone = audioContext.createMediaStreamSource(stream);
+                    analyser = audioContext.createAnalyser();
+                    microphone.connect(analyser);
+                    
+                    // Get supported mimeType
+                    const mimeType = getSupportedMimeType();
+                    if (!mimeType) {
+                        throw new Error('No supported recording format found');
+                    }
+                    
+                    // Setup MediaRecorder with cross-browser options
+                    const options = { mimeType };
+                    if (isStreaming) {
+                        options.audioBitsPerSecond = 96000; // Lower bitrate for streaming
+                    } else {
+                        options.audioBitsPerSecond = 128000;
+                    }
+                    
+                    mediaRecorder = new MediaRecorder(stream, options);
+                    
+                    mediaRecorder.ondataavailable = (event) => {
+                        if (event.data.size > 0) {
+                            audioChunks.push(event.data);
+                            
+                            if (isStreaming) {
+                                // Show streaming chunk info
+                                recordingStatus.textContent = `Streaming chunk: ${(event.data.size/1024).toFixed(1)}KB`;
+                                console.log('Streaming chunk:', event.data.size, 'bytes');
+                            }
+                        }
+                    };
+                    
+                    mediaRecorder.onstop = () => {
+                        if (!isStreaming && audioChunks.length > 0) {
+                            const blobType = mediaRecorder.mimeType.split(';')[0];
+                            const audioBlob = new Blob(audioChunks, { type: blobType });
+                            const audioUrl = URL.createObjectURL(audioBlob);
+                            recordedAudioPlayer.src = audioUrl;
+                            recordedAudioPlayer.style.display = 'block';
+                            recordingStatus.textContent = `Recording complete (${(audioBlob.size/1024).toFixed(1)}KB)`;
+                        }
+                        
+                        audioChunks = [];
+                        cancelAnimationFrame(animationId);
+                    };
+                    
+                    mediaRecorder.onerror = (event) => {
+                        console.error('MediaRecorder error:', event.error);
+                        recordingStatus.textContent = "Recording error: " + event.error;
+                        stopRecording();
+                    };
+                    
+                    // Start recording with appropriate chunk size
+                    const chunkSize = isStreaming ? parseInt(chunkSizeInput.value) * 1000 : 100;
+                    mediaRecorder.start(chunkSize);
+                    
+                    // Update UI
+                    isRecording = true;
+                    recordBtn.disabled = true;
+                    stopBtn.disabled = false;
+                    recordingIndicator.style.display = 'flex';
+                    noAudio.style.display = 'none';
+                    recordedAudioPlayer.style.display = 'none';
+                    recordingStatus.textContent = isStreaming ? "Streaming started..." : "Recording started...";
+                    
+                    // Start visualization
+                    visualizeWaveform();
+                    
+                } catch (error) {
+                    console.error('Recording error:', error);
+                    recordingStatus.textContent = "Error: " + error.message;
+                    stopRecording();
+                }
+            }
+            
+            // Visualize waveform (optimized for mobile)
+            function visualizeWaveform() {
+                if (!isRecording) return;
+                
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                analyser.getByteFrequencyData(dataArray);
+                
+                const bars = document.querySelectorAll('.wave-bar');
+                bars.forEach((bar, i) => {
+                    const value = dataArray[i % bufferLength] / 255;
+                    const height = 5 + (value * 50); // Reduced range for mobile
+                    bar.style.height = `${height}px`;
+                    bar.style.opacity = 0.5 + (value * 0.5);
+                });
+                
+                animationId = requestAnimationFrame(visualizeWaveform);
+            }
+            
+            // Stop recording
+            function stopRecording() {
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                    
+                    if (microphone) {
+                        microphone.disconnect();
+                    }
+                    
+                    isRecording = false;
+                    recordBtn.disabled = false;
+                    stopBtn.disabled = true;
+                    recordingIndicator.style.display = 'none';
+                    
+                    cancelAnimationFrame(animationId);
+                }
+            }
+            
+            // Toggle streaming options
+            streamingToggle.addEventListener('change', function() {
+                isStreaming = this.checked;
+                streamingOptions.style.display = isStreaming ? 'block' : 'none';
+            });
+            
+            // Initialize
+            checkCompatibility();
+            createWaveformBars();
+            
+            // Event listeners
+            recordBtn.addEventListener('click', startRecording);
+            stopBtn.addEventListener('click', stopRecording);
+            
+            // Handle mobile browser page visibility changes
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden && isRecording) {
+                    recordingStatus.textContent = "Warning: Recording may stop when app is in background";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
