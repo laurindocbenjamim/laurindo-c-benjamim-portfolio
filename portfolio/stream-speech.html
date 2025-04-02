@@ -84,6 +84,10 @@
             font-size: 0.9rem;
         }
 
+        .upload-section {
+            margin-bottom: 20px;
+        }
+
         .recording-mode {
             background: rgba(0, 0, 0, 0.1);
             padding: 12px;
@@ -101,6 +105,15 @@
             font-size: 0.85rem;
         }
 
+        .chunk-alert {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            max-width: 300px;
+            z-index: 1000;
+            display: none;
+        }
+
         @media (max-width: 576px) {
             .btn-record {
                 padding: 0.375rem 0.75rem;
@@ -110,6 +123,13 @@
             .wave-bar {
                 width: 4px;
                 gap: 3px;
+            }
+            
+            .chunk-alert {
+                bottom: 10px;
+                right: 10px;
+                max-width: 200px;
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -137,6 +157,18 @@
                             <input type="number" id="chunkSize" class="form-control form-control-sm" min="1" max="10" value="2">
                         </div>
                     </div>
+                </div>
+
+                <!-- File Upload Section -->
+                <div class="upload-section">
+                    <label for="audioUpload" class="form-label">Upload Audio File</label>
+                    <div class="input-group">
+                        <input type="file" class="form-control" id="audioUpload" accept="audio/*">
+                        <button class="btn btn-outline-secondary" type="button" id="playUploadedBtn" disabled>
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                    <audio id="uploadedAudioPlayer" class="w-100 mt-2" controls style="display: none;"></audio>
                 </div>
 
                 <!-- Waveform Display -->
@@ -167,6 +199,12 @@
         </div>
     </div>
 
+    <!-- Chunk Alert -->
+    <div class="alert alert-info chunk-alert" id="chunkAlert">
+        <strong>Streaming Chunk Sent</strong>
+        <div>Size: <span id="chunkSizeDisplay">0</span> KB</div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // DOM elements
@@ -176,11 +214,16 @@
             const noAudio = document.getElementById('noAudio');
             const recordedAudioPlayer = document.getElementById('recordedAudioPlayer');
             const recordingIndicator = document.querySelector('.recording-indicator');
+            const audioUpload = document.getElementById('audioUpload');
+            const playUploadedBtn = document.getElementById('playUploadedBtn');
+            const uploadedAudioPlayer = document.getElementById('uploadedAudioPlayer');
             const streamingToggle = document.getElementById('streamingToggle');
             const streamingOptions = document.getElementById('streamingOptions');
             const chunkSizeInput = document.getElementById('chunkSize');
             const browserWarning = document.getElementById('browserWarning');
             const recordingStatus = document.getElementById('recordingStatus');
+            const chunkAlert = document.getElementById('chunkAlert');
+            const chunkSizeDisplay = document.getElementById('chunkSizeDisplay');
             
             // Audio variables
             let audioContext;
@@ -240,6 +283,15 @@
                 return '';
             }
             
+            // Show chunk alert
+            function showChunkAlert(size) {
+                chunkSizeDisplay.textContent = (size / 1024).toFixed(2);
+                chunkAlert.style.display = 'block';
+                setTimeout(() => {
+                    chunkAlert.style.display = 'none';
+                }, 2000);
+            }
+            
             // Initialize audio context
             async function initAudioContext() {
                 try {
@@ -262,6 +314,24 @@
                     recordingStatus.textContent = "Audio initialization failed: " + error.message;
                     return false;
                 }
+            }
+            
+            // Process audio chunk (simulated backend)
+            function processAudioChunk(chunk) {
+                console.log('Processing chunk:', chunk.size, 'bytes');
+                showChunkAlert(chunk.size);
+                
+                // In a real app, you would send this to your backend
+                // Here we just simulate processing
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        const p = document.createElement('p');
+                        p.textContent = `[Chunk processed] Partial transcription would appear here...`;
+                        p.className = 'text-info small';
+                        recordedAudioPlayer.insertAdjacentElement('beforebegin', p);
+                        resolve();
+                    }, 500);
+                });
             }
             
             // Start recording
@@ -314,14 +384,14 @@
                     
                     mediaRecorder = new MediaRecorder(stream, options);
                     
-                    mediaRecorder.ondataavailable = (event) => {
+                    mediaRecorder.ondataavailable = async (event) => {
                         if (event.data.size > 0) {
                             audioChunks.push(event.data);
                             
                             if (isStreaming) {
-                                // Show streaming chunk info
+                                // Process chunk immediately in streaming mode
+                                await processAudioChunk(event.data);
                                 recordingStatus.textContent = `Streaming chunk: ${(event.data.size/1024).toFixed(1)}KB`;
-                                console.log('Streaming chunk:', event.data.size, 'bytes');
                             }
                         }
                     };
@@ -334,6 +404,12 @@
                             recordedAudioPlayer.src = audioUrl;
                             recordedAudioPlayer.style.display = 'block';
                             recordingStatus.textContent = `Recording complete (${(audioBlob.size/1024).toFixed(1)}KB)`;
+                            
+                            // Simulate full audio processing
+                            const p = document.createElement('p');
+                            p.textContent = `[Full recording processed] Transcription would appear here...`;
+                            p.className = 'text-success small';
+                            recordedAudioPlayer.insertAdjacentElement('beforebegin', p);
                         }
                         
                         audioChunks = [];
@@ -358,6 +434,9 @@
                     noAudio.style.display = 'none';
                     recordedAudioPlayer.style.display = 'none';
                     recordingStatus.textContent = isStreaming ? "Streaming started..." : "Recording started...";
+                    
+                    // Clear previous messages
+                    document.querySelectorAll('.text-info, .text-success').forEach(el => el.remove());
                     
                     // Start visualization
                     visualizeWaveform();
@@ -406,6 +485,27 @@
                     cancelAnimationFrame(animationId);
                 }
             }
+            
+            // Handle file upload
+            audioUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                if (!file.type.match('audio.*')) {
+                    alert('Please select an audio file');
+                    return;
+                }
+                
+                const audioUrl = URL.createObjectURL(file);
+                uploadedAudioPlayer.src = audioUrl;
+                playUploadedBtn.disabled = false;
+                uploadedAudioPlayer.style.display = 'block';
+            });
+            
+            // Play uploaded audio
+            playUploadedBtn.addEventListener('click', function() {
+                uploadedAudioPlayer.play();
+            });
             
             // Toggle streaming options
             streamingToggle.addEventListener('change', function() {
