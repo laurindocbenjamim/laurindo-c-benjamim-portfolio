@@ -1,315 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speech to Text with Streaming</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
-    <style>
-        /* ... (keep your existing styles) ... */
+  <title>Audio Recorder</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
 
-        /* New styles for audio player and streaming options */
-        .audio-player {
-            width: 100%;
-            margin: 15px 0;
-        }
-        
-        .streaming-options {
-            background: rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        
-        .chunk-info {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-top: 5px;
-        }
-    </style>
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
+    }
+  </style>
 </head>
 <body>
-    <!-- ... (keep your existing header and navigation) ... -->
 
-    <div class="container py-5 main-container">
-        <section class="speech-section">
-            <h2 class="mb-4"><i class="fas fa-microphone-alt me-2"></i>Speech to Text Converter</h2>
-            
-            <div class="streaming-options mb-3">
-                <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" id="streamingToggle">
-                    <label class="form-check-label" for="streamingToggle">Enable Streaming Conversion</label>
-                </div>
-                <div id="streamingOptions" style="display: none;">
-                    <div class="mb-3">
-                        <label class="form-label">Chunk Size (seconds)</label>
-                        <input type="number" id="chunkSize" class="form-control" min="1" max="10" value="5">
-                    </div>
-                    <p class="chunk-info">Audio will be sent to backend in chunks for real-time processing</p>
-                </div>
-            </div>
-            
-            <div class="speech-controls">
-                <div class="flex-grow-1">
-                    <label for="audioFile" class="form-label">Upload Audio File</label>
-                    <input type="file" id="audioFile" class="form-control" accept="audio/*">
-                </div>
-                <div class="d-flex align-items-end gap-2">
-                    <button id="recordBtn" class="btn btn-danger">
-                        <i class="fas fa-microphone me-2"></i>Record
-                    </button>
-                    <button id="stopBtn" class="btn btn-secondary" disabled>
-                        <i class="fas fa-stop me-2"></i>Stop
-                    </button>
-                </div>
-                <div class="recording-indicator">
-                    <div class="pulse"></div>
-                    <span>Recording...</span>
-                </div>
-            </div>
-            
-            <audio id="audioPlayer" class="audio-player" controls style="display: none;"></audio>
-            
-            <div class="mb-3">
-                <label for="languageSelect" class="form-label">Language</label>
-                <select id="languageSelect" class="form-select">
-                    <option value="en-US">English (US)</option>
-                    <option value="pt-PT">Portuguese (Portugal)</option>
-                    <option value="es-ES">Spanish (Spain)</option>
-                    <option value="fr-FR">French (France)</option>
-                </select>
-            </div>
-            
-            <div class="mb-3">
-                <label class="form-label">Transcription Result</label>
-                <div class="speech-result" id="transcriptionResult">
-                    <p class="text-muted mb-0">Your transcribed text will appear here...</p>
-                </div>
-            </div>
-            
-            <div class="d-flex gap-2">
-                <button id="copyBtn" class="btn btn-outline-light">
-                    <i class="fas fa-copy me-2"></i>Copy Text
-                </button>
-                <button id="clearBtn" class="btn btn-outline-light">
-                    <i class="fas fa-trash-alt me-2"></i>Clear
-                </button>
-                <button id="saveBtn" class="btn btn-primary ms-auto">
-                    <i class="fas fa-save me-2"></i>Save Recording
-                </button>
-            </div>
-        </section>
+  <h1>Audio Recorder</h1>
 
-        <!-- ... (rest of your content) ... -->
-    </div>
+  <button id="startButton">Start Recording</button>
+  <button id="stopButton" disabled>Stop Recording</button>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM elements
-            const recordBtn = document.getElementById('recordBtn');
-            const stopBtn = document.getElementById('stopBtn');
-            const audioFileInput = document.getElementById('audioFile');
-            const transcriptionResult = document.getElementById('transcriptionResult');
-            const languageSelect = document.getElementById('languageSelect');
-            const copyBtn = document.getElementById('copyBtn');
-            const clearBtn = document.getElementById('clearBtn');
-            const saveBtn = document.getElementById('saveBtn');
-            const audioPlayer = document.getElementById('audioPlayer');
-            const recordingIndicator = document.querySelector('.recording-indicator');
-            const streamingToggle = document.getElementById('streamingToggle');
-            const streamingOptions = document.getElementById('streamingOptions');
-            const chunkSizeInput = document.getElementById('chunkSize');
-            
-            // Audio recording variables
-            let mediaRecorder;
-            let audioChunks = [];
-            let recognition;
-            let isRecording = false;
-            let isStreaming = false;
-            let chunkInterval;
-            let currentChunk = [];
-            let socket;
-            
-            // Toggle streaming options
-            streamingToggle.addEventListener('change', function() {
-                isStreaming = this.checked;
-                streamingOptions.style.display = isStreaming ? 'block' : 'none';
-            });
-            
-            // Initialize audio recording
-            async function startRecording() {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    
-                    mediaRecorder.ondataavailable = event => {
-                        if (event.data.size > 0) {
-                            audioChunks.push(event.data);
-                            
-                            // If streaming, send chunks to backend
-                            if (isStreaming && isRecording) {
-                                sendAudioChunk(event.data);
-                            }
-                        }
-                    };
-                    
-                    mediaRecorder.onstop = () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                        const audioUrl = URL.createObjectURL(audioBlob);
-                        audioPlayer.src = audioUrl;
-                        audioPlayer.style.display = 'block';
-                        
-                        if (!isStreaming) {
-                            // Process full recording when not streaming
-                            processAudioBlob(audioBlob);
-                        }
-                    };
-                    
-                    // Start recording with specified chunk size if streaming
-                    const chunkSize = isStreaming ? parseInt(chunkSizeInput.value) * 1000 : 1000;
-                    mediaRecorder.start(chunkSize);
-                    
-                    isRecording = true;
-                    recordBtn.disabled = true;
-                    stopBtn.disabled = false;
-                    recordingIndicator.style.display = 'flex';
-                    
-                    // Initialize speech recognition if not streaming
-                    if (!isStreaming) {
-                        initSpeechRecognition();
-                    }
-                    
-                } catch (error) {
-                    console.error('Error accessing microphone:', error);
-                    alert('Could not access microphone. Please ensure you have granted permission.');
-                }
+  <div id="audioContainer"></div>
+
+  <script>
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+    const audioContainer = document.getElementById('audioContainer');
+
+    let recorder;
+    let audioChunks = [];
+
+    startButton.addEventListener('click', startRecording);
+    stopButton.addEventListener('click', stopRecording);
+
+    function startRecording() {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(function(stream) {
+          let selectedMimeType = null;
+          const supportedMimeTypes = [
+            'audio/webm;codecs=opus',
+            'audio/ogg;codecs=opus',
+            'audio/webm',
+            'audio/ogg',
+            'audio/mpeg'
+          ];
+
+          for (const mimeType of supportedMimeTypes) {
+            if (MediaRecorder.isTypeSupported(mimeType)) {
+              selectedMimeType = mimeType;
+              break;
             }
-            
-            // Stop recording
-            function stopRecording() {
-                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                    mediaRecorder.stop();
-                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
-                    
-                    isRecording = false;
-                    recordBtn.disabled = false;
-                    stopBtn.disabled = true;
-                    recordingIndicator.style.display = 'none';
-                    
-                    if (recognition) {
-                        recognition.stop();
-                    }
-                    
-                    if (chunkInterval) {
-                        clearInterval(chunkInterval);
-                    }
-                }
-            }
-            
-            // Initialize speech recognition (for non-streaming)
-            function initSpeechRecognition() {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                
-                if (!SpeechRecognition) {
-                    alert('Speech recognition not supported in your browser. Try Chrome or Edge.');
-                    return;
-                }
-                
-                recognition = new SpeechRecognition();
-                recognition.continuous = true;
-                recognition.interimResults = true;
-                recognition.lang = languageSelect.value;
-                
-                recognition.onresult = function(event) {
-                    let interimTranscript = '';
-                    let finalTranscript = '';
-                    
-                    for (let i = event.resultIndex; i < event.results.length; i++) {
-                        const transcript = event.results[i][0].transcript;
-                        if (event.results[i].isFinal) {
-                            finalTranscript += transcript + ' ';
-                        } else {
-                            interimTranscript += transcript;
-                        }
-                    }
-                    
-                    if (finalTranscript) {
-                        const p = document.createElement('p');
-                        p.textContent = finalTranscript;
-                        transcriptionResult.appendChild(p);
-                    }
-                    
-                    transcriptionResult.scrollTop = transcriptionResult.scrollHeight;
-                };
-                
-                recognition.onerror = function(event) {
-                    console.error('Recognition error:', event.error);
-                };
-                
-                recognition.onend = function() {
-                    if (isRecording) {
-                        recognition.start();
-                    }
-                };
-                
-                recognition.start();
-            }
-            
-            // Send audio chunk to backend (simulated)
-            function sendAudioChunk(chunk) {
-                // In a real implementation, you would:
-                // 1. Use WebSocket for real-time streaming
-                // 2. Or send chunks via HTTP with proper sequencing
-                
-                console.log('Sending audio chunk to backend...', chunk.size);
-                
-                // Simulate processing delay
-                setTimeout(() => {
-                    const p = document.createElement('p');
-                    p.textContent = `[Chunk processed] Partial transcription would appear here...`;
-                    p.className = 'text-info';
-                    transcriptionResult.appendChild(p);
-                    transcriptionResult.scrollTop = transcriptionResult.scrollHeight;
-                }, 1000);
-            }
-            
-            // Process full audio blob (for non-streaming)
-            function processAudioBlob(blob) {
-                console.log('Processing full audio recording...');
-                
-                // Simulate processing delay
-                setTimeout(() => {
-                    const p = document.createElement('p');
-                    p.textContent = `[Full recording processed] Transcription would appear here...`;
-                    transcriptionResult.appendChild(p);
-                    transcriptionResult.scrollTop = transcriptionResult.scrollHeight;
-                }, 2000);
-            }
-            
-            // Save recording to file input
-            saveBtn.addEventListener('click', function() {
-                if (audioChunks.length > 0) {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                    
-                    // Create a fake file input for the recording
-                    const file = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(file);
-                    audioFileInput.files = dataTransfer.files;
-                    
-                    alert('Recording has been saved to the upload field');
-                } else {
-                    alert('No recording available to save');
-                }
-            });
-            
-            // Event listeners
-            recordBtn.addEventListener('click', startRecording);
-            stopBtn.addEventListener('click', stopRecording);
-            
-            // ... (keep your existing event listeners for copy, clear, etc) ...
+          }
+
+          if (selectedMimeType) {
+            recorder = new MediaRecorder(stream, { mimeType: selectedMimeType });
+
+            audioChunks = []; // Clear previous recording
+
+            recorder.ondataavailable = event => {
+              if (event.data.size > 0) {
+                audioChunks.push(event.data);
+              }
+            };
+
+            recorder.onstop = () => {
+              const audioBlob = new Blob(audioChunks, { type: selectedMimeType });
+              const audioUrl = URL.createObjectURL(audioBlob);
+              const audio = new Audio(audioUrl);
+              audio.controls = true;
+              audioContainer.innerHTML = ''; // Clear previous audio
+              audioContainer.appendChild(audio);
+
+              stopButton.disabled = true;
+              startButton.disabled = false;
+            };
+
+            recorder.start();
+            startButton.disabled = true;
+            stopButton.disabled = false;
+          } else {
+            alert("Your browser does not support any of the required audio mimeTypes for recording.");
+            stream.getTracks().forEach(track => track.stop());
+          }
+        })
+        .catch(function(err) {
+          console.error('Error accessing microphone:', err);
+          alert('Could not access the microphone. Please check your browser permissions.');
         });
-    </script>
+    }
+
+    function stopRecording() {
+      recorder.stop();
+    }
+  </script>
+
 </body>
 </html>
