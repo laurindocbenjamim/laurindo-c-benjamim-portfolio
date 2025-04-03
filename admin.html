@@ -9,7 +9,9 @@
     <meta name="csrf-token" content="22222">
     <meta name="author" content="Laurindo C.Benjamim">
     <meta name="generator" content="Laurindo C.Benjamim">
+
     <title>Home</title>
+    <link rel="icon" type="image/x-icon" href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
 
@@ -575,10 +577,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 
-
-
     <script>
-
 
 
 
@@ -591,8 +590,12 @@
             const logoutLink2 = document.getElementById('logout-link-2');
             const userInfo = document.getElementById('user-info');
 
+            prolyfillForOldBrowser() // for old browsers
 
             let response = null;
+
+            console.log("Checking the cookies")
+            //console.log(document.cookie)
             try {
                 response = await getUserData();
             } catch (error) {

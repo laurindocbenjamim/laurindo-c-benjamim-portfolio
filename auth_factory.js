@@ -1,10 +1,10 @@
 
 class AuthUser {
     constructor() {
-        //this.baseURL = window.location.origin;
-        this.baseURL = window.location.origin + '/laurindo-c-benjamim-portfolio';
-        this.serverDomain = 'https://www.d-tuning.com';
-        //this.serverDomain = 'http://localhost:5000';
+        this.baseURL = window.location.origin.includes('laurindocbenjamim.github.io')
+            ? window.location.origin + '/laurindo-c-benjamim-portfolio'
+            : window.location.origin;
+        this.serverDomain = this.baseURL.includes('.github.io') ? 'https://www.d-tuning.com' : 'http://localhost:5000';
     }
     async login(options) {
         const response = await fetch(`${this.serverDomain}/login-w-cookies`, options);
@@ -35,6 +35,15 @@ class AuthUser {
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
+    async getCookie2(name) {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            const [cookieName, cookieValue] = cookie.trim().split('=');
+            if (cookieName === name) return cookieValue;
+        }
+        return null;
+    }
+
     async getOptions2(method, formData) {
         if (!method || !formData) { return null; };
 
@@ -55,7 +64,7 @@ class AuthUser {
     };
 
     async getOptions(method, formData) {
-        const csrfToken = await this.getCookie('csrf_access_token');
+        const csrfToken = await this.getCookie2('csrf_access_token');
         const headers = {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': csrfToken,
@@ -149,10 +158,10 @@ async function getUserData() {
     const options = {
         method: 'get',
         credentials: 'include',
-        mode: 'cors',
+        //mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+            'X-CSRF-TOKEN': auth.getCookie2('csrf_access_token'),
         },
     };
 
@@ -163,7 +172,7 @@ async function getUserData() {
     } catch (error) {
         throw new Error("Error to get the user data! " + error);
     }
-    console.log("Response...")
+    console.log("Response on getting User Data...")
     console.log(response)
 
     if (!response.ok && !response.status_code) {
@@ -173,7 +182,7 @@ async function getUserData() {
         const message = await auth.handlingErrors(response)
         console.log(message)
         setTimeout(() => {
-            window.location.href = auth.baseURL + '/login.html'
+            //window.location.href = auth.baseURL + '/login.html'
         }, 2000)
         return;
     } else {
@@ -194,7 +203,7 @@ async function getUserData() {
             localStorage.clear()
             alert("Ups! Something went wrong. Redirecting to login...")
             setTimeout(() => {
-                window.location.href = auth.baseURL + '/login.html'
+                //window.location.href = auth.baseURL + '/login.html'
             }, 2000)
             return false;
         }
@@ -202,6 +211,20 @@ async function getUserData() {
     }
     console.log('Process  finished!')
     return false;
+}
+
+// Since we can get crypto.randomUUID error we 
+// might need to polyfill this for older browsers. 
+async function prolyfillForOldBrowser() {
+    console.log("Polyfilling for old browsers...")
+    if (!window.crypto?.randomUUID) {
+        window.crypto = window.crypto || {};
+        window.crypto.randomUUID = function () {
+            return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+        };
+    }
 }
 
 
@@ -271,7 +294,7 @@ async function send_email_for_confirmation(dataForm) {
         credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+            'X-CSRF-TOKEN': auth.getCookie2('csrf_access_token'),
         },
     };
     console.log("Send email starting...")
