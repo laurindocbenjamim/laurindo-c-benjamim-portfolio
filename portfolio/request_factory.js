@@ -1,12 +1,10 @@
 
 class RequestFactory {
     constructor() {
-        //this.baseURL = window.location.origin;
         this.baseURL = window.location.origin.includes('laurindocbenjamim.github.io') 
             ? window.location.origin + '/laurindo-c-benjamim-portfolio' 
             : window.location.origin;
-        this.serverDomain = 'https://www.d-tuning.com';
-        //this.serverDomain = 'http://localhost:5000';
+            this.serverDomain = this.baseURL.includes('.github.io') ? 'https://www.d-tuning.com' : 'http://localhost:5000';
     }
 
     async makeRequest(options, endpoint) {
