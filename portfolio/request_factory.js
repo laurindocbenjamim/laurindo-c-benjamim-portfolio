@@ -1,10 +1,15 @@
 
 class RequestFactory {
     constructor() {
-        this.baseURL = window.location.origin.includes('laurindocbenjamim.github.io') 
-            ? window.location.origin + '/laurindo-c-benjamim-portfolio' 
+        this.baseURL = window.location.origin.includes('laurindocbenjamim.github.io')
+            ? window.location.origin + '/laurindo-c-benjamim-portfolio'
             : window.location.origin;
-            this.serverDomain = this.baseURL.includes('.github.io') ? 'https://www.d-tuning.com' : 'http://localhost:5000';
+
+        this.serverDomain = this.baseURL.includes('localhost')
+
+        if (this.baseURL.includes('.github.io') || this.baseURL.includes('laurindocbenjamim.pt')) {
+            this.serverDomain = 'https://www.d-tuning.com';
+        }
     }
 
     async makeRequest(options, endpoint) {
@@ -18,7 +23,7 @@ class RequestFactory {
             console.error("Failed to connect to the server. Please try again later.");
             document.getElementById('spinnerBorder').style.display = 'none';
             document.getElementById('errorMessage').innerText = error;
-            document.getElementById('successMessage') .innerText = '';
+            document.getElementById('successMessage').innerText = '';
             return response;
         }
     }
@@ -134,7 +139,7 @@ class RequestFactory {
         return null;
     }
 
-    async test(t){
+    async test(t) {
         alert(t)
         return t;
     }
