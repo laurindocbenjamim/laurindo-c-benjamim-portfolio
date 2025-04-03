@@ -381,6 +381,9 @@
             setTimeout(async () => {
                 try {
                     const response = await send_email_for_confirmation({ "email": form.get('email') })
+                    console.log("Send email response....")
+                    console.log(response)
+                    
                     window.location.href = auth.baseURL + '/registration_alert.html';
                 } catch (error) {
                     console.error('Error to send the email for confirmation. ' + error)
@@ -426,7 +429,7 @@
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                    'X-CSRF-TOKEN': auth.getCookie2('csrf_access_token'),
                 },
             };
             console.log("Registration with cookies starting...")

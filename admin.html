@@ -593,6 +593,9 @@
             prolyfillForOldBrowser() // for old browsers
 
             let response = null;
+
+            console.log("Checking the cookies")
+            //console.log(document.cookie)
             try {
                 response = await getUserData();
             } catch (error) {
