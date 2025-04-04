@@ -10,7 +10,7 @@
     <meta property="og:image"
         content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
 
-    <title>Login | Data Tuning</title>
+    <title>User Register | Data Tuning</title>
     <link rel="icon" type="image/x-icon" href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -608,11 +608,11 @@
                         <a class="nav-link" href="portfolio/blog.html">Blog</a>
                     </li>
 
-                    <a href="../register.html" class="btn btn-auth btn-register">
+                    <a href="../register.html" class="btn btn-auth btn-register active">
                         <i class="fas fa-user-plus"></i>
                         <span>Register</span>
                     </a>
-                    <a href="../login.html" class="btn btn-auth btn-login active">
+                    <a href="../login.html" class="btn btn-auth btn-login">
                         <i class="fas fa-sign-in-alt"></i>
                         <span>Login</span>
                     </a>
@@ -629,33 +629,104 @@
             
 
             <!-- Main Content -->
-            <div class="col-lg-5">
+            <div class="col-lg-9">
                 <div class="upload-container">
                     <div class="upload-header">
-                        <h1 class="upload-title">Login</h1>
+                        <h1 class="upload-title">User Register</h1>
                         <p class="upload-description">
-                            Make login to your account to have access of our applications.
+                            Create your account to have access of our applications.
                         </p>
                     </div>
 
-                    <form id="loginForm" class="needs-validation" novalidate>
+                    <form id="registerForm" class="needs-validation" novalidate>
                         
-                        <div class="mb-2">
+                        <div class="row g-3 " style="text-align: left;">
+
+                            <div class="col-sm-6 ">
+                                <label for="firstName" class="form-label" style="color: #b4b3b3;">First
+                                    name</label>
+                                <input type="text" class="form-control" name="firstName" id="firstName"
+                                    placeholder="first name" value="" required>
+                                <div class="invalid-feedback">
+                                    Valid first name is required.
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="lastName" class="form-label" style="color: #b4b3b3;">Last
+                                    name</label>
+                                <input type="text" class="form-control" id="lastName" name="lastName"
+                                    placeholder="last name" value="" required>
+                                <div class=" invalid-feedback">
+                                    Valid last name is required.
+                                </div>
+                            </div>
+
                             <div class="col-12">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control rounded-3" id="username"
-                                        name="username" placeholder="username or name@example.com"
-                                        required>
-                                    <label for="username">Username</label>
+                                <label for="username" class="form-label"
+                                    style="color: #b4b3b3;">Username</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text">@</span>
+                                    <input type="text" class="form-control" name="username"
+                                        id="username" placeholder="Username" required>
                                     <div class="invalid-feedback">
-                                        Valid username is required.
+                                        Your username is required.
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="email" class="form-label" style="color: #b4b3b3;">Email
+                                    <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" name="email" id="email"
+                                    placeholder="you@example.com">
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address for shipping updates.
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="country" class="form-label"
+                                    style="color: #b4b3b3;">Country</label>
+                                <select class="form-select" id="country" name="country" required>
+                                    <option value="">Choose...</option>
+                                    <option>Angola</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a valid country.
+                                </div>
+                                <p id="alert-countries" class="text-danger"></p>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="country" class="form-label"
+                                    style="color: #b4b3b3;">Code</label>
+                                <select class="form-select" id="country_tel_code"
+                                    name="country_tel_code" required>
+                                    <option value="">Choose...</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a valid country code.
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="phoneNumber" class="form-label"
+                                    style="color: #b4b3b3;">Phone</label>
+                                <input type="text" class="form-control" name="phoneNumber"
+                                    id="phoneNumber" placeholder="91 242 4507" required>
+                                <div class="invalid-feedback">
+                                    Phone number required.
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mb-2">
-                            <div class="col-12">
+                        <hr class="my-4">
+
+                        <div class="row g-3 " style="text-align: left;">
+
+
+                            <div class="col-md-6">
                                 <div class="form-floating mb-3 position-relative">
                                     <input type="password" class="form-control rounded-3"
                                         name="password" id="password" placeholder="********" required>
@@ -665,12 +736,34 @@
                                         style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;color:#4e4e4e;"></i>
                                 </div>
                             </div>
+
+
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 position-relative">
+                                    <input type="password" class="form-control rounded-3"
+                                        name="confirmPassword" id="confirmPassword"
+                                        placeholder="********" required>
+                                    <label for="confirmPassword">Confirm password</label>
+                                    <div class="invalid-feedback">Cnfirm password required.</div>
+
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="password-strength mt-0 py-2" id="password-strength"></div>
+
                         </div>
+
+
+
 
 
                         <div class="mb-2">
                             <div class="col-12">
-                                <div class="password-strength" id="password-strength"></div>
+
                                 <div class="error-message text-danger" id="error-message"></div>
                                 <div class="info-message text-info" id="info-message"></div>
                                 <div class="success-message text-success" id="success-message"></div>
@@ -678,32 +771,34 @@
                         </div>
 
                         <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit"
-                            id="btnSubmit">Login</button>
+                            id="btnSubmit">Submit</button>
 
                         <small class="text-light-emphasis">By clicking Sign up, you agree to the terms
                             of use.</small>
                         <hr class="my-4">
-                        <h2 class="fs-5 fw-bold mb-3">Or use</h2>
+                        <h2 class="fs-5 fw-bold mb-3">Or Register with</h2>
                         <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3"
                             type="submit">
                             <svg class="bi me-1" width="16" height="16">
                                 <use xlink:href="#twitter" />
                             </svg>
-                            Sign in with Twitter
+                            Sign up with Twitter
                         </button>
                         <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="submit">
                             <svg class="bi me-1" width="16" height="16">
                                 <use xlink:href="#facebook" />
                             </svg>
-                            Sign in with Facebook
+                            Sign up with Facebook
                         </button>
 
+
                         <small class="text-light">
-                            New to our platform? <a
+                            I already have an account. <a
                                 class="link-offset-2 link-underline link-underline-opacity-25"
-                                href="register.html"><strong>Sign Up</strong></a>
+                                href="login.html"><strong>Sign In</strong></a>
                         </small>
-                        <hr class="my-4">
+
+                       
 
                     </form>
 
@@ -767,20 +862,31 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     <script src="auth_factory.js"></script>
-
-      <script>
+    <script src="app/get_countries.js"></script>
+    <script>
 
 
         const auth = new AuthUser();
-        const form = document.getElementById('loginForm');
+        const country = new Country();
+
+        loadCountries();
+
+        const form = document.getElementById('registerForm');
         const btnSubmit = document.getElementById('btnSubmit')
         const infoMessage = document.getElementById('info-message')
         const successMessage = document.getElementById('success-message')
         const errorMessage = document.getElementById('error-message')
         const passwordStrength = document.getElementById('password-strength');
+        const countrySelect = document.getElementById('country');
+        const countryCode = document.getElementById('country_tel_code');
         const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
                 <span role="status">Loading...</span>`;
 
+        let countriesData = [];
+
+        // Get input element
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirmPassword");
 
         document.getElementById("togglePassword").addEventListener("click", function () {
             const passwordField = document.getElementById("password");
@@ -795,27 +901,76 @@
             }
         });
 
+        // Listen for typing events
+        password.addEventListener("input", (event) => {
+            passwordStrength.textContent = event.target.value; // Update span with input value
+            //console.log("User typed:", event.target.value); // Log to console
+
+            // Password strength validation
+            const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#$])[A-Za-z\d@$!%*?&#$]{8,}$/;
+
+            // Check if the password matches the strong pattern
+            if (strongPasswordPattern.test(event.target.value)) {
+                passwordStrength.textContent = 'Strong password!';
+                passwordStrength.style.color = 'green';
+            } else if (event.target.value.length >= 6) {
+                // If password length is at least 6 but doesn't match the full criteria
+                passwordStrength.textContent = 'Medium password. Add more complexity for strength.';
+                passwordStrength.style.color = 'orange';
+            } else {
+                passwordStrength.textContent = 'Weak password! Must include at least 8 characters, one uppercase, one lowercase, one number, and one special character (@, $, !, %, *, ?, &, #).';
+                passwordStrength.style.color = 'red';
+            }
+
+        });
+
+        confirmPassword.addEventListener('input', (event) => {
+            if (event.target.value !== password.value) {
+                infoMessage.textContent = '';
+                errorMessage.textContent = `Password doesn't match.`;
+                successMessage.textContent = '';
+            } else {
+                infoMessage.textContent = '';
+                errorMessage.textContent = '';
+                successMessage.textContent = '';
+            }
+        });
+
         async function cleanAlerts() {
             infoMessage.textContent = '';
-                successMessage.textContent = '';
-                errorMessage.textContent = '';
-                btnSubmit.innerHTML = '<span>Login</span>';
+            successMessage.textContent = '';
+            errorMessage.textContent = '';
+            btnSubmit.innerHTML = '<span>Submit</span>';
         }
 
+        async function redirectToConfirmPage(form) {
+            infoMessage.textContent = '';
+            successMessage.textContent = 'Registration successful! Redirecting...';
+            errorMessage.textContent = '';
+            setTimeout(async () => {
+                try {
+                    const response = await send_email_for_confirmation({ "email": form.get('email') })
+                    console.log("Send email response....")
+                    console.log(response)
+                    
+                    window.location.href = auth.baseURL + '/registration_alert.html';
+                } catch (error) {
+                    console.error('Error to send the email for confirmation. ' + error)
+                }
+
+            }, 1000);
+        }
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
+
             cleanAlerts()
             if (!form.checkValidity()) {
                 event.stopPropagation();
                 form.classList.add("was-validated");
-                cleanAlerts()
                 return;
             }
 
             btnSubmit.innerHTML = spinnerHtml;
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
 
             // Reset previous error message
             errorMessage.textContent = '';
@@ -823,92 +978,152 @@
 
             const formD = new FormData(event.target)
 
-            // Basic validation
-            if (!formD.get('username') || !formD.get('password')) {
-                errorMessage.textContent = 'Username and password are required!';
-                return;
+            for (const [key, value] of formD.entries()) {
+                // Await the asynchronous validation function
+                if (!await filterDataFormLevel1(value, key, errorMessage)) {
+                    btnSubmit.innerHTML = '<span>Submit</span>';
+                    return; // Stop further validation
+                }
             }
 
-            if (formD.get('username').length < 4) {
-                errorMessage.textContent = 'Username must have at least 4 characters long.';
-                return;
-            }
+            const userData = Object.fromEntries(formD.entries()); // Convert FormData to an object
 
-            // Prevent SQL Injection - Allow only letters, numbers, and underscores
-            const sqlInjectionPattern = /^[a-zA-Z0-9_]+$/;
-            if (!sqlInjectionPattern.test(formD.get('username'))) {
-                errorMessage.textContent = 'Invalid username! Use only letters, numbers, and underscores.';
-                return;
-            }
+            //console.log(userData); // Debugging: Check the extracted data
 
-            // Password strength validation
-            const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-
-            const formData = JSON.stringify({ "username": formD.get('username'), "password": formD.get('password') });
+            // Submit data using fetch
 
             const options = {
                 method: 'post',
-                body: formData,
+                body: JSON.stringify(userData),
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                    'X-CSRF-TOKEN': auth.getCookie2('csrf_access_token'),
                 },
             };
-            console.log("Login with cookies tarting...")
+            console.log("Registration with cookies starting...")
             //const response = await auth.login(options)
-            const response = await auth.makeRequest(options, 'api/v1/auth/login')
-            
-            if(response===null){
+            const response = await auth.makeRequest(options, 'api/v1/user/dao')
+
+
+            if (response === null) {
                 cleanAlerts()
                 errorMessage.textContent = 'Failed to login! Please try again later.';
                 return;
-            } if (!response.ok) {
-                //const message = await auth.handlingErrors(response)
-                console.error("Login failed! " + response)
+            }
+            if (!response.ok) {
+                
+                console.log(response)
+
                 const message = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
                 if(!response.status_code)   {
                     const error = await auth.handlingFieldErrors(response)
                     errorMessage.textContent = error === null ? message : error;
                 } else
-                if(response.status_code===201){
+                if (response.status_code === 201) {
                     infoMessage.textContent = message;
-                }else if (response.status_code === 200) {
-                    console.error("Login success! ")
-                    console.log(response)
-                    successMessage.textContent = response.message;
-                    setTimeout(() => {
-                        window.location.href = auth.baseURL + '/admin.html';
-                    }, 1000);
+                } else if (response.status_code === 200) {
+                    redirectToConfirmPage(formD)
                 }else {
                     
                     const error = await auth.handlingErrors(response) 
                     console.error("Error to register user. " + error)
                     errorMessage.textContent = error;
                 }
-                
-                
             } else {
-                
-                infoMessage.textContent = '';
-                successMessage.textContent = '';
-                errorMessage.textContent = '';
+
                 if (response.status_code === 200) {
-                    successMessage.textContent = 'Login successful! Redirecting...';
-                    setTimeout(() => {
-                        window.location.href = auth.baseURL + '/admin.html';
-                    }, 1000);
-                } 
+                    redirectToConfirmPage(formD)
+                }
             }
             successMessage.textContent = '';
             //infoMessage.textContent = '';
-            btnSubmit.innerHTML = '<span>Login</span>';
+            btnSubmit.innerHTML = '<span>Submit</span>';
             document.getElementById('password').value = '';
+            document.getElementById('confirmPassword').value = '';
             console.log('Process  finished!')
         });
 
+        countrySelect.addEventListener('change', (event) => {
+            const country = countrySelect.value;
+            const code = event.target.value;
+            const codeC = selectCountry(country);
 
+            if (codeC) {
+                while (countryCode.firstChild) {
+                    countryCode.removeChild(countryCode.firstChild);
+                }
+            }
+            const option = document.createElement('option');
+
+            option.value = !codeC ? '+244' : `+${codeC}`;
+            option.textContent = !codeC ? '+244' : `+${codeC}`;
+            countryCode.appendChild(option);
+
+        });
+
+        async function loadCountries() {
+            let response = null;
+            try {
+                response = await country.getCountries();
+            } catch (error) {
+                throw new Error("Error to load countries. " + error);
+            }
+            console.log("Loading countries...")
+            
+            if (response.ok) {
+                const message = await auth.handlingErrors(response);
+                console.error("Error to load countries. " + message);
+                document.getElementById('alert-countries').textContent = "Failed to load countries. ";
+                //alert("Failed to load countries. " + message);
+                return;
+            }
+            document.getElementById('alert-countries').textContent = "";
+            
+         
+            if (response.OBJECTS) {
+                //console.log(response.OBJECTS[0].Country);
+                countriesData = response.OBJECTS.map(item => ({
+                    Country: item.Country,
+                    CountryCode: item.CountryCode
+                }));
+                
+
+                if (countriesData.length > 0) {
+                    countriesData.forEach(item => {
+                        const option = document.createElement('option');
+                        
+                        option.value = item.Country;
+                        option.textContent = item.Country;
+                        countrySelect.appendChild(option);
+                    });
+                }
+            }
+
+            console.log("Finished to load countries.")
+
+        }
+
+
+        function selectCountry(country) {
+            if (!country) return;
+            const filteredCountryCode = countriesData
+                .filter(item => item.Country.startsWith(country))
+                .map(item => item.CountryCode);
+
+            //console.log(filteredCountryCode);
+            return filteredCountryCode.length > 0 ? filteredCountryCode : null;
+        }
+
+        function clearObjectSelect(object) {
+            while (object.firstChild) {
+                object.removeChild(object.firstChild);
+            }
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = "Choose...";
+            object.appendChild(defaultOption);
+        }
 
 
         async function accessProtectedRoute() {
