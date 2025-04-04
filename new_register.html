@@ -10,7 +10,7 @@
     <meta property="og:image"
         content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
 
-    <title>User Register | Data Tuning</title>
+    <title>User new_register.html | Data Tuning</title>
     <link rel="icon" type="image/x-icon" href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -419,13 +419,13 @@
             background: rgba(79, 70, 229, 0.1);
         }
 
-        .btn-register {
+        .btn-new_register.html {
             background: var(--primary-color);
             color: white;
             border: 1px solid var(--primary-color);
         }
 
-        .btn-register:hover {
+        .btn-new_register.html:hover {
             background: #4338ca;
             border-color: #4338ca;
         }
@@ -608,11 +608,11 @@
                         <a class="nav-link" href="portfolio/blog.html">Blog</a>
                     </li>
 
-                    <a href="../register.html" class="btn btn-auth btn-register active">
+                    <a href="../new_register.html.html" class="btn btn-auth btn-new_register.html active">
                         <i class="fas fa-user-plus"></i>
-                        <span>Register</span>
+                        <span>new_register.html</span>
                     </a>
-                    <a href="../login.html" class="btn btn-auth btn-login">
+                    <a href="../new_login.html" class="btn btn-auth btn-login">
                         <i class="fas fa-sign-in-alt"></i>
                         <span>Login</span>
                     </a>
@@ -632,13 +632,13 @@
             <div class="col-lg-9">
                 <div class="upload-container">
                     <div class="upload-header">
-                        <h1 class="upload-title">User Register</h1>
+                        <h1 class="upload-title">User new_register.html</h1>
                         <p class="upload-description">
                             Create your account to have access of our applications.
                         </p>
                     </div>
 
-                    <form id="registerForm" class="needs-validation" novalidate>
+                    <form id="new_register.htmlForm" class="needs-validation" novalidate>
                         
                         <div class="row g-3 " style="text-align: left;">
 
@@ -776,7 +776,7 @@
                         <small class="text-light-emphasis">By clicking Sign up, you agree to the terms
                             of use.</small>
                         <hr class="my-4">
-                        <h2 class="fs-5 fw-bold mb-3">Or Register with</h2>
+                        <h2 class="fs-5 fw-bold mb-3">Or new_register.html with</h2>
                         <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3"
                             type="submit">
                             <svg class="bi me-1" width="16" height="16">
@@ -795,7 +795,7 @@
                         <small class="text-light">
                             I already have an account. <a
                                 class="link-offset-2 link-underline link-underline-opacity-25"
-                                href="login.html"><strong>Sign In</strong></a>
+                                href="new_login.html"><strong>Sign In</strong></a>
                         </small>
 
                        
@@ -871,7 +871,7 @@
 
         loadCountries();
 
-        const form = document.getElementById('registerForm');
+        const form = document.getElementById('new_register.htmlForm');
         const btnSubmit = document.getElementById('btnSubmit')
         const infoMessage = document.getElementById('info-message')
         const successMessage = document.getElementById('success-message')
@@ -1027,7 +1027,7 @@
                 }else {
                     
                     const error = await auth.handlingErrors(response) 
-                    console.error("Error to register user. " + error)
+                    console.error("Error to new_register.html user. " + error)
                     errorMessage.textContent = error;
                 }
             } else {
