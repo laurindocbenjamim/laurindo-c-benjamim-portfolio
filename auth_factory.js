@@ -178,7 +178,7 @@ async function getUserData() {
         throw new Error("Error to get the user data! " + error);
     }
     console.log("Response on getting User Data...")
-    console.log(response)
+    //console.log(response)
 
     if (!response.ok && !response.status_code) {
 
@@ -187,7 +187,7 @@ async function getUserData() {
         const message = await auth.handlingErrors(response)
         console.log(message)
         setTimeout(() => {
-            //window.location.href = auth.baseURL + '/login.html'
+            window.location.href = auth.baseURL + '/new_login.html'
         }, 2000)
         return;
     } else {
@@ -208,7 +208,7 @@ async function getUserData() {
             localStorage.clear()
             alert("Ups! Something went wrong. Redirecting to login...")
             setTimeout(() => {
-                //window.location.href = auth.baseURL + '/login.html'
+                window.location.href = auth.baseURL + '/new_login.html'
             }, 2000)
             return false;
         }
@@ -261,7 +261,7 @@ async function logout(e) {
     }
     setTimeout(() => {
         console.log("Accessing login page...")
-        window.location.href = auth.baseURL + '/login.html'
+        window.location.href = auth.baseURL + '/new_login.html'
     }, 400)
     console.log('Process  finished!')
 };
