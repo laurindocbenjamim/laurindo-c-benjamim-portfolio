@@ -1,8 +1,12 @@
 
 class Country{
     constructor(){
-        this.api='https://www.d-tuning.com/api/v1/web-scrapping/countries';
-        //this.api='http://localhost:5000/api/v1/web-scrapping/countries';
+        
+        this.api='http://localhost:5000/api/v1/web-scrapping/countries';
+
+        if (window.location.origin.includes('.github.io') || window.location.origin.includes('laurindocbenjamim.pt')) {
+            this.api='https://www.d-tuning.com/api/v1/web-scrapping/countries';
+        }
     }
 
     async getCountries() {
