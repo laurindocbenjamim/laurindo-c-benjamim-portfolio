@@ -5,7 +5,7 @@ class RequestFactory {
             ? window.location.origin + '/laurindo-c-benjamim-portfolio'
             : window.location.origin;
 
-        this.serverDomain = this.baseURL.includes('localhost')
+        this.serverDomain = 'http://localhost:5000';
 
         if (this.baseURL.includes('.github.io') || this.baseURL.includes('laurindocbenjamim.pt')) {
             this.serverDomain = 'https://www.d-tuning.com';

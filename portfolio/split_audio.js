@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Read file as array buffer
+    const fileReader = new FileReader();
+
     // Handle file upload
     // Handle file upload with progress
     audioFileInput.addEventListener('change', function (e) {
@@ -52,8 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const objectUrl = URL.createObjectURL(file);
         audioPlayer.src = objectUrl;
 
-        // Read file as array buffer
-        const fileReader = new FileReader();
+        
 
         // Update progress during file reading
         fileReader.onprogress = function (e) {
@@ -108,6 +110,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Split audio into 3 parts
     splitBtn.addEventListener('click', function () {
+
+        // Update progress during file reading
+        fileReader.onprogress = function (e) {
+            if (e.lengthComputable) {
+                const percent = Math.round((e.loaded / e.total) * 50); // First half of progress
+                decodeProgress.style.width = `${percent}%`;
+                decodeProgressText.textContent = `Loading file: ${percent}%`;
+            }
+        };
+        
         if (!audioBuffer) return;
 
         const numberOfChunks = document.getElementById('numberOfChunks').value;

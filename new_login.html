@@ -6,13 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Speech to Text Converter">
-    <meta property="og:description" content="Upload audio or video files and split it">
+    <meta property="og:description" content="Upload audio or video files to convert speech to text">
     <meta property="og:image"
         content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
 
-    <title>Audio Splitter | Laurindo C. Benjamim</title>
-    <link rel="icon" type="image/x-icon"
-        href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
+    <title>Speech to Text Converter | Laurindo C. Benjamim</title>
+    <link rel="icon" type="image/x-icon" href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
@@ -502,14 +501,6 @@
             font-size: 0.9rem;
         }
 
-        .progress-container {
-            margin-bottom: 15px;
-        }
-
-        .progress-bar-animated {
-            transition: width 0.3s ease;
-        }
-
         /* Responsive adjustments */
         @media (max-width: 1200px) {
             .sidebar {
@@ -550,22 +541,21 @@
                 top: 15px;
                 right: 15px;
             }
-
+            
             .btn-auth {
                 padding: 0.35rem 0.7rem;
                 font-size: 0.8rem;
             }
-
+            
             .btn-auth span {
-                display: none;
-                /* Hide text on small mobile */
+                display: none; /* Hide text on small mobile */
             }
-
+            
             .btn-auth i {
                 margin-right: 0;
                 font-size: 0.9rem;
             }
-
+            
             /* Ensure buttons are visible on mobile */
             .auth-buttons {
                 background: rgba(15, 23, 42, 0.8);
@@ -594,36 +584,35 @@
 <body>
 
     <!-- Auth Buttons - Now positioned top-right -->
-
+   
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="../index.html">Laurindo C. Benjamim <span style="color: #23acd6;">.PID<span
-                        style="color: #38d840;">IO</span></span></a>
+            <a class="navbar-brand" href="../index.html">Laurindo C. Benjamim <span style="color: #23acd6;">.PID<span style="color: #38d840;">IO</span></span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
+                        <a class="nav-link" href="portfolio/about.html">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="experiences.html">Experience</a>
+                        <a class="nav-link" href="portfolio/experiences.html">Experience</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="projects.html">Projects</a>
+                        <a class="nav-link" href="portfolio/projects.html">Projects</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="blog.html">Blog</a>
+                        <a class="nav-link" href="portfolio/blog.html">Blog</a>
                     </li>
 
                     <a href="../register.html" class="btn btn-auth btn-register">
                         <i class="fas fa-user-plus"></i>
                         <span>Register</span>
                     </a>
-                    <a href="../new_login.html" class="btn btn-auth btn-login">
+                    <a href="../login.html" class="btn btn-auth btn-login active">
                         <i class="fas fa-sign-in-alt"></i>
                         <span>Login</span>
                     </a>
@@ -634,220 +623,101 @@
     </nav>
 
     <main class="container py-5">
-        <div class="row">
-            <!-- Desktop Sidebar Menu -->
-            <aside class="col-lg-3 d-none d-lg-block">
-                <div class="sidebar">
-                    <h3 class="sidebar-title">Related Tools</h3>
-                    <ul class="article-list">
-                        <li>
-                            <a href="#">
-                                <strong>Audio Transcription Service</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-clock"></i> Fast processing</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Video to Text Converter</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-clock"></i> Supports multiple formats</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Speech Recognition API</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-clock"></i> Developer friendly</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Batch Processing</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-clock"></i> Process multiple files</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
+        <div class="row justify-content-center">
+          
 
-                    <h3 class="sidebar-title mt-5">Features</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">High accuracy</a></li>
-                        <li><a href="#">Multi-language support</a></li>
-                        <li><a href="#">Secure processing</a></li>
-                        <li><a href="#">Download results</a></li>
-                        <li><a href="#">API access</a></li>
-                    </ul>
-                </div>
-            </aside>
-
-            <!-- Mobile Sidebar Menu (Hidden by default) -->
-            <div class="mobile-sidebar-overlay"></div>
-            <aside class="mobile-sidebar">
-                <button class="mobile-sidebar-close">
-                    <i class="fas fa-times"></i>
-                </button>
-                <h3 class="sidebar-title">Related Tools</h3>
-                <ul class="article-list">
-                    <li>
-                        <a href="#">
-                            <strong>Audio Transcription Service</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-clock"></i> Fast processing</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>Video to Text Converter</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-clock"></i> Supports multiple formats</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>Speech Recognition API</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-clock"></i> Developer friendly</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>Batch Processing</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-clock"></i> Process multiple files</span>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-
-                <h3 class="sidebar-title mt-5">Features</h3>
-                <ul class="footer-links">
-                    <li><a href="#">High accuracy</a></li>
-                    <li><a href="#">Multi-language support</a></li>
-                    <li><a href="#">Secure processing</a></li>
-                    <li><a href="#">Download results</a></li>
-                    <li><a href="#">API access</a></li>
-                </ul>
-            </aside>
-
-            <!-- Mobile Toggle Button -->
-            <button class="mobile-sidebar-toggle d-lg-none">
-                <i class="fas fa-book-open"></i>
-            </button>
+            
 
             <!-- Main Content -->
-            <div class="col-lg-9">
+            <div class="col-lg-5">
                 <div class="upload-container">
                     <div class="upload-header">
-                        <h1 class="upload-title">Audio Splitter</h1>
-                        <p class="upload-description">Upload your audio or video files to split</p>
+                        <h1 class="upload-title">Login</h1>
+                        <p class="upload-description">
+                            Make login to your account to have access of our applications.
+                        </p>
                     </div>
 
-                    <form id="uploadForm" class="needs-validation" enctype="multipart/form-data" novalidate>
-
-                        <div class="form-group">
-                            <label for="audioFile" class="form-label">Select File</label>
-                            <div class="file-upload-wrapper">
-                                <input type="file" id="audioFile" name="audioFile" class="file-upload-input"
-                                    accept="audio/*,video/*" required>
-                                <label for="audioFile" class="file-upload-label">
-                                    <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
-                                    <span class="file-upload-text">Drag & drop your file here or click to browse</span>
-                                    <span class="file-upload-hint">Max file size: 100MB</span>
-                                </label>
+                    <form id="loginForm" class="needs-validation" enctype="multipart/form-data" novalidate>
+                        
+                        <div class="mb-2">
+                            <div class="col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control rounded-3" id="username"
+                                        name="username" placeholder="username or name@example.com"
+                                        required>
+                                    <label for="username">Username</label>
+                                    <div class="invalid-feedback">
+                                        Valid username is required.
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="supported-formats">
-                            <div class="supported-formats-title">Supported formats:</div>
-                            <div>
-                                <span class="format-badge">MP3</span>
-                                <span class="format-badge">WAV</span>
-                                <span class="format-badge">AAC</span>
-                                <span class="format-badge">FLAC</span>
-                                <span class="format-badge">MP4</span>
-                                <span class="format-badge">MOV</span>
-                                <span class="format-badge">AVI</span>
-                                <span class="format-badge">MKV</span>
-                            </div>
-                        </div>
-
-                        <!-- Add this after the results div but before the status div -->
-                        <div id="decodeProgressContainer" class="progress-container d-none mt-3">
-                            <div class="progress">
-                                <div id="decodeProgress" class="progress-bar progress-bar-striped progress-bar-animated"
-                                    role="progressbar" style="width: 0%"></div>
-                            </div>
-                            <small id="decodeProgressText" class="text-muted">Decoding audio: 0%</small>
-                        </div>
-
-
-                        <div id="audioInfo" class="mb-3 d-none">
-                            <h5>Audio Information</h5>
-                            <p id="fileName"></p>
-                            <p id="fileDuration"></p>
-                            <audio id="audioPlayer" controls class="w-100 mb-3"></audio>
-                        </div>
-
-                        <div class="mb-4">
-                            <div class="form-group">
-                                <label for="numberOfChunks" class="form-label">Number of chunks</label>
-                                <select id="numberOfChunks" name="numberOfChunks" class="form-select" required>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
+                        <div class="mb-2">
+                            <div class="col-12">
+                                <div class="form-floating mb-3 position-relative">
+                                    <input type="password" class="form-control rounded-3"
+                                        name="password" id="password" placeholder="********" required>
+                                    <label for="password">Password</label>
+                                    <div class="invalid-feedback">Valid password is required.</div>
+                                    <i class="fa-solid fa-eye position-absolute" id="togglePassword"
+                                        style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;color:#4e4e4e;"></i>
+                                </div>
                             </div>
                         </div>
 
 
-                        <div id="splitControls" class="mb-3 d-none">
-                            <button id="splitBtn" class="btn btn-primary">Split Audio into 3 Parts</button>
-                        </div>
-
-                        <div id="results" class="d-none">
-                            <h5>Split Results</h5>
-                            <div class="row" id="audioParts">
-                                <!-- Parts will be added here dynamically -->
-                            </div>
-                            <div class="mt-3">
-                                <button id="sendToServerBtn" type="submit" class="btn btn-success">Send All to
-                                    Server</button>
+                        <div class="mb-2">
+                            <div class="col-12">
+                                <div class="password-strength" id="password-strength"></div>
+                                <div class="error-message text-danger" id="error-message"></div>
+                                <div class="info-message text-info" id="info-message"></div>
+                                <div class="success-message text-success" id="success-message"></div>
                             </div>
                         </div>
 
-                        <div id="uploadProgressContainer" class="progress-container d-none mt-3">
-                            <div class="progress">
-                                <div id="uploadProgress" class="progress-bar progress-bar-striped progress-bar-animated"
-                                    role="progressbar" style="width: 0%"></div>
-                            </div>
-                            <small id="uploadProgressText" class="text-muted">Uploading to server: 0%</small>
-                        </div>
+                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit"
+                            id="btnSubmit">Login</button>
 
-                        <div id="status" class="mt-3"></div>
+                        <small class="text-light-emphasis">By clicking Sign up, you agree to the terms
+                            of use.</small>
+                        <hr class="my-4">
+                        <h2 class="fs-5 fw-bold mb-3">Or use</h2>
+                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3"
+                            type="submit">
+                            <svg class="bi me-1" width="16" height="16">
+                                <use xlink:href="#twitter" />
+                            </svg>
+                            Sign in with Twitter
+                        </button>
+                        <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="submit">
+                            <svg class="bi me-1" width="16" height="16">
+                                <use xlink:href="#facebook" />
+                            </svg>
+                            Sign in with Facebook
+                        </button>
 
-                        <div class="form-group">
-                            <div id="errorMessage" class="text-danger mt-2"></div>
-                            <div id="successMessage" class="text-success mt-2"></div>
-                        </div>
-
-                        <div class="d-flex justify-content-center">
-                            <div id="spinnerBorder2" class="spinner-border" style="display: none;" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
+                        <small class="text-light">
+                            New to our platform? <a
+                                class="link-offset-2 link-underline link-underline-opacity-25"
+                                href="register.html"><strong>Sign Up</strong></a>
+                        </small>
+                        <hr class="my-4">
 
                     </form>
 
+                    <div class="results-container" id="resultsContainer">
+                        <div class="results-header">
+                            <h3 class="results-title">Transcription Results</h3>
+                            <button class="copy-btn" id="copyBtn">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="results-content" id="resultsContent">
+                            <!-- Transcription results will appear here -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -896,7 +766,233 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    <script src="split_audio.js"></script>
+    <script src="auth_factory.js"></script>
+
+      <script>
+
+
+        const auth = new AuthUser();
+        const form = document.getElementById('loginForm');
+        const btnSubmit = document.getElementById('btnSubmit')
+        const infoMessage = document.getElementById('info-message')
+        const successMessage = document.getElementById('success-message')
+        const errorMessage = document.getElementById('error-message')
+        const passwordStrength = document.getElementById('password-strength');
+        const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                <span role="status">Loading...</span>`;
+
+
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordField = document.getElementById("password");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                this.classList.remove("fa-eye");
+                this.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                this.classList.remove("fa-eye-slash");
+                this.classList.add("fa-eye");
+            }
+        });
+
+        async function cleanAlerts() {
+            infoMessage.textContent = '';
+                successMessage.textContent = '';
+                errorMessage.textContent = '';
+                btnSubmit.innerHTML = '<span>Login</span>';
+        }
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            cleanAlerts()
+            if (!form.checkValidity()) {
+                event.stopPropagation();
+                form.classList.add("was-validated");
+                cleanAlerts()
+                return;
+            }
+
+            btnSubmit.innerHTML = spinnerHtml;
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Reset previous error message
+            errorMessage.textContent = '';
+            passwordStrength.textContent = '';
+
+            const formD = new FormData(event.target)
+
+            // Basic validation
+            if (!formD.get('username') || !formD.get('password')) {
+                errorMessage.textContent = 'Username and password are required!';
+                return;
+            }
+
+            if (formD.get('username').length < 4) {
+                errorMessage.textContent = 'Username must have at least 4 characters long.';
+                return;
+            }
+
+            // Prevent SQL Injection - Allow only letters, numbers, and underscores
+            const sqlInjectionPattern = /^[a-zA-Z0-9_]+$/;
+            if (!sqlInjectionPattern.test(formD.get('username'))) {
+                errorMessage.textContent = 'Invalid username! Use only letters, numbers, and underscores.';
+                return;
+            }
+
+            // Password strength validation
+            const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+
+            const formData = JSON.stringify({ "username": formD.get('username'), "password": formD.get('password') });
+
+            const options = {
+                method: 'post',
+                body: formData,
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                },
+            };
+            console.log("Login with cookies tarting...")
+            //const response = await auth.login(options)
+            const response = await auth.makeRequest(options, 'api/v1/auth/login')
+            
+            if(response===null){
+                cleanAlerts()
+                errorMessage.textContent = 'Failed to login! Please try again later.';
+                return;
+            } if (!response.ok) {
+                //const message = await auth.handlingErrors(response)
+                console.error("Login failed! " + response)
+                const message = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
+                if(!response.status_code)   {
+                    const error = await auth.handlingFieldErrors(response)
+                    errorMessage.textContent = error === null ? message : error;
+                } else
+                if(response.status_code===201){
+                    infoMessage.textContent = message;
+                }else if (response.status_code === 200) {
+                    console.error("Login success! ")
+                    console.log(response)
+                    successMessage.textContent = response.message;
+                    setTimeout(() => {
+                        window.location.href = auth.baseURL + '/admin.html';
+                    }, 1000);
+                }else {
+                    
+                    const error = await auth.handlingErrors(response) 
+                    console.error("Error to register user. " + error)
+                    errorMessage.textContent = error;
+                }
+                
+                
+            } else {
+                
+                infoMessage.textContent = '';
+                successMessage.textContent = '';
+                errorMessage.textContent = '';
+                if (response.status_code === 200) {
+                    successMessage.textContent = 'Login successful! Redirecting...';
+                    setTimeout(() => {
+                        window.location.href = auth.baseURL + '/admin.html';
+                    }, 1000);
+                } 
+            }
+            successMessage.textContent = '';
+            //infoMessage.textContent = '';
+            btnSubmit.innerHTML = '<span>Login</span>';
+            document.getElementById('password').value = '';
+            console.log('Process  finished!')
+        });
+
+
+
+
+        async function accessProtectedRoute() {
+            const options = {
+                method: 'get',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                },
+            };
+            console.log("Accessing protected route with cookies tarting...")
+            const endpoint = 'protected';
+            const response = await auth.makeRequest(options, endpoint)
+            console.log(response)
+
+            if (!response.ok && !response.status_code) {
+                const message = await auth.handlingErrors(response)
+                console.log(message)
+            } else {
+                if (response.status_code === 200) {
+                    localStorage.setItem('user_id', response.id)
+                    localStorage.setItem('username', response.username)
+                    localStorage.setItem('fullname', response.full_name)
+                    window.location.href = auth.baseURL + '/admin.html'
+                    console.log("Accessed protected successfully!")
+                }
+
+            }
+            console.log('Process  finished!')
+        }
+
+        function showAdminArea() {
+            const token = localStorage.getItem('jwtToken');
+            if (token) {
+                document.getElementById('adminArea').style.display = 'block';
+                //fetchUserData(token);
+            }
+        }
+
+        function fetchUserDat(token) {
+            // Simulate fetching user data
+            const userData = {
+                username: 'admin',
+                email: 'admin@example.com'
+            };
+
+            document.getElementById('userData').textContent = JSON.stringify(userData, null, 2);
+        }
+
+
+
+        function fetchUserData(method, endpoint, formData, headers) {
+            const request = method === 'POST' ? {
+                method: method,
+                body: formData,
+                headers: headers
+            } : {
+                method: method,
+                headers: headers
+            };
+
+            fetch(endpoint, request)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    if (data.access_token) {
+                        localStorage.setItem('jwtToken', data.access_token)
+                        document.getElementById('token').value = data.access_token;
+                    } else if (data.id) {
+                        localStorage.setItem('user_id', data.id)
+                        localStorage.setItem('username', data.username)
+                        localStorage.setItem('fullname', data.full_name)
+
+                        //alert(`ID: ${data.id}_ Username: ${data.username}__" Fullname: ${data.full_name}`)
+                        window.location.href = '/admin.html'
+                    }
+                    document.getElementById('userData').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                });
+        }
+    </script>
 </body>
 
 </html>
