@@ -596,23 +596,23 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
+                        <a class="nav-link" href="portfolio/about.html">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="experiences.html">Experience</a>
+                        <a class="nav-link" href="portfolio/experiences.html">Experience</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="projects.html">Projects</a>
+                        <a class="nav-link" href="portfolio/projects.html">Projects</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="blog.html">Blog</a>
+                        <a class="nav-link" href="portfolio/blog.html">Blog</a>
                     </li>
 
                     <a href="../register.html" class="btn btn-auth btn-register">
                         <i class="fas fa-user-plus"></i>
                         <span>Register</span>
                     </a>
-                    <a href="../login.html" class="btn btn-auth btn-login">
+                    <a href="../login.html" class="btn btn-auth btn-login active">
                         <i class="fas fa-sign-in-alt"></i>
                         <span>Login</span>
                     </a>
@@ -623,192 +623,87 @@
     </nav>
 
     <main class="container py-5">
-        <div class="row">
-            <!-- Desktop Sidebar Menu -->
-            <aside class="col-lg-3 d-none d-lg-block">
-                <div class="sidebar">
-                    <h3 class="sidebar-title">Related Tools</h3>
-                    <ul class="article-list">
-                        <li>
-                            <a href="#">
-                                <strong>Audio Transcription Service</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-clock"></i> Fast processing</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Video to Text Converter</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-clock"></i> Supports multiple formats</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Speech Recognition API</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-clock"></i> Developer friendly</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Batch Processing</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-clock"></i> Process multiple files</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
+        <div class="row justify-content-center">
+          
 
-                    <h3 class="sidebar-title mt-5">Features</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">High accuracy</a></li>
-                        <li><a href="#">Multi-language support</a></li>
-                        <li><a href="#">Secure processing</a></li>
-                        <li><a href="#">Download results</a></li>
-                        <li><a href="#">API access</a></li>
-                    </ul>
-                </div>
-            </aside>
-
-            <!-- Mobile Sidebar Menu (Hidden by default) -->
-            <div class="mobile-sidebar-overlay"></div>
-            <aside class="mobile-sidebar">
-                <button class="mobile-sidebar-close">
-                    <i class="fas fa-times"></i>
-                </button>
-                <h3 class="sidebar-title">Related Tools</h3>
-                <ul class="article-list">
-                    <li>
-                        <a href="#">
-                            <strong>Audio Transcription Service</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-clock"></i> Fast processing</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>Video to Text Converter</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-clock"></i> Supports multiple formats</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>Speech Recognition API</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-clock"></i> Developer friendly</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>Batch Processing</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-clock"></i> Process multiple files</span>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-
-                <h3 class="sidebar-title mt-5">Features</h3>
-                <ul class="footer-links">
-                    <li><a href="#">High accuracy</a></li>
-                    <li><a href="#">Multi-language support</a></li>
-                    <li><a href="#">Secure processing</a></li>
-                    <li><a href="#">Download results</a></li>
-                    <li><a href="#">API access</a></li>
-                </ul>
-            </aside>
-
-            <!-- Mobile Toggle Button -->
-            <button class="mobile-sidebar-toggle d-lg-none">
-                <i class="fas fa-book-open"></i>
-            </button>
+            
 
             <!-- Main Content -->
-            <div class="col-lg-9">
+            <div class="col-lg-5">
                 <div class="upload-container">
                     <div class="upload-header">
-                        <h1 class="upload-title">Speech to Text Converter</h1>
-                        <p class="upload-description">Upload your audio or video files to convert speech to text with
-                            high accuracy. Our service supports multiple formats and languages.</p>
+                        <h1 class="upload-title">Login</h1>
+                        <p class="upload-description">
+                            Make login to your account to have access of our applications.
+                        </p>
                     </div>
 
-                    <form id="uploadForm" class="needs-validation" enctype="multipart/form-data" novalidate>
+                    <form id="loginForm" class="needs-validation" enctype="multipart/form-data" novalidate>
                         
-                        <div class="form-group">
-                            <label for="fileInput" class="form-label">Select File</label>
-                            <div class="file-upload-wrapper">
-                                <input type="file" id="fileInput" name="fileInput" class="file-upload-input"
-                                    accept="audio/*,video/*" required>
-                                <label for="fileInput" class="file-upload-label">
-                                    <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
-                                    <span class="file-upload-text">Drag & drop your file here or click to browse</span>
-                                    <span class="file-upload-hint">Max file size: 100MB</span>
-                                </label>
+                        <div class="mb-2">
+                            <div class="col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control rounded-3" id="username"
+                                        name="username" placeholder="username or name@example.com"
+                                        required>
+                                    <label for="username">Username</label>
+                                    <div class="invalid-feedback">
+                                        Valid username is required.
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="supported-formats">
-                            <div class="supported-formats-title">Supported formats:</div>
-                            <div>
-                                <span class="format-badge">MP3</span>
-                                <span class="format-badge">WAV</span>
-                                <span class="format-badge">AAC</span>
-                                <span class="format-badge">FLAC</span>
-                                <span class="format-badge">MP4</span>
-                                <span class="format-badge">MOV</span>
-                                <span class="format-badge">AVI</span>
-                                <span class="format-badge">MKV</span>
+                        <div class="mb-2">
+                            <div class="col-12">
+                                <div class="form-floating mb-3 position-relative">
+                                    <input type="password" class="form-control rounded-3"
+                                        name="password" id="password" placeholder="********" required>
+                                    <label for="password">Password</label>
+                                    <div class="invalid-feedback">Valid password is required.</div>
+                                    <i class="fa-solid fa-eye position-absolute" id="togglePassword"
+                                        style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;color:#4e4e4e;"></i>
+                                </div>
                             </div>
                         </div>
-                        
 
-                        <div class="form-group">
-                            <label for="languageSelect" class="form-label">Output Language</label>
-                            <select id="languageSelect" name="languageSelect" class="form-select" required>
-                                <option value="">Select language</option>
-                                <option value="en">English</option>
-                                <option value="es">Spanish</option>
-                                <option value="fr">French</option>
-                                <option value="de">German</option>
-                                <option value="pt">Portuguese</option>
-                                <option value="other">Other (auto-detect)</option>
-                            </select>
+
+                        <div class="mb-2">
+                            <div class="col-12">
+                                <div class="password-strength" id="password-strength"></div>
+                                <div class="error-message text-danger" id="error-message"></div>
+                                <div class="info-message text-info" id="info-message"></div>
+                                <div class="success-message text-success" id="success-message"></div>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="outputFormat" class="form-label">Output Format</label>
-                            <select id="outputFormat" name="outputFormat" class="form-select">
-                                <option value="plain">Plain Text</option>
-                                <!--<option value="srt">SubRip (SRT)</option>
-                                <option value="vtt">WebVTT</option>
-                                <option value="json">JSON</option>-->
-                            </select>
-                        </div>
+                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit"
+                            id="btnSubmit">Login</button>
 
-                        <button type="submit" class="btn-submit">
-                            <i class="fas fa-exchange-alt"></i>
-                            <span id="submit-title">Convert to Text</span>
-
+                        <small class="text-light-emphasis">By clicking Sign up, you agree to the terms
+                            of use.</small>
+                        <hr class="my-4">
+                        <h2 class="fs-5 fw-bold mb-3">Or use</h2>
+                        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3"
+                            type="submit">
+                            <svg class="bi me-1" width="16" height="16">
+                                <use xlink:href="#twitter" />
+                            </svg>
+                            Sign in with Twitter
+                        </button>
+                        <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="submit">
+                            <svg class="bi me-1" width="16" height="16">
+                                <use xlink:href="#facebook" />
+                            </svg>
+                            Sign in with Facebook
                         </button>
 
-                        <div class="form-group">
-                            <div id="errorMessage" class="text-danger mt-2"></div>
-                            <div id="successMessage" class="text-success mt-2"></div>
-                        </div>
-
-                        <div class="d-flex justify-content-center">
-                            <div id="spinnerBorder" class="spinner-border" style="display: none;" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
+                        <small class="text-light">
+                            New to our platform? <a
+                                class="link-offset-2 link-underline link-underline-opacity-25"
+                                href="register.html"><strong>Sign Up</strong></a>
+                        </small>
+                        <hr class="my-4">
 
                     </form>
 
@@ -871,229 +766,231 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    <script src="request_factory.js"></script>
-    <script>
+    <script src="auth_factory.js"></script>
 
-        const request = new RequestFactory();
+      <script>
 
 
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
+        const auth = new AuthUser();
+        const form = document.getElementById('loginForm');
+        const btnSubmit = document.getElementById('btnSubmit')
+        const infoMessage = document.getElementById('info-message')
+        const successMessage = document.getElementById('success-message')
+        const errorMessage = document.getElementById('error-message')
+        const passwordStrength = document.getElementById('password-strength');
+        const spinnerHtml = `<span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                <span role="status">Loading...</span>`;
 
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
 
-                window.scrollTo({
-                    top: targetElement.offsetTop - 100,
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Mobile sidebar toggle
-        const mobileSidebarToggle = document.querySelector('.mobile-sidebar-toggle');
-        const mobileSidebar = document.querySelector('.mobile-sidebar');
-        const mobileSidebarClose = document.querySelector('.mobile-sidebar-close');
-        const mobileSidebarOverlay = document.querySelector('.mobile-sidebar-overlay');
-
-        function toggleMobileSidebar() {
-            mobileSidebar.classList.toggle('active');
-            mobileSidebarOverlay.classList.toggle('active');
-            document.body.style.overflow = mobileSidebar.classList.contains('active') ? 'hidden' : '';
-        }
-
-        mobileSidebarToggle.addEventListener('click', toggleMobileSidebar);
-        mobileSidebarClose.addEventListener('click', toggleMobileSidebar);
-        mobileSidebarOverlay.addEventListener('click', toggleMobileSidebar);
-
-        // Close sidebar when clicking on a link
-        document.querySelectorAll('.mobile-sidebar a').forEach(link => {
-            link.addEventListener('click', toggleMobileSidebar);
-        });
-
-        // Prevent body scroll when sidebar is open
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && mobileSidebar.classList.contains('active')) {
-                toggleMobileSidebar();
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordField = document.getElementById("password");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                this.classList.remove("fa-eye");
+                this.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                this.classList.remove("fa-eye-slash");
+                this.classList.add("fa-eye");
             }
         });
 
-        // File upload form handling
-        const submitTitle = document.getElementById('submit-title');
-        const uploadForm = document.getElementById('uploadForm');
-        const fileInput = document.getElementById('fileInput');
-        const resultsContainer = document.getElementById('resultsContainer');
-        const resultsContent = document.getElementById('resultsContent');
-        const copyBtn = document.getElementById('copyBtn');
-        const spinnerBorder = document.getElementById('spinnerBorder');
-        const errorMessage = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessage');
+        async function cleanAlerts() {
+            infoMessage.textContent = '';
+                successMessage.textContent = '';
+                errorMessage.textContent = '';
+                btnSubmit.innerHTML = '<span>Login</span>';
+        }
 
-        const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
-
-        uploadForm.addEventListener('submit', async (event) => {
+        form.addEventListener('submit', async (event) => {
             event.preventDefault();
-
-            if (!uploadForm.checkValidity()) {
+            cleanAlerts()
+            if (!form.checkValidity()) {
                 event.stopPropagation();
-                uploadForm.classList.add("was-validated");
-
+                form.classList.add("was-validated");
+                cleanAlerts()
                 return;
             }
 
-            spinnerBorder.style.display = 'block';
+            btnSubmit.innerHTML = spinnerHtml;
 
-            // Simulate processing (in a real app, this would be an API call)
-            if (fileInput.files.length > 0) {
-                const fileName = fileInput.files[0].name;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-                if (fileInput.files[0].size > MAX_FILE_SIZE) {
-                    errorMessage.innerText = 'File is too large! Maximum allowed size is 25MB.';
-                    successMessage.innerText = '';
-                    spinnerBorder.style.display = 'none';
-                    return;
-                }
-                errorMessage.innerText = '';
-                successMessage.innerText = '';
+            // Reset previous error message
+            errorMessage.textContent = '';
+            passwordStrength.textContent = '';
 
-                const formData = new FormData(event.target)
+            const formD = new FormData(event.target)
 
-                // Show loading state
-                resultsContent.innerHTML = '<p>Processing your file... Please wait.</p>';
-                resultsContainer.style.display = 'block';
-
-                // Simulate processing delay
-                setTimeout(async () => {
-
-                    //
-                    //const formData = JSON.stringify({ "file": form.get('fileInput'), 
-                    //"language": form.get('languageSelect'), 
-                    //"outputFormat": form.get('outputFormat') });
-
-                    const options = {
-                        method: 'post',
-                        body: formData,
-                        credentials: 'include',
-                        mode: 'cors',
-                        headers: {
-                            //'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': request.getCookie('csrf_access_token'),
-                        },
-                    };
-                    console.log("Login with cookies tarting...")
-
-                    console.log(formData.get('languageSelect'))
-
-                    const response = await request.makeRequest(options, '/api/v1/speech_recognition/convert-audio-speech-into-text')
-                    console.log(response)
-
-                    let message = null;
-
-                    if (response === null) {
-                        //cleanAlerts()
-                        //errorMessage.textContent = 'Failed to login! Please try again later.';
-                        return;
-                    } if (!response.ok) {
-
-                        //message = await request.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
-                        resultsContent.innerHTML = !response.error ? response.transcription : `<span class="text-danger">${response.error}</span>`;
-                    }
-                    // This is just sample text - in a real app, you would get this from your speech-to-text API
-                    //const sampleText = `This is a sample transcription of your audio/video file: ${fileName}\n\n`;
-                    //const loremIpsum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.\n\n`;
-
-                    //sampleText + loremIpsum.repeat(5);
-
-                    // Scroll to results
-                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
-                    spinnerBorder.style.display = 'none';
-                }, 2000);
+            // Basic validation
+            if (!formD.get('username') || !formD.get('password')) {
+                errorMessage.textContent = 'Username and password are required!';
+                return;
             }
+
+            if (formD.get('username').length < 4) {
+                errorMessage.textContent = 'Username must have at least 4 characters long.';
+                return;
+            }
+
+            // Prevent SQL Injection - Allow only letters, numbers, and underscores
+            const sqlInjectionPattern = /^[a-zA-Z0-9_]+$/;
+            if (!sqlInjectionPattern.test(formD.get('username'))) {
+                errorMessage.textContent = 'Invalid username! Use only letters, numbers, and underscores.';
+                return;
+            }
+
+            // Password strength validation
+            const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+
+            const formData = JSON.stringify({ "username": formD.get('username'), "password": formD.get('password') });
+
+            const options = {
+                method: 'post',
+                body: formData,
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                },
+            };
+            console.log("Login with cookies tarting...")
+            //const response = await auth.login(options)
+            const response = await auth.makeRequest(options, 'api/v1/auth/login')
             
-
-        });
-
-        // Copy results to clipboard
-        copyBtn.addEventListener('click', function () {
-            const range = document.createRange();
-            range.selectNode(resultsContent);
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
-            document.execCommand('copy');
-            window.getSelection().removeAllRanges();
-
-            // Show copied feedback
-            const originalText = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-            setTimeout(() => {
-                copyBtn.innerHTML = originalText;
-            }, 2000);
-        });
-
-        // File input styling
-        fileInput.addEventListener('change', function () {
-            if (this.files.length > 0) {
-                const fileName = this.files[0].name;
-                const fileUploadLabel = document.querySelector('.file-upload-label');
-                
-                if (this.files[0].size > MAX_FILE_SIZE) {
-                    alert('File is too large! Maximum allowed size is 25MB.')
-                    errorMessage.innerText = 'File is too large! Maximum allowed size is 25MB.';
-                    successMessage.innerText = '';
-                    fileInput.value = ''; // Clear the file input
-                    return;
+            if(response===null){
+                cleanAlerts()
+                errorMessage.textContent = 'Failed to login! Please try again later.';
+                return;
+            } if (!response.ok) {
+                //const message = await auth.handlingErrors(response)
+                console.error("Login failed! " + response)
+                const message = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
+                if(!response.status_code)   {
+                    const error = await auth.handlingFieldErrors(response)
+                    errorMessage.textContent = error === null ? message : error;
+                } else
+                if(response.status_code===201){
+                    infoMessage.textContent = message;
+                }else if (response.status_code === 200) {
+                    console.error("Login success! ")
+                    console.log(response)
+                    successMessage.textContent = response.message;
+                    setTimeout(() => {
+                        window.location.href = auth.baseURL + '/admin.html';
+                    }, 1000);
+                }else {
+                    
+                    const error = await auth.handlingErrors(response) 
+                    console.error("Error to register user. " + error)
+                    errorMessage.textContent = error;
                 }
-                errorMessage.innerText = '';
-                successMessage.innerText = '';
-
-                fileUploadLabel.innerHTML = `
-                    <i class="fas fa-file-alt file-upload-icon"></i>
-                    <span class="file-upload-text">${fileName}</span>
-                    <span class="file-upload-hint">Click to change file</span>
-                `;
+                
+                
+            } else {
+                
+                infoMessage.textContent = '';
+                successMessage.textContent = '';
+                errorMessage.textContent = '';
+                if (response.status_code === 200) {
+                    successMessage.textContent = 'Login successful! Redirecting...';
+                    setTimeout(() => {
+                        window.location.href = auth.baseURL + '/admin.html';
+                    }, 1000);
+                } 
             }
+            successMessage.textContent = '';
+            //infoMessage.textContent = '';
+            btnSubmit.innerHTML = '<span>Login</span>';
+            document.getElementById('password').value = '';
+            console.log('Process  finished!')
         });
 
-        // Drag and drop functionality
-        const fileUploadWrapper = document.querySelector('.file-upload-wrapper');
 
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            fileUploadWrapper.addEventListener(eventName, preventDefaults, false);
-        });
 
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
+
+        async function accessProtectedRoute() {
+            const options = {
+                method: 'get',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                },
+            };
+            console.log("Accessing protected route with cookies tarting...")
+            const endpoint = 'protected';
+            const response = await auth.makeRequest(options, endpoint)
+            console.log(response)
+
+            if (!response.ok && !response.status_code) {
+                const message = await auth.handlingErrors(response)
+                console.log(message)
+            } else {
+                if (response.status_code === 200) {
+                    localStorage.setItem('user_id', response.id)
+                    localStorage.setItem('username', response.username)
+                    localStorage.setItem('fullname', response.full_name)
+                    window.location.href = auth.baseURL + '/admin.html'
+                    console.log("Accessed protected successfully!")
+                }
+
+            }
+            console.log('Process  finished!')
         }
 
-        ['dragenter', 'dragover'].forEach(eventName => {
-            fileUploadWrapper.addEventListener(eventName, highlight, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            fileUploadWrapper.addEventListener(eventName, unhighlight, false);
-        });
-
-        function highlight() {
-            fileUploadWrapper.classList.add('highlight');
+        function showAdminArea() {
+            const token = localStorage.getItem('jwtToken');
+            if (token) {
+                document.getElementById('adminArea').style.display = 'block';
+                //fetchUserData(token);
+            }
         }
 
-        function unhighlight() {
-            fileUploadWrapper.classList.remove('highlight');
+        function fetchUserDat(token) {
+            // Simulate fetching user data
+            const userData = {
+                username: 'admin',
+                email: 'admin@example.com'
+            };
+
+            document.getElementById('userData').textContent = JSON.stringify(userData, null, 2);
         }
 
-        fileUploadWrapper.addEventListener('drop', handleDrop, false);
 
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            fileInput.files = files;
 
-            // Trigger change event
-            const event = new Event('change');
-            fileInput.dispatchEvent(event);
+        function fetchUserData(method, endpoint, formData, headers) {
+            const request = method === 'POST' ? {
+                method: method,
+                body: formData,
+                headers: headers
+            } : {
+                method: method,
+                headers: headers
+            };
+
+            fetch(endpoint, request)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    if (data.access_token) {
+                        localStorage.setItem('jwtToken', data.access_token)
+                        document.getElementById('token').value = data.access_token;
+                    } else if (data.id) {
+                        localStorage.setItem('user_id', data.id)
+                        localStorage.setItem('username', data.username)
+                        localStorage.setItem('fullname', data.full_name)
+
+                        //alert(`ID: ${data.id}_ Username: ${data.username}__" Fullname: ${data.full_name}`)
+                        window.location.href = '/admin.html'
+                    }
+                    document.getElementById('userData').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                });
         }
     </script>
 </body>
