@@ -18,8 +18,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="style_auth_form.css">
     <style>
+        
         :root {
             --primary-color: #4f46e5;
             --secondary-color: #10b981;
@@ -608,11 +609,11 @@
                         <a class="nav-link" href="portfolio/blog.html">Blog</a>
                     </li>
 
-                    <a href="../new_register.html.html" class="btn btn-auth btn-new_register.html active">
+                    <a href="new_register.html" class="btn btn-auth btn-new_register.html active">
                         <i class="fas fa-user-plus"></i>
-                        <span>new_register.html</span>
+                        <span>Register</span>
                     </a>
-                    <a href="../new_login.html" class="btn btn-auth btn-login">
+                    <a href="new_login.html" class="btn btn-auth btn-login">
                         <i class="fas fa-sign-in-alt"></i>
                         <span>Login</span>
                     </a>
@@ -632,7 +633,7 @@
             <div class="col-lg-9">
                 <div class="upload-container">
                     <div class="upload-header">
-                        <h1 class="upload-title">User new_register.html</h1>
+                        <h1 class="upload-title">User Register</h1>
                         <p class="upload-description">
                             Create your account to have access of our applications.
                         </p>
@@ -685,10 +686,10 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <label for="country" class="form-label"
                                     style="color: #b4b3b3;">Country</label>
-                                <select class="form-select" id="country" name="country" required>
+                                <select class="form-control" id="country" name="country" required>
                                     <option value="">Choose...</option>
                                     <option>Angola</option>
                                 </select>
@@ -698,10 +699,10 @@
                                 <p id="alert-countries" class="text-danger"></p>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label for="country" class="form-label"
                                     style="color: #b4b3b3;">Code</label>
-                                <select class="form-select" id="country_tel_code"
+                                <select class="form-control" id="country_tel_code"
                                     name="country_tel_code" required>
                                     <option value="">Choose...</option>
                                 </select>
