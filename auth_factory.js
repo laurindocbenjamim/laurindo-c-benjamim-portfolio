@@ -188,7 +188,7 @@ async function getUserData() {
         console.log(message)
         setTimeout(() => {
             window.location.href = auth.baseURL + '/new_login.html'
-        }, 2000)
+        }, 3000)
         return;
     } else {
         if (response.status_code === 200) {
@@ -209,7 +209,7 @@ async function getUserData() {
             alert("Ups! Something went wrong. Redirecting to login...")
             setTimeout(() => {
                 window.location.href = auth.baseURL + '/new_login.html'
-            }, 2000)
+            }, 3000)
             return false;
         }
 
