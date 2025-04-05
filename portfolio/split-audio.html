@@ -510,6 +510,78 @@
             transition: width 0.3s ease;
         }
 
+
+        .audio-list {
+            display: grid;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            gap: 20px;
+            background-color: #10b981;
+            border-radius: 4px;
+            max-width: 800px;
+            max-height: 350px;
+            overflow-y: auto;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .audio-item {
+           
+        }
+
+        .audio-item:hover {
+            background-color: #343746;
+            transform: translateY(-2px);
+        }
+
+        .audio-icon svg {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+        }
+
+        .audio-info {
+            flex: 1;
+        }
+
+        .audio-info h3 {
+            margin: 0;
+            color: #f8f8f2;
+            font-size: 1.1rem;
+        }
+
+        .audio-info p {
+            margin: 5px 0 0;
+            color: #6272a4;
+            font-size: 0.9rem;
+        }
+
+        .audio-player {
+            flex: 2;
+            min-width: 200px;
+            height: 40px;
+        }
+
+        .audio-player::-webkit-media-controls-panel {
+            background-color: #44475a;
+            border-radius: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .audio-item {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .audio-player {
+                flex: 1 0 100%;
+            }
+        }
+
+
         /* Responsive adjustments */
         @media (max-width: 1200px) {
             .sidebar {
@@ -796,28 +868,32 @@
                             <audio id="audioPlayer" controls class="w-100 mb-3"></audio>
                         </div>
 
-                        <div class="mb-4">
-                            <div class="form-group">
-                                <label for="numberOfChunks" class="form-label">Number of chunks</label>
-                                <select id="numberOfChunks" name="numberOfChunks" class="form-select" required>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
+                        <div class="col-md-3">
+                            <label for="numberOfChunks" class="form-label"
+                                style="color: #b4b3b3;">Number of chunks</label>
+                            <input type="text" class="form-control" name="numberOfChunks"
+                                id="numberOfChunks" placeholder="1" value="1" >
+                            
+                        </div>
+
+                        <div id="progressBarContainer" class="progress mt-3 d-none" role="progressbar"
+                            aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0"
+                            aria-valuemax="100">
+                            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated"
+                                style="width: 0%">
+                                0%
                             </div>
                         </div>
 
-
-                        <div id="splitControls" class="mb-3 d-none">
-                            <button id="splitBtn" class="btn btn-primary">Split Audio into 3 Parts</button>
+                        <div id="splitControls" class="mb-3 mt-3 d-none">
+                            <button id="splitBtn" class="btn btn-primary">Split Audio</button>
                         </div>
 
                         <div id="results" class="d-none">
                             <h5>Split Results</h5>
-                            <div class="row" id="audioParts">
+                            <div class="row" >
                                 <!-- Parts will be added here dynamically -->
+                                <div id="audioParts"  class="audio-list"></div>
                             </div>
                             <div class="mt-3">
                                 <button id="sendToServerBtn" type="submit" class="btn btn-success">Send All to
@@ -825,13 +901,13 @@
                             </div>
                         </div>
 
-                        <div id="uploadProgressContainer" class="progress-container d-none mt-3">
+                        <!--<div id="uploadProgressContainer" class="progress-container d-none mt-3">
                             <div class="progress">
                                 <div id="uploadProgress" class="progress-bar progress-bar-striped progress-bar-animated"
                                     role="progressbar" style="width: 0%"></div>
                             </div>
                             <small id="uploadProgressText" class="text-muted">Uploading to server: 0%</small>
-                        </div>
+                        </div>-->
 
                         <div id="status" class="mt-3"></div>
 
@@ -840,11 +916,11 @@
                             <div id="successMessage" class="text-success mt-2"></div>
                         </div>
 
-                        <div class="d-flex justify-content-center">
+                        <!--<div class="d-flex justify-content-center">
                             <div id="spinnerBorder2" class="spinner-border" style="display: none;" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
-                        </div>
+                        </div>-->
 
                     </form>
 
