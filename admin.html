@@ -588,18 +588,15 @@
 
             const auth = new AuthUser();
 
-            //setTimeout(() => {
-
             if (!response) {
                 setTimeout(() => {
-                    document.querySelector(".spinner-container").style.display = "none";
                     window.location.href = auth.baseURL + '/new_login.html'
                 }, 3000)
                 return;
             }
-
+            document.querySelector(".spinner-container").style.display = "none";
             localStorage.setItem("pageRefreshed", "true");
-            //location.reload();
+          
 
             document.getElementById('main-content').style.display = 'block';
             document.getElementById('user-info').style.display = 'block';
@@ -608,10 +605,6 @@
             document.getElementById('login-link').style.display = 'none';
             document.getElementById('logout-link').style.display = 'block';
             document.getElementById('logout-link-2').style.display = 'block';
-
-
-            //document.querySelector(".spinner-container").style.display = "none";
-            //}, 2000);
 
 
             window.addEventListener('navbarLoaded', () => {
