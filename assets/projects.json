@@ -1,0 +1,38 @@
+[
+  {
+    "title": "MSpeeText: converter",
+    "description": "Convert audio speech into text.",
+    "url": "convert-speech-to-text.html",
+    "repository":""
+  },
+  {
+    "title": "MSpeeText - Streaming",
+    "description": "Convert audio speech into text in Streaming.",
+    "url": "stream-convert-speech-to-text.html",
+    "repository":""
+  },
+  {
+    "title": "Countries API",
+    "description": "API of international country calling phone codes.",
+    "url": "https://www.d-tuning.com/api/v1/web-scrapping/countries",
+    "repository":""
+  },
+  {
+    "title": "Sentiment Analysis",
+    "description": "Extract sentiments from text using the Watson AI API",
+    "url": "#",
+    "repository": "https://github.com/laurindocbenjamim/pylau-app-flask/tree/main/app/package_data_science/module_sentiment_analyse"
+  },
+  {
+    "title": "Stream Speech Test",
+    "description": "Record your speech and convert it to text.",
+    "url": "stream-speech.html",
+    "repository":""
+  },
+  {
+    "title": "Audio Splitter",
+    "description": "Split audio files into smaller segments ",
+    "url": "split-audio.html",
+    "repository":""
+  }
+]

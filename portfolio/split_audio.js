@@ -1,3 +1,53 @@
+
+
+    // Function to fetch and populate the list
+    async function populateProjectList() {
+        try {
+            // Fetch the JSON file
+            const response = await fetch('../assets/projects.json');
+            const services = await response.json();
+            
+            // Get the UL element
+            const articleList = document.querySelector('.article-list');
+
+            // Clear any existing items
+            articleList.innerHTML = '';
+
+            // Create and append list items for each service
+            services.forEach(service => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+          <a href="${service.url}">
+            <strong>${service.title}</strong>
+            <div class="article-meta">
+              <span><i class="far fa-clock"></i> ${service.description}</span>
+            </div>
+          </a>
+        `;
+                articleList.appendChild(listItem);
+            });
+
+        } catch (error) {
+            console.error('Error loading the services:', error);
+            // Fallback to default items if JSON fails to load
+            const articleList = document.querySelector('.article-list');
+            articleList.innerHTML = `
+        <li>
+          <a href="#">
+            <strong>Audio Transcription Service</strong>
+            <div class="article-meta">
+              <span><i class="far fa-clock"></i> Fast processing</span>
+            </div>
+          </a>
+        </li>
+        
+      `;
+        }
+    }
+// Function to fetch and populate the list
+// Run when the page loads
+document.addEventListener('DOMContentLoaded', populateProjectList);
+
 document.addEventListener('DOMContentLoaded', function () {
     const audioFileInput = document.getElementById('audioFile');
     const audioInfoDiv = document.getElementById('audioInfo');
@@ -15,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let audioBuffer = null;
     let audioContext = null;
     let audioParts = [];
+
 
     // Initialize audio context
     function initAudioContext() {
@@ -186,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
         partDiv.className = 'col-md-4 audio-part';
 
         // Create the audio item with properly organized controls
-partDiv.innerHTML = `<div class="audio-item">
+        partDiv.innerHTML = `<div class="audio-item">
 <div class="audio-header">
     <div class="audio-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#50fa7b" width="18" height="18">
@@ -212,9 +263,9 @@ partDiv.innerHTML = `<div class="audio-item">
 </div>
 </div>`;
 
-// Add responsive styles
-const style = document.createElement('style');
-style.textContent = `
+        // Add responsive styles
+        const style = document.createElement('style');
+        style.textContent = `
 .audio-item {
 
 background-color: #282a36;
@@ -323,32 +374,32 @@ background-color: rgba(80, 250, 123, 0.1);
 }
 }
 `;
-document.head.appendChild(style);
+        document.head.appendChild(style);
 
-const audioElement = partDiv.querySelector('audio');
-const downloadBtn = partDiv.querySelector('.download-btn');
-const audioMeta = partDiv.querySelector('.audio-meta');
+        const audioElement = partDiv.querySelector('audio');
+        const downloadBtn = partDiv.querySelector('.download-btn');
+        const audioMeta = partDiv.querySelector('.audio-meta');
 
-// Create object URL for playback
-const blob = bufferToWavBlob(buffer);
-const objectUrl = URL.createObjectURL(blob);
-audioElement.src = objectUrl;
+        // Create object URL for playback
+        const blob = bufferToWavBlob(buffer);
+        const objectUrl = URL.createObjectURL(blob);
+        audioElement.src = objectUrl;
 
-// Calculate and display file size and duration
-audioElement.addEventListener('loadedmetadata', function() {
-const fileSizeMB = (blob.size / (1024 * 1024)).toFixed(1);
-const duration = audioElement.duration;
-const minutes = Math.floor(duration / 60);
-const seconds = Math.floor(duration % 60).toString().padStart(2, '0');
-audioMeta.textContent = `MP3 • ${fileSizeMB} MB • ${minutes}:${seconds}`;
-});
+        // Calculate and display file size and duration
+        audioElement.addEventListener('loadedmetadata', function () {
+            const fileSizeMB = (blob.size / (1024 * 1024)).toFixed(1);
+            const duration = audioElement.duration;
+            const minutes = Math.floor(duration / 60);
+            const seconds = Math.floor(duration % 60).toString().padStart(2, '0');
+            audioMeta.textContent = `MP3 • ${fileSizeMB} MB • ${minutes}:${seconds}`;
+        });
 
-// Set up download
-downloadBtn.addEventListener('click', function() {
-downloadAudio(blob, `part_${partNumber}.mp3`);
-});
+        // Set up download
+        downloadBtn.addEventListener('click', function () {
+            downloadAudio(blob, `part_${partNumber}.mp3`);
+        });
 
-audioPartsDiv.appendChild(partDiv);
+        audioPartsDiv.appendChild(partDiv);
     }
 
     // Convert AudioBuffer to WAV Blob
