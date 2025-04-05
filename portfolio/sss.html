@@ -1,105 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Audio Recorder</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cursor Control</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        #cursorCanvas {
+            border: 1px solid #ddd;
+            margin-top: 20px;
+            background-color: #f8f9fa;
+        }
+        .task-item {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .task-item:hover {
+            background-color: #f0f0f0;
+        }
+        #aiResponse {
+            min-height: 100px;
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+    </style>
 </head>
 <body>
+    <div class="container py-4">
+        <h1 class="text-center mb-4">AI Cursor Control</h1>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Task Management</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group mb-3">
+                            <input type="text" id="taskInput" class="form-control" placeholder="Enter a task...">
+                            <button class="btn btn-primary" id="addTaskBtn">Add Task</button>
+                        </div>
+                        <ul class="list-group" id="taskList">
+                            <!-- Tasks will be added here -->
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>AI Control</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="aiPrompt" class="form-label">AI Prompt</label>
+                            <textarea class="form-control" id="aiPrompt" rows="3" placeholder="Tell the AI what you want to do..."></textarea>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-success" id="executeAI">Execute with AI</button>
+                            <select class="form-select w-50" id="aiProvider">
+                                <option value="openai">OpenAI</option>
+                                <option value="deepseek">DeepSeek</option>
+                            </select>
+                        </div>
+                        <div class="mt-3" id="aiResponse"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Cursor Control</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <button class="btn btn-outline-primary" id="startControl">Start Cursor Control</button>
+                            <button class="btn btn-outline-danger" id="stopControl">Stop Cursor Control</button>
+                        </div>
+                        <canvas id="cursorCanvas" width="500" height="300"></canvas>
+                        <div class="mt-3">
+                            <button class="btn btn-info" id="openWebsiteBtn">Open Website Programmatically</button>
+                            <input type="text" id="websiteUrl" class="form-control mt-2" placeholder="https://example.com">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <h1>Audio Recorder</h1>
-
-  <button id="startButton">Start Recording</button>
-  <button id="stopButton" disabled>Stop Recording</button>
-
-  <div id="audioContainer"></div>
-
-  <script>
-    const startButton = document.getElementById('startButton');
-    const stopButton = document.getElementById('stopButton');
-    const audioContainer = document.getElementById('audioContainer');
-
-    let recorder;
-    let audioChunks = [];
-
-    startButton.addEventListener('click', startRecording);
-    stopButton.addEventListener('click', stopRecording);
-
-    function startRecording() {
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(function(stream) {
-          let selectedMimeType = null;
-          const supportedMimeTypes = [
-            'audio/webm;codecs=opus',
-            'audio/ogg;codecs=opus',
-            'audio/webm',
-            'audio/ogg',
-            'audio/mpeg'
-          ];
-
-          for (const mimeType of supportedMimeTypes) {
-            if (MediaRecorder.isTypeSupported(mimeType)) {
-              selectedMimeType = mimeType;
-              break;
-            }
-          }
-
-          if (selectedMimeType) {
-            recorder = new MediaRecorder(stream, { mimeType: selectedMimeType });
-
-            audioChunks = []; // Clear previous recording
-
-            recorder.ondataavailable = event => {
-              if (event.data.size > 0) {
-                audioChunks.push(event.data);
-              }
-            };
-
-            recorder.onstop = () => {
-              const audioBlob = new Blob(audioChunks, { type: selectedMimeType });
-              const audioUrl = URL.createObjectURL(audioBlob);
-              const audio = new Audio(audioUrl);
-              audio.controls = true;
-              audioContainer.innerHTML = ''; // Clear previous audio
-              audioContainer.appendChild(audio);
-
-              stopButton.disabled = true;
-              startButton.disabled = false;
-            };
-
-            recorder.start();
-            startButton.disabled = true;
-            stopButton.disabled = false;
-          } else {
-            alert("Your browser does not support any of the required audio mimeTypes for recording.");
-            stream.getTracks().forEach(track => track.stop());
-          }
-        })
-        .catch(function(err) {
-          console.error('Error accessing microphone:', err);
-          alert('Could not access the microphone. Please check your browser permissions.');
-        });
-    }
-
-    function stopRecording() {
-      recorder.stop();
-    }
-  </script>
-
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="agent_app.js"></script>
 </body>
 </html>

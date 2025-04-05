@@ -69,10 +69,11 @@ class AuthUser {
     };
 
     async getOptions(method, formData) {
-        const csrfToken = await this.getCookie2('csrf_access_token');
+        
         const headers = {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken,
+            'X-CSRF-TOKEN': await this.getCookie2('csrf_access_token'),
+            'Authorization': `Bearer ${await this.getCookie2('access_token_cookie')}`,
         };
         return method === 'GET' ? {
             method: method,
@@ -99,6 +100,11 @@ class AuthUser {
     };
 
     async handlingErrors(response) {
+        if (response === null || response === 'null') {
+            return 'No response from the server.';
+        }
+
+
         if (!response.ok) {
             const errorMessages = {
                 400: response.error || 'Bad Request.',
@@ -156,9 +162,10 @@ class AuthUser {
 };
 
 async function getUserData() {
+    document.querySelector(".spinner-container").style.display = "block";
 
     let response = null;
-    const auth = new AuthUser()
+    const auth = new AuthUser();
 
     const options = {
         method: 'get',
@@ -166,7 +173,8 @@ async function getUserData() {
         //mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': auth.getCookie2('csrf_access_token'),
+            'X-CSRF-TOKEN': await auth.getCookie2('csrf_access_token'),
+            'Authorization': `Bearer ${await auth.getCookie2('access_token_cookie')}`,
         },
     };
 
@@ -175,22 +183,22 @@ async function getUserData() {
     try {
         response = await auth.makeRequest(options, endpoint)
     } catch (error) {
+        localStorage.clear()
+        document.querySelector(".spinner-container").style.display = "none";
         throw new Error("Error to get the user data! " + error);
     }
     console.log("Response on getting User Data...")
-    //console.log(response)
-
-    if (!response.ok && !response.status_code) {
-
+   
+    console.log(`Is "response.ok" Null? ${response===null}`)
+    if (response ===null ||!response.ok===undefined) {
+        console.error("Error to get the user data! ")
         localStorage.clear()
-
         const message = await auth.handlingErrors(response)
-        console.log(message)
-        setTimeout(() => {
-            window.location.href = auth.baseURL + '/new_login.html'
-        }, 3000)
-        return;
+        //console.log(response.status_code)
+        document.querySelector(".spinner-container").style.display = "none";
+        return false;
     } else {
+        
         if (response.status_code === 200) {
             localStorage.setItem('user_id', response.id)
             localStorage.setItem('username', response.username)
@@ -203,11 +211,16 @@ async function getUserData() {
             window.dispatchEvent(new Event('userDataLoaded'))
 
             console.log("Accessed protected successfully!")
+            //document.querySelector(".spinner-container").style.display = "none";
             return true;
-        } else if (response.status_code === 401 || response.status_code === 422) {
+        } else {
+            
+            console.error("Failed to check the user data! ")
             localStorage.clear()
-            alert("Ups! Something went wrong. Redirecting to login...")
+            const message = await auth.getErrorsSuccessMessage(response.message ? response.message : '!!!', response.status_code)
+            console.error(message)
             setTimeout(() => {
+                document.querySelector(".spinner-container").style.display = "none";
                 window.location.href = auth.baseURL + '/new_login.html'
             }, 3000)
             return false;
@@ -242,7 +255,7 @@ async function logout(e) {
         credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+            'X-CSRF-TOKEN': auth.getCookie2('csrf_access_token'),
         },
     };
     console.log("Logout process with cookies tarting...")
@@ -299,7 +312,8 @@ async function send_email_for_confirmation(dataForm) {
         credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': auth.getCookie2('csrf_access_token'),
+            'X-CSRF-TOKEN': await this.getCookie2('csrf_access_token'),
+            'Authorization': `Bearer ${await this.getCookie2('access_token_cookie')}`,
         },
     };
     console.log("Send email starting...")

@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+
     // DOM elements
     const recordBtn = document.getElementById('recordBtn');
     const stopBtn = document.getElementById('stopBtn');
@@ -26,6 +28,22 @@ document.addEventListener('DOMContentLoaded', function() {
     let animationId;
     const barCount = 20;
     
+
+     // Check if user is logged in
+     const isLoggedIn = localStorage.getItem('user_id');
+     if (!isLoggedIn || isLoggedIn === 0 || isLoggedIn === null || isLoggedIn === undefined) {
+         // Hide login button
+         document.getElementById('login').style.display = 'block';
+         document.getElementById('register').style.display = 'block';
+         document.getElementById('isLoggedOut').style.display = 'none';
+         // Redirect to login page
+         alert('You are not logged in. Please log in to access this feature.');
+         localStorage.clear();
+         localStorage.setItem('denyed_page', 'convert-speech-to-text.html');
+         alert(localStorage.getItem('denyed_page'))
+         window.location.href = '../new_login.html';
+     }
+     
     // Create waveform bars
     function createWaveformBars() {
         waveform.innerHTML = '';

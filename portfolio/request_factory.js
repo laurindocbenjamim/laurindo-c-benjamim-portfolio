@@ -34,6 +34,15 @@ class RequestFactory {
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
+    async getCookie2(name) {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            const [cookieName, cookieValue] = cookie.trim().split('=');
+            if (cookieName === name) return cookieValue;
+        }
+        return null;
+    }
+
     async getOptions2(method, formData) {
         if (!method || !formData) { return null; };
 
@@ -158,4 +167,37 @@ async function filterDataFormLevel1(value, key, alertObject) {
     return true;
 }
 
+
+async function logout(e) {
+    localStorage.clear()
+    const auth = new AuthUser();
+    let response = null;
+    const options = {
+        method: 'get',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': auth.getCookie2('csrf_access_token'),
+        },
+    };
+    console.log("Logout process with cookies tarting...")
+    const endpoint = 'api/v1/auth/logout';
+    response = await auth.makeRequest(options, endpoint)
+    //console.log(response)
+    if (!response.ok) {
+        const message = await auth.handlingErrors(response)
+        if (message.logout || message.msg) {
+            console.info(message.logout + ". " + message.msg)
+        }
+
+        console.error("Logout process failed!")
+    } else {
+        console.log("Logout process done successfully!")
+    }
+    setTimeout(() => {
+        console.log("Accessing login page...")
+        window.location.href = auth.baseURL + '/new_login.html'
+    }, 400)
+    console.log('Process  finished!')
+};
 
