@@ -923,7 +923,9 @@
            setTimeout(() => {
             window.location.href = '../new_login.html';
             }, 3000);
+            
         }
+        document.querySelector('.spinner-container').style.display = 'none';
 
         localStorage.removeItem('denyed_page');
 
