@@ -11,7 +11,8 @@
     <meta name="generator" content="Laurindo C.Benjamim">
 
     <title>Home</title>
-    <link rel="icon" type="image/x-icon" href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
+    <link rel="icon" type="image/x-icon"
+        href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
 
@@ -142,13 +143,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
     <script src="auth_factory.js"></script>
     <!--<script src="assets/pages_component.js"></script>-->
-    <script>
 
-
-
-
-
-    </script>
 
 </head>
 
@@ -157,6 +152,7 @@
 
     <div class="spinner-container">
         <div class="spinner"></div>
+        <p style="color: #50fa7b; margin-top: 10px; font-size: 1.2rem;">Loading...</p>
     </div>
 
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -245,7 +241,7 @@
     </svg>
 
     <header class="navbar sticky-top flex-md-nowrap p-0 shadow" data-bs-theme="dark">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">Data Tuning</a>
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="index.html">Data Tuning</a>
 
         <ul class="navbar-nav flex-row d-md-none">
             <li class="nav-item text-nowrap">
@@ -347,12 +343,15 @@
                 <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu"
                     aria-labelledby="sidebarMenuLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="sidebarMenuLabel">Data Tuning</h5>
+                        <h5 class="offcanvas-title" id="sidebarMenuLabel"><a href="index.html"
+                                class="text-decoration-none">Data Tuning</a></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                             data-bs-target="#sidebarMenu" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
                         <ul class="nav flex-column">
+
+
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#">
                                     <svg class="bi">
@@ -369,12 +368,21 @@
                                     Market Analyse
                                 </a>
                             </li>
-                            <li class="nav-item"></li>
-                            <a class="nav-link d-flex align-items-center gap-2" aria-current="page"
-                                href="cv_customizer.html">
-                                <i class="fa-regular fa-circle-user"></i>
-                                CV Customizer
-                            </a>
+
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" aria-current="page"
+                                    href="portfolio/convert-speech-to-text.html">
+                                    <i class="fas fa-microphone"></i>
+                                    Convert Speech to Text
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" aria-current="page"
+                                    href="cv_customizer.html">
+                                    <i class="fa-regular fa-circle-user"></i>
+                                    CV Customizer
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2" href="upload-videos.html"
@@ -676,7 +684,7 @@
                     const endpoint = 'api/v1/auth/logout';//'logout_with_cookies';
                     const response = await auth.makeRequest(options, endpoint)
                     console.log(response)
-                    
+
                     if (!response.ok) {
                         const message = await auth.handlingErrors(response)
                         console.log(message)
