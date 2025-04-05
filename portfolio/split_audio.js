@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const objectUrl = URL.createObjectURL(file);
         audioPlayer.src = objectUrl;
 
-        
+
 
         // Update progress during file reading
         fileReader.onprogress = function (e) {
@@ -109,17 +109,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Split audio into 3 parts
-    splitBtn.addEventListener('click', function () {
+    const progressBarContainer = document.getElementById('progressBarContainer')
+    const progressBar = document.getElementById('progressBar')
 
+    let percent = 0;
+    splitBtn.addEventListener('click', function () {
+        percent = 1;
+        progressBarContainer.classList.remove('d-none');
         // Update progress during file reading
-        fileReader.onprogress = function (e) {
-            if (e.lengthComputable) {
-                const percent = Math.round((e.loaded / e.total) * 50); // First half of progress
-                decodeProgress.style.width = `${percent}%`;
-                decodeProgressText.textContent = `Loading file: ${percent}%`;
-            }
-        };
-        
+        progressBar.style.width = `${percent}%`;
+        progressBar.textContent = `${percent}%`;
+
         if (!audioBuffer) return;
 
         const numberOfChunks = document.getElementById('numberOfChunks').value;
@@ -129,7 +129,15 @@ document.addEventListener('DOMContentLoaded', function () {
         audioParts = [];
         audioPartsDiv.innerHTML = '';
 
+        percent += 2;
+        // Update progress during file reading
+        progressBar.style.width = `${percent}%`;
+        progressBar.textContent = `${percent}%`;
+
         for (let i = 0; i < numberOfChunks; i++) {
+
+            percent += Math.round((i / numberOfChunks) * 100);
+
             const startTime = i * partDuration;
             const endTime = (i + 1) * partDuration;
 
@@ -148,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Calculate sample positions
                 const startOffset = Math.floor(startTime * audioBuffer.sampleRate);
                 const endOffset = Math.floor(endTime * audioBuffer.sampleRate);
-
+                console.log(`Part ${i + 1}: Start: ${startOffset}, End: ${endTime}`);
                 // Copy the samples
                 for (let j = startOffset; j < endOffset; j++) {
                     partChannelData[j - startOffset] = channelData[j];
@@ -157,8 +165,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             audioParts.push(partBuffer);
 
+
             // Create a download link for this part
             createAudioPartElement(partBuffer, i + 1);
+
+
+            console.log(`Splitting audio: ${percent}%`);
+            progressBar.style.width = `${percent}%`;
+            progressBar.textContent = `${percent}%`;
         }
 
         resultsDiv.classList.remove('d-none');
@@ -171,26 +185,170 @@ document.addEventListener('DOMContentLoaded', function () {
         const partDiv = document.createElement('div');
         partDiv.className = 'col-md-4 audio-part';
 
-        partDiv.innerHTML = `
-            <h6>Part ${partNumber}</h6>
-            <audio controls class="w-100 mb-2"></audio>
-            <button class="btn btn-sm btn-primary download-part">Download Part ${partNumber}</button>
-        `;
+        // Create the audio item with properly organized controls
+partDiv.innerHTML = `<div class="audio-item">
+<div class="audio-header">
+    <div class="audio-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#50fa7b" width="18" height="18">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+    </div>
+    <div class="audio-info">
+        <h4 class="audio-title">Part ${partNumber}</h4>
+        <p class="audio-meta">Loading...</p>
+    </div>
+</div>
 
-        const audioElement = partDiv.querySelector('audio');
-        const downloadBtn = partDiv.querySelector('.download-part');
+<div class="audio-footer">
+    <audio controls class="audio-player">
+        <source src="part_${partNumber}.mp3" type="audio/mpeg">
+    </audio>
+    <button class="download-btn" title="Download">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+        </svg>
+    </button>
+</div>
+</div>`;
 
-        // Create object URL for playback
-        const blob = bufferToWavBlob(buffer);
-        const objectUrl = URL.createObjectURL(blob);
-        audioElement.src = objectUrl;
+// Add responsive styles
+const style = document.createElement('style');
+style.textContent = `
+.audio-item {
 
-        // Set up download
-        downloadBtn.addEventListener('click', function () {
-            downloadAudio(blob, `part_${partNumber}.wav`);
-        });
+background-color: #282a36;
+border-radius: 8px;
+display: flex;
+flex-direction: column;
+text-align: left;
+padding: 9px;
+margin-bottom: 12px;
+min-width: 300px;
+max-width: 500px;
+}
 
-        audioPartsDiv.appendChild(partDiv);
+.audio-header {
+
+display: flex;
+align-items: left;
+text-align: left;
+justify-content: left;
+align-items: flex-start;
+gap: 10px;
+margin-bottom: 4px;
+}
+
+.audio-icon {
+flex-shrink: 0;
+display: flex;
+align-items: center;
+margin-top: 2px;
+}
+
+.audio-info {
+flex: 1;
+min-width: 0;
+}
+
+.audio-title {
+margin: 0;
+font-size: 0.95rem;
+color: #f8f8f2;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.audio-meta {
+margin: 4px 0 0;
+font-size: 0.8rem;
+color: #6272a4;
+}
+
+.audio-footer {
+display: flex;
+align-items: center;
+gap: 12px;
+width: 100%;
+}
+
+.audio-player {
+flex: 1;
+min-width: 0;
+height: 36px;
+}
+
+.audio-player::-webkit-media-controls-panel {
+background-color: #44475a;
+border-radius: 6px;
+padding: 0 8px;
+}
+
+.download-btn {
+background: none;
+border: none;
+color: #50fa7b;
+cursor: pointer;
+padding: 6px;
+border-radius: 4px;
+flex-shrink: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: background-color 0.2s;
+}
+
+.download-btn:hover {
+background-color: rgba(80, 250, 123, 0.1);
+}
+
+@media (max-width: 600px) {
+.audio-item {
+    padding: 10px;
+    min-width: auto;
+}
+
+.audio-footer {
+    flex-direction: column;
+    gap: 8px;
+}
+
+.audio-player {
+    width: 100%;
+}
+
+.download-btn {
+    align-self: flex-end;
+}
+}
+`;
+document.head.appendChild(style);
+
+const audioElement = partDiv.querySelector('audio');
+const downloadBtn = partDiv.querySelector('.download-btn');
+const audioMeta = partDiv.querySelector('.audio-meta');
+
+// Create object URL for playback
+const blob = bufferToWavBlob(buffer);
+const objectUrl = URL.createObjectURL(blob);
+audioElement.src = objectUrl;
+
+// Calculate and display file size and duration
+audioElement.addEventListener('loadedmetadata', function() {
+const fileSizeMB = (blob.size / (1024 * 1024)).toFixed(1);
+const duration = audioElement.duration;
+const minutes = Math.floor(duration / 60);
+const seconds = Math.floor(duration % 60).toString().padStart(2, '0');
+audioMeta.textContent = `MP3 • ${fileSizeMB} MB • ${minutes}:${seconds}`;
+});
+
+// Set up download
+downloadBtn.addEventListener('click', function() {
+downloadAudio(blob, `part_${partNumber}.mp3`);
+});
+
+audioPartsDiv.appendChild(partDiv);
     }
 
     // Convert AudioBuffer to WAV Blob
