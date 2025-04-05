@@ -104,42 +104,11 @@
         .bd-mode-toggle .dropdown-menu .active .bi {
             display: block !important;
         }
-
-        .spinner-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #00010a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .spinner {
-            border: 8px solid #44475a;
-            border-top: 8px solid #50fa7b;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
     </style>
     <!-- Custom styles for this template -->
     <link href="assets/css/dashboard.css" rel="stylesheet">
     <link href="assets/css/sidebars.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/spinner_style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
     <script src="auth_factory.js"></script>
     <!--<script src="assets/pages_component.js"></script>-->
@@ -150,9 +119,11 @@
 <body style="background: #00010a; color:#cac8c8
 ">
 
-    <div class="spinner-container">
-        <div class="spinner"></div>
-        <p style="color: #50fa7b; margin-top: 10px; font-size: 1.2rem;">Loading...</p>
+    <div class="spinner-container" style="display: none;">
+        <div class="spinner-wrapper">
+            <div class="spinner"></div>
+            <p id="spinnerText" style="color: #50fa7b; margin-top: 10px; font-size: 1.2rem;">Loading...</p>
+        </div>
     </div>
 
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -591,6 +562,7 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
 
+            document.querySelector(".spinner-container").style.display = "block";
             const mainContent = document.getElementById('main-content');
             const usernameSpan = document.getElementById('username');
             const loginLink = document.getElementById('login-link');
@@ -618,21 +590,27 @@
 
             //setTimeout(() => {
 
-            if (response) {
-
-                localStorage.setItem("pageRefreshed", "true");
-                //location.reload();
-
-                document.getElementById('main-content').style.display = 'block';
-                document.getElementById('user-info').style.display = 'block';
-                document.getElementById('sidebar').style.display = 'block';
-                document.getElementById('username').textContent = `${localStorage.getItem('fullname')} [${localStorage.getItem('username')}]`;
-                document.getElementById('login-link').style.display = 'none';
-                document.getElementById('logout-link').style.display = 'block';
-                document.getElementById('logout-link-2').style.display = 'block';
-
+            if (!response) {
+                setTimeout(() => {
+                    document.querySelector(".spinner-container").style.display = "none";
+                    window.location.href = auth.baseURL + '/new_login.html'
+                }, 3000)
+                return;
             }
-            document.querySelector(".spinner-container").style.display = "none";
+
+            localStorage.setItem("pageRefreshed", "true");
+            //location.reload();
+
+            document.getElementById('main-content').style.display = 'block';
+            document.getElementById('user-info').style.display = 'block';
+            document.getElementById('sidebar').style.display = 'block';
+            document.getElementById('username').textContent = `${localStorage.getItem('fullname')} [${localStorage.getItem('username')}]`;
+            document.getElementById('login-link').style.display = 'none';
+            document.getElementById('logout-link').style.display = 'block';
+            document.getElementById('logout-link-2').style.display = 'block';
+
+
+            //document.querySelector(".spinner-container").style.display = "none";
             //}, 2000);
 
 

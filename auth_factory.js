@@ -162,7 +162,8 @@ class AuthUser {
 };
 
 async function getUserData() {
-    document.querySelector(".spinner-container").style.display = "block";
+    
+    
 
     let response = null;
     const auth = new AuthUser();
@@ -190,12 +191,23 @@ async function getUserData() {
     console.log("Response on getting User Data...")
    
     console.log(`Is "response.ok" Null? ${response===null}`)
+    
     if (response ===null ||!response.ok===undefined) {
         console.error("Error to get the user data! ")
         localStorage.clear()
         const message = await auth.handlingErrors(response)
         //console.log(response.status_code)
-        document.querySelector(".spinner-container").style.display = "none";
+        if(document.getElementById('spinnerText')){
+            document.getElementById('spinnerText').innerHTML = `
+            <p style="color: red;">Error to get user information.</p>
+            <p>Redirecting...</p>
+            `;
+        }
+        
+        setTimeout(() => {
+            document.querySelector(".spinner-container").style.display = "none";
+            window.location.href = auth.baseURL + '/new_login.html'
+        }, 3000)
         return false;
     } else {
         

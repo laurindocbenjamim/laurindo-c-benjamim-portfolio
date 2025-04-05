@@ -502,6 +502,8 @@
             font-size: 0.9rem;
         }
 
+        
+
         /* Responsive adjustments */
         @media (max-width: 1200px) {
             .sidebar {
@@ -581,12 +583,25 @@
             }
         }
     </style>
+
+    <link rel="stylesheet" href="../assets/css/spinner_style.css">
 </head>
 
 <body>
 
-    <!-- Auth Buttons - Now positioned top-right -->
 
+    <!-- Auth Buttons - Now positioned top-right -->
+<div class="spinner-container" style="display: none;">
+    <div class="spinner-wrapper">
+        <div class="spinner"></div>
+    <p id="spinnerText" style="color: #50fa7b; margin-top: 10px; font-size: 1.2rem;">Loading...</p>
+    </div>
+</div>
+
+
+
+    <!-- Auth Buttons - Now positioned top-right -->
+   
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg">
@@ -884,21 +899,30 @@
     <script src="request_factory.js"></script>
     <script>
 
+        document.querySelector('.spinner-container').style.display = 'block';
+
         const request = new RequestFactory();
 
         // Check if user is logged in
         const isLoggedIn = localStorage.getItem('user_id');
         if (!isLoggedIn || isLoggedIn === 0 || isLoggedIn === null || isLoggedIn === undefined) {
+            document.getElementById('spinnerText').innerHTML = `
+            <p style="color: red;">You are not logged in. Please log in to access this feature.</p>
+            <p>Redirecting...</p>
+            `;
+            
             // Hide login button
             document.getElementById('login').style.display = 'block';
             document.getElementById('register').style.display = 'block';
             document.getElementById('isLoggedOut').style.display = 'none';
             // Redirect to login page
-            alert('You are not logged in. Please log in to access this feature.');
+            
             localStorage.clear();
             localStorage.setItem('denyed_page', 'convert-speech-to-text.html');
-            alert(localStorage.getItem('denyed_page'))
+            
+           setTimeout(() => {
             window.location.href = '../new_login.html';
+            }, 3000);
         }
 
         localStorage.removeItem('denyed_page');
