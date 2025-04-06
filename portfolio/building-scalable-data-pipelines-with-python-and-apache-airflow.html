@@ -55,7 +55,7 @@
             <aside class="col-lg-3 d-none d-lg-block">
                 <div class="sidebar">
                     <h3 class="sidebar-title">Related Articles</h3>
-                    <ul class="article-list">
+                    <ul class="article-list" id="articleListMobile">
                         <li>
                             <a href="build-classification-model-using-the-one-r-package.html">
                                 <strong>Building a OneR Classification Model in R: A Step-by-Step Guide</strong>
@@ -65,51 +65,7 @@
                                 </div>
                             </a>
                         </li>
-                        <li>
-                            <a href="#">
-                                <strong>Modern Data Warehousing with Snowflake</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> May 28, 2023</span>
-                                    <span><i class="far fa-clock"></i> 6 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>ETL vs ELT: Choosing the Right Approach</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> April 15, 2023</span>
-                                    <span><i class="far fa-clock"></i> 5 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Data Quality Monitoring with Great Expectations</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> March 22, 2023</span>
-                                    <span><i class="far fa-clock"></i> 7 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Stream Processing with Apache Kafka</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> February 10, 2023</span>
-                                    <span><i class="far fa-clock"></i> 8 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Data Orchestration Best Practices</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> January 5, 2023</span>
-                                    <span><i class="far fa-clock"></i> 6 min read</span>
-                                </div>
-                            </a>
-                        </li>
+                       
                     </ul>
 
                     <h3 class="sidebar-title mt-5">Categories</h3>
@@ -130,7 +86,7 @@
                     <i class="fas fa-times"></i>
                 </button>
                 <h3 class="sidebar-title">Related Articles</h3>
-                <ul class="article-list">
+                <ul class="article-list" id="articleListMobile">
                    
                     <li>
                         <a href="#">
@@ -438,8 +394,8 @@ my_task = PythonOperator(
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    
-    <script>
+    <script src="../assets/js/articles.js"></script>
+    <!--<script>
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
@@ -482,6 +438,6 @@ my_task = PythonOperator(
                 toggleMobileSidebar();
             }
         });
-    </script>
+    </script>-->
 </body>
 </html>

@@ -63,51 +63,7 @@
                                 </div>
                             </a>
                         </li>
-                        <li>
-                            <a href="#">
-                                <strong>Modern Data Warehousing with Snowflake</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> May 28, 2023</span>
-                                    <span><i class="far fa-clock"></i> 6 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>ETL vs ELT: Choosing the Right Approach</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> April 15, 2023</span>
-                                    <span><i class="far fa-clock"></i> 5 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Data Quality Monitoring with Great Expectations</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> March 22, 2023</span>
-                                    <span><i class="far fa-clock"></i> 7 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Stream Processing with Apache Kafka</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> February 10, 2023</span>
-                                    <span><i class="far fa-clock"></i> 8 min read</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <strong>Data Orchestration Best Practices</strong>
-                                <div class="article-meta">
-                                    <span><i class="far fa-calendar"></i> January 5, 2023</span>
-                                    <span><i class="far fa-clock"></i> 6 min read</span>
-                                </div>
-                            </a>
-                        </li>
+                        
                     </ul>
 
                     <h3 class="sidebar-title mt-5">Categories</h3>
@@ -128,7 +84,7 @@
                     <i class="fas fa-times"></i>
                 </button>
                 <h3 class="sidebar-title">Related Articles</h3>
-                <ul class="article-list">
+                <ul class="article-list" id="articleListMobile">
                     <li>
                         <a href="#">
                             <strong>Modern Data Warehousing with Snowflake</strong>
@@ -138,42 +94,7 @@
                             </div>
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
-                            <strong>ETL vs ELT: Choosing the Right Approach</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-calendar"></i> April 15, 2023</span>
-                                <span><i class="far fa-clock"></i> 5 min read</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>Data Quality Monitoring with Great Expectations</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-calendar"></i> March 22, 2023</span>
-                                <span><i class="far fa-clock"></i> 7 min read</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>Stream Processing with Apache Kafka</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-calendar"></i> February 10, 2023</span>
-                                <span><i class="far fa-clock"></i> 8 min read</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <strong>Data Orchestration Best Practices</strong>
-                            <div class="article-meta">
-                                <span><i class="far fa-calendar"></i> January 5, 2023</span>
-                                <span><i class="far fa-clock"></i> 6 min read</span>
-                            </div>
-                        </a>
-                    </li>
+                    
                 </ul>
 
                 <h3 class="sidebar-title mt-5">Categories</h3>
@@ -216,9 +137,16 @@
                 
                     <section class="section">
                         <h2>Introduction</h2>
-                        <p>In this article, we’ll walk through the process of building a OneR (One Rule) classification model in R to predict risk using the <code>Classify_risk_dataset.xlsx</code> dataset. OneR is a simple yet effective algorithm that selects a single feature to create a classification rule. We’ll cover data loading, preprocessing, model training, prediction, and evaluation, including how to debug common issues like length mismatches and poor accuracy.</p>
+                        <p>In this article, we’ll walk through the process of building a OneR (One Rule) classification model in R to predict risk using the 
+                            <code>Classify_risk_dataset.xlsx</code> dataset. OneR is a simple yet effective algorithm that selects a single feature to create a classification rule. We’ll cover data loading, preprocessing, model training, prediction, and evaluation, including how to debug common issues like length mismatches and poor accuracy.</p>
                         <p><strong>Target Audience:</strong> Data science beginners and R programmers interested in classification.</p>
+                        <p><b>Note:</b>
+                            This project is part of a set of academic exercises and is not intended for production use.
+                            All the problems and datasets are for educational purposes only since they are being solved in the context of a Data Mining course.
+                            
+                        </p>
                         <p><strong>Keywords:</strong> OneR model, R programming, risk prediction, machine learning.</p>
+                        
                     </section>
                     
                     <section class="section">
@@ -491,49 +419,6 @@ Predicted   0   1
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     
-    <script>
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                window.scrollTo({
-                    top: targetElement.offsetTop - 100,
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Mobile sidebar toggle
-        const mobileSidebarToggle = document.querySelector('.mobile-sidebar-toggle');
-        const mobileSidebar = document.querySelector('.mobile-sidebar');
-        const mobileSidebarClose = document.querySelector('.mobile-sidebar-close');
-        const mobileSidebarOverlay = document.querySelector('.mobile-sidebar-overlay');
-
-        function toggleMobileSidebar() {
-            mobileSidebar.classList.toggle('active');
-            mobileSidebarOverlay.classList.toggle('active');
-            document.body.style.overflow = mobileSidebar.classList.contains('active') ? 'hidden' : '';
-        }
-
-        mobileSidebarToggle.addEventListener('click', toggleMobileSidebar);
-        mobileSidebarClose.addEventListener('click', toggleMobileSidebar);
-        mobileSidebarOverlay.addEventListener('click', toggleMobileSidebar);
-
-        // Close sidebar when clicking on a link
-        document.querySelectorAll('.mobile-sidebar a').forEach(link => {
-            link.addEventListener('click', toggleMobileSidebar);
-        });
-
-        // Prevent body scroll when sidebar is open
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && mobileSidebar.classList.contains('active')) {
-                toggleMobileSidebar();
-            }
-        });
-    </script>
+    <script src="../assets/js/articles.js"></script>
 </body>
 </html>

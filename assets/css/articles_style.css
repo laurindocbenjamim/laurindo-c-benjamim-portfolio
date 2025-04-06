@@ -412,6 +412,17 @@ main {
     font-size: 0.9rem;
 }
 
+.highlight {
+    background-color: #fff3cd;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+code {
+    text-align: left;
+    justify-content: left;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1200px) {
     .sidebar {

@@ -6,7 +6,7 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
 <url>
-  <loc>https://www.laurindocbenjamim.pt/</loc>
+  <loc>https://www.laurindocbenjamim.pt/index.html</loc>
   <lastmod>2025-03-29T18:50:33+00:00</lastmod>
   <priority>1.00</priority>
   <changefreq>weekly</changefreq>
@@ -77,6 +77,13 @@
 
 <url>
   <loc>https://www.laurindocbenjamim.pt/portfolio/build-classification-model-using-the-one-r-package.html</loc>
+  <lastmod>2025-03-29T18:46:57+00:00</lastmod>
+  <priority>0.64</priority>
+  <changefreq>weekly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.laurindocbenjamim.pt/portfolio/build-a-classification-model-with-k-nn-to-predict-risk.html</loc>
   <lastmod>2025-03-29T18:46:57+00:00</lastmod>
   <priority>0.64</priority>
   <changefreq>weekly</changefreq>
