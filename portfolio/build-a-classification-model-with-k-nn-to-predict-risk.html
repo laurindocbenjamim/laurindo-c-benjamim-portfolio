@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how to build scalable data pipelines with Python and Apache Airflow">
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Building Scalable Data Pipelines with Python and Apache Airflow">
+    <meta name="og:description"
+        content="Learn how to build a OneR classification model in R to predict risk using the Classify_risk_dataset.xlsx. Step-by-step guide with code, debugging, and evaluation.">
+    <meta name="og:keywords"
+        content="OneR model, R programming, data science, classification, risk prediction, machine learning, confusion matrix, accuracy">
+    <meta property="og:image"
+        content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
+
+    <title>Building a OneR Classification Model in R: A Step-by-Step Guide | Laurindo C. Benjamim</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/articles_style.css">
+</head>
+<style>
+    .highlight {
+        background-color: #fff3cd;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+
+    .highlight2{
+        color: #70ecd1;
+    }
+</style>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg reveal">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">Laurindo C. Benjamim</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="experiences.html">Experience</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="projects.html">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="blog.html">Blog</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <div class="row">
+            <!-- Desktop Sidebar Menu -->
+            <aside class="col-lg-3 d-none d-lg-block">
+                <div class="sidebar">
+                    <h3 class="sidebar-title">Related Articles</h3>
+                    <ul class="article-list">
+                        <li>
+                            <a href="building-scalable-data-pipelines-with-python-and-apache-airflow.html">
+                                <strong>Risk Classification with k-Nearest Neighbors</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-calendar"></i> March 18, 2025</span>
+                                    <span><i class="far fa-clock"></i> 6 min read</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <strong>Modern Data Warehousing with Snowflake</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-calendar"></i> May 28, 2023</span>
+                                    <span><i class="far fa-clock"></i> 6 min read</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <strong>ETL vs ELT: Choosing the Right Approach</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-calendar"></i> April 15, 2023</span>
+                                    <span><i class="far fa-clock"></i> 5 min read</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <strong>Data Quality Monitoring with Great Expectations</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-calendar"></i> March 22, 2023</span>
+                                    <span><i class="far fa-clock"></i> 7 min read</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <strong>Stream Processing with Apache Kafka</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-calendar"></i> February 10, 2023</span>
+                                    <span><i class="far fa-clock"></i> 8 min read</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <strong>Data Orchestration Best Practices</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-calendar"></i> January 5, 2023</span>
+                                    <span><i class="far fa-clock"></i> 6 min read</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h3 class="sidebar-title mt-5">Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Data Engineering</a></li>
+                        <li><a href="#">Python</a></li>
+                        <li><a href="#">Data Pipelines</a></li>
+                        <li><a href="#">ETL</a></li>
+                        <li><a href="#">Big Data</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Mobile Sidebar Menu (Hidden by default) -->
+            <div class="mobile-sidebar-overlay"></div>
+            <aside class="mobile-sidebar">
+                <button class="mobile-sidebar-close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h3 class="sidebar-title">Related Articles</h3>
+                <ul class="article-list" id="articleListMobile">
+                    <li>
+                        <a href="#">
+                            <strong>Modern Data Warehousing with Snowflake</strong>
+                            <div class="article-meta">
+                                <span><i class="far fa-calendar"></i> May 28, 2023</span>
+                                <span><i class="far fa-clock"></i> 6 min read</span>
+                            </div>
+                        </a>
+                    </li>
+
+                </ul>
+
+                <h3 class="sidebar-title mt-5">Categories</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Data Engineering</a></li>
+                    <li><a href="#">Python</a></li>
+                    <li><a href="#">Data Pipelines</a></li>
+                    <li><a href="#">ETL</a></li>
+                    <li><a href="#">Big Data</a></li>
+                </ul>
+            </aside>
+
+            <!-- Mobile Toggle Button -->
+            <button class="mobile-sidebar-toggle d-lg-none">
+                <i class="fas fa-book-open"></i>
+            </button>
+
+            <!-- Main Article Content -->
+            <div class="col-lg-9">
+                <article class="article-content">
+                    <header class="article-header">
+                        <span class="article-category">Data Sciency</span>
+                        <h1 class="article-title">Risk Classification with k-Nearest Neighbors</h1>
+                        <div class="article-meta">
+                            <span class="article-date">Published: April 3, 2025</span>
+                            <span class="article-read-time">
+                                <i class="far fa-clock"></i> 7 min read
+                            </span>
+                        </div>
+                    </header>
+
+                    <div class="article-image">
+                        <img src="https://i.ytimg.com/vi/wTF6vzS9fy4/maxresdefault.jpg"
+                            alt="Classification Model in R using k-Nearest Neighbors" class="img-fluid rounded"
+                            loading="lazy">
+                    </div>
+
+
+
+                    <section class="section">
+                        <h2>Introduction</h2>
+                        <p>I
+                            This project implements a k-Nearest Neighbors (kNN) classifier to predict customer risk
+                            levels ("good risk" vs. "bad loss")
+                            using the <b><i>classify_risk_dataset</i></b>. The dataset contains financial and
+                            demographic features where we aim to:
+                        </p>
+                        <ul>
+                            <li>Use 10-fold cross-validation to estimate model performance</li>
+                            <li>Focus on AUC as the primary metric</li>
+                            <li>Implement kNN with k=2 neighbors</li>
+                            <li>Handle probability outputs correctly from the FNN package</li>
+                        </ul>
+                        <p><b>Note:</b>
+                            This project is part of a set of academic exercises and is not intended for production use.
+                            All the problems and datasets are for educational purposes only since they are being solved
+                            in the context of a Data Mining course.
+
+                        </p>
+
+                        <div class="alert alert-info">
+                            <strong>Key Insight:
+
+                            </strong> The kNN algorithm was chosen for its simplicity and effectiveness with
+                            normalized numerical data, though we acknowledge that <span class="highlight">eliminating
+                                categorical variables may not always make business sense</span> - alternative distance
+                            measures could preserve them.
+                        </div>
+
+                        <p><strong>Target Audience:</strong> Data science beginners and R programmers interested in
+                            classification.</p>
+                        <p><strong>Keywords:</strong> OneR model, R programming, risk prediction, machine learning.</p>
+                    </section>
+
+                    <section class="section">
+                        <h2 style="color: rgb(10, 136, 130);">Classify Risk Dataset</h2>
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Name/Attributes</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody style="color: rgb(126, 121, 121);">
+                                <tr>
+                                    <td>ID</td>
+                                    <td>ID of Record</td>
+                                </tr>
+                                <tr>
+                                    <td>RISK</td>
+                                    <td>What type of risk the customer is</td>
+                                </tr>
+                                <tr>
+                                    <td>AGE</td>
+                                    <td>Age Of Customer</td>
+                                </tr>
+                                <tr>
+                                    <td>INCOME</td>
+                                    <td>How much the customer earns</td>
+                                </tr>
+                                <tr>
+                                    <td>GENDER</td>
+                                    <td>Gender of the customer</td>
+                                </tr>
+                                <tr>
+                                    <td>MARITAL</td>
+                                    <td>If the customer is married or not</td>
+                                </tr>
+                                <tr>
+                                    <td>NUMKIDS</td>
+                                    <td>Number of Kids the customer has</td>
+                                </tr>
+                                <tr>
+                                    <td>NUMCARDS</td>
+                                    <td>Number of Bank Cards the customer has</td>
+                                </tr>
+                                <tr>
+                                    <td>HOWPAID</td>
+                                    <td>When the customer is paid…monthly weekly etc</td>
+                                </tr>
+                                <tr>
+                                    <td>MORTGAGE</td>
+                                    <td>Does the customer have a mortgage</td>
+                                </tr>
+                                <tr>
+                                    <td>STORECAR</td>
+                                    <td>How many cars do they own</td>
+                                </tr>
+                                <tr>
+                                    <td>LOANS</td>
+                                    <td>How many loans does the customer currently have</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="mb-3">Resources and Libraries</h2>
+                        <p>The analysis was performed in R using these key packages:</p>
+
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Package</th>
+                                        <th>Purpose</th>
+                                        <th>Why Used</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color: rgb(126, 121, 121);">
+                                    <tr>
+                                        <td><code>readxl</code></td>
+                                        <td>Reading Excel files</td>
+                                        <td>Original data was in Excel format</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>caret</code></td>
+                                        <td>Machine learning utilities</td>
+                                        <td>For creating cross-validation folds</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>FNN</code></td>
+                                        <td>Fast kNN implementation</td>
+                                        <td>Efficient nearest neighbor calculations</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>pROC</code></td>
+                                        <td>ROC curve analysis</td>
+                                        <td>Evaluating classifier performance</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>yardstick</code></td>
+                                        <td>Model metrics</td>
+                                        <td>Standardized metric calculations</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>dplyr</code></td>
+                                        <td>Data manipulation</td>
+                                        <td>Data cleaning and transformation</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="section">
+                        <h2>Step 1: Setting Up the Environment</h2>
+                        <p>First, we need to load the required R packages: <code>readxl</code> for reading Excel files,
+                            <code>OneR</code> for the OneR algorithm, and <code>caret</code> for data splitting and
+                            evaluation.
+                        </p>
+                        <pre><code>
+                        # Install the packages
+                        #install.packages(e1071)
+                        #install.packages("FNN")
+                        #install.packages("dplyr")
+
+                        # Load required libraries
+                        library(readxl)
+                        library(caret)
+                        library(FNN)
+                        library(pROC)
+                        library(yardstick)
+                        library(dplyr)
+                        </code></pre>
+                        <p>We also set the working directory to where the dataset is stored:</p>
+                        <pre><code>setwd("~/Documents/RProjects/data-sciency-contents-with-R-and-Python/data-mining/datasets/")</code></pre>
+                    </section>
+
+                    <section class="section">
+                        <h2>Step 2: Loading and Exploring the Dataset</h2>
+                        <p>The dataset <code>Classify_risk_dataset.xlsx</code> contains 1710 observations and 12
+                            variables, including <code>ID</code>, <code>AGE</code>, <code>INCOME</code>, and the target
+                            variable <code>RISK</code>. We load it using <code>read_excel()</code> and convert it to a
+                            data frame:</p>
+                        <pre><code>dataset <- read_excel("Classify_risk_dataset.xlsx")
+            df <- as.data.frame(dataset)</code></pre>
+                        <p>We inspect the structure using <code>str(df)</code>, which reveals:</p>
+                        <ul>
+                            <li><code>ID</code>: Numeric identifier</li>
+                            <li><code>AGE</code>: Integer (e.g., 44, 35)</li>
+                            <li><code>INCOME</code>: Numeric (e.g., 59944)</li>
+                            <li><code>GENDER</code>: Factor ("f", "m")</li>
+                            <li><code>RISK</code>: Factor ("bad loss", "good risk")</li>
+                        </ul>
+                    </section>
+
+                    <section class="section">
+                        <h2>Step 3: Data Preparation vs Preprocessing</h2>
+                        <p>We classify the dependent variable/attribute (categorical) to ensure correct data types for
+                            modeling:</p>
+                        <pre><code># Load and prepare data
+                            # Clean and encode RISK variable
+                            df$RISK <- trimws(df$RISK)
+                            df$RISK <- as.factor(df$RISK)
+                            levels(df$RISK) <- c("1", "0")  # 1 = bad loss, 0 = good risk
+                            df$RISK <- relevel(df$RISK, ref = "0")
+                            
+                            # Exclude categorical variables (Euclidean distance may not make sense)
+                            categorical_vars <- sapply(df, is.factor) | sapply(df, is.character)
+                            categorical_vars["RISK"] <- FALSE
+                            df_numeric <- df[, !categorical_vars]</code></pre>
+                        <p>We also check for missing values and remove them if present:</p>
+                        <pre><code>cat("Missing values in dataset:\n")
+            print(colSums(is.na(df)))
+            df <- na.omit(df)</code></pre>
+                        <p>In this case, there are no missing values. We then adjust the <code>RISK</code> levels to "1"
+                            (bad loss) and "0" (good risk) for clarity:</p>
+                        <pre><code>levels(df$RISK) <- c("1", "0")
+            df$RISK <- relevel(df$RISK, ref = "0")</code></pre>
+
+                        <p>Critical considerations:</p>
+                        <ul>
+                            <li>Categorical variables are excluded because
+                                <span class="highlight2" >Euclidean distance doesn't handle them
+                                    well</span>
+                            </li>
+                            <li>In business contexts, alternative approaches might be better:
+                                <ul>
+                                    <li>Specialized distance measures for categorical data</li>
+                                    <li>One-hot encoding with careful normalization</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section class="section">
+                        <h2>Step 4: Normalization and Setup</h2>
+                        
+                        <h3>Normalization in the context of Machine Learning</h3>
+                        <p>
+                           
+
+                            In machine learning, normalization is a data preprocessing technique used to scale numerical
+                            features to a standard range. This is often done to ensure that all features contribute
+                            equally to the model and to improve the performance and stability of the learning algorithm.
+                             
+                        </p>
+                            <h5>Why is Normalization Important?</h5>
+
+                        <ul>
+                            <li>
+                                Prevents Feature Dominance: Features with larger values can dominate the distance
+                                calculations in many machine learning algorithms (e.g., k-Nearest Neighbors, Support
+                                Vector Machines) and lead to biased models. Normalization brings all features to a
+                                similar scale, preventing this.  
+                            </li>
+                            <li>Faster Convergence: For gradient-based optimization algorithms (e.g., gradient descent
+                                used in neural networks), normalized data can lead to faster convergence to the optimal
+                                solution. This is because the loss function landscape becomes more regular.  
+                            </li>
+                            <li>mproved Model Stability: Some algorithms can be sensitive to the scale of the input
+                                features. Normalization can help stabilize the learning process.  
+                            </li>
+                        </ul>
+
+                        <p>
+                            <strong>Common Normalization Techniques:</strong>
+
+                        <ol>
+                            <li>
+                                <strong>Min-Max Scaling (Normalization to a Range):</strong>
+                                <ul>
+                                    <li>Scales the data to a fixed range, usually between 0 and 1.</li>
+                                    <li>Formula: <code>X_scaled = (X - X_min) / (X_max - X_min)</code></li>
+                                    <li>For more information read <a href="https://www.analyticsvidhya.com/blog/2025/feature-scaling-engineering-normalization-and-standardization/" target="_blank">Feature Scaling: Engineering, Normalization, and Standardization (Updated 2025) - Analytics Vidhya</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Z-score Standardization (Standard Normalization):</strong>
+                                <ul>
+                                    <li>Scales the data to have a mean of 0 and a standard deviation of 1.</li>
+                                    <li>Formula: <code>X_scaled = (X - mean) / standard_deviation</code></li>
+                                    <li>For more information read <a href="https://medium.com/@normalization-in-machine-learning-and-deep-learning" target="_blank">NORMALIZATION in Machine Learning AND Deep Learning - Medium</a></li>
+                                </ul>
+                            </li>
+                        </ol>
+                        </p>
+
+                        <p>In our project the exercice asked to use the first technique as you can check at the script notation.
+                            
+                        </p>
+                        <pre><code>
+                            # Min-Max normalization (critical for distance-based algorithms)
+normalize_min_max <- function(x) {
+  return((x - min(x)) / (max(x) - min(x)))
+}
+df_numeric_norm <- as.data.frame(lapply(df_numeric[, -ncol(df_numeric)], normalize_min_max))
+df_norm <- cbind(df_numeric_norm, RISK = df_numeric$RISK)
+
+# 10-fold CV setup
+set.seed(123)
+folds <- createFolds(df_norm$RISK, k = 10)
+                        </code></pre>
+
+                        <p>Key points:</p>
+                        <ul>
+                            <li><span class="highlight2">Min-Max normalization (0-1 range)</span> ensures all features
+                                contribute equally to distance calculations</li>
+                            <li>10-fold cross-validation provides robust performance estimates</li>
+                        </ul>
+                        
+                    </section>
+
+                    <section class="section">
+                        <h2>Step 5: Building the k-Nearest Neighbors (k-NN) Model</h2>
+                        <h3>k-Nearest Neighbors (k-NN) with k=2: The Basics</h3>
+                        <p>
+
+                            The k-NN algorithm is a supervised learning technique used for both classification and regression. It's a non-parametric, instance-based learning method. This means it doesn't make strong assumptions about the underlying data distribution and relies directly on the training data to make predictions.   
+                            
+                            When we set k=2, we are instructing the algorithm to consider the two closest data points in the training set to a new, unseen data point (the query point) when making a prediction.
+                        </p>
+
+                            <p ><h3 class="highlight2">How it Works with k=2?</h3></p>
+
+                            <ol>
+                                <li>Distance Calculation: For a given query point, the algorithm calculates the distance to every data point in the training set. Common distance metrics include:</li>
+                                <ol type="1">
+                                    <li>Euclidean Distance: The straight-line distance between two points.</li>
+                                    <li>Manhattan Distance (L1 Norm): The sum of the absolute differences of their coordinate-wise values.</li>
+                                    <li>Minkowski Distance: A generalization of Euclidean and Manhattan distances.</li>
+                                </ol>
+                                <li>Identifying the 2 Nearest Neighbors: The algorithm then identifies the two training data points with the smallest distances to the query point.</li>
+                                <li>Making Predictions:</li>
+                                <ol type="1">
+                                    <li>Classification (k=2):</li>
+                                    <ol type="1">
+                                        <li>The algorithm looks at the class labels of these two nearest neighbors.</li>
+                                        <li>The predicted class for the query point is the majority class among these two neighbors.</li>
+                                        <li>Crucially, with k=2, a tie is possible if the two nearest neighbors belong to different classes. This necessitates a tie-breaking mechanism. Common tie-breaking strategies include:</li>
+                                        <ol type="1">
+                                            <li>Random Selection: Randomly choose one of the tied classes.</li>
+                                            <li>Considering Distances: If the distances to the two neighbors are different, the class of the closer neighbor might be chosen. However, with k=2, if the distances are equal and the classes differ, a tie still exists.</li>
+                                        </ol>
+                                    </ol>
+                                    <li>Regression (k=2):</li>
+                                    <ol type="1">
+                                        <li>The algorithm looks at the target values of the two nearest neighbors.</li>
+                                        <li>The predicted value for the query point is typically the average of these two target values. Other aggregation methods like the median could also be used, but the mean is more common.</li>
+                                    </ol>
+                                </ol>
+                            </ol>
+                            
+                            <ol>
+                                <li>Distance Calculation: For a given query point, the algorithm calculates the distance to every data point in the training set. Common distance metrics include:
+                                    <ul>
+                                        <li>Euclidean Distance: The straight-line distance between two points.</li>
+                                        <li>Manhattan Distance (L1 Norm): The sum of the absolute differences of their coordinate-wise values.</li>
+                                        <li>Minkowski Distance: A generalization of Euclidean and Manhattan distances.</li>
+                                    </ul>
+                                </li>
+                                <li>Identifying the 2 Nearest Neighbors: The algorithm identifies the two training data points with the smallest distances to the query point.</li>
+                                <li>Making Predictions:
+                                    <ul>
+                                        <li>Classification (k=2):
+                                            <ul>
+                                                <li>The algorithm looks at the class labels of these two nearest neighbors.</li>
+                                                <li>The predicted class for the query point is the majority class among these two neighbors.</li>
+                                                <li>In case of a tie (when the two neighbors belong to different classes), tie-breaking strategies include:
+                                                    <ul>
+                                                        <li>Random Selection: Randomly choose one of the tied classes.</li>
+                                                        <li>Considering Distances: Choose the class of the closer neighbor if distances differ.</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>Regression (k=2):
+                                            <ul>
+                                                <li>The algorithm looks at the target values of the two nearest neighbors.</li>
+                                                <li>The predicted value for the query point is typically the average of these two target values.</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ol>
+
+                            <h3>Implications of Choosing k=2:</h3>
+                            <ul>
+                                <li>Sensitivity to Individual Points: Predictions can be influenced by noisy or mislabeled data points.</li>
+                                <li>Complex Decision Boundaries: Smaller k values create more complex decision boundaries, which may lead to overfitting.</li>
+                                <li>Lower Stability: Predictions may vary significantly with slight changes in the training data or query point.</li>
+                                <li>Tie-Breaking is Critical: Ties are frequent with k=2, making the tie-breaking method important.</li>
+                                <li>Computational Efficiency: Fewer comparisons are needed during prediction, but initial distance calculations remain the same.</li>
+                            </ul>
+
+                            <h3>Why Might You Consider k=2?</h3>
+                            <ul>
+                                <li>Exploring Local Relationships: Useful for understanding very local patterns in the data.</li>
+                                <li>Capturing Fine-Grained Patterns: May work well in datasets with clear local clusters, though it is risky due to noise sensitivity.</li>
+                                <li>As a Baseline: Serves as a simple baseline model to compare against larger k values.</li>
+                            </ul>
+
+                            <h3>Important Considerations:</h3>
+                            <ul>
+                                <li>Data Scaling: Ensure features are scaled (e.g., normalization) to prevent larger ranges from dominating distance calculations.</li>
+                                <li>Curse of Dimensionality: In high-dimensional spaces, distances become less meaningful, affecting k-NN performance.</li>
+                                <li>Choosing the Right k: Experimentation and cross-validation are key to finding the optimal k value.</li>
+                            </ul>
+
+                            <p>The script with complete implemetation of the <code>K-NN</code> model is as below.
+                                As you can see at the script we were asked to create the ROC curves to visualize performance across all thresholds.
+                            </p>
+
+                        <pre><code># Initialize storage for metrics
+                            metrics <- list(auc = c(), accuracy = c(), precision = c(), recall = c(), f1 = c())
+                            
+                            # ROC plot setup
+                            plot(NA, xlim = c(0,1), ylim = c(0,1), xlab = "FPR", ylab = "TPR", main = "10-Fold CV ROC Curves")
+                            abline(a = 0, b = 1, lty = 2)
+                            </code></pre>
+
+                            <p>Creating the training dataset and testing dataset very importante to train and evaluate the model.</p>
+                            <pre><code>
+                                
+                                # 
+                                  test_idx <- folds[[i]]
+                                  train <- df_norm[-test_idx, ]
+                                  test <- df_norm[test_idx, ]
+                                </code></pre>
+
+                                <p> Creating the K-NN model.</p>
+                                <pre><code>
+                                    
+                                      
+                                      # kNN with k=2 and probability estimates
+                                      knn_pred <- FNN::knn(
+                                        train = train[, -ncol(train)],
+                                        test = test[, -ncol(test)],
+                                        cl = train$RISK,
+                                        k = 2,
+                                        prob = TRUE  # Get proportion of votes for winning class
+                                      )
+                                      
+                                      # Convert to proper probabilities (positive class)
+                                      prob_positive <- ifelse(knn_pred == "1", 
+                                                             attr(knn_pred, "prob"),
+                                                             1 - attr(knn_pred, "prob"))
+
+                                                             # Calculate metrics
+                          pred_class <- ifelse(prob_positive >= 0.5, "1", "0")
+                          pred_class <- factor(pred_class, levels = c("0", "1"))
+                                      </code></pre>
+                    </section>
+
+                    
+
+                    <section class="section">
+                        <h2>Step 6: Making Predictions</h2>
+                        <p>We predict <code>RISK</code> for the test set:</p>
+                        
+
+                        <pre><code>
+                          
+                            # Store metrics
+                            metrics$accuracy[i] <- accuracy_vec(test$RISK, pred_class)
+                            metrics$precision[i] <- precision_vec(test$RISK, pred_class)
+                            metrics$recall[i] <- recall_vec(test$RISK, pred_class)
+                            metrics$f1[i] <- f_meas_vec(test$RISK, pred_class)
+                            
+                            # ROC/AUC calculation
+                            roc_obj <- pROC::roc(response = test$RISK, predictor = prob_positive)
+                            metrics$auc[i] <- pROC::auc(roc_obj)
+                            lines(roc_obj, col = rgb(0.3, 0.3, 1, 0.4))
+                          
+                          
+                          # Final metrics
+                          sapply(metrics, mean) %>% round(3)</code></pre>
+
+                        <p>Both should be 341, confirming correct prediction generation.</p>
+                    </section>
+
+                    <section class="section">
+                        <h2>Step 7: Evaluating the Model</h2>
+                        <p>We calculate accuracy and generate a confusion matrix:</p>
+                        <pre><code>accuracy_score <- mean(predictions == test_data$RISK, na.rm = TRUE)
+            cat("Accuracy of the OneR model: ", round(accuracy_score * 100, 2), "%\n")
+            conf_matrix <- table(Predicted = predictions, Actual = test_data$RISK)
+            print("Confusion Matrix:")
+            print(conf_matrix)
+            confusionMatrix(conf_matrix)</code></pre>
+                        <p>Example output:</p>
+                        <pre><code>Accuracy of the OneR model:  75.37 %
+            Confusion Matrix:
+                        Actual
+            Predicted   0   1
+                    0 121  45
+                    1  39 136
+                </code></pre>
+
+                        <p>Detailed confusion matrix</p>
+                        <pre><code>
+                    Confusion Matrix and Statistics
+
+         Actual
+Predicted   0   1
+        0 121  45
+        1  39 136
+                                          
+               Accuracy : 0.7537          
+                 95% CI : (0.7044, 0.7985)
+    No Information Rate : 0.5308          
+    P-Value [Acc > NIR] : <2e-16          
+                                          
+                  Kappa : 0.5065          
+                                          
+ Mcnemar's Test P-Value : 0.5854          
+                                          
+            Sensitivity : 0.7562          
+            Specificity : 0.7514          
+         Pos Pred Value : 0.7289          
+         Neg Pred Value : 0.7771          
+             Prevalence : 0.4692          
+         Detection Rate : 0.3548          
+   Detection Prevalence : 0.4868          
+      Balanced Accuracy : 0.7538          
+                                          
+       'Positive' Class : 0 
+
+                </code></pre>
+                    </section>
+
+                    <section class="section">
+                        <h2>Debugging Common Issues</h2>
+                        <p>We encountered a bug where <code>predictions</code> had length 1 due to a typo
+                            (<code>prediction</code> vs. <code>predictions</code>) and <code>ID</code> being used as a
+                            predictor. Excluding <code>ID</code> and fixing the typo resolved the issue, ensuring
+                            predictions matched the test set size.</p>
+
+                        <p>Check out the source code on <a
+                                href="https://github.com/laurindocbenjamim/data-sciency-contents-with-R-and-Python/blob/oneR-package/data-mining/classification_oneR_v1.R"
+                                target="_blank">GitHub</a> for more details.</p>
+                    </section>
+
+                    <section class="section">
+                        <h2>Conclusion</h2>
+                        <p>This project demonstrates how to use R and the OneR algorithm for risk classification. With
+                            an accuracy of around 78-80%, the model provides a simple yet effective baseline. Future
+                            improvements could involve feature selection or more complex models like Random Forest.</p>
+
+                    </section>
+
+                    <!--  article-footer -->
+                    <section class="article-footer">
+                        <h3>Tags</h3>
+                        <div class="tags">
+                            <a href="#" class="tag">R Language</a>
+                            <a href="#" class="tag">Classification</a>
+                            <a href="#" class="tag">Data Science</a>
+                            <a href="#" class="tag">OneR</a>
+                            <a href="#" class="tag">risk Prediction</a>
+                            <a href="#" class="tag">Model evaluation</a>
+                            <a href="#" class="tag">Accuracy</a>
+                            <a href="#" class="tag">Confusion Matrix</a>
+                        </div>
+                    </section>
+                    <!-- article-footer end -->
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">About</h3>
+                <p>Laurindo C. Benjamim is a Data Engineer & Software Developer passionate about building scalable data
+                    solutions and sharing knowledge.</p>
+                <div class="footer-social">
+                    <a href="https://github.com/laurindocbenjamim" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com/in/laurindocbenjamim" target="_blank"><i
+                            class="fab fa-linkedin-in"></i></a>
+                    <a href="https://youtube.com/@laurindocbenjamim" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="mailto:laurindocbenjamim@gmail.com"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3 class="footer-title">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="about.html">About Me</a></li>
+                    <li><a href="experiences.html">Experience</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3 class="footer-title">Categories</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Data Engineering</a></li>
+                    <li><a href="#">Python</a></li>
+                    <li><a href="#">JavaScript</a></li>
+                    <li><a href="#">AI & ML</a></li>
+                    <li><a href="#">Web Development</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2023 Laurindo C. Benjamim. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="../assets/js/articles.js"></script>
+    <script>
+
+    </script>
+</body>
+
+</html>
