@@ -37,24 +37,7 @@
     "timeToRead": "6 min to read",
     "repository":""
   },
-  {
-    "title": "Building Scalable Data Pipelines with Python and Apache Airflow",
-    "description": "In this article, we’ll walk through the process of building a OneR (One Rule) classification model in R to predict risk using the <code>Classify_risk_dataset.xlsx</code> dataset. ",
-    "url": "building-scalable-data-pipelines-with-python-and-apache-airflow",
-    "datePublished": "April 3, 2025",
-    "dateModified": "April 3, 2025",
-    "image": "",
-    "tags": [
-      "R",
-      "Machine Learning",
-      "Data Science"
-    ],
-    "author": "Laurindo C.Benjamim",
-    "authorUrl": "https://www.Laurindo C.Benjamim.com/",
-    "authorImage": "https://www.Laurindo C.Benjamim.com/wp-content/uploads/2023/10/oneR.png",
-    "timeToRead": "6 min to read",
-    "repository":""
-  },
+ 
   {
     "title": "Risk Classification with k-Nearest Neighbors",
     "description": "This project implements a k-Nearest Neighbors (kNN) classifier to predict customer risk levels ('good risk' vs. 'bad loss') using the classify_risk_dataset.",
