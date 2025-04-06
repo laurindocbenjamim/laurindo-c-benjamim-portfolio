@@ -324,8 +324,8 @@ async function send_email_for_confirmation(dataForm) {
         credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': await this.getCookie2('csrf_access_token'),
-            'Authorization': `Bearer ${await this.getCookie2('access_token_cookie')}`,
+            'X-CSRF-TOKEN': await auth.getCookie2('csrf_access_token'),
+            'Authorization': `Bearer ${await auth.getCookie2('access_token_cookie')}`,
         },
     };
     console.log("Send email starting...")
