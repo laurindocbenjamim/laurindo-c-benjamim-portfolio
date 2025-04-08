@@ -950,10 +950,13 @@
             errorMessage.textContent = '';
             setTimeout(async () => {
                 try {
+                    let message = "";
                     const response = await send_email_for_confirmation({ "email": form.get('email') })
                     console.log("Send email response....")
                     console.log(response)
-                    
+                    if(response.status_code && response.status_code > 225){
+                        message = response.message
+                    }
                     window.location.href = auth.baseURL + '/registration_alert.html';
                 } catch (error) {
                     console.error('Error to send the email for confirmation. ' + error)

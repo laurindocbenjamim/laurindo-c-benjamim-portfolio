@@ -389,6 +389,15 @@
             z-index: 1051;
         }
 
+        .server-message{
+            padding: 1rem;
+            margin-bottom: 5px;
+            border: 1px solid rgba(40, 51, 78, 0.7);
+            border-radius: 4px;
+            background-color: rgba(15, 23, 42, 0.7);
+            box-shadow: rgba(255, 255, 255, 0.05);
+        }
+
         /* Auth buttons */
         .auth-buttons {
             position: absolute;
@@ -874,6 +883,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="projects_sidebar_populate.js"></script>
     <script src="request_factory.js"></script>
     <script>
 
@@ -996,7 +1006,10 @@
                 const formData = new FormData(event.target)
 
                 // Show loading state
-                resultsContent.innerHTML = '<p>Processing your file... Please wait.</p>';
+                if(resultsContent.textContent === ""){
+                    resultsContent.innerHTML = '<p>Processing your file... Please wait.</p>';
+                }
+                
                 resultsContainer.style.display = 'block';
 
                 // Simulate processing delay
@@ -1032,8 +1045,17 @@
                         return;
                     } if (!response.ok) {
 
+
+                        // Append server message to resultsContent
+     
+                        const messageElement = document.createElement('div');
+                        messageElement.classList.add('server-message');
+                        messageElement.innerHTML = !response.error ? response.transcription : `<span class="text-danger">${response.error}</span>`;
+                        resultsContent.appendChild(messageElement);
+
+
                         //message = await request.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
-                        resultsContent.innerHTML = !response.error ? response.transcription : `<span class="text-danger">${response.error}</span>`;
+                        //resultsContent.innerHTML = !response.error ? response.transcription : `<span class="text-danger">${response.error}</span>`;
                     }
                     // This is just sample text - in a real app, you would get this from your speech-to-text API
                     //const sampleText = `This is a sample transcription of your audio/video file: ${fileName}\n\n`;
