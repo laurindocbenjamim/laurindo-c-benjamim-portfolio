@@ -309,17 +309,17 @@
     <link href="assets/css/dashboard.css" rel="stylesheet">
     <link href="assets/css/sidebars.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
-    
 
 
- <!-- ------- Libraries to Convert HTML to DOCX in JavaScript -->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.0.6/pizzip.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.21.0/docxtemplater.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
- <!---------- Libraries to Convert HTML to PDF in JavaScript-->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+    <!-- ------- Libraries to Convert HTML to DOCX in JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.0.6/pizzip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.21.0/docxtemplater.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <!---------- Libraries to Convert HTML to PDF in JavaScript-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
     <script src="assets/pages_component.js"></script>
     <style>
@@ -548,44 +548,54 @@
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <!--<div class="modal-header">-->
-                    <nav class="navbar navbar-expand-lg bg-body-tertiary rounded" aria-label="Thirteenth navbar example">
-                        <div class="container-fluid">
-                          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample11" aria-controls="navbarsExample11" aria-expanded="false" aria-label="Toggle navigation">
+                <nav class="navbar navbar-expand-lg bg-body-tertiary rounded" aria-label="Thirteenth navbar example">
+                    <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarsExample11" aria-controls="navbarsExample11" aria-expanded="false"
+                            aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
-                          </button>
-                  
-                          <div class="collapse navbar-collapse navbar-dark bg-dark d-lg-flex rounded" id="navbarsExample11">
-                            <a class="navbar-brand col-lg-3 me-0" href="#" style="background-color: transparent; color: #fff;">CV Customiser</a>
+                        </button>
+
+                        <div class="collapse navbar-collapse navbar-dark bg-dark d-lg-flex rounded"
+                            id="navbarsExample11">
+                            <a class="navbar-brand col-lg-3 me-0" href="#"
+                                style="background-color: transparent; color: #fff;">CV Customiser</a>
                             <ul class="navbar-nav col-lg-6 justify-content-lg-center">
-                              <li class="nav-item">
-                                <a class="nav-link active"  aria-current="page" href="#">
-                                    <button class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i> Editor.01</button>
-                                </a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link">
-                                    <button class="btn btn-outline-warning btn-sm"><i class="fas fa-edit"></i> Editor.02</button>                                    
-                                </a>
-                              </li>
-                              
-                              <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Download</a>
-                                <ul class="dropdown-menu">
-                                  <li><a class="dropdown-item btn btn-outline-success btn-sm" href="#"><i class="fas fa-download"></i> Docx</a></li>
-                                  <li><a class="dropdown-item btn btn-outline-success btn-sm" href="#"><i class="fas fa-download"></i> Pdf</a></li>
-                                </ul>
-                              </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="#">
+                                        <button class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i>
+                                            Editor.01</button>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link">
+                                        <button class="btn btn-outline-warning btn-sm"><i class="fas fa-edit"></i>
+                                            Editor.02</button>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                                        aria-expanded="false">Download</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item btn btn-outline-success btn-sm" href="#"><i
+                                                    class="fas fa-download"></i> Docx</a></li>
+                                        <li><a class="dropdown-item btn btn-outline-success btn-sm" href="#"><i
+                                                    class="fas fa-download"></i> Pdf</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                             <div class="d-lg-flex col-lg-1 justify-content-lg-end">
-                                <button type="button" class="btn btn-outline-danger rounded-circle p-3 lh-1 shadow" data-bs-dismiss="modal">
-                                <i class="fas fa-close fa-lg text-light"></i>
-                            </button>
+                                <button type="button" class="btn btn-outline-danger rounded-circle p-3 lh-1 shadow"
+                                    data-bs-dismiss="modal">
+                                    <i class="fas fa-close fa-lg text-light"></i>
+                                </button>
                             </div>
-                          </div>
                         </div>
-                      </nav>
+                    </div>
+                </nav>
 
-                
+
                 <div class="modal-body" id="modal-body-PreviewDocuments">
 
                     <div class="toolbar">
@@ -672,7 +682,7 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.4/dist/purify.min.js"></script>
 
 
-   
+    <script src="portfolio/request_factory.js"></script>
 
     <script>
 
@@ -719,11 +729,11 @@
                     $("#modalPreviewDocuments").modal("show");
                 });
             };
-          $(document).ready(function () {
-                    document.getElementById("previewFrame").style.display = 'block'
-                    document.getElementById("editor").style.display = 'none'
-                    $("#modalPreviewDocuments").modal("show");
-                });
+            $(document).ready(function () {
+                document.getElementById("previewFrame").style.display = 'block'
+                document.getElementById("editor").style.display = 'none'
+                $("#modalPreviewDocuments").modal("show");
+            });
             document.getElementById('contentOrigin').addEventListener('change', (e) => {
 
                 if (e.target.value === 'file') {
@@ -762,12 +772,74 @@
                 }
             }
             // Submiting the form 
+
             form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                document.getElementById('error-message').textContent = '';
+                document.getElementById('success-message').textContent = '';
+                document.getElementById('download-box').innerHTML = '';
+ 
+                if (!form.checkValidity()) {
+                    event.stopPropagation();
+                    form.classList.add("was-validated");
+                    return;
+                }
+                const formData = new FormData(event.target)
+
+                const request = new RequestFactory();
+
+                setTimeout(async () => {
+
+                    //
+                    //const formData = JSON.stringify({ "file": form.get('fileInput'), 
+                    //"language": form.get('languageSelect'), 
+                    //"outputFormat": form.get('outputFormat') });
+
+                    const options = {
+                        method: 'post',
+                        body: formData,
+                        credentials: 'include',
+                        mode: 'cors',
+                        headers: {
+                            //'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': request.getCookie('csrf_access_token'),
+                        },
+                    };
+                    console.log("Login with cookies tarting...")
+
+                    console.log(formData.get('languageSelect'))
+
+                    const response = await request.makeRequest(options, '/api/v1/speech_recognition/convert-audio-speech-into-text')
+                    
+
+                    let message = null;
+
+                    if (response === null) {
+                        console.log("Success in submition")
+                        console.log(response)
+                        //cleanAlerts()
+                        //errorMessage.textContent = 'Failed to login! Please try again later.';
+                        return;
+                    } if (!response.ok) {
+                        console.error("Failed to submit")
+                        console.error(response)
+                        // Append server message to resultsContent
+
+                        const messageElement = document.createElement('div');
+                        messageElement.classList.add('server-message');
+                        messageElement.innerHTML = !response.error ? response.transcription : `<span class="text-danger">${response.error}</span>`;
+                        //resultsContent.appendChild(messageElement);
+
+                    }
+                });
+            });
+            /*form.addEventListener('submit', async (event) => {
                 event.preventDefault()
                 document.getElementById('error-message').textContent = '';
                 document.getElementById('success-message').textContent = '';
                 document.getElementById('download-box').innerHTML = '';
-
+ 
                 if (!form.checkValidity()) {
                     event.stopPropagation();
                     form.classList.add("was-validated");
@@ -789,19 +861,19 @@
                     console.error('Error fetching CSRF token:', err);
                     return;
                 }
-
+ 
                 let endpoint = window.location.origin + '';
                 document.getElementById('btnSubmit').innerHTML = spinnerHtml
                 const headers = new Headers()
                 //headers.append('X-CSRF-Token', csrfToken)
                 //headers.append("Authorization", ` Bearer ${csrfToken}`);
-
+ 
                 const formData = new FormData(event.target)
-
+ 
                 // Validate document File
                 const jobRequirements = document.getElementById("jobRequirements");
                 let jobRequirementsFile = ""
-
+ 
                 if (formData.get('contentOrigin') === 'file') {
                     try {
                         jobRequirementsFile = jobRequirements.files[0];
@@ -810,10 +882,10 @@
                         }
                     } catch (err) { }
                     // Validate file size (example: max 2MB) 
-
+ 
                     const file = formData.get('jobRequirements');
                     //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
-
+ 
                     try {
                         validateVideoSize(file, 16)
                     } catch (error) {
@@ -821,9 +893,9 @@
                         return error
                     }
                 }
-
+ 
                 document.getElementById('btnSubmit').innerHTML = spinnerHtml
-
+ 
                 fetch(`${domain}/api/cv-customizer`, {
                     method: 'POST',
                     body: formData,//JSON.stringify({ objectives, requirements, topics, courseName, courseClonedName, courseDescription }),
@@ -844,9 +916,9 @@
                             document.getElementById('download-box').innerHTML = '';
                         } else {
                             form.reset();
-
+ 
                             var downloadDocxLink = '';
-
+ 
                             if (resp.docx_file_path) {
                                 downloadDocxLink += `<ul><li><a class="icon-link border" href='${domain}/${resp.docx_file_path}' target="top">Optimised CV.docx
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
@@ -854,7 +926,7 @@
                                 <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
                                 </svg></a></li>`;
                             }
-
+ 
                             if (resp.pdf_file_path) {
                                 downloadDocxLink += `
                                 <li><a class="icon-link border" href='${domain}/${resp.pdf_file_path}' target="top">Optimised CV.pdf
@@ -864,37 +936,37 @@
                                 </svg></a></li><ul>
                                 `;
                             }
-
+ 
                             document.getElementById('download-box').innerHTML = downloadDocxLink
                             document.getElementById('error-message').textContent = '';
                             document.getElementById('success-message').textContent = resp.message;
-
+ 
                             let json_object = {}
                             if (resp.json) {
                                 var newObjParsed = JSON.parse(String(resp.json).replace(/\n/g, ''));
-
+ 
                                 let cv_optimised_html = newObjParsed.cv_in_html_format
-
+ 
                                 // Create button element
                                 const buttonPreview = document.createElement("button");
                                 // Create icon element
                                 const icon = document.createElement("i");
                                 //icon.className = "bi bi-eye"; // Bootstrap eye icon
                                 icon.className = "bi bi-box-arrow-up-right"
-
+ 
                                 // Append icon and text to button
                                 buttonPreview.appendChild(icon);
                                 // Add classes and attributes
                                 buttonPreview.type = "button";
                                 buttonPreview.className = "btn btn-outline-success";
                                 buttonPreview.textContent = "Preview";
-
+ 
                                 // Append the button to the body (or any specific element)
                                 document.getElementById('download-box').appendChild(buttonPreview);
-
+ 
                                 // Add click event listener
                                 buttonPreview.addEventListener("click", function () {
-
+ 
                                     // Convert to lowercase for a case-insensitive check
                                     if (!cv_optimised_html.toLowerCase().includes('<meta charset="utf-8">')) {
                                         // Insert the meta tag after <head>
@@ -903,12 +975,12 @@
                                     }
                                     previewPage(cv_optimised_html)
                                 });
-
+ 
                             }
                         }
                         //console.log(resp)
                         document.getElementById('btnSubmit').innerHTML = '<span>Submit</span>';
-
+ 
                     })
                     .catch((error) => {
                         document.getElementById('download-box').innerHTML = '';
@@ -917,8 +989,8 @@
                         document.getElementById('success-message').textContent = ''
                         console.log(error)
                     });
-
-            });
+ 
+            });*/
         });
 
         document.getElementById('btn-show-alternative-editor').addEventListener('click', () => {
@@ -932,11 +1004,12 @@
         })
 
         // the method to convert HTML to DOCX
-        function htmlToDocx(htmlContent) { alert("Download DOCX... "+htmlContent)
-            if(!htmlContent){
+        function htmlToDocx(htmlContent) {
+            alert("Download DOCX... " + htmlContent)
+            if (!htmlContent) {
                 throw new Error("Not content received")
             }
-            const doc = new PizZip(); 
+            const doc = new PizZip();
             const docxTemplate = doc.file("word/document.xml", htmlContent); // Use a DOCX template
 
             const zip = doc.generate();
@@ -949,9 +1022,9 @@
 
         // method to save HTML as a PDF
         function saveHtmlAsPdf(element) {
-            alert("Download PDF... "+element)
+            alert("Download PDF... " + element)
             //const element = document.getElementById("content"); // The element to be converted to PDF
-            if(!element){
+            if (!element) {
                 throw new Error("Not content received")
             }
             html2pdf()

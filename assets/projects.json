@@ -3,36 +3,81 @@
     "title": "MSpeeText: converter",
     "description": "Convert audio speech into text.",
     "url": "convert-speech-to-text.html",
-    "repository":""
+    "repository": "https://github.com/laurindocbenjamim/laurindo-c-benjamim-portfolio",
+    "techStacks": {
+      "Python": "fas fa-robot",
+      "Flask": "fab fa-python",
+      "JavaScript": "fas fa-flask",
+      "OpenAI API": "fab fa-js",
+      "Bootstrap": "fab fa-bootstrap",
+      "HTML & CSS": "fab fa-html5"
+    }
   },
   {
-    "title": "MSpeeText - Streaming",
-    "description": "Convert audio speech into text in Streaming.",
-    "url": "stream-convert-speech-to-text.html",
-    "repository":""
+    "title": "CV Customization Tool",
+    "description": "Adjust your CV to match job requirements effortlessly",
+    "url": "../cv_customizer.html",
+    "repository": "https://github.com/laurindocbenjamim/laurindo-c-benjamim-portfolio",
+    "techStacks": {
+      "Python": "fas fa-robot",
+      "Flask": "fab fa-python",
+      "JavaScript": "fas fa-flask",
+      "OpenAI API": "fab fa-js",
+      "Bootstrap": "fab fa-bootstrap",
+      "HTML & CSS": "fab fa-html5"
+    }
   },
   {
     "title": "Countries API",
     "description": "API of international country calling phone codes.",
     "url": "https://www.d-tuning.com/api/v1/web-scrapping/countries",
-    "repository":""
+    "repository": "",
+    "techStacks": {
+      "Python": "fas fa-robot",
+      "Flask": "fab fa-python",
+      "JavaScript": "fas fa-flask"
+    }
   },
   {
     "title": "Sentiment Analysis",
     "description": "Extract sentiments from text using the Watson AI API",
     "url": "#",
-    "repository": "https://github.com/laurindocbenjamim/pylau-app-flask/tree/main/app/package_data_science/module_sentiment_analyse"
+    "repository": "https://github.com/laurindocbenjamim/pylau-app-flask/tree/main/app/package_data_science/module_sentiment_analyse",
+    "techStacks": {
+      "Python": "fas fa-robot",
+      "Flask": "fab fa-python",
+      "JavaScript": "fas fa-flask",
+      "OpenAI API": "fab fa-js",
+      "Bootstrap": "fab fa-bootstrap",
+      "HTML & CSS": "fab fa-html5"
+    }
   },
   {
     "title": "Stream Speech Test",
     "description": "Record your speech and convert it to text.",
     "url": "stream-speech.html",
-    "repository":""
+    "repository": "",
+    "techStacks": {
+      "Python": "fas fa-robot",
+      "Flask": "fab fa-python",
+      "JavaScript": "fas fa-flask",
+      "OpenAI API": "fab fa-js",
+      "Bootstrap": "fab fa-bootstrap",
+      "HTML & CSS": "fab fa-html5"
+    }
   },
   {
     "title": "Audio Splitter",
     "description": "Split audio files into smaller segments ",
     "url": "split-audio.html",
-    "repository":""
+    "repository": "",
+    "techStacks": {
+      "Python": "fas fa-robot",
+      "Flask": "fab fa-python",
+      "JavaScript": "fas fa-flask",
+      "OpenAI API": "fab fa-js",
+      "Bootstrap": "fab fa-bootstrap",
+      "HTML & CSS": "fab fa-html5"
+    }
   }
 ]
