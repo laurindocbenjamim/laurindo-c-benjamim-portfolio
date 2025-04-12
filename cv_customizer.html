@@ -20,6 +20,27 @@
 
 
     <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+            --text-color: #f8fafc;
+            --dark-bg: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --code-bg: #1e293b;
+        }
+
+        #body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+        }
+
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -174,22 +195,16 @@
         }
 
         .form-control {
-            background-color: #cfd5db;
-            color: rgb(8, 8, 8);
             border: 1px solid #444;
             border-radius: 0px;
         }
 
         .form-control:focus {
-            background-color: #3b3f45;
-            color: #FFF;
-            border-color: #5a5e65;
+            
         }
 
 
-        .btn-outline-light:hover {
-            background-color: #5a5e65;
-        }
+        
 
         .dynamic-field {
             display: flex;
@@ -225,7 +240,6 @@
 
 
         .upload-form {
-            background-color: rgba(55, 43, 161, 0.5);
             /* Semi-transparent */
             padding: 20px;
             border-radius: 10px;
@@ -256,7 +270,6 @@
 
 
         .upload-form {
-            background-color: rgba(19, 39, 80, 0.8);
             /* Semi-transparent */
             padding: 30px;
             border-radius: 10px;
@@ -292,12 +305,7 @@
             color: #cac8c8;
         }
 
-        .navbar-brand {
-            margin-left: 2%;
-            background-color: transparent;
-            color: #000;
-            border-radius: 3px;
-        }
+        
     </style>
 
 
@@ -390,7 +398,7 @@
 
 </head>
 
-<body style="background: #00010a; color:#cac8c8">
+<body id="body">
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
         <symbol id="check2" viewBox="0 0 16 16">
             <path
@@ -425,7 +433,7 @@
 
             </div>
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="background-color: #ffffff;">
 
                 <div class="container">
                     <div class="header">
@@ -434,15 +442,15 @@
                         </p>
                     </div>
                     <style>
+                        
                         #form {
-                            color: #000;
                             padding: 2rem;
                             /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);*/
                             box-shadow: 4px 4px 8px 12px rgba(100, 98, 98, 0.089);
                             /* Increased shadow */
                             border-radius: 8px;
                             overflow: hidden;
-                            background-color: rgba(255, 255, 255, 0.87);
+                            background-color: #f0f0f0;
                         }
                     </style>
 
@@ -779,7 +787,7 @@
                 document.getElementById('error-message').textContent = '';
                 document.getElementById('success-message').textContent = '';
                 document.getElementById('download-box').innerHTML = '';
- 
+
                 if (!form.checkValidity()) {
                     event.stopPropagation();
                     form.classList.add("was-validated");
@@ -788,6 +796,33 @@
                 const formData = new FormData(event.target)
 
                 const request = new RequestFactory();
+
+                 // Validate document File
+                const jobRequirements = document.getElementById("jobRequirements");
+                let jobRequirementsFile = ""
+
+                if (formData.get('contentOrigin') === 'file') {
+                    
+                    try {
+                        jobRequirementsFile = jobRequirements.files[0];
+                        if (!jobRequirementsFile) {
+                            throw Error("File not found or not selected!")
+                        }
+                    } catch (err) { }
+                    // Validate file size (example: max 2MB) 
+ 
+                    const file = formData.get('jobRequirements');
+                    //const objectives = Array.from(document.querySelectorAll('input[name="objectives[]"]')).map(input => input.value);
+ 
+                    try {
+                        validateVideoSize(file, 16)
+                    } catch (error) {
+                        alert(error)
+                        //document.getElementById('error-message').textContent = error;
+                        return error
+                    }
+                }
+
 
                 setTimeout(async () => {
 
@@ -798,20 +833,20 @@
 
                     const options = {
                         method: 'post',
-                        body: formData,
+                        body: JSON.stringify({"origin": formData.get('contentOrigin')}),//formData,
                         credentials: 'include',
                         mode: 'cors',
                         headers: {
-                            //'Content-Type': 'application/json',
+                            'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': request.getCookie('csrf_access_token'),
                         },
                     };
                     console.log("Login with cookies tarting...")
+                    alert(formData.get('contentOrigin'))
+                    console.log("Lang: "+formData.get('languageSelect'))
 
-                    console.log(formData.get('languageSelect'))
+                    const response = await request.makeRequest(options, 'api/v1/cv/customizer')
 
-                    const response = await request.makeRequest(options, '/api/v1/speech_recognition/convert-audio-speech-into-text')
-                    
 
                     let message = null;
 
