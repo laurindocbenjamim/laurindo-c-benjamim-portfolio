@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    document.getElementById('btn-submit').addEventListener('click', async (event) => {
+    document.getElementById('btnSubmit').addEventListener('click', async (event) => {
         event.preventDefault();
 
         if (!form.checkValidity()) {
@@ -57,12 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
         
             if(session.error){
                 console.log("Session")
-                console.log(session)
+                //console.log(session)
                 console.error(session.error)
                 return ;
             }
             const stripe = Stripe(pk);
-            console.log("SessionID: ", session.id); // Now session.id should be accessible
         
             const { error } = await stripe.redirectToCheckout({ sessionId: session.id });
         
