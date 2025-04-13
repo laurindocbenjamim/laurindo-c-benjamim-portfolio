@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Science Fundamentals - Learning Portal | EduLearn</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #f8f9fc;
+            --accent-color: #2e59d9;
+            --success-color: #1cc88a;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --text-color: #5a5c69;
+            --sidebar-width: 280px;
+        }
+        
+        body {
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text-color);
+            background-color: #f8f9fc;
+        }
+        
+        .navbar {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .course-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #224abe 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .progress-container {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .progress-bar {
+            background-color: var(--success-color);
+            transition: width 0.6s ease;
+        }
+        
+        /* Sidebar Styles */
+        .course-sidebar {
+            width: var(--sidebar-width);
+            flex: 0 0 var(--sidebar-width);
+            position: sticky;
+            top: 20px;
+            height: calc(100vh - 40px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) #f1f1f1;
+        }
+        
+        .course-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .course-sidebar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .course-sidebar::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 10px;
+        }
+        
+        .sidebar-module {
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-module-header {
+            padding: 0.75rem 1rem;
+            background-color: #f8f9fa;
+            border-radius: 0.35rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sidebar-module-header:hover {
+            background-color: #e9ecef;
+        }
+        
+        .sidebar-module-header.collapsed .module-arrow {
+            transform: rotate(-90deg);
+        }
+        
+        .module-arrow {
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar-lessons {
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+        
+        .sidebar-module-header:not(.collapsed) + .sidebar-lessons {
+            max-height: 1000px;
+            opacity: 1;
+        }
+        
+        .sidebar-lesson {
+            padding: 0.5rem 0;
+            border-left: 2px solid #dee2e6;
+            padding-left: 1rem;
+            margin-left: -2px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-lesson:hover {
+            border-left-color: var(--primary-color);
+        }
+        
+        .sidebar-lesson.current {
+            border-left-color: var(--primary-color);
+            background-color: rgba(78, 115, 223, 0.05);
+        }
+        
+        .sidebar-lesson.completed .lesson-title::before {
+            content: "\f058"; /* fa-check-circle */
+            color: var(--success-color);
+        }
+        
+        .sidebar-lesson.current .lesson-title::before {
+            content: "\f144"; /* fa-play-circle */
+            color: var(--primary-color);
+        }
+        
+        .sidebar-lesson .lesson-title::before {
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 0.5rem;
+            content: "\f111"; /* fa-circle */
+            color: #adb5bd;
+        }
+        
+        /* Main Content Styles */
+        .course-content {
+            flex: 1;
+            margin-left: 1.5rem;
+        }
+        
+        .lesson-card {
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        /* New Video Component Styles */
+        .video-container-wrapper {
+            position: relative;
+            width: 100%;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        
+        #lesson-video {
+            width: 100%;
+            display: block;
+        }
+        
+        .video-controls {
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .video-container-wrapper:hover .video-controls {
+            opacity: 1;
+        }
+        
+        .control-btn {
+            color: white;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .control-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        .control-btn.active {
+            background-color: var(--primary-color);
+        }
+        
+        .video-progress-container {
+            flex: 1;
+            height: 6px;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 0 8px;
+        }
+        
+        .video-progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 3px;
+            width: 0%;
+        }
+        
+        .time-display {
+            color: white;
+            font-size: 14px;
+            font-family: monospace;
+        }
+        
+        .settings-menu {
+            position: absolute;
+            bottom: 50px;
+            right: 10px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 8px 0;
+            width: 180px;
+            z-index: 100;
+            display: none;
+        }
+        
+        .settings-menu.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .settings-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .settings-item:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .settings-item i {
+            width: 20px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+        
+        .speed-options {
+            display: none;
+            padding-left: 24px;
+        }
+        
+        .speed-options.show {
+            display: block;
+        }
+        
+        /* Dynamic Content Cards */
+        .concept-card {
+            perspective: 1000px;
+            margin-bottom: 1.5rem;
+            min-height: 200px;
+        }
+        
+        .concept-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            border-radius: 0.35rem;
+        }
+        
+        .concept-card:hover .concept-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .concept-card-front, .concept-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 0.35rem;
+        }
+        
+        .concept-card-back {
+            transform: rotateY(180deg);
+            background-color: var(--secondary-color);
+        }
+        
+        /* Canvas Visualization */
+        .visualization-container {
+            background-color: white;
+            border-radius: 0.35rem;
+            padding: 1rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .visualization-title {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 0.35rem;
+        }
+        
+        /* Completion Badge */
+        .completion-badge {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--success-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .completion-badge.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">EduLearn</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-concierge-bell me-1"></i> Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-book-open me-1"></i> Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary text-white ms-2" href="#"><i class="fas fa-user-plus me-1"></i> Register</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Course Header -->
+    <header class="course-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="fw-bold mb-2">Data Science Fundamentals</h1>
+                    <p class="mb-0">Master Python, data analysis, visualization and machine learning basics</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="d-inline-block me-3">
+                        <span class="fw-bold">Progress:</span>
+                        <span id="course-progress-text">25%</span>
+                    </div>
+                    <button class="btn btn-light">
+                        <i class="fas fa-bookmark me-1"></i> Save Progress
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="container mt-4">
+        <div class="progress-container">
+            <div class="progress-bar" id="course-progress-bar" style="width: 25%"></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container my-4 d-flex">
+        <!-- Lessons Navigation Sidebar -->
+        <div class="course-sidebar">
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h3 class="mb-0">Course Content</h3>
+                </div>
+                <div class="card-body p-0">
+                    <!-- Module 1 -->
+                    <div class="sidebar-module">
+                        <div class="sidebar-module-header collapsed" data-bs-toggle="collapse" data-bs-target="#module1-content">
+                            <h5 class="mb-0">Module 1: Introduction</h5>
+                            <i class="fas fa-chevron-down module-arrow"></i>
+                        </div>
+                        <div class="sidebar-lessons collapse" id="module1-content">
+                            <div class="sidebar-lesson completed" data-lesson="1">
+                                <div class="d-flex justify-content-between">
+                                    <span class="lesson-title">What is Data Science?</span>
+                                    <span class="text-muted small">15 min</span>
+                                </div>
+                            </div>
+                            <div class="sidebar-lesson completed" data-lesson="2">
+                                <div class="d-flex justify-content-between">
+                                    <span class="lesson-title">Data Science Workflow</span>
+                                    <span class="text-muted small">20 min</span>
+                                </div>
+                            </div>
+                            <div class="sidebar-lesson current" data-lesson="3">
+                                <div class="d-flex justify-content-between">
+                                    <span class="lesson-title">Tools and Technologies</span>
+                                    <span class="text-muted small">25 min</span>
+                                </div>
+                            </div>
+                            <div class="sidebar-lesson" data-lesson="4">
+                                <div class="d-flex justify-content-between">
+                                    <span class="lesson-title">Hands-on: Setting Up</span>
+                                    <span class="text-muted small">30 min</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Module 2 -->
+                    <div class="sidebar-module">
+                        <div class="sidebar-module-header collapsed" data-bs-toggle="collapse" data-bs-target="#module2-content">
+                            <h5 class="mb-0">Module 2: Python Basics</h5>
+                            <i class="fas fa-chevron-down module-arrow"></i>
+                        </div>
+                        <div class="sidebar-lessons collapse" id="module2-content">
+                            <div class="sidebar-lesson" data-lesson="5">
+                                <div class="d-flex justify-content-between">
+                                    <span class="lesson-title">Python Basics Review</span>
+                                    <span class="text-muted small">30 min</span>
+                                </div>
+                            </div>
+                            <div class="sidebar-lesson" data-lesson="6">
+                                <div class="d-flex justify-content-between">
+                                    <span class="lesson-title">Working with Jupyter</span>
+                                    <span class="text-muted small">20 min</span>
+                                </div>
+                            </div>
+                            <div class="sidebar-lesson" data-lesson="7">
+                                <div class="d-flex justify-content-between">
+                                    <span class="lesson-title">Essential Libraries</span>
+                                    <span class="text-muted small">35 min</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quiz Item -->
+                    <div class="sidebar-lesson quiz-item" data-quiz="1">
+                        <div class="d-flex justify-content-between">
+                            <span class="lesson-title"><i class="fas fa-trophy me-1 text-warning"></i> Module 1 Quiz</span>
+                            <span class="text-muted small">10 questions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Resources Card -->
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h3 class="mb-0">Resources</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a href="#" class="text-decoration-none"><i class="fas fa-file-pdf me-2 text-danger"></i> Course Slides (PDF)</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#" class="text-decoration-none"><i class="fas fa-file-code me-2 text-primary"></i> Jupyter Notebooks</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#" class="text-decoration-none"><i class="fas fa-database me-2 text-success"></i> Practice Datasets</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#" class="text-decoration-none"><i class="fas fa-book me-2 text-info"></i> Recommended Readings</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Lesson Content -->
+        <div class="course-content">
+            <!-- Current Lesson -->
+            <div class="card lesson-card current" id="current-lesson">
+                <div class="card-header bg-white">
+                    <h3 class="mb-0">Tools and Technologies</h3>
+                </div>
+                <div class="card-body">
+                    <!-- New Video Component -->
+                    <div class="video-container-wrapper">
+                        <video id="lesson-video">
+                            <source src="https://data-tuning.storage.nyc3.digitaloceanspaces.com/data-tuning.storage/videos/249475_tiny.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO8019BHXAFT8ZE3T3LM%2F20250413%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250413T213245Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=68384e865c431d2417ddd513fe35d3d2bee93421487dabc760f4dc093690dfe5" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="video-controls">
+                            <button class="control-btn" id="play-pause-btn">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="control-btn" id="prev-btn">
+                                <i class="fas fa-step-backward"></i>
+                            </button>
+                            <button class="control-btn" id="next-btn">
+                                <i class="fas fa-step-forward"></i>
+                            </button>
+                            <div class="video-progress-container" id="progress-container">
+                                <div class="video-progress-bar" id="progress-bar"></div>
+                            </div>
+                            <span class="time-display" id="time-display">00:00 / 00:00</span>
+                            <div class="position-relative" style="margin-left: auto;">
+                                <button class="control-btn" id="settings-btn">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <div class="settings-menu" id="settings-menu">
+                                    <div class="settings-item" id="speed-btn">
+                                        <i class="fas fa-tachometer-alt"></i>
+                                        <span>Playback Speed</span>
+                                        <i class="fas fa-chevron-right ms-auto"></i>
+                                    </div>
+                                    <div class="speed-options" id="speed-options">
+                                        <div class="settings-item speed-option" data-speed="0.5">0.5x</div>
+                                        <div class="settings-item speed-option" data-speed="0.75">0.75x</div>
+                                        <div class="settings-item speed-option active" data-speed="1">Normal</div>
+                                        <div class="settings-item speed-option" data-speed="1.25">1.25x</div>
+                                        <div class="settings-item speed-option" data-speed="1.5">1.5x</div>
+                                        <div class="settings-item speed-option" data-speed="2">2x</div>
+                                    </div>
+                                    <div class="settings-item" id="translate-btn">
+                                        <i class="fas fa-language"></i>
+                                        <span>Translate</span>
+                                    </div>
+                                    <hr class="my-1">
+                                    <div class="settings-item">
+                                        <i class="fas fa-closed-captioning"></i>
+                                        <span>Subtitles</span>
+                                    </div>
+                                    <div class="settings-item">
+                                        <i class="fas fa-expand"></i>
+                                        <span>Fullscreen</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Lesson Description -->
+                    <div class="mb-4">
+                        <p>In this lesson, we'll explore the essential tools and technologies used in data science. You'll learn about programming languages, libraries, and platforms that data scientists use daily.</p>
+                        <button class="btn btn-success" id="complete-lesson">
+                            <i class="fas fa-check-circle me-1"></i> Mark as Completed
+                        </button>
+                    </div>
+                    
+                    <!-- Dynamic Content Cards -->
+                    <h4 class="mb-3">Key Concepts</h4>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="concept-card h-100">
+                                <div class="concept-card-inner">
+                                    <div class="concept-card-front d-flex flex-column justify-content-center">
+                                        <h5 class="text-center"><i class="fas fa-laptop-code text-primary me-2"></i>Programming Languages</h5>
+                                        <p class="text-center text-muted">Click to learn more</p>
+                                    </div>
+                                    <div class="concept-card-back">
+                                        <h5>Programming Languages</h5>
+                                        <ul>
+                                            <li>Python (most popular)</li>
+                                            <li>R (statistics focus)</li>
+                                            <li>SQL (databases)</li>
+                                            <li>Julia (high performance)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="concept-card h-100">
+                                <div class="concept-card-inner">
+                                    <div class="concept-card-front d-flex flex-column justify-content-center">
+                                        <h5 class="text-center"><i class="fas fa-box-open text-primary me-2"></i>Essential Libraries</h5>
+                                        <p class="text-center text-muted">Click to learn more</p>
+                                    </div>
+                                    <div class="concept-card-back">
+                                        <h5>Essential Libraries</h5>
+                                        <ul>
+                                            <li>Pandas (data manipulation)</li>
+                                            <li>NumPy (numerical computing)</li>
+                                            <li>Matplotlib (visualization)</li>
+                                            <li>Scikit-learn (machine learning)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Canvas Visualization -->
+                    <div class="visualization-container">
+                        <h5 class="visualization-title">Data Science Tools Ecosystem</h5>
+                        <canvas id="toolsCanvas" width="600" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quiz Container (Hidden by default) -->
+            <div class="quiz-container" id="quiz-container" style="display: none;">
+                <!-- Quiz content remains the same as previous implementation -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Completion Badge (Hidden by default) -->
+    <div class="completion-badge" id="completion-badge">
+        <div class="text-center">
+            <i class="fas fa-trophy fa-2x mb-1"></i>
+            <div class="small">Lesson Completed!</div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Canvas visualization
+            const canvas = document.getElementById('toolsCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Draw ecosystem visualization
+            function drawEcosystem() {
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw central Python circle
+                ctx.beginPath();
+                ctx.arc(300, 150, 60, 0, Math.PI * 2);
+                ctx.fillStyle = '#3776ab';
+                ctx.fill();
+                ctx.strokeStyle = '#2a5c8a';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                // Python text
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Python', 300, 155);
+                
+                // Draw connecting lines and other elements
+                const tools = [
+                    { name: 'Pandas', color: '#150458', x: 150, y: 70 },
+                    { name: 'NumPy', color: '#4d77cf', x: 450, y: 70 },
+                    { name: 'Matplotlib', color: '#11557c', x: 150, y: 230 },
+                    { name: 'Scikit-learn', color: '#f7931e', x: 450, y: 230 },
+                    { name: 'Jupyter', color: '#f37626', x: 80, y: 150 },
+                    { name: 'TensorFlow', color: '#ff6f00', x: 520, y: 150 }
+                ];
+                
+                // Draw connecting lines
+                ctx.strokeStyle = '#aaaaaa';
+                ctx.lineWidth = 1;
+                tools.forEach(tool => {
+                    ctx.beginPath();
+                    ctx.moveTo(300, 150);
+                    ctx.lineTo(tool.x, tool.y);
+                    ctx.stroke();
+                });
+                
+                // Draw tool circles
+                tools.forEach(tool => {
+                    ctx.beginPath();
+                    ctx.arc(tool.x, tool.y, 30, 0, Math.PI * 2);
+                    ctx.fillStyle = tool.color;
+                    ctx.fill();
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    
+                    // Tool text
+                    ctx.fillStyle = 'white';
+                    ctx.font = '10px Arial';
+                    ctx.fillText(tool.name, tool.x, tool.y + 5);
+                });
+                
+                // Animation loop
+                requestAnimationFrame(drawEcosystem);
+            }
+            
+            // Initial draw
+            drawEcosystem();
+            
+            // Video player controls
+            const video = document.getElementById('lesson-video');
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const progressContainer = document.getElementById('progress-container');
+            const timeDisplay = document.getElementById('time-display');
+            const settingsBtn = document.getElementById('settings-btn');
+            const settingsMenu = document.getElementById('settings-menu');
+            const speedBtn = document.getElementById('speed-btn');
+            const speedOptions = document.getElementById('speed-options');
+            const speedOptionItems = document.querySelectorAll('.speed-option');
+            const translateBtn = document.getElementById('translate-btn');
+            
+            // Format time as MM:SS
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+            
+            // Update progress bar and time display
+            function updateProgress() {
+                const percent = (video.currentTime / video.duration) * 100;
+                progressBar.style.width = `${percent}%`;
+                timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+            }
+            
+            // Set video progress when clicking on progress bar
+            progressContainer.addEventListener('click', function(e) {
+                const pos = (e.pageX - this.getBoundingClientRect().left) / this.offsetWidth;
+                video.currentTime = pos * video.duration;
+            });
+            
+            // Play/pause toggle
+            playPauseBtn.addEventListener('click', function() {
+                if (video.paused) {
+                    video.play();
+                    this.innerHTML = '<i class="fas fa-pause"></i>';
+                    this.classList.add('active');
+                } else {
+                    video.pause();
+                    this.innerHTML = '<i class="fas fa-play"></i>';
+                    this.classList.remove('active');
+                }
+            });
+            
+            // Previous button (go back 10 seconds)
+            prevBtn.addEventListener('click', function() {
+                video.currentTime = Math.max(0, video.currentTime - 10);
+            });
+            
+            // Next button (skip ahead 10 seconds)
+            nextBtn.addEventListener('click', function() {
+                video.currentTime = Math.min(video.duration, video.currentTime + 10);
+            });
+            
+            // Settings menu toggle
+            settingsBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                settingsMenu.classList.toggle('show');
+            });
+            
+            // Speed options toggle
+            speedBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                speedOptions.classList.toggle('show');
+            });
+            
+            // Set playback speed
+            speedOptionItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const speed = parseFloat(this.getAttribute('data-speed'));
+                    video.playbackRate = speed;
+                    
+                    // Update active state
+                    speedOptionItems.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Translate button
+            translateBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                alert('Translation functionality would be implemented here');
+            });
+            
+            // Close settings when clicking elsewhere
+            document.addEventListener('click', function() {
+                settingsMenu.classList.remove('show');
+                speedOptions.classList.remove('show');
+            });
+            
+            // Update video time display
+            video.addEventListener('timeupdate', updateProgress);
+            
+            // Update play/pause button when video ends
+            video.addEventListener('ended', function() {
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                playPauseBtn.classList.remove('active');
+            });
+            
+            // Initialize time display when metadata is loaded
+            video.addEventListener('loadedmetadata', function() {
+                timeDisplay.textContent = `00:00 / ${formatTime(video.duration)}`;
+            });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    playPauseBtn.click();
+                }
+                if (e.code === 'ArrowLeft') {
+                    prevBtn.click();
+                }
+                if (e.code === 'ArrowRight') {
+                    nextBtn.click();
+                }
+            });
+            
+            // Lesson navigation
+            document.querySelectorAll('.sidebar-lesson, .quiz-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove current class from all items
+                    document.querySelectorAll('.sidebar-lesson, .quiz-item').forEach(i => {
+                        i.classList.remove('current');
+                    });
+                    
+                    // Add current class to clicked item
+                    this.classList.add('current');
+                    
+                    // Show appropriate content
+                    if (this.classList.contains('quiz-item')) {
+                        document.getElementById('current-lesson').style.display = 'none';
+                        document.getElementById('quiz-container').style.display = 'block';
+                        startQuiz();
+                    } else {
+                        document.getElementById('current-lesson').style.display = 'block';
+                        document.getElementById('quiz-container').style.display = 'none';
+                    }
+                });
+            });
+            
+            // Complete lesson button
+            document.getElementById('complete-lesson').addEventListener('click', function() {
+                // Show completion badge
+                document.getElementById('completion-badge').classList.add('show');
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    document.getElementById('completion-badge').classList.remove('show');
+                }, 3000);
+                
+                // Update progress
+                const progressBar = document.getElementById('course-progress-bar');
+                const progressText = document.getElementById('course-progress-text');
+                const newWidth = Math.min(parseInt(progressBar.style.width) + 15, 100);
+                progressBar.style.width = `${newWidth}%`;
+                progressText.textContent = `${newWidth}%`;
+                
+                // Mark as completed
+                const currentLesson = document.querySelector('.sidebar-lesson.current');
+                currentLesson.classList.remove('current');
+                currentLesson.classList.add('completed');
+                
+                // Move to next lesson
+                const nextLesson = currentLesson.nextElementSibling;
+                if (nextLesson && !nextLesson.classList.contains('sidebar-module-header')) {
+                    nextLesson.classList.add('current');
+                }
+                
+                // Change button state
+                this.disabled = true;
+                this.innerHTML = '<i class="fas fa-check me-1"></i> Completed';
+            });
+            
+            // Quiz functionality would be implemented here
+            function startQuiz() {
+                // Quiz implementation from previous version
+            }
+        });
+    </script>
+</body>
+</html>
