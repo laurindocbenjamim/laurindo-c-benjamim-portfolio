@@ -5,7 +5,7 @@ class AuthUser {
             ? window.location.origin + '/laurindo-c-benjamim-portfolio'
             : window.location.origin;
 
-            this.serverDomain = 'https://f634-2001-818-e749-bf00-ba62-cacf-c73-b086.ngrok-free.app' //'http://localhost:5000';
+            this.serverDomain = 'http://localhost:5000';
 
             if (this.baseURL.includes('.github.io') || this.baseURL.includes('laurindocbenjamim.pt')) {
                 this.serverDomain = 'https://www.d-tuning.com';
