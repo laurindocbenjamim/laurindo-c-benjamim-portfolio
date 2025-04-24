@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI AudioBook Generator - Pidio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 0.5rem 0.5rem 0 0 !important;
+        }
+        
+        .voice-option {
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #dee2e6;
+        }
+        
+        .voice-option:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .voice-option.selected {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .volume-container {
+            background-color: rgba(67, 97, 238, 0.05);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Enhanced Progress Bars */
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+        
+        .progress-wrapper {
+            height: 24px;
+            border-radius: 12px;
+            background-color: #e9ecef;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            border-radius: 12px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Preview Modal */
+        .preview-modal .modal-content {
+            border-radius: 1rem;
+            background-color: #2c2c2c;
+            color: white;
+        }
+        
+        .preview-modal .modal-header {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .preview-modal .modal-body {
+            padding-top: 0;
+        }
+        
+        .preview-modal .btn-close {
+            filter: invert(1);
+        }
+
+        /* Voice List Animation */
+        #voiceOptions {
+            transition: all 0.3s ease;
+            max-height: 500px;
+            overflow: scroll; 
+        }
+
+        #voiceOptions.hidden {
+            max-height: 0;
+            opacity: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toggle-voice-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+     <!-- Navigation -->
+     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-book-reader me-2"></i>AudioGen Pro
+            </a>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h3 class="mb-0">AudioBook Generator</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="audiobookForm">
+                            <div class="mb-4">
+                                <label for="textInput" class="form-label">Enter your text</label>
+                                <textarea class="form-control" id="textInput" rows="8" placeholder="Type or paste your text here..." required></textarea>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label for="modelSelect" class="form-label">AI Model</label>
+                                    <select class="form-select" id="modelSelect" required>
+                                        <option value="openai">OpenAI TTS</option>
+                                        <option value="openai-gpt-4o">OpenAI GPT-4o</option>
+                                        <option value="elevenlabs">ElevenLabs</option>
+                                        <option value="google">Google TTS</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="languageSelect" class="form-label">Language</label>
+                                    <select class="form-select" id="languageSelect" required>
+                                        <option value="en">English</option>
+                                        <option value="pt">Portuguese</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4" id="dialectContainer" style="display: none;">
+                                <label for="dialectSelect" class="form-label">Dialect</label>
+                                <select class="form-select" id="dialectSelect">
+                                    <option value="pt-PT">Portuguese (Portugal)</option>
+                                    <option value="pt-BR">Portuguese (Brazil)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label class="form-label">Select Voice</label>
+                                    <button type="button" class="btn btn-outline-primary toggle-voice-btn" id="toggleVoiceList">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                                <div id="voiceOptions" class="p-3 bg-light rounded">
+                                    <!-- Voices will be populated here -->
+                                    <div class="text-center py-3 text-muted" id="loadingVoices">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Loading voices...</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="volume-container mb-4">
+                                <h5 class="mb-3"><i class="fas fa-music me-2"></i>Background Music</h5>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="useDefaultBackground">
+                                    <label class="form-check-label" for="useDefaultBackground">
+                                        Use default background music
+                                    </label>
+                                </div>
+                                <div id="customBackgroundSection">
+                                    <label for="backgroundFile" class="form-label">Or upload your own</label>
+                                    <input class="form-control" type="file" id="backgroundFile" accept="audio/*">
+                                    <div class="progress-upload-container mt-2" style="display: none;">
+                                        <div class="d-flex justify-content-between small text-muted mb-1">
+                                            <span>Uploading...</span>
+                                            <span id="uploadPercent">0%</span>
+                                        </div>
+                                        <div class="progress progress-upload">
+                                            <div class="progress-bar progress-bar-upload" id="uploadProgress" role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label for="backgroundVolume" class="form-label">Background Music Volume (<span id="backgroundVolumeValue">-20</span> dB)</label>
+                                    <input type="range" class="form-range" min="-40" max="0" step="1" id="backgroundVolume" value="-20">
+                                    <div class="d-flex justify-content-between small text-muted">
+                                        <span>Quieter</span>
+                                        <span>Louder</span>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <label for="voiceVolume" class="form-label">Voice Volume (<span id="voiceVolumeValue">0</span> dB)</label>
+                                    <input type="range" class="form-range" min="-40" max="6" step="1" id="voiceVolume" value="0">
+                                    <div class="d-flex justify-content-between small text-muted">
+                                        <span>Quieter</span>
+                                        <span>Louder</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-container" id="progressContainer">
+                                <h5 class="mb-3">Generating Audiobook</h5>
+                                <div class="d-flex justify-content-between small text-muted mb-1">
+                                    <span id="progressStatus">Initializing...</span>
+                                    <span id="generatePercent">0%</span>
+                                </div>
+                                <div class="progress progress-generate">
+                                    <div class="progress-bar progress-bar-generate progress-bar-striped progress-bar-animated" 
+                                         id="generateProgress" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-lg w-100 mt-3 py-3">
+                                <i class="fas fa-magic me-2"></i>Generate AudioBook
+                            </button>
+                        </form>
+                        
+                        <div class="result-section text-center py-4" id="resultSection" style="display: none;">
+                            <h4 class="mb-4">Your AudioBook is Ready!</h4>
+                            <div class="audio-player-container bg-light p-4 rounded">
+                                <audio controls class="w-100" id="audioPlayer"></audio>
+                            </div>
+                            <div class="d-flex justify-content-center gap-3 mt-4">
+                                <button class="btn btn-outline-primary px-4" id="downloadBtn">
+                                    <i class="fas fa-download me-2"></i>Download
+                                </button>
+                                <button class="btn btn-primary px-4" id="newAudiobookBtn">
+                                    <i class="fas fa-plus me-2"></i>Create New
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Preview Modal -->
+    <div class="modal fade preview-modal" id="previewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title">Voice Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-0">
+                    <audio controls class="w-100" id="previewAudio"></audio>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const form = document.getElementById('audiobookForm');
+            const modelSelect = document.getElementById('modelSelect');
+            const languageSelect = document.getElementById('languageSelect');
+            const voiceOptionsContainer = document.getElementById('voiceOptions');
+            const toggleVoiceListBtn = document.getElementById('toggleVoiceList');
+            const backgroundVolumeInput = document.getElementById('backgroundVolume');
+            const voiceVolumeInput = document.getElementById('voiceVolume');
+            const backgroundVolumeValue = document.getElementById('backgroundVolumeValue');
+            const voiceVolumeValue = document.getElementById('voiceVolumeValue');
+            const progressContainer = document.createElement('div');
+            progressContainer.className = 'progress-container';
+            progressContainer.innerHTML = `
+                <div class="progress-wrapper">
+                    <div class="progress-bar" id="mainProgressBar" style="width: 0%"></div>
+                </div>
+                <div class="progress-info">
+                    <span id="progressStatus">Ready</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+            `;
+            form.appendChild(progressContainer);
+
+            // State
+            let currentAudiobookUrl = '';
+            let selectedVoice = '';
+            let voicesData = {};
+            let backgroundFilePath = '';
+            let isVoiceListVisible = true;
+
+            // Initialize
+            loadModels();
+            setupEventListeners();
+            updateVolumeDisplay();
+
+            function loadModels() {
+                axios.get('/api/models')
+                    .then(response => {
+                        voicesData = response.data;
+                        updateVoiceOptions();
+                    })
+                    .catch(error => {
+                        console.error('Error loading models:', error);
+                        showAlert('Failed to load available models. Please try again later.', 'danger');
+                    });
+            }
+
+            function updateVoiceOptions() {
+                let model = modelSelect.value;
+                voiceOptionsContainer.innerHTML = '';
+
+                //model = modelSelect.value==='openai-gpt-4o' ? 'openai' : model;
+
+                if (!voicesData[model] || !voicesData[model].voices) {
+                    voiceOptionsContainer.innerHTML = '<div class="alert alert-warning">No voices available for this model</div>';
+                    return;
+                }
+
+                Object.entries(voicesData[model].voices).forEach(([voiceId, voiceData]) => {
+                    const voiceElement = document.createElement('div');
+                    voiceElement.className = 'voice-option mb-2 p-3';
+                    voiceElement.dataset.voice = voiceId;
+                    voiceElement.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>${voiceId}</strong>
+                                <div class="text-muted small">${voicesData[model].name}</div>
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary preview-btn">
+                                <i class="fas fa-play me-1"></i> Preview
+                            </button>
+                        </div>
+                    `;
+
+                    voiceElement.addEventListener('click', function() {
+                        document.querySelectorAll('.voice-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                        selectedVoice = this.dataset.voice;
+                    });
+
+                    voiceElement.querySelector('.preview-btn').addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        previewVoice(voiceId);
+                    });
+
+                    voiceOptionsContainer.appendChild(voiceElement);
+                });
+            }
+
+            function toggleVoiceList() {
+                isVoiceListVisible = !isVoiceListVisible;
+                voiceOptionsContainer.classList.toggle('hidden', !isVoiceListVisible);
+                toggleVoiceListBtn.querySelector('i').className = `fas fa-chevron-${isVoiceListVisible ? 'down' : 'up'}`;
+            }
+
+            function updateVolumeDisplay() {
+                backgroundVolumeValue.textContent = backgroundVolumeInput.value;
+                voiceVolumeValue.textContent = voiceVolumeInput.value;
+            }
+
+            function previewVoice(voice) {
+                updateProgress(10, 'Generating preview...');
+                
+                const model = modelSelect.value;
+                const language = languageSelect.value;
+                const sampleText = "This is a preview of the selected voice.";
+                
+                axios.post('/api/audiobooks', {
+                    language: language,
+                    textInput: sampleText,
+                    voice: voice,
+                    modelSelect: model,
+                    use_default_background: false
+                }, {
+                    onUploadProgress: function(progressEvent) {
+                        const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                        updateProgress(percent, 'Generating preview...');
+                    }
+                })
+                .then(response => {
+                    updateProgress(100, 'Preview ready');
+                    setTimeout(() => updateProgress(0, 'Ready'), 1000);
+                    
+                    // Show preview in modal
+                    const previewModal = new bootstrap.Modal('#previewModal');
+                    const previewAudio = document.getElementById('previewAudio');
+                    previewAudio.src = response.data.url;
+                    previewModal.show();
+                })
+                .catch(error => {
+                    console.error('Preview error:', error);
+                    updateProgress(0, 'Preview failed');
+                    showAlert('Failed to generate preview. Please try again.', 'danger');
+                });
+            }
+
+            function uploadBackground(file) {
+                return new Promise((resolve, reject) => {
+                    const formData = new FormData();
+                    formData.append('background', file);
+                    
+                    axios.post('/api/upload', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        },
+                        onUploadProgress: function(progressEvent) {
+                            const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                            updateProgress(percent, 'Uploading background...');
+                        }
+                    })
+                    .then(response => {
+                        backgroundFilePath = response.data.filePath;
+                        resolve();
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+                });
+            }
+
+            function generateAudiobook(text) {
+                updateProgress(10, 'Starting generation...');
+                
+                const formData = new FormData();
+                formData.append('textInput', text);
+                formData.append('voice', selectedVoice);
+                formData.append('modelSelect', modelSelect.value);
+                formData.append('background_volume', backgroundVolumeInput.value);
+                formData.append('voice_volume', voiceVolumeInput.value);
+                
+                const useDefaultBackground = document.getElementById('useDefaultBackground').checked;
+                const backgroundFile = document.getElementById('backgroundFile').files[0];
+                
+                if (useDefaultBackground) {
+                    formData.append('use_default_background', 'true');
+                    sendGenerationRequest(formData);
+                } else if (backgroundFile) {
+                    updateProgress(20, 'Uploading background music...');
+                    
+                    uploadBackground(backgroundFile)
+                        .then(() => {
+                            formData.append('background_path', backgroundFilePath);
+                            sendGenerationRequest(formData);
+                        })
+                        .catch(error => {
+                            console.error('Upload error:', error);
+                            updateProgress(0, 'Background upload failed');
+                            showAlert('Background upload failed. Generating without background music.', 'warning');
+                            sendGenerationRequest(formData);
+                        });
+                } else {
+                    sendGenerationRequest(formData);
+                }
+            }
+
+            function sendGenerationRequest(formData) {
+                updateProgress(30, 'Generating speech...');
+                
+                axios.post('/api/audiobooks', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    onUploadProgress: function(progressEvent) {
+                        const percent = 30 + Math.round((progressEvent.loaded * 100) / progressEvent.total * 0.7);
+                        updateProgress(percent, 'Generating audiobook...');
+                    }
+                })
+                .then(response => {
+                    updateProgress(100, 'Generation complete!');
+                    currentAudiobookUrl = response.data.url;
+                    showResult(response.data);
+                })
+                .catch(error => {
+                    console.error('Generation error:', error);
+                    updateProgress(0, 'Generation failed');
+                    showAlert('Failed to generate audiobook. Please try again.', 'danger');
+                });
+            }
+
+            function updateProgress(percent, message) {
+                const progressBar = document.getElementById('mainProgressBar');
+                const progressStatus = document.getElementById('progressStatus');
+                const progressPercent = document.getElementById('progressPercent');
+                
+                progressBar.style.width = `${percent}%`;
+                progressStatus.classList.add('alert-success')
+                progressStatus.textContent = message;
+                progressPercent.textContent = `${percent}%`;
+                
+                if (percent >= 100) {
+                    setTimeout(() => {
+                        progressBar.style.width = '0%';
+                        progressPercent.textContent = '0%';
+                    }, 1000);
+                }
+            }
+
+            function showResult(data) {
+                const resultSection = document.getElementById('resultSection');
+                const audioPlayer = document.getElementById('audioPlayer');
+                
+                audioPlayer.src = data.url;
+                resultSection.style.display = 'block';
+                
+                // Smooth scroll to result
+                resultSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            function setupEventListeners() {
+                // Model selection change
+                modelSelect.addEventListener('change', updateVoiceOptions);
+                
+                // Toggle voice list
+                toggleVoiceListBtn.addEventListener('click', toggleVoiceList);
+                
+                // Volume sliders
+                backgroundVolumeInput.addEventListener('input', updateVolumeDisplay);
+                voiceVolumeInput.addEventListener('input', updateVolumeDisplay);
+                
+                // Form submission
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const text = document.getElementById('textInput').value.trim();
+                    if (!text) {
+                        showAlert('Please enter some text to convert.', 'warning');
+                        return;
+                    }
+                    
+                    if (!selectedVoice) {
+                        showAlert('Please select a voice.', 'warning');
+                        return;
+                    }
+                    
+                    generateAudiobook(text);
+                });
+                
+                // Download button
+                document.getElementById('downloadBtn').addEventListener('click', function() {
+                    if (currentAudiobookUrl) {
+                        const link = document.createElement('a');
+                        link.href = currentAudiobookUrl;
+                        link.download = `audiobook_${new Date().toISOString().slice(0, 10)}.mp3`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                });
+                
+                // New audiobook button
+                document.getElementById('newAudiobookBtn').addEventListener('click', function() {
+                    document.getElementById('resultSection').style.display = 'none';
+                    document.getElementById('textInput').value = '';
+                    document.getElementById('backgroundFile').value = '';
+                    backgroundFilePath = '';
+                });
+            }
+
+            function showAlert(message, type) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type} alert-dismissible fade show mt-3`;
+                alertDiv.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                
+                const cardBody = document.querySelector('.card-body');
+                cardBody.insertBefore(alertDiv, cardBody.firstChild);
+                
+                setTimeout(() => {
+                    alertDiv.classList.remove('show');
+                    setTimeout(() => alertDiv.remove(), 150);
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
