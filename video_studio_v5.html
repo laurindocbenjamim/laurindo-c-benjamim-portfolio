@@ -10,6 +10,55 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="video_studio_v3.css">
+
+
+    <style>
+        /* Add these new styles */
+        .transcript-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .transcript-editor {
+            min-height: 200px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+
+        .thumbnail {
+            border-radius: 10px;
+            object-fit: cover;
+            height: 120px;
+            width: 100%;
+        }
+
+        
+
+        #errorAlert {
+            display: none;
+        }
+
+        .download-btn-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body class="dark-theme">
     <div class="wrapper">
@@ -25,13 +74,13 @@
             </div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i>Dashboard</a>
+                    <a class="nav-link" href="#"><i class="fas fa-home me-2"></i>Dashboard</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="video_studio_v4.html"><i class="fa fa-file-video"></i>Content</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="video_studio_v5.html"><i class="fas fa-film me-2"></i>YUpload</a>
+                    <a class="nav-link active" href="video_studio_v5.html"><i class="fas fa-film me-2"></i>YUpload</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="fas fa-chart-line me-2"></i>Analytics</a>
@@ -49,7 +98,7 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="header d-flex justify-content-between align-items-center mb-4">
-                <h3 class="m-0">Watch Video</h3>
+                <h4 class="m-1">Load Video from everywhere</h4>
                 <button class="btn btn-primary" id="uploadBtn">
                     <i class="fas fa-plus me-2"></i><span class="d-none d-md-inline">Upload Media</span>
                     <span class="d-inline d-md-none"><i class="fas fa-upload"></i></span>
@@ -72,6 +121,39 @@
                 </div>
             </div>
             
+            <!-- Results Section -->
+            <div class="card mt-4" id="resultSection" style="display: none;">
+                <div class="card-body">
+                    <h4 class="card-title"><i class="bi bi-download me-2"></i>Downloads Ready</h4>
+
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <img src="" class="thumbnail mb-3" id="resultThumbnail" alt="Video thumbnail">
+                        </div>
+                        <div class="col-md-8">
+                            <h5 id="resultTitle"></h5>
+                            <p class="text-muted" id="resultDuration"></p>
+                            <p class="text-muted" id="resultMeta"></p>
+
+                            <div class="download-btn-container" id="downloadButtons"></div>
+
+                            <!-- Updated Transcript Container -->
+                            <div id="transcriptContainer" class="mt-4" style="display: none;">
+                                <div class="transcript-header">
+                                    <h5><i class="bi bi-text-paragraph me-2"></i>Transcript</h5>
+                                    <button class="copy-btn" id="copyTranscriptBtn" title="Copy to clipboard">
+                                        <i class="bi bi-clipboard"></i>
+                                    </button>
+                                </div>
+                                <div id="transcriptText" class="transcript-editor" contenteditable="true"></div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Audio Player Section -->
             <div class="card mb-4 audio-section d-none" id="audioSection">
                 <div class="card-header">
@@ -92,6 +174,8 @@
                     </div>
                 </div>
             </div>
+
+            
             
             <!-- Text Content Section -->
             <div class="card text-section d-none" id="textSection">
@@ -104,6 +188,30 @@
             </div>
         </main>
     </div>
+
+    <!-- Authentication Required -->
+    <div id="authContainer" class="text-center mt-3" style="display: none;">
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            YouTube requires authentication
+        </div>
+        <div class="cookie-upload" id="cookieDropArea">
+            <h5><i class="bi bi-file-earmark-lock"></i> Upload YouTube Cookies</h5>
+            <p class="small text-muted">
+                Export cookies using <a
+                    href="https://chrome.google.com/webstore/detail/get-cookiestxt/bgaddhkoddajcdgocldbbfleckgcbcid"
+                    target="_blank">Get cookies.txt</a>
+            </p>
+            <input type="file" id="cookieFileInput" class="d-none" accept=".txt">
+            <button class="btn btn-outline-primary mt-2" id="selectCookieFile">
+                <i class="bi bi-upload me-1"></i>Select cookies.txt
+            </button>
+        </div>
+        <button class="btn btn-primary mt-3" id="retryDownload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Retry Download
+        </button>
+    </div>
+    
     
     <!-- Upload Modal -->
     <div class="modal fade" id="uploadModal" tabindex="-1" aria-hidden="true">
@@ -119,7 +227,7 @@
                             <button class="nav-link active" id="file-tab" data-bs-toggle="tab" data-bs-target="#file-tab-pane" type="button" role="tab">File Upload</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="url-tab" data-bs-toggle="tab" data-bs-target="#url-tab-pane" type="button" role="tab">From URL</button>
+                            <button class="nav-link" id="url-tab" data-bs-toggle="tab" data-bs-target="#url-tab-pane" type="button" role="tab">From Youtube URL</button>
                         </li>
                     </ul>
                     
@@ -148,14 +256,15 @@
                         <div class="tab-pane fade" id="url-tab-pane" role="tabpanel">
                             <form id="urlUploadForm">
                                 <div class="mb-3">
-                                    <label for="mediaUrl" class="form-label">Enter media URL</label>
+                                    <label for="videoUrl" class="form-label">Enter media URL</label>
                                     <div class="url-input-group">
                                         <select class="form-select url-type-select" id="urlType">
                                             <option value="video">Video</option>
                                             <option value="audio">Audio</option>
                                             <option value="text">Text</option>
                                         </select>
-                                        <input type="url" class="form-control" id="mediaUrl" placeholder="https://example.com/media.mp4" required>
+                                        <input type="url" class="form-control" id="videoUrl" 
+                                        placeholder="https://www.youtube.com/watch?v=..." required>
                                     </div>
                                 </div>
                                 <div class="form-check mb-3">
@@ -164,18 +273,71 @@
                                         Auto-play video after loading
                                     </label>
                                 </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Format</label>
+                                        <div class="btn-group w-100" role="group">
+                                            <input type="radio" class="btn-check" name="format" id="formatMp4" value="mp4"
+                                                autocomplete="off" checked>
+                                            <label class="btn btn-outline-primary" for="formatMp4"><i
+                                                    class="bi bi-film me-1"></i> MP4</label>
+    
+                                            <input type="radio" class="btn-check" name="format" id="formatMp3" value="mp3"
+                                                autocomplete="off">
+                                            <label class="btn btn-outline-primary" for="formatMp3"><i
+                                                    class="bi bi-music-note me-1"></i> MP3</label>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-md-6">
+                                        <label class="form-label">Options</label>
+                                        <div class="d-flex flex-column">
+                                            <div class="form-check form-switch mb-2">
+                                                <input class="form-check-input" type="checkbox" id="extractAudio">
+                                                <label class="form-check-label" for="extractAudio">Extract Audio</label>
+                                            </div>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="speechToText">
+                                                <label class="form-check-label" for="speechToText">Speech to Text</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="loading-indicator" id="urlLoadingIndicator">
                                     <div class="spinner"></div>
                                     <p>Loading media from URL...</p>
                                 </div>
                                 <div class="error-message" id="urlErrorMessage"></div>
+
+
+
+                               <!-- <form id="downloadForm">
+                                  
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary text-center btn-lg">
+                                            <span id="submitText">Download Now</span>
+                                            
+                                            <span class="d-flex align-items-center mt-2">
+                                                <span id="loadingSpinner"
+                                                    class="spinner-border spinner-border-sm loading-spinner"></span>
+                                                <span class="progress-text" id="progressText">Processing: <span id="percentageDisplay"
+                                                        class="text-white">0</span>%</span>
+        
+                                            </span>
+                                        </button>
+        
+                                    </div>
+                                </form>-->
+                                
                             </form>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="submitUpload">Upload</button>
+                    <button type="button" class="btn btn-primary" id="submitUpload">Download Now</button>
                 </div>
             </div>
         </div>
@@ -184,6 +346,7 @@
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
-    <script src="video_studio_v4.js"></script>
+    <script src="video_studio_youtube_download.js"></script>
+    <!--<script src="youtube_video_download.js" type="module"></script>-->
 </body>
 </html>

@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+
+    var userId = `user_${Math.random().toString(36).substr(2, 9)}`;
+
     // Initialize Bootstrap components
     const uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
     const uploadTabs = new bootstrap.Tab(document.getElementById('uploadTabs'));
@@ -18,6 +22,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlErrorMessage = document.getElementById('urlErrorMessage');
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
+
+    const urlInput = document.getElementById('videoUrl');
+    const formatRadios = document.querySelectorAll('input[name="format"]');
+    const extractAudio = document.getElementById('extractAudio');
+    const speechToText = document.getElementById('speechToText');
+
+    // Result elements
+    const resultSection = document.getElementById('resultSection');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultThumbnail = document.getElementById('resultThumbnail');
+    const resultDuration = document.getElementById('resultDuration');
+    const downloadButtons = document.getElementById('downloadButtons');
+
+    // Transcript elements
+    const transcriptContainer = document.getElementById('transcriptContainer');
+    const transcriptText = document.getElementById('transcriptText');
+    const copyBtn = document.getElementById('copyTranscriptBtn');
+
+    // Auth elements
+    const authContainer = document.getElementById('authContainer');
+    const cookieUpload = document.getElementById('cookieUpload');
+    const cookieInput = document.getElementById('cookieInput');
+    const retryBtn = document.getElementById('retryBtn');
 
     // Server configuration
     let baseURL = window.location.origin.includes('laurindocbenjamim.github.io')
@@ -45,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const headers = {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN':  getCookie('csrf_access_token'),
+            'X-CSRF-TOKEN': getCookie('csrf_access_token'),
         };
         const options = {
             method: method,
@@ -128,15 +155,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function handleUrlUpload() {
-        const url = document.getElementById('mediaUrl').value.trim();
+        const url = urlInput.value.trim();
         const urlType = document.getElementById('urlType').value;
         const autoPlay = document.getElementById('urlAutoPlay').checked;
 
-        /*if (!url) {
+        if (!url) {
             showUrlError('Please enter a valid URL');
             return;
         }
-        
+
         // Validate URL format
         let validUrl;
         try {
@@ -144,18 +171,15 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (e) {
             showUrlError('Please enter a valid URL');
             return;
-        }*/
-        
+        }
 
         // Show loading indicator
         urlLoadingIndicator.classList.add('active');
         urlErrorMessage.textContent = '';
 
         try {
-            if (urlType === 'text') {
-                await loadTextFromUrl(url);
-            } else if (urlType === 'video') {
-                await loadVideoFromApi(url, autoPlay);
+            if (urlType === 'video') {
+                await downloadVideoFromYoutube(url, autoPlay);
             } else if (urlType === 'audio') {
                 await loadAudioFromApi(url);
             }
@@ -170,22 +194,68 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    async function downloadVideoFromYoutube(url, autoPlay) {
+
+        try {
+            urlLoadingIndicator.querySelector('p').textContent = 'Fetching video from API...';
+
+            const response = await downloadVideo();
+            const data = await response.json();
+            
+            
+            if (!response.ok) {
+                if (data.auth_required) {
+                    showAuthRequired(data);
+                    return;
+                }
+                throw new Error(data.error || 'Download failed');
+            }
+
+            displayResults(data, autoPlay);
+
+
+            return ;
+            const blobResponse = await new Response(stream).blob();
+            const videoUrl = URL.createObjectURL(blobResponse);
+
+            //document.getElementById('videoPlayer').src = videoUrl;
+
+            
+
+            /******** end **** */
+
+
+            /*if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'API request failed');
+            }
+
+            const videoData = await response.json();
+
+            // Assuming the API returns a direct video URL or a streaming URL
+            if (!videoData.url) {
+                throw new Error('No video URL returned from API');
+            }
+
+            videoPlayer.classList.remove('d-none');
+            videoContainer.querySelector('.empty-state').classList.add('d-none');
+
+            videoPlayer.src = videoData.url;
+            videoPlayer.load();*/
+
+            
+
+        } catch (error) {
+            console.error('Error loading video:', error);
+            throw error;
+        }
+    }
+
+
     async function loadVideoFromApi(url, autoPlay) {
         
         try {
             urlLoadingIndicator.querySelector('p').textContent = 'Fetching video from API...';
-
-           /* const response = await fetch(`${serverDomain}/api/v1/video/get/${url}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    //'Authorization': 'Bearer YOUR_ACCESS_TOKEN' // Add if your API requires auth
-                },
-                body: JSON.stringify({ 
-                    filename: url,
-                    // Add any additional parameters your API expects
-                })
-            });*/
 
             
                 const response = await fetch(`${serverDomain}/api/v1/video/get/${url}`);
@@ -225,25 +295,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 /******** end **** */
 
-
-            /*if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'API request failed');
-            }
-
-            const videoData = await response.json();
-
-            // Assuming the API returns a direct video URL or a streaming URL
-            if (!videoData.url) {
-                throw new Error('No video URL returned from API');
-            }
-
-            videoPlayer.classList.remove('d-none');
-            videoContainer.querySelector('.empty-state').classList.add('d-none');
-
-            videoPlayer.src = videoData.url;
-            videoPlayer.load();*/
-
             if (autoPlay) {
                 try {
                     await videoPlayer.play();
@@ -259,7 +310,140 @@ document.addEventListener('DOMContentLoaded', function () {
             throw error;
         }
     }
-    
+
+
+    async function handleSubmit() {
+
+
+        try {
+            const response = await downloadVideo();
+            const data = await response.json();
+
+            if (!response.ok) {
+                if (data.auth_required) {
+                    showAuthRequired(data);
+                    return;
+                }
+                throw new Error(data.error || 'Download failed');
+            }
+
+            displayResults(data);
+        } catch (error) {
+            this.showError(error.message);
+        } finally {
+            this.hideLoading();
+        }
+    }
+
+
+    function showAuthRequired(data) {
+        authContainer.innerHTML = `
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                ${data.solution.description}
+            </div>
+            <div class="mt-3">
+                <ol class="small">
+                    ${data.solution.instructions.map(i => `<li>${i}</li>`).join('')}
+                </ol>
+                <a href="${data.solution.extension_url}" target="_blank" class="btn btn-sm btn-outline-primary me-2">
+                    <i class="bi bi-download me-1"></i> Get Extension
+                </a>
+                <button id="cookieUpload" class="btn btn-sm btn-primary">
+                    <i class="bi bi-upload me-1"></i> Upload Cookies
+                </button>
+                <input type="file" id="cookieInput" accept=".txt" class="d-none">
+            </div>
+        `;
+        authContainer.style.display = 'block';
+
+        // Re-bind events for dynamically created elements
+        /*document.getElementById('cookieUpload').addEventListener('click', () => {
+            document.getElementById('cookieInput').click();
+        });
+        document.getElementById('cookieInput').addEventListener('change', (e) => handleCookieUpload(e));
+        */
+    }
+
+    function displayResults(data, autoPlay) {
+        //this.clearResults();
+
+        // Set basic info
+        document.getElementById('resultTitle').textContent = data.title || 'Downloaded Content';
+        document.getElementById('resultThumbnail').src = data.thumbnail || '';
+        document.getElementById('resultDuration').textContent = formatDuration(data.duration);
+
+        // Create download buttons
+        let videoFilename = null;
+
+        data.files.forEach(file => {
+            createDownloadButton(file);
+
+            if (file.type === 'transcript') {
+                showTranscript(file.text);
+            }
+            if (file.type === 'video') {
+                videoFilename = file.filename
+            }
+        });
+
+        loadVideoFromApi(videoFilename, autoPlay)
+
+        resultSection.style.display = 'block';
+    }
+
+    function createDownloadButton(file) {
+        const btn = document.createElement('a');
+        btn.href = `${this.serverDomain}/api/v1/video/download/${encodeURIComponent(file.filename)}`;
+        btn.className = 'btn btn-outline-primary me-2 mb-2';
+        btn.innerHTML = `<i class="bi bi-download me-1"></i> ${capitalize(file.type)} (${file.size_mb}MB)`;
+        btn.download = file.filename;
+        btn.target = '_blank';
+        downloadButtons.appendChild(btn);
+    }
+
+    function retryDownload() {
+        authContainer.style.display = 'none';
+        form.dispatchEvent(new Event('submit'));
+    }
+
+    function clearResults() {
+        downloadButtons.innerHTML = '';
+        transcriptContainer.style.display = 'none';
+        resultSection.style.display = 'none';
+    }
+
+    function formatDuration(seconds) {
+        if (!seconds) return '';
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return [hours > 0 ? `${hours}h` : null, minutes > 0 ? `${minutes}m` : null, `${secs}s`]
+            .filter(Boolean).join(' ');
+    }
+
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function showTranscript(text) {
+        transcriptText.textContent = text;
+        transcriptContainer.style.display = 'block';
+    }
+
+    async function downloadVideo() {
+        return fetch(serverDomain + '/api/v1/video/download', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                url: urlInput.value,
+                format: document.querySelector('input[name="format"]:checked').value,
+                extract_audio: extractAudio.checked,
+                speech_to_text: speechToText.checked,
+                user_id: userId
+            })
+        });
+    }
 
     async function loadAudioFromApi(url) {
         try {
