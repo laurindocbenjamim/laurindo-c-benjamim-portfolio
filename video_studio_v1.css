@@ -1,0 +1,236 @@
+:root {
+    --dark-bg: #0f0f0f;
+    --darker-bg: #030303;
+    --dark-card: #212121;
+    --dark-border: #303030;
+    --primary-text: #ffffff;
+    --secondary-text: #aaaaaa;
+    --accent-color: #065fd4;
+    --accent-hover: #0447a0;
+}
+
+body.dark-theme {
+    background-color: var(--dark-bg);
+    color: var(--primary-text);
+    min-height: 100vh;
+}
+
+.studio-container {
+    padding: 0;
+    min-height: 100vh;
+}
+
+.sidebar {
+    background-color: var(--darker-bg);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    padding: 20px;
+    border-right: 1px solid var(--dark-border);
+}
+
+.sidebar .logo {
+    color: var(--primary-text);
+    padding: 10px;
+    border-bottom: 1px solid var(--dark-border);
+}
+
+.nav-link {
+    color: var(--secondary-text);
+    margin-bottom: 5px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: var(--dark-card);
+    color: var(--primary-text);
+}
+
+.nav-link i {
+    width: 20px;
+    text-align: center;
+}
+
+.main-content {
+    padding: 20px;
+    background-color: var(--dark-bg);
+}
+
+.header {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--dark-border);
+}
+
+.card {
+    background-color: var(--dark-card);
+    border: 1px solid var(--dark-border);
+    color: var(--primary-text);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    border-bottom: 1px solid var(--dark-border);
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.btn-outline-secondary {
+    color: var(--secondary-text);
+    border-color: var(--dark-border);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--dark-bg);
+    color: var(--primary-text);
+}
+
+.video-container {
+    width: 100%;
+    background-color: black;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--secondary-text);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.audio-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.audio-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.text-container {
+    white-space: pre-wrap;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.modal-content.dark-theme {
+    background-color: var(--dark-card);
+    color: var(--primary-text);
+}
+
+.form-control, .form-select {
+    background-color: var(--dark-bg);
+    border: 1px solid var(--dark-border);
+    color: var(--primary-text);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--dark-bg);
+    color: var(--primary-text);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.25rem rgba(6, 95, 212, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--dark-border);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Add these to the end of your CSS file */
+.url-upload-section {
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.speed-indicator {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    z-index: 10;
+}
+
+.form-switch .form-check-input {
+    width: 2.5em;
+    height: 1.5em;
+    margin-left: 0;
+}
+
+.loading-spinner {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+}
+
+.loading-spinner.active {
+    display: block;
+}
+
+.loading-spinner .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+.error-message {
+    color: #ff6b6b;
+    margin-top: 5px;
+    font-size: 0.85rem;
+}
