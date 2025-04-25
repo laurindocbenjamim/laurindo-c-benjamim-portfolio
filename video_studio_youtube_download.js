@@ -358,11 +358,11 @@ document.addEventListener('DOMContentLoaded', function () {
         authContainer.style.display = 'block';
 
         // Re-bind events for dynamically created elements
-        /*document.getElementById('cookieUpload').addEventListener('click', () => {
+        document.getElementById('cookieUpload').addEventListener('click', () => {
             document.getElementById('cookieInput').click();
         });
         document.getElementById('cookieInput').addEventListener('change', (e) => handleCookieUpload(e));
-        */
+        
     }
 
     function displayResults(data, autoPlay) {

@@ -212,6 +212,11 @@ audio {
     flex-direction: column;
 }
 
+.text-container{
+    max-height: 500px;
+    overflow: scroll;
+}
+
 @media (min-width: 576px) {
     .url-input-group {
         flex-direction: row;

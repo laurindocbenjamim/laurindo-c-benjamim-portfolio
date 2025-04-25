@@ -13,6 +13,16 @@
 
 
     <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+            --text-color: #f8fafc;
+            --dark-bg: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --code-bg: #1e293b;
+        }
+
         /* Add these new styles */
         .transcript-header {
             display: flex;
@@ -27,7 +37,10 @@
             border-radius: 5px;
             padding: 15px;
             background-color: #f8f9fa;
+            color: #000;
             white-space: pre-wrap;
+            max-height: 500px;
+            overflow: scroll;
         }
 
         .copy-btn {
@@ -57,6 +70,13 @@
             gap: 10px;
             flex-wrap: wrap;
             margin-top: 20px;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
@@ -130,27 +150,34 @@
                         <div class="col-md-4">
                             <img src="" class="thumbnail mb-3" id="resultThumbnail" alt="Video thumbnail">
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-4 text-left">
                             <h5 id="resultTitle"></h5>
                             <p class="text-muted" id="resultDuration"></p>
                             <p class="text-muted" id="resultMeta"></p>
 
-                            <div class="download-btn-container" id="downloadButtons"></div>
-
-                            <!-- Updated Transcript Container -->
-                            <div id="transcriptContainer" class="mt-4" style="display: none;">
-                                <div class="transcript-header">
-                                    <h5><i class="bi bi-text-paragraph me-2"></i>Transcript</h5>
-                                    <button class="copy-btn" id="copyTranscriptBtn" title="Copy to clipboard">
-                                        <i class="bi bi-clipboard"></i>
-                                    </button>
-                                </div>
-                                <div id="transcriptText" class="transcript-editor" contenteditable="true"></div>
-                            </div>
-
-
+                            <div class="download-btn-container text-left" id="downloadButtons"></div>
                         </div>
+                        
                     </div>
+
+                    <!--   Text speech Editor-->
+                    <div class="col-md-10 ">
+                            
+
+                        <!-- Updated Transcript Container -->
+                        <div id="transcriptContainer" class="mt-4" style="display: none;">
+                            <div class="transcript-header">
+                                <h5><i class="bi bi-text-paragraph me-2"></i>Transcript</h5>
+                                <button class="copy-btn" id="copyTranscriptBtn" title="Copy to clipboard">
+                                    <i class="bi bi-clipboard"></i>
+                                </button>
+                            </div>
+                            <div id="transcriptText" class="transcript-editor" contenteditable="true"></div>
+                        </div>
+
+
+                    </div>
+                    
                 </div>
             </div>
 
