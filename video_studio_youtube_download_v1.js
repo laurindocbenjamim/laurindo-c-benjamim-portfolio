@@ -1,85 +1,8 @@
-
-document.addEventListener("DOMContentLoaded", () => {
-    const toggleListBtn = document.querySelector(".toggle-list-btn");
-    const fileList = document.getElementById("fileList");
-
-    toggleListBtn.addEventListener("click", () => {
-        const isExpanded = toggleListBtn.getAttribute("aria-expanded") === "true";
-        toggleListBtn.setAttribute("aria-expanded", !isExpanded);
-        fileList.style.maxHeight = isExpanded ? "0" : "200px";
-    });
-
-   
-
-    // Server configuration
-    let baseURL = window.location.origin.includes('laurindocbenjamim.github.io')
-        ? window.location.origin + '/laurindo-c-benjamim-portfolio'
-        : window.location.origin;
-
-    let serverDomain = 'http://localhost:5000';
-
-    if (baseURL.includes('.github.io') || baseURL.includes('laurindocbenjamim.pt')) {
-        serverDomain = 'https://www.d-tuning.com';
-    }
-
-    // Simulate fetching files from the server
-    fetch(`${serverDomain}/api/v1/video/select/files`)
-        .then(response => response.json())
-        .then(data => {
-            console.log("Files.....")
-            console.log(data)
-
-            if (data.files) {
-                data.files.forEach(file => {
-                    const listItem = document.createElement("li"); //class="list-group-item"
-                    listItem.className = "list-group-item ";
-                    listItem.innerHTML = `
-                    
-                    <span class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" ><span>${file}</span></span>
-                `;
-                listItem.addEventListener("click", () => {
-                    navigator.clipboard.writeText(file).then(() => {
-                        /*const alertBox = document.createElement("div");
-                        alertBox.textContent = "Copied";
-                        alertBox.style.position = "fixed";
-                        alertBox.style.bottom = "20px";
-                        alertBox.style.right = "20px";
-                        alertBox.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-                        alertBox.style.color = "white";
-                        alertBox.style.padding = "10px 20px";
-                        alertBox.style.borderRadius = "5px";
-                        alertBox.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.3)";
-                        alertBox.style.zIndex = "1000";
-                        alertBox.style.opacity = "0";
-                        alertBox.style.transition = "opacity 0.3s ease";
-
-                        document.body.appendChild(alertBox);
-
-                        setTimeout(() => {
-                            alertBox.style.opacity = "1";
-                        }, 10);
-
-                        setTimeout(() => {
-                            alertBox.style.opacity = "0";
-                            setTimeout(() => {
-                                document.body.removeChild(alertBox);
-                            }, 300);
-                        }, 2000);*/
-                    });
-                });
-                    fileList.appendChild(listItem);
-                });
-            }
-
-        })
-        .catch(error => {
-            console.error("Error fetching files:", error);
-            fileList.innerHTML = `<li class="list-group-item text-danger">Failed to load files</li>`;
-        });
-});
-
-
 document.addEventListener('DOMContentLoaded', function () {
+
+
+    var userId = `user_${Math.random().toString(36).substr(2, 9)}`;
+
     // Initialize Bootstrap components
     const uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
     const uploadTabs = new bootstrap.Tab(document.getElementById('uploadTabs'));
@@ -99,6 +22,92 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlErrorMessage = document.getElementById('urlErrorMessage');
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
+
+    const urlInput = document.getElementById('videoUrl');
+    const formatRadios = document.querySelectorAll('input[name="format"]');
+    const extractAudio = document.getElementById('extractAudio');
+    const speechToText = document.getElementById('speechToText');
+
+    // Result elements
+    const resultSection = document.getElementById('resultSection');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultThumbnail = document.getElementById('resultThumbnail');
+    const resultDuration = document.getElementById('resultDuration');
+    const downloadButtons = document.getElementById('downloadButtons');
+
+    // Transcript elements
+    const transcriptContainer = document.getElementById('transcriptContainer');
+    const transcriptText = document.getElementById('transcriptText');
+    const copyBtn = document.getElementById('copyTranscriptBtn');
+
+    // Auth elements
+    const authContainer = document.getElementById('authContainer');
+    const cookieUpload = document.getElementById('cookieUpload');
+    const cookieInput = document.getElementById('cookieInput');
+    const retryBtn = document.getElementById('retryBtn');
+
+    // Add these with other DOM selections at the top
+const minimizeBtn = document.querySelector('.minimize-modal');
+const maximizeBtn = document.querySelector('.maximize-modal');
+const modalElement = document.getElementById('uploadModal');
+const modalInstance = new bootstrap.Modal(modalElement);
+
+// Minimize functionality
+minimizeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    modalElement.classList.add('modal-minimized');
+    minimizeBtn.classList.add('d-none');
+    maximizeBtn.classList.remove('d-none');
+    
+    // Hide backdrop but keep modal functional
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.style.opacity = '0';
+    }
+});
+
+// Maximize functionality
+maximizeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    modalElement.classList.remove('modal-minimized');
+    maximizeBtn.classList.add('d-none');
+    minimizeBtn.classList.remove('d-none');
+    
+    // Show backdrop again
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.style.opacity = '0.5';
+    }
+});
+
+// Click minimized header to maximize
+modalElement.addEventListener('click', function(e) {
+    if (modalElement.classList.contains('modal-minimized') && 
+        !e.target.classList.contains('btn-modal-control') &&
+        !e.target.closest('.btn-modal-control')) {
+        modalElement.classList.remove('modal-minimized');
+        maximizeBtn.classList.add('d-none');
+        minimizeBtn.classList.remove('d-none');
+        
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+            backdrop.style.opacity = '0.5';
+        }
+    }
+});
+
+// Reset when modal closes
+modalElement.addEventListener('hidden.bs.modal', function() {
+    modalElement.classList.remove('modal-minimized');
+    maximizeBtn.classList.add('d-none');
+    minimizeBtn.classList.remove('d-none');
+    
+    // Reset backdrop
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.style.opacity = '0.5';
+    }
+});
 
     // Server configuration
     let baseURL = window.location.origin.includes('laurindocbenjamim.github.io')
@@ -126,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const headers = {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN':  getCookie('csrf_access_token'),
+            'X-CSRF-TOKEN': getCookie('csrf_access_token'),
         };
         const options = {
             method: method,
@@ -209,15 +218,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function handleUrlUpload() {
-        const url = document.getElementById('mediaUrl').value.trim();
+        const url = urlInput.value.trim();
         const urlType = document.getElementById('urlType').value;
         const autoPlay = document.getElementById('urlAutoPlay').checked;
 
-        /*if (!url) {
+        if (!url) {
             showUrlError('Please enter a valid URL');
             return;
         }
-        
+
         // Validate URL format
         let validUrl;
         try {
@@ -225,18 +234,15 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (e) {
             showUrlError('Please enter a valid URL');
             return;
-        }*/
-        
+        }
 
         // Show loading indicator
         urlLoadingIndicator.classList.add('active');
         urlErrorMessage.textContent = '';
 
         try {
-            if (urlType === 'text') {
-                await loadTextFromUrl(url);
-            } else if (urlType === 'video') {
-                await loadVideoFromApi(url, autoPlay);
+            if (urlType === 'video') {
+                await downloadVideoFromYoutube(url, autoPlay);
             } else if (urlType === 'audio') {
                 await loadAudioFromApi(url);
             }
@@ -251,22 +257,68 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    async function downloadVideoFromYoutube(url, autoPlay) {
+
+        try {
+            urlLoadingIndicator.querySelector('p').textContent = 'Fetching video from API...';
+
+            const response = await downloadVideo();
+            const data = await response.json();
+            
+            
+            if (!response.ok) {
+                if (data.auth_required) {
+                    showAuthRequired(data);
+                    return;
+                }
+                throw new Error(data.error || 'Download failed');
+            }
+
+            displayResults(data, autoPlay);
+
+
+            return ;
+            const blobResponse = await new Response(stream).blob();
+            const videoUrl = URL.createObjectURL(blobResponse);
+
+            //document.getElementById('videoPlayer').src = videoUrl;
+
+            
+
+            /******** end **** */
+
+
+            /*if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'API request failed');
+            }
+
+            const videoData = await response.json();
+
+            // Assuming the API returns a direct video URL or a streaming URL
+            if (!videoData.url) {
+                throw new Error('No video URL returned from API');
+            }
+
+            videoPlayer.classList.remove('d-none');
+            videoContainer.querySelector('.empty-state').classList.add('d-none');
+
+            videoPlayer.src = videoData.url;
+            videoPlayer.load();*/
+
+            
+
+        } catch (error) {
+            console.error('Error loading video:', error);
+            throw error;
+        }
+    }
+
+
     async function loadVideoFromApi(url, autoPlay) {
         
         try {
             urlLoadingIndicator.querySelector('p').textContent = 'Fetching video from API...';
-
-           /* const response = await fetch(`${serverDomain}/api/v1/video/get/${url}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    //'Authorization': 'Bearer YOUR_ACCESS_TOKEN' // Add if your API requires auth
-                },
-                body: JSON.stringify({ 
-                    filename: url,
-                    // Add any additional parameters your API expects
-                })
-            });*/
 
             
                 const response = await fetch(`${serverDomain}/api/v1/video/get/${url}`);
@@ -306,25 +358,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 /******** end **** */
 
-
-            /*if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'API request failed');
-            }
-
-            const videoData = await response.json();
-
-            // Assuming the API returns a direct video URL or a streaming URL
-            if (!videoData.url) {
-                throw new Error('No video URL returned from API');
-            }
-
-            videoPlayer.classList.remove('d-none');
-            videoContainer.querySelector('.empty-state').classList.add('d-none');
-
-            videoPlayer.src = videoData.url;
-            videoPlayer.load();*/
-
             if (autoPlay) {
                 try {
                     await videoPlayer.play();
@@ -340,14 +373,149 @@ document.addEventListener('DOMContentLoaded', function () {
             throw error;
         }
     }
-    
+
+
+    async function handleSubmit() {
+
+
+        try {
+            const response = await downloadVideo();
+            const data = await response.json();
+
+            if (!response.ok) {
+                if (data.auth_required) {
+                    showAuthRequired(data);
+                    return;
+                }
+                throw new Error(data.error || 'Download failed');
+            }
+
+            displayResults(data);
+        } catch (error) {
+            this.showError(error.message);
+        } finally {
+            this.hideLoading();
+        }
+    }
+
+
+    function showAuthRequired(data) {
+        authContainer.innerHTML = `
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                ${data.solution.description}
+            </div>
+            <div class="mt-3">
+                <ol class="small">
+                    ${data.solution.instructions.map(i => `<li>${i}</li>`).join('')}
+                </ol>
+                <a href="${data.solution.extension_url}" target="_blank" class="btn btn-sm btn-outline-primary me-2">
+                    <i class="bi bi-download me-1"></i> Get Extension
+                </a>
+                <button id="cookieUpload" class="btn btn-sm btn-primary">
+                    <i class="bi bi-upload me-1"></i> Upload Cookies
+                </button>
+                <input type="file" id="cookieInput" accept=".txt" class="d-none">
+            </div>
+        `;
+        authContainer.style.display = 'block';
+
+        // Re-bind events for dynamically created elements
+        document.getElementById('cookieUpload').addEventListener('click', () => {
+            document.getElementById('cookieInput').click();
+        });
+        document.getElementById('cookieInput').addEventListener('change', (e) => handleCookieUpload(e));
+        
+    }
+
+    function displayResults(data, autoPlay) {
+        //this.clearResults();
+
+        // Set basic info
+        document.getElementById('resultTitle').textContent = data.title || 'Downloaded Content';
+        document.getElementById('resultThumbnail').src = data.thumbnail || '';
+        document.getElementById('resultDuration').textContent = formatDuration(data.duration) +
+         ' ' + data.size_mb + 'MB';
+
+        // Create download buttons
+        let videoFilename = null;
+        downloadButtons.innerHTML = '';
+
+        data.files.forEach(file => {
+            createDownloadButton(file);
+
+            if (file.type === 'transcript') {
+                showTranscript(file.text);
+            }
+            if (file.type === 'video') {
+                videoFilename = file.filename
+            }
+        });
+
+        loadVideoFromApi(videoFilename, autoPlay)
+
+        resultSection.style.display = 'block';
+    }
+
+    function createDownloadButton(file) {
+        const btn = document.createElement('a');
+        btn.href = `${serverDomain}/api/v1/video/download/${encodeURIComponent(file.filename)}`;
+        btn.className = 'btn btn-outline-primary me-2 mb-2';
+        btn.innerHTML = `<i class="bi bi-download me-1"></i> ${capitalize(file.type)} (${file.size_mb}MB)`;
+        btn.download = file.filename;
+        btn.target = '_blank';
+        downloadButtons.appendChild(btn);
+    }
+
+    function retryDownload() {
+        authContainer.style.display = 'none';
+        form.dispatchEvent(new Event('submit'));
+    }
+
+    function clearResults() {
+        downloadButtons.innerHTML = '';
+        transcriptContainer.style.display = 'none';
+        resultSection.style.display = 'none';
+    }
+
+    function formatDuration(seconds) {
+        if (!seconds) return '';
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return [hours > 0 ? `${hours}h` : null, minutes > 0 ? `${minutes}m` : null, `${secs}s`]
+            .filter(Boolean).join(' ');
+    }
+
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function showTranscript(text) {
+        transcriptText.textContent = text;
+        transcriptContainer.style.display = 'block';
+    }
+
+    async function downloadVideo() {
+        return fetch(serverDomain + '/api/v1/video/download', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                url: urlInput.value,
+                format: document.querySelector('input[name="format"]:checked').value,
+                extract_audio: extractAudio.checked,
+                speech_to_text: speechToText.checked,
+                user_id: userId
+            })
+        });
+    }
 
     async function loadAudioFromApi(url) {
         try {
             urlLoadingIndicator.querySelector('p').textContent = 'Fetching audio from API...';
 
             // You might use the same endpoint or a different one for audio
-            /*const response = await fetch(`${serverDomain}/api/v1/video/get`, {
+            const response = await fetch(`${serverDomain}/api/v1/audio/get`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -357,38 +525,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     url: url,
                     // Add any additional parameters your API expects
                 })
-            });*/
+            });
 
-            const response = await fetch(`${serverDomain}/api/v1/video/get/${url}`);
-          
-                if (!response.ok) {
-                  throw new Error('Network response was not OK');
-                }
-          
-                const reader = response.body.getReader();
-          
-                const stream = new ReadableStream({
-                  start(controller) {
-                    function push() {
-                      reader.read().then(({ done, value }) => {
-                        if (done) {
-                          controller.close();
-                          return;
-                        }
-                        controller.enqueue(value);
-                        push();
-                      });
-                    }
-                    push();
-                  }
-                });
-          
-                const blobResponse = await new Response(stream).blob();
-                const videoUrl = URL.createObjectURL(blobResponse);
-          
-               
-
-           /* if (!response.ok) {
+            if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'API request failed');
             }
@@ -397,10 +536,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!audioData.url) {
                 throw new Error('No audio URL returned from API');
-            }*/
+            }
 
             audioSection.classList.remove('d-none');
-            audioPlayer.src = videoUrl;
+            audioPlayer.src = audioData.url;
             audioPlayer.load();
             addAudioControls();
 

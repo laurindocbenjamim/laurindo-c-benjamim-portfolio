@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,51 +16,51 @@
             --success-color: #4cc9f0;
             --warning-color: #f72585;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f7fa;
         }
-        
+
         .card {
             border: none;
             border-radius: 0.5rem;
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
         }
-        
+
         .card-header {
             background-color: var(--primary-color);
             color: white;
             border-radius: 0.5rem 0.5rem 0 0 !important;
         }
-        
+
         .voice-option {
             cursor: pointer;
             transition: all 0.2s;
             border: 1px solid #dee2e6;
         }
-        
+
         .voice-option:hover {
             background-color: rgba(67, 97, 238, 0.05);
         }
-        
+
         .voice-option.selected {
             background-color: rgba(67, 97, 238, 0.1);
             border-left: 3px solid var(--primary-color);
         }
-        
+
         .volume-container {
             background-color: rgba(67, 97, 238, 0.05);
             padding: 1rem;
             border-radius: 0.5rem;
             margin-bottom: 1rem;
         }
-        
+
         /* Enhanced Progress Bars */
         .progress-container {
             margin: 1.5rem 0;
         }
-        
+
         .progress-wrapper {
             height: 24px;
             border-radius: 12px;
@@ -67,7 +68,7 @@
             overflow: hidden;
             position: relative;
         }
-        
+
         .progress-bar {
             height: 100%;
             border-radius: 12px;
@@ -76,7 +77,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .progress-bar::after {
             content: '';
             position: absolute;
@@ -84,43 +85,46 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0) 0%,
-                rgba(255, 255, 255, 0.3) 50%,
-                rgba(255, 255, 255, 0) 100%
-            );
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.3) 50%,
+                    rgba(255, 255, 255, 0) 100%);
             animation: shimmer 2s infinite;
         }
-        
+
         @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
-        
+
         .progress-info {
             display: flex;
             justify-content: space-between;
             margin-top: 0.5rem;
             font-size: 0.875rem;
         }
-        
+
         /* Preview Modal */
         .preview-modal .modal-content {
             border-radius: 1rem;
             background-color: #2c2c2c;
             color: white;
         }
-        
+
         .preview-modal .modal-header {
             border-bottom: none;
             padding-bottom: 0;
         }
-        
+
         .preview-modal .modal-body {
             padding-top: 0;
         }
-        
+
         .preview-modal .btn-close {
             filter: invert(1);
         }
@@ -129,7 +133,7 @@
         #voiceOptions {
             transition: all 0.3s ease;
             max-height: 500px;
-            overflow: scroll; 
+            overflow: scroll;
         }
 
         #voiceOptions.hidden {
@@ -148,9 +152,10 @@
         }
     </style>
 </head>
+
 <body>
-     <!-- Navigation -->
-     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <i class="fas fa-book-reader me-2"></i>AudioGen Pro
@@ -169,9 +174,10 @@
                         <form id="audiobookForm">
                             <div class="mb-4">
                                 <label for="textInput" class="form-label">Enter your text</label>
-                                <textarea class="form-control" id="textInput" rows="8" placeholder="Type or paste your text here..." required></textarea>
+                                <textarea class="form-control" id="textInput" rows="8"
+                                    placeholder="Type or paste your text here..." required></textarea>
                             </div>
-                            
+
                             <div class="row mb-4">
                                 <div class="col-md-6 mb-3 mb-md-0">
                                     <label for="modelSelect" class="form-label">AI Model</label>
@@ -190,7 +196,7 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="mb-4" id="dialectContainer" style="display: none;">
                                 <label for="dialectSelect" class="form-label">Dialect</label>
                                 <select class="form-select" id="dialectSelect">
@@ -198,11 +204,12 @@
                                     <option value="pt-BR">Portuguese (Brazil)</option>
                                 </select>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <label class="form-label">Select Voice</label>
-                                    <button type="button" class="btn btn-outline-primary toggle-voice-btn" id="toggleVoiceList">
+                                    <button type="button" class="btn btn-outline-primary toggle-voice-btn"
+                                        id="toggleVoiceList">
                                         <i class="fas fa-chevron-down"></i>
                                     </button>
                                 </div>
@@ -216,7 +223,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="volume-container mb-4">
                                 <h5 class="mb-3"><i class="fas fa-music me-2"></i>Background Music</h5>
                                 <div class="form-check form-switch mb-3">
@@ -234,28 +241,33 @@
                                             <span id="uploadPercent">0%</span>
                                         </div>
                                         <div class="progress progress-upload">
-                                            <div class="progress-bar progress-bar-upload" id="uploadProgress" role="progressbar" style="width: 0%"></div>
+                                            <div class="progress-bar progress-bar-upload" id="uploadProgress"
+                                                role="progressbar" style="width: 0%"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <label for="backgroundVolume" class="form-label">Background Music Volume (<span id="backgroundVolumeValue">-20</span> dB)</label>
-                                    <input type="range" class="form-range" min="-40" max="0" step="1" id="backgroundVolume" value="-20">
+                                    <label for="backgroundVolume" class="form-label">Background Music Volume (<span
+                                            id="backgroundVolumeValue">-20</span> dB)</label>
+                                    <input type="range" class="form-range" min="-40" max="0" step="1"
+                                        id="backgroundVolume" value="-20">
                                     <div class="d-flex justify-content-between small text-muted">
                                         <span>Quieter</span>
                                         <span>Louder</span>
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <label for="voiceVolume" class="form-label">Voice Volume (<span id="voiceVolumeValue">0</span> dB)</label>
-                                    <input type="range" class="form-range" min="-40" max="6" step="1" id="voiceVolume" value="0">
+                                    <label for="voiceVolume" class="form-label">Voice Volume (<span
+                                            id="voiceVolumeValue">0</span> dB)</label>
+                                    <input type="range" class="form-range" min="-40" max="6" step="1" id="voiceVolume"
+                                        value="0">
                                     <div class="d-flex justify-content-between small text-muted">
                                         <span>Quieter</span>
                                         <span>Louder</span>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="progress-container" id="progressContainer">
                                 <h5 class="mb-3">Generating Audiobook</h5>
                                 <div class="d-flex justify-content-between small text-muted mb-1">
@@ -263,16 +275,16 @@
                                     <span id="generatePercent">0%</span>
                                 </div>
                                 <div class="progress progress-generate">
-                                    <div class="progress-bar progress-bar-generate progress-bar-striped progress-bar-animated" 
-                                         id="generateProgress" role="progressbar" style="width: 0%"></div>
+                                    <div class="progress-bar progress-bar-generate progress-bar-striped progress-bar-animated"
+                                        id="generateProgress" role="progressbar" style="width: 0%"></div>
                                 </div>
                             </div>
-                            
+
                             <button type="submit" class="btn btn-primary btn-lg w-100 mt-3 py-3">
                                 <i class="fas fa-magic me-2"></i>Generate AudioBook
                             </button>
                         </form>
-                        
+
                         <div class="result-section text-center py-4" id="resultSection" style="display: none;">
                             <h4 class="mb-4">Your AudioBook is Ready!</h4>
                             <div class="audio-player-container bg-light p-4 rounded">
@@ -310,9 +322,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Server configuration
+            let baseURL = window.location.origin.includes('laurindocbenjamim.github.io')
+                ? window.location.origin + '/laurindo-c-benjamim-portfolio'
+                : window.location.origin;
+
+            let serverDomain = 'http://localhost:5000';
+
+            if (baseURL.includes('.github.io') || baseURL.includes('laurindocbenjamim.pt')) {
+                serverDomain = 'https://www.d-tuning.com';
+            }
             // DOM elements
             const form = document.getElementById('audiobookForm');
             const modelSelect = document.getElementById('modelSelect');
@@ -349,7 +372,7 @@
             updateVolumeDisplay();
 
             function loadModels() {
-                axios.get('/api/models')
+                axios.get(serverDomain +'/api/v1/AI-AUDIO-BOOK/models')
                     .then(response => {
                         voicesData = response.data;
                         updateVoiceOptions();
@@ -387,7 +410,7 @@
                         </div>
                     `;
 
-                    voiceElement.addEventListener('click', function() {
+                    voiceElement.addEventListener('click', function () {
                         document.querySelectorAll('.voice-option').forEach(opt => {
                             opt.classList.remove('selected');
                         });
@@ -395,7 +418,7 @@
                         selectedVoice = this.dataset.voice;
                     });
 
-                    voiceElement.querySelector('.preview-btn').addEventListener('click', function(e) {
+                    voiceElement.querySelector('.preview-btn').addEventListener('click', function (e) {
                         e.stopPropagation();
                         previewVoice(voiceId);
                     });
@@ -417,83 +440,84 @@
 
             function previewVoice(voice) {
                 updateProgress(10, 'Generating preview...');
-                
+
+
                 const model = modelSelect.value;
                 const language = languageSelect.value;
                 const sampleText = "This is a preview of the selected voice.";
-                
-                axios.post('/api/audiobooks', {
+
+                axios.post(serverDomain + '/api/v1/AI-AUDIO-BOOK/audiobooks', {
                     language: language,
                     textInput: sampleText,
                     voice: voice,
                     modelSelect: model,
                     use_default_background: false
                 }, {
-                    onUploadProgress: function(progressEvent) {
+                    onUploadProgress: function (progressEvent) {
                         const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                         updateProgress(percent, 'Generating preview...');
                     }
                 })
-                .then(response => {
-                    updateProgress(100, 'Preview ready');
-                    setTimeout(() => updateProgress(0, 'Ready'), 1000);
-                    
-                    // Show preview in modal
-                    const previewModal = new bootstrap.Modal('#previewModal');
-                    const previewAudio = document.getElementById('previewAudio');
-                    previewAudio.src = response.data.url;
-                    previewModal.show();
-                })
-                .catch(error => {
-                    console.error('Preview error:', error);
-                    updateProgress(0, 'Preview failed');
-                    showAlert('Failed to generate preview. Please try again.', 'danger');
-                });
+                    .then(response => {
+                        updateProgress(100, 'Preview ready');
+                        setTimeout(() => updateProgress(0, 'Ready'), 1000);
+
+                        // Show preview in modal
+                        const previewModal = new bootstrap.Modal('#previewModal');
+                        const previewAudio = document.getElementById('previewAudio');
+                        previewAudio.src = response.data.url;
+                        previewModal.show();
+                    })
+                    .catch(error => {
+                        console.error('Preview error:', error);
+                        updateProgress(0, 'Preview failed');
+                        showAlert('Failed to generate preview. Please try again.', 'danger');
+                    });
             }
 
             function uploadBackground(file) {
                 return new Promise((resolve, reject) => {
                     const formData = new FormData();
                     formData.append('background', file);
-                    
-                    axios.post('/api/upload', formData, {
+
+                    axios.post(serverDomain +'/api/v1/AI-AUDIO-BOOK/upload', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         },
-                        onUploadProgress: function(progressEvent) {
+                        onUploadProgress: function (progressEvent) {
                             const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                             updateProgress(percent, 'Uploading background...');
                         }
                     })
-                    .then(response => {
-                        backgroundFilePath = response.data.filePath;
-                        resolve();
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
+                        .then(response => {
+                            backgroundFilePath = response.data.filePath;
+                            resolve();
+                        })
+                        .catch(error => {
+                            reject(error);
+                        });
                 });
             }
 
             function generateAudiobook(text) {
                 updateProgress(10, 'Starting generation...');
-                
+
                 const formData = new FormData();
                 formData.append('textInput', text);
                 formData.append('voice', selectedVoice);
                 formData.append('modelSelect', modelSelect.value);
                 formData.append('background_volume', backgroundVolumeInput.value);
                 formData.append('voice_volume', voiceVolumeInput.value);
-                
+
                 const useDefaultBackground = document.getElementById('useDefaultBackground').checked;
                 const backgroundFile = document.getElementById('backgroundFile').files[0];
-                
+
                 if (useDefaultBackground) {
                     formData.append('use_default_background', 'true');
                     sendGenerationRequest(formData);
                 } else if (backgroundFile) {
                     updateProgress(20, 'Uploading background music...');
-                    
+
                     uploadBackground(backgroundFile)
                         .then(() => {
                             formData.append('background_path', backgroundFilePath);
@@ -512,38 +536,38 @@
 
             function sendGenerationRequest(formData) {
                 updateProgress(30, 'Generating speech...');
-                
-                axios.post('/api/audiobooks', formData, {
+
+                axios.post(serverDomain +'/api/v1/AI-AUDIO-BOOK/audiobooks', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
-                    onUploadProgress: function(progressEvent) {
+                    onUploadProgress: function (progressEvent) {
                         const percent = 30 + Math.round((progressEvent.loaded * 100) / progressEvent.total * 0.7);
                         updateProgress(percent, 'Generating audiobook...');
                     }
                 })
-                .then(response => {
-                    updateProgress(100, 'Generation complete!');
-                    currentAudiobookUrl = response.data.url;
-                    showResult(response.data);
-                })
-                .catch(error => {
-                    console.error('Generation error:', error);
-                    updateProgress(0, 'Generation failed');
-                    showAlert('Failed to generate audiobook. Please try again.', 'danger');
-                });
+                    .then(response => {
+                        updateProgress(100, 'Generation complete!');
+                        currentAudiobookUrl = response.data.url;
+                        showResult(response.data);
+                    })
+                    .catch(error => {
+                        console.error('Generation error:', error);
+                        updateProgress(0, 'Generation failed');
+                        showAlert('Failed to generate audiobook. Please try again.', 'danger');
+                    });
             }
 
             function updateProgress(percent, message) {
                 const progressBar = document.getElementById('mainProgressBar');
                 const progressStatus = document.getElementById('progressStatus');
                 const progressPercent = document.getElementById('progressPercent');
-                
+
                 progressBar.style.width = `${percent}%`;
                 progressStatus.classList.add('alert-success')
                 progressStatus.textContent = message;
                 progressPercent.textContent = `${percent}%`;
-                
+
                 if (percent >= 100) {
                     setTimeout(() => {
                         progressBar.style.width = '0%';
@@ -555,10 +579,10 @@
             function showResult(data) {
                 const resultSection = document.getElementById('resultSection');
                 const audioPlayer = document.getElementById('audioPlayer');
-                
+
                 audioPlayer.src = data.url;
                 resultSection.style.display = 'block';
-                
+
                 // Smooth scroll to result
                 resultSection.scrollIntoView({ behavior: 'smooth' });
             }
@@ -566,34 +590,34 @@
             function setupEventListeners() {
                 // Model selection change
                 modelSelect.addEventListener('change', updateVoiceOptions);
-                
+
                 // Toggle voice list
                 toggleVoiceListBtn.addEventListener('click', toggleVoiceList);
-                
+
                 // Volume sliders
                 backgroundVolumeInput.addEventListener('input', updateVolumeDisplay);
                 voiceVolumeInput.addEventListener('input', updateVolumeDisplay);
-                
+
                 // Form submission
-                form.addEventListener('submit', function(e) {
+                form.addEventListener('submit', function (e) {
                     e.preventDefault();
-                    
+
                     const text = document.getElementById('textInput').value.trim();
                     if (!text) {
                         showAlert('Please enter some text to convert.', 'warning');
                         return;
                     }
-                    
+
                     if (!selectedVoice) {
                         showAlert('Please select a voice.', 'warning');
                         return;
                     }
-                    
+
                     generateAudiobook(text);
                 });
-                
+
                 // Download button
-                document.getElementById('downloadBtn').addEventListener('click', function() {
+                document.getElementById('downloadBtn').addEventListener('click', function () {
                     if (currentAudiobookUrl) {
                         const link = document.createElement('a');
                         link.href = currentAudiobookUrl;
@@ -603,9 +627,9 @@
                         document.body.removeChild(link);
                     }
                 });
-                
+
                 // New audiobook button
-                document.getElementById('newAudiobookBtn').addEventListener('click', function() {
+                document.getElementById('newAudiobookBtn').addEventListener('click', function () {
                     document.getElementById('resultSection').style.display = 'none';
                     document.getElementById('textInput').value = '';
                     document.getElementById('backgroundFile').value = '';
@@ -620,10 +644,10 @@
                     ${message}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 `;
-                
+
                 const cardBody = document.querySelector('.card-body');
                 cardBody.insertBefore(alertDiv, cardBody.firstChild);
-                
+
                 setTimeout(() => {
                     alertDiv.classList.remove('show');
                     setTimeout(() => alertDiv.remove(), 150);
@@ -632,4 +656,5 @@
         });
     </script>
 </body>
+
 </html>

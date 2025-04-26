@@ -44,7 +44,7 @@
   {
     "title": "Video Studio",
     "description": "Create and edit videos with advanced tools and effects",
-    "url": "../video_studio_v1.html",
+    "url": "../video_studio_v4.html",
     "repository": "https://github.com/laurindocbenjamim/laurindo-c-benjamim-portfolio",
     "techStacks": {
       "Python": "fas fa-robot",

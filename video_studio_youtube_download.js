@@ -375,6 +375,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Create download buttons
         let videoFilename = null;
+        downloadButtons.innerHTML = '';
 
         data.files.forEach(file => {
             createDownloadButton(file);
@@ -394,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function createDownloadButton(file) {
         const btn = document.createElement('a');
-        btn.href = `${this.serverDomain}/api/v1/video/download/${encodeURIComponent(file.filename)}`;
+        btn.href = `${serverDomain}/api/v1/video/download/${encodeURIComponent(file.filename)}`;
         btn.className = 'btn btn-outline-primary me-2 mb-2';
         btn.innerHTML = `<i class="bi bi-download me-1"></i> ${capitalize(file.type)} (${file.size_mb}MB)`;
         btn.download = file.filename;
