@@ -1,0 +1,128 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eef1f5; /* Lighter page background */
+}
+
+#palette .draggable-source-item {
+    cursor: grab;
+    transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+    user-select: none;
+    background-color: #fff;
+}
+#palette .draggable-source-item:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+#palette .draggable-source-item:active {
+    cursor: grabbing;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+#workflow-canvas {
+    position: relative;
+    overflow: hidden;
+    background-image: radial-gradient(circle, #ddd 1px, transparent 1px); /* Subtle dot grid */
+    background-size: 20px 20px;
+}
+
+.workflow-block { /* Renamed from text-box-node */
+    position: absolute;
+    cursor: move;
+    z-index: 10;
+    min-width: 220px;
+    background-color: white;
+    border-radius: 0.375rem; /* Bootstrap card radius */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+.workflow-block:hover {
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    /* transform: translateY(-2px); */ /* Subtle hover lift */
+}
+.workflow-block.dragging {
+    opacity: 0.8;
+    z-index: 1000;
+    transform: scale(1.02);
+}
+.workflow-block.selected-for-connection {
+    outline: 3px solid #0dcaf0; /* Bootstrap info blue */
+    outline-offset: 2px;
+}
+
+.block-header {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.block-header .block-icon {
+    margin-right: 0.5rem;
+}
+.block-content {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+}
+.block-content .form-label {
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+}
+.block-content .form-control,
+.block-content .form-select {
+    font-size: 0.85rem;
+}
+
+
+.connection-point {
+    width: 14px;
+    height: 14px;
+    background-color: #6c757d;
+    border-radius: 50%;
+    position: absolute;
+    cursor: crosshair;
+    transition: background-color 0.2s, transform 0.2s;
+    border: 2px solid white;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    z-index: 11; /* Above block */
+}
+.connection-point:hover {
+    background-color: #0dcaf0; /* Bootstrap info */
+    transform: scale(1.2);
+}
+/* Connection point positions remain the same */
+.cp-top { top: -7px; left: 50%; transform: translateX(-50%); }
+.cp-bottom { bottom: -7px; left: 50%; transform: translateX(-50%); }
+.cp-left { left: -7px; top: 50%; transform: translateY(-50%); }
+.cp-right { right: -7px; top: 50%; transform: translateY(-50%); }
+
+
+#connections-svg line {
+    stroke: #555;
+    stroke-width: 2.5;
+    pointer-events: auto;
+}
+#connections-svg line.active-drawing {
+    stroke: #0dcaf0;
+    stroke-dasharray: 4, 4;
+}
+#connections-svg line:hover {
+    stroke: #dc3545;
+    stroke-width: 3.5;
+}
+
+/* Video Upload Modal - styles largely unchanged */
+.drop-zone-area {
+    border: 2px dashed #007bff;
+    color: #007bff;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+.drop-zone-area.drag-over {
+    background-color: #e9ecef;
+}
+
+.canvas-instructions {
+    pointer-events: none;
+}

@@ -28,6 +28,20 @@
     }
   },
   {
+    "title": "Clone Voice with AI",
+    "description": "Clone your voice using AI technology.",
+    "url": "http://localhost:5000/api/v1/video/clone-voice",
+    "repository": "https://github.com/laurindocbenjamim/pidio-audio-book-frontend",
+    "techStacks": {
+      "Python": "fas fa-robot",
+      "Flask": "fab fa-python",
+      "JavaScript": "fas fa-flask",
+      "OpenAI API": "fab fa-js",
+      "Bootstrap": "fab fa-bootstrap",
+      "HTML & CSS": "fab fa-html5"
+    }
+  },
+  {
     "title": "CV Customization Tool",
     "description": "Adjust your CV to match job requirements effortlessly",
     "url": "../cv_customizer.html",
@@ -64,6 +78,17 @@
       "Python": "fas fa-robot",
       "Flask": "fab fa-python",
       "JavaScript": "fas fa-flask"
+    }
+  },
+  {
+    "title": "Dubbing Studio",
+    "description": "Create and edit videos with advanced tools and effects",
+    "url": "../dubbing_studio/",
+    "repository": "",
+    "techStacks": {
+      "Python": "fas fa-robot",
+      "Flask": "fab fa-python",
+      "JavaScript": "fas fa-film"
     }
   },
   {

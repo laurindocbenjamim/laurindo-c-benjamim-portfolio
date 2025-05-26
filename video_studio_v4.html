@@ -30,6 +30,96 @@
             width: fit-content;
             /* List group only as wide as items */
         }
+
+
+
+
+
+
+
+
+
+
+        /* File List Styles */
+        .file-list-container {
+            max-height: 300px;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .file-list-container.collapsed {
+            max-height: 0;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 300px;
+            overflow: scroll;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--dark-border);
+            transition: background-color 0.2s;
+            white-space: normal; /* Allow text to wrap */
+            overflow-wrap: break-word; /* Break long words if needed */
+            word-break: break-word; /* Ensure breaking long text */
+            cursor: pointer;
+        }
+
+        .file-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .file-item span {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .btn-toggle-files {
+            background: none;
+            border: none;
+            color: var(--secondary-text);
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-toggle-files:hover {
+            color: var(--primary-text);
+        }
+
+        .btn-toggle-files .fa-chevron-down {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-toggle-files.collapsed .fa-chevron-down {
+            transform: rotate(-90deg);
+        }
     </style>
 </head>
 
@@ -67,22 +157,7 @@
                         style="color: rgb(74, 247, 40);">PIDIO</span></a>
                 <a class="nav-link" href="#"><i class="fas fa-question-circle me-2"></i>Help</a>
             </div>
-            <div class="file-list" style="margin-bottom: 20%;">
-                <h6 class="text-uppercase d-flex justify-content-between align-items-center">
-                    Recent Files
-                    <button class="btn btn-sm btn-outline-secondary toggle-list-btn" aria-expanded="false">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </h6>
-                
-
-
-                <!--<ul class="list-group" id="fileList" style="max-height: 300px; overflow: scroll; overflow-y: hidde; transitio: max-heigh 0.5s ease;">
-                     Files will be dynamically loaded here 
-                </ul>-->
-                
-
-            </div>
+            
 
 
 
@@ -98,23 +173,69 @@
                 </button>
             </div>
 
-            <div class="accordion" id="accordionExample">
-                <div class="accordion-item">
-                  <h4 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      List of Files
+            <!--- Files list -->
+            <!-- Add this section above the Video Player Section -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5>Recent Files</h5>
+                    <button class="btn btn-sm btn-toggle-files" id="toggleFilesBtn">
+                        <i class="fas fa-chevron-down"></i>
                     </button>
-                  </h4>
-                  <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                      
-                        <div class="list-group" id="fileList" style="max-height: 200px; overflow: scroll;"></div>
-                    
-                    </div>
-                  </div>
                 </div>
-                
-              </div>
+                <div class="card-body p-0">
+                    <div class="file-list-container" id="fileListContainer">
+                        <ul class="file-list" id="fileList">
+                           
+                            
+                            <li class="file-item">
+                                <i class="fas fa-file-video text-primary me-2"></i>
+                                <span>tutorial.mp4</span>
+                                <div class="file-actions">
+                                    <button class="btn btn-sm btn-link text-secondary">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-link text-secondary">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <script>
+                // File List Toggle
+                const toggleFilesBtn = document.getElementById('toggleFilesBtn');
+                const fileListContainer = document.getElementById('fileListContainer');
+
+                toggleFilesBtn.addEventListener('click', function () {
+                    fileListContainer.classList.toggle('collapsed');
+                    toggleFilesBtn.classList.toggle('collapsed');
+
+                    // Update icon based on state
+                    const icon = toggleFilesBtn.querySelector('i');
+                    if (fileListContainer.classList.contains('collapsed')) {
+                        icon.classList.replace('fa-chevron-down', 'fa-chevron-right');
+                    } else {
+                        icon.classList.replace('fa-chevron-right', 'fa-chevron-down');
+                    }
+                });
+
+                // Sample function to handle file item clicks (can be expanded)
+                document.querySelectorAll('.file-item').forEach(item => {
+                    item.addEventListener('click', function (e) {
+                        if (!e.target.classList.contains('btn')) {
+                            // Handle file selection
+                            console.log('Selected file:', this.querySelector('span').textContent);
+                        }
+                    });
+                });
+            </script>
+            <!--  Files list end -->
+
 
             <!-- Video Player Section -->
             <div class="card mb-4">
@@ -239,7 +360,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" id="submitUpload">Upload</button>
                 </div>
             </div>

@@ -1,11 +1,12 @@
 
 export class RequestFactory {
     constructor() {
+        let ip = "192.168.1.216"; //localhost
         this.baseURL = window.location.origin.includes('laurindocbenjamim.github.io')
             ? window.location.origin + '/laurindo-c-benjamim-portfolio'
             : window.location.origin;
 
-        this.serverDomain = 'http://localhost:5000';
+            this.serverDomain = `http://${ip}:5000`;
 
         if (this.baseURL.includes('.github.io') || this.baseURL.includes('laurindocbenjamim.pt')) {
             this.serverDomain = 'https://www.d-tuning.com';

@@ -1,15 +1,15 @@
 
 document.addEventListener("DOMContentLoaded", () => {
-    const toggleListBtn = document.querySelector(".toggle-list-btn");
+    //const toggleListBtn = document.querySelector(".toggle-list-btn");
     const fileList = document.getElementById("fileList");
 
-    toggleListBtn.addEventListener("click", () => {
+    /*toggleListBtn.addEventListener("click", () => {
         const isExpanded = toggleListBtn.getAttribute("aria-expanded") === "true";
         toggleListBtn.setAttribute("aria-expanded", !isExpanded);
         fileList.style.maxHeight = isExpanded ? "0" : "200px";
-    });
+    });*/
 
-   
+
 
     // Server configuration
     let baseURL = window.location.origin.includes('laurindocbenjamim.github.io')
@@ -27,48 +27,85 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => response.json())
         .then(data => {
             console.log("Files.....")
-            console.log(data)
-
+            //console.log(data)
+            
             if (data.files) {
+                fileList.innerHTML = ""; // Clear existing list items
                 data.files.forEach(file => {
+
                     const listItem = document.createElement("li"); //class="list-group-item"
-                    listItem.className = "list-group-item ";
-                    listItem.innerHTML = `
-                    
-                    <span class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" ><span>${file}</span></span>
-                `;
-                listItem.addEventListener("click", () => {
-                    navigator.clipboard.writeText(file).then(() => {
-                        /*const alertBox = document.createElement("div");
-                        alertBox.textContent = "Copied";
-                        alertBox.style.position = "fixed";
-                        alertBox.style.bottom = "20px";
-                        alertBox.style.right = "20px";
-                        alertBox.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-                        alertBox.style.color = "white";
-                        alertBox.style.padding = "10px 20px";
-                        alertBox.style.borderRadius = "5px";
-                        alertBox.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.3)";
-                        alertBox.style.zIndex = "1000";
-                        alertBox.style.opacity = "0";
-                        alertBox.style.transition = "opacity 0.3s ease";
+                    listItem.className = "file-item";
+                    /*listItem.innerHTML = `<span class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" >
+                    <span>${file}</span></span>`;*/
+                    const fileIcons = {
+                        '.txt': 'fas fa-file-alt text-info',
+                        '.mp4': 'fas fa-file-video text-primary',
+                        '.mp3': 'fas fa-file-audio text-success'
+                    };
 
-                        document.body.appendChild(alertBox);
+                    const fileActions = {
+                        '.txt': `<button class="btn btn-sm btn-link text-secondary">
+                                    <i class="fas fa-eye"></i>
+                                </button>`,
+                        '.mp4': `<button onclick="loadVideoFromApi(${file}, ${true})" class="btn btn-sm btn-link text-secondary">
+                                    <i class="fas fa-play"></i>
+                                </button>`,
+                        '.mp3': `<button onclick="loadAudioFromApi(${file})" class="btn btn-sm btn-link text-secondary">
+                                    <i class="fas fa-play"></i>
+                                </button>`
+                    };
 
-                        setTimeout(() => {
-                            alertBox.style.opacity = "1";
-                        }, 10);
+                    const fileExtension = Object.keys(fileIcons).find(ext => file.includes(ext));
 
-                        setTimeout(() => {
-                            alertBox.style.opacity = "0";
-                            setTimeout(() => {
-                                document.body.removeChild(alertBox);
-                            }, 300);
-                        }, 2000);*/
-                    });
+                    if (fileExtension) {
+                        listItem.innerHTML = `
+                            <i class="${fileIcons[fileExtension]} me-2"></i>
+                            <span>${file}</span>
+                            <div class="file-actions">
+                                ${fileActions[fileExtension]}
+                                <button class="btn btn-sm btn-link text-secondary">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>`;
+                    }
+
+
+                   fileList.appendChild(listItem);
                 });
-                    fileList.appendChild(listItem);
-                });
+                const testFileItem = document.createElement("li");
+                testFileItem.className = "file-item";
+
+                const fileIcon = document.createElement("i");
+                fileIcon.className = "fas fa-file-video text-primary me-2";
+
+                const fileName = document.createElement("span");
+                fileName.textContent = "This is a test of component.mp4";
+
+                const fileActions = document.createElement("div");
+                fileActions.className = "file-actions";
+
+                const playButton = document.createElement("button");
+                playButton.className = "btn btn-sm btn-link text-secondary";
+                const playIcon = document.createElement("i");
+                playIcon.className = "fas fa-play";
+                playButton.appendChild(playIcon);
+
+                const downloadButton = document.createElement("button");
+                downloadButton.className = "btn btn-sm btn-link text-secondary";
+                const downloadIcon = document.createElement("i");
+                downloadIcon.className = "fas fa-download";
+                downloadButton.appendChild(downloadIcon);
+
+                fileActions.appendChild(playButton);
+                fileActions.appendChild(downloadButton);
+
+                testFileItem.appendChild(fileIcon);
+                testFileItem.appendChild(fileName);
+                testFileItem.appendChild(fileActions);
+
+                //fileList.appendChild(testFileItem);
+            }else if(data.message){
+                alert("Error found. "+data.message)
             }
 
         })
@@ -76,10 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error fetching files:", error);
             fileList.innerHTML = `<li class="list-group-item text-danger">Failed to load files</li>`;
         });
-});
 
-
-document.addEventListener('DOMContentLoaded', function () {
     // Initialize Bootstrap components
     const uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
     const uploadTabs = new bootstrap.Tab(document.getElementById('uploadTabs'));
@@ -100,16 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
 
-    // Server configuration
-    let baseURL = window.location.origin.includes('laurindocbenjamim.github.io')
-        ? window.location.origin + '/laurindo-c-benjamim-portfolio'
-        : window.location.origin;
-
-    let serverDomain = 'http://localhost:5000';
-
-    if (baseURL.includes('.github.io') || baseURL.includes('laurindocbenjamim.pt')) {
-        serverDomain = 'https://www.d-tuning.com';
-    }
+    
 
 
     function getCookie(name) {
@@ -126,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const headers = {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN':  getCookie('csrf_access_token'),
+            'X-CSRF-TOKEN': getCookie('csrf_access_token'),
         };
         const options = {
             method: method,
@@ -226,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function () {
             showUrlError('Please enter a valid URL');
             return;
         }*/
-        
+
 
         // Show loading indicator
         urlLoadingIndicator.classList.add('active');
@@ -252,59 +277,47 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function loadVideoFromApi(url, autoPlay) {
-        
+
         try {
             urlLoadingIndicator.querySelector('p').textContent = 'Fetching video from API...';
 
-           /* const response = await fetch(`${serverDomain}/api/v1/video/get/${url}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    //'Authorization': 'Bearer YOUR_ACCESS_TOKEN' // Add if your API requires auth
-                },
-                body: JSON.stringify({ 
-                    filename: url,
-                    // Add any additional parameters your API expects
-                })
-            });*/
 
-            
-                const response = await fetch(`${serverDomain}/api/v1/video/get/${url}`);
-          
-                if (!response.ok) {
-                  throw new Error('Network response was not OK');
-                }
-          
-                const reader = response.body.getReader();
-          
-                const stream = new ReadableStream({
-                  start(controller) {
+            const response = await fetch(`${serverDomain}/api/v1/video/get/${url}`);
+
+            if (!response.ok) {
+                throw new Error('Network response was not OK');
+            }
+
+            const reader = response.body.getReader();
+
+            const stream = new ReadableStream({
+                start(controller) {
                     function push() {
-                      reader.read().then(({ done, value }) => {
-                        if (done) {
-                          controller.close();
-                          return;
-                        }
-                        controller.enqueue(value);
-                        push();
-                      });
+                        reader.read().then(({ done, value }) => {
+                            if (done) {
+                                controller.close();
+                                return;
+                            }
+                            controller.enqueue(value);
+                            push();
+                        });
                     }
                     push();
-                  }
-                });
-          
-                const blobResponse = await new Response(stream).blob();
-                const videoUrl = URL.createObjectURL(blobResponse);
-          
-                //document.getElementById('videoPlayer').src = videoUrl;
-                
-                videoPlayer.classList.remove('d-none');
-                videoContainer.querySelector('.empty-state').classList.add('d-none');
+                }
+            });
 
-                videoPlayer.src = videoUrl;
-                videoPlayer.load();
+            const blobResponse = await new Response(stream).blob();
+            const videoUrl = URL.createObjectURL(blobResponse);
 
-                /******** end **** */
+            //document.getElementById('videoPlayer').src = videoUrl;
+
+            videoPlayer.classList.remove('d-none');
+            videoContainer.querySelector('.empty-state').classList.add('d-none');
+
+            videoPlayer.src = videoUrl;
+            videoPlayer.load();
+
+            /******** end **** */
 
 
             /*if (!response.ok) {
@@ -340,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
             throw error;
         }
     }
-    
+
 
     async function loadAudioFromApi(url) {
         try {
@@ -360,44 +373,44 @@ document.addEventListener('DOMContentLoaded', function () {
             });*/
 
             const response = await fetch(`${serverDomain}/api/v1/video/get/${url}`);
-          
-                if (!response.ok) {
-                  throw new Error('Network response was not OK');
-                }
-          
-                const reader = response.body.getReader();
-          
-                const stream = new ReadableStream({
-                  start(controller) {
-                    function push() {
-                      reader.read().then(({ done, value }) => {
-                        if (done) {
-                          controller.close();
-                          return;
-                        }
-                        controller.enqueue(value);
-                        push();
-                      });
-                    }
-                    push();
-                  }
-                });
-          
-                const blobResponse = await new Response(stream).blob();
-                const videoUrl = URL.createObjectURL(blobResponse);
-          
-               
 
-           /* if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'API request failed');
+            if (!response.ok) {
+                throw new Error('Network response was not OK');
             }
 
-            const audioData = await response.json();
+            const reader = response.body.getReader();
 
-            if (!audioData.url) {
-                throw new Error('No audio URL returned from API');
-            }*/
+            const stream = new ReadableStream({
+                start(controller) {
+                    function push() {
+                        reader.read().then(({ done, value }) => {
+                            if (done) {
+                                controller.close();
+                                return;
+                            }
+                            controller.enqueue(value);
+                            push();
+                        });
+                    }
+                    push();
+                }
+            });
+
+            const blobResponse = await new Response(stream).blob();
+            const videoUrl = URL.createObjectURL(blobResponse);
+
+
+
+            /* if (!response.ok) {
+                 const errorData = await response.json();
+                 throw new Error(errorData.message || 'API request failed');
+             }
+ 
+             const audioData = await response.json();
+ 
+             if (!audioData.url) {
+                 throw new Error('No audio URL returned from API');
+             }*/
 
             audioSection.classList.remove('d-none');
             audioPlayer.src = videoUrl;

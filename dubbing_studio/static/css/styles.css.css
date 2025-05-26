@@ -1,0 +1,66 @@
+/* static/css/styles.css */
+/* Custom styles for the application */
+
+/* Video player container */
+.video-player-container {
+    background-color: #000;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Tracks container */
+.tracks-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.track-item {
+    background-color: #f8f9fa;
+    transition: all 0.2s;
+}
+
+.track-item:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+}
+
+/* Merge area */
+.merge-area {
+    min-height: 150px;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s;
+}
+
+.merge-area.bg-light {
+    background-color: #e9ecef !important;
+}
+
+.merge-items {
+    min-height: 50px;
+}
+
+/* Draggable modal */
+.modal-dialog {
+    transition: none !important;
+}
+
+.draggable-handle {
+    cursor: move;
+}
+
+/* Fixed position script button */
+.fixed-bottom-right {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* Progress bar for recording */
+.progress {
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    transition: width 0.1s linear;
+}
