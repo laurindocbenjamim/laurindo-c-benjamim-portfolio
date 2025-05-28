@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Automation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            overflow: hidden; /* Prevent body scroll */
+        }
+        .workflow-area {
+            position: relative;
+            background-color: #ffffff;
+            border: 2px dashed #d1d5db; /* Dashed border for drop zone */
+            min-height: calc(100vh - 4rem); /* Full height minus header/footer space */
+            overflow: hidden; /* Allow scrolling within the workflow area if content exceeds */
+
+            /* Grid background */
+            background-image:
+                linear-gradient(to right, #e5e7eb 1px, transparent 1px),
+                linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px; /* Adjust grid cell size */
+        }
+        .draggable-block {
+            position: absolute;
+            cursor: grab;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.1s ease-out;
+            z-index: 10; /* Ensure blocks are above lines */
+        }
+        .draggable-block:active {
+            cursor: grabbing;
+        }
+        .draggable-block.selected-for-connection {
+            border: 2px solid #3b82f6; /* Blue border when selected for connection */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+        .context-menu {
+            position: absolute;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            padding: 0.5rem 0;
+        }
+        .context-menu-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+        .context-menu-item:hover {
+            background-color: #f3f4f6;
+        }
+        .connection-line {
+            position: absolute;
+            z-index: 5; /* Ensure lines are below blocks */
+            pointer-events: none; /* Allow clicks to pass through lines */
+        }
+        .connection-line.dashed {
+            stroke-dasharray: 5 5;
+        }
+        .connection-line.arrow {
+            marker-end: url(#arrowhead);
+        }
+        /* Arrowhead definition for SVG lines */
+        svg defs marker#arrowhead polygon {
+            fill: #4b5563; /* Dark gray for arrow */
+        }
+
+        /* Message Box styles */
+        .message-box-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .message-box {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        .message-box h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        .message-box p {
+            font-size: 1rem;
+            color: #4b5563;
+            margin-bottom: 1.5rem;
+            text-align: left; /* Align text content left */
+            white-space: pre-wrap; /* Preserve whitespace and line breaks */
+            word-break: break-word; /* Break long words */
+            max-height: 300px; /* Limit height for long messages */
+            overflow-y: auto; /* Add scroll for overflow */
+        }
+        .message-box button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .message-box button:hover {
+            background-color: #2563eb;
+        }
+
+        /* Progress Bar styles */
+        .progress-bar-container {
+            width: 100%;
+            background-color: #4b5563; /* Dark background for the bar container */
+            border-radius: 0.5rem;
+            overflow: hidden;
+            height: 1rem; /* Height of the progress bar */
+            margin-top: 1rem;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #34d399; /* Green fill color */
+            border-radius: 0.5rem;
+            transition: width 0.1s ease-in-out;
+        }
+
+        /* Media Player Icon Styles */
+        .media-icon {
+            cursor: pointer;
+            margin-left: 0.5rem;
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen">
+    <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 shadow-lg flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Workflow Automation Tool</h1>
+        <div class="flex space-x-4">
+            <button id="display-connections-btn" class="p-2 bg-blue-700 hover:bg-blue-800 rounded-lg transition duration-200 ease-in-out shadow-md flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <button id="save-image-btn" class="p-2 bg-teal-600 hover:bg-teal-700 rounded-lg transition duration-200 ease-in-out shadow-md flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+            </button>
+            <button id="start-automation-btn" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium transition duration-200 ease-in-out shadow-md">
+                Start Automation
+            </button>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <aside class="w-64 bg-gray-800 text-white p-4 flex flex-col space-y-4 shadow-lg overflow-y-auto">
+            <h2 class="text-xl font-semibold mb-4 text-gray-200">Blocks</h2>
+            <div id="text-box-palette" draggable="true" class="p-3 bg-blue-500 hover:bg-blue-600 rounded-lg cursor-grab text-center font-medium transition duration-200 ease-in-out shadow-md flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Text Box
+            </div>
+            <div id="file-upload-palette" draggable="true" class="p-3 bg-green-500 hover:bg-green-600 rounded-lg cursor-grab text-center font-medium transition duration-200 ease-in-out shadow-md flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                </svg>
+                File Upload
+            </div>
+            <div id="json-list-palette" draggable="true" class="p-3 bg-yellow-500 hover:bg-yellow-600 rounded-lg cursor-grab text-center font-medium transition duration-200 ease-in-out shadow-md flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+                JSON/List
+            </div>
+            <div class="mt-auto pt-4 border-t border-gray-700 text-sm text-gray-400">
+                <p>Drag and drop blocks to the right area.</p>
+                <p>Right-click a block to connect or delete.</p>
+                <p>Double-click a block title to edit.</p>
+            </div>
+
+            <div id="progress-bar-wrapper" class="hidden mt-4">
+                <p class="text-xs text-gray-400 mb-1">Automation Progress:</p>
+                <div class="progress-bar-container">
+                    <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                </div>
+            </div>
+        </aside>
+
+        <main id="workflow-area" class="flex-1 p-6 workflow-area overflow-auto">
+            <p class="text-center text-gray-400 text-lg mt-20">Drag blocks here to start your workflow...</p>
+
+            <svg id="connection-svg" class="absolute top-0 left-0 w-full h-full pointer-events-none">
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#4b5563" />
+                    </marker>
+                </defs>
+            </svg>
+        </main>
+    </div>
+
+    <div id="context-menu" class="context-menu hidden">
+        <div class="context-menu-item" data-action="connect-solid">Connect (Solid)</div>
+        <div class="context-menu-item" data-action="connect-dashed">Connect (Dashed)</div>
+        <div class="context-menu-item" data-action="connect-arrow">Connect (Arrow)</div>
+        <div class="context-menu-item" data-action="remove-connection">Remove Connection</div>
+        <div class="context-menu-item" data-action="delete">Delete</div>
+    </div>
+
+    <div id="message-box-container" class="message-box-overlay hidden">
+        <div class="message-box">
+            <h3 id="message-box-title"></h3>
+            <p id="message-box-content"></p>
+            <button id="message-box-ok">OK</button>
+        </div>
+    </div>
+
+    <div id="video-modal-container" class="message-box-overlay hidden">
+        <div class="message-box">
+            <h3 id="video-modal-title">Video Preview</h3>
+            <video id="video-player" controls class="w-full h-auto rounded-md mb-4"></video>
+            <button id="video-modal-close">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const workflowArea = document.getElementById('workflow-area');
+        const textBoxPalette = document.getElementById('text-box-palette');
+        const fileUploadPalette = document.getElementById('file-upload-palette');
+        const jsonListPalette = document.getElementById('json-list-palette');
+        const connectionSvg = document.getElementById('connection-svg');
+        const contextMenu = document.getElementById('context-menu');
+        const startAutomationBtn = document.getElementById('start-automation-btn');
+        const displayConnectionsBtn = document.getElementById('display-connections-btn'); // New button
+        const saveImageBtn = document.getElementById('save-image-btn'); // New button
+        const messageBoxContainer = document.getElementById('message-box-container');
+        const messageBoxTitle = document.getElementById('message-box-title');
+        const messageBoxContent = document.getElementById('message-box-content');
+        const messageBoxOkBtn = document.getElementById('message-box-ok');
+        const progressBarWrapper = document.getElementById('progress-bar-wrapper');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+
+        const videoModalContainer = document.getElementById('video-modal-container');
+        const videoPlayer = document.getElementById('video-player');
+        const videoModalCloseBtn = document.getElementById('video-modal-close');
+
+        let blockCounter = 0;
+        let blocks = {}; // Stores block elements and their data
+        let connections = []; // Stores connection data { from: id, to: id, type: 'solid'|'dashed'|'arrow', lineElement: SVGLineElement }
+        let selectedBlockForConnection = null;
+        let currentContextMenuBlockId = null; // ID of the block that triggered the context menu
+
+        // --- Utility for showing custom message box ---
+        function showMessageBox(title, message) {
+            messageBoxTitle.textContent = title;
+            messageBoxContent.textContent = message;
+            messageBoxContainer.classList.remove('hidden');
+        }
+
+        messageBoxOkBtn.addEventListener('click', () => {
+            messageBoxContainer.classList.add('hidden');
+        });
+
+        // --- Video Modal Logic ---
+        function showVideoModal(fileUrl) {
+            videoPlayer.src = fileUrl;
+            videoModalContainer.classList.remove('hidden');
+            videoPlayer.play(); // Auto-play video
+        }
+
+        videoModalCloseBtn.addEventListener('click', () => {
+            videoPlayer.pause();
+            videoPlayer.src = ''; // Clear source to release memory
+            videoModalContainer.classList.add('hidden');
+        });
+
+        // --- Drag and Drop from Palette ---
+        textBoxPalette.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', 'text-box');
+        });
+
+        fileUploadPalette.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', 'file-upload');
+        });
+
+        jsonListPalette.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', 'json-list-box');
+        });
+
+        workflowArea.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Allow drop
+            workflowArea.style.borderColor = '#60a5fa'; // Highlight drop zone
+        });
+
+        workflowArea.addEventListener('dragleave', () => {
+            workflowArea.style.borderColor = '#d1d5db'; // Reset border
+        });
+
+        workflowArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            workflowArea.style.borderColor = '#d1d5db'; // Reset border
+
+            const type = e.dataTransfer.getData('text/plain');
+            const newBlockId = `block-${blockCounter++}`;
+            const blockElement = createBlockElement(type, newBlockId);
+
+            // Calculate position relative to workflow area
+            const workflowAreaRect = workflowArea.getBoundingClientRect();
+            let x = e.clientX - workflowAreaRect.left - (blockElement.offsetWidth / 2);
+            let y = e.clientY - workflowAreaRect.top - (blockElement.offsetHeight / 2);
+
+            // Ensure block stays within bounds (optional, but good for UX)
+            x = Math.max(0, Math.min(x, workflowAreaRect.width - blockElement.offsetWidth));
+            y = Math.max(0, Math.min(y, workflowAreaRect.height - blockElement.offsetHeight));
+
+            blockElement.style.left = `${x}px`;
+            blockElement.style.top = `${y}px`;
+
+            workflowArea.appendChild(blockElement);
+            blocks[newBlockId] = {
+                element: blockElement,
+                type: type,
+                x: x,
+                y: y,
+                width: blockElement.offsetWidth,
+                height: blockElement.offsetHeight,
+                title: getDefaultTitle(type), // Default title based on type
+                content: '' // For text boxes, store content; for file uploads, store file name
+            };
+
+            makeBlockDraggable(blockElement, newBlockId);
+            updatePlaceholderVisibility();
+        });
+
+        function getDefaultTitle(type) {
+            switch (type) {
+                case 'text-box': return 'Text Block';
+                case 'file-upload': return 'File Upload';
+                case 'json-list-box': return 'JSON/List Block';
+                default: return 'Block';
+            }
+        }
+
+        // --- Create Block Element ---
+        function createBlockElement(type, id) {
+            const block = document.createElement('div');
+            block.id = id;
+            block.classList.add('draggable-block', 'p-4', 'rounded-lg', 'bg-white', 'border', 'border-gray-200', 'flex', 'flex-col', 'items-center', 'justify-center');
+            block.style.minWidth = '120px'; // Minimum width for blocks
+            block.style.minHeight = '80px'; // Minimum height for blocks
+
+            const titleContainer = document.createElement('div');
+            titleContainer.classList.add('flex', 'items-center', 'justify-center', 'mb-2'); // Flex container for title and icons
+
+            const titleElement = document.createElement('p');
+            titleElement.classList.add('font-semibold', 'cursor-text'); // Add cursor-text for double-click hint
+            titleElement.textContent = getDefaultTitle(type);
+
+            // Double-click to edit title
+            titleElement.addEventListener('dblclick', () => {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = titleElement.textContent;
+                input.classList.add('w-full', 'p-1', 'text-sm', 'rounded-md', 'border', 'border-gray-300', 'focus:outline-none', 'focus:ring-2', 'focus:ring-blue-400');
+                
+                titleElement.replaceWith(input);
+                input.focus();
+
+                const saveTitle = () => {
+                    titleElement.textContent = input.value || getDefaultTitle(type);
+                    input.replaceWith(titleElement);
+                    blocks[id].title = titleElement.textContent; // Update block data
+                };
+
+                input.addEventListener('blur', saveTitle);
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        saveTitle();
+                    }
+                });
+            });
+
+            titleContainer.appendChild(titleElement);
+            block.appendChild(titleContainer);
+
+            if (type === 'text-box') {
+                block.classList.add('bg-blue-100', 'border-blue-300');
+                const textarea = document.createElement('textarea');
+                textarea.classList.add('w-full', 'h-16', 'p-2', 'text-sm', 'rounded-md', 'border', 'border-blue-200', 'focus:outline-none', 'focus:ring-2', 'focus:ring-blue-400', 'resize-none');
+                textarea.placeholder = "Enter text...";
+                textarea.addEventListener('input', () => {
+                    blocks[id].content = textarea.value; // Update content in block data
+                });
+                block.appendChild(textarea);
+            } else if (type === 'file-upload') {
+                block.classList.add('bg-green-100', 'border-green-300');
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.classList.add('w-full', 'text-sm', 'text-gray-500', 'file:mr-4', 'file:py-2', 'file:px-4', 'file:rounded-full', 'file:border-0', 'file:text-sm', 'file:font-semibold', 'file:bg-green-50', 'file:text-green-700', 'hover:file:bg-green-100', 'cursor-pointer');
+                
+                // Placeholder for media icon
+                const mediaIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                mediaIcon.setAttribute('class', 'h-5 w-5 text-gray-600 media-icon hidden');
+                mediaIcon.setAttribute('fill', 'none');
+                mediaIcon.setAttribute('viewBox', '0 0 24 24');
+                mediaIcon.setAttribute('stroke', 'currentColor');
+                mediaIcon.setAttribute('stroke-width', '2');
+                const mediaIconPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                mediaIconPath.setAttribute('stroke-linecap', 'round');
+                mediaIconPath.setAttribute('stroke-linejoin', 'round');
+                mediaIcon.appendChild(mediaIconPath);
+                titleContainer.appendChild(mediaIcon);
+
+                let currentMediaObjectUrl = null; // To store object URL for cleanup
+                let currentAudioPlayer = null; // To manage audio playback
+
+                input.addEventListener('change', (e) => {
+                    if (currentMediaObjectUrl) {
+                        URL.revokeObjectURL(currentMediaObjectUrl); // Clean up previous object URL
+                        currentMediaObjectUrl = null;
+                    }
+                    if (currentAudioPlayer) {
+                        currentAudioPlayer.pause();
+                        currentAudioPlayer = null;
+                    }
+
+                    if (e.target.files.length > 0) {
+                        const file = e.target.files[0];
+                        const fileName = file.name;
+                        blocks[id].content = fileName; // Store full file name
+                        
+                        // Truncate for display, add full name as tooltip
+                        const displayFileName = fileName.length > 25 ? fileName.substring(0, 25) + '...' : fileName;
+                        titleElement.textContent = `File: ${displayFileName}`;
+                        titleElement.title = fileName; // Tooltip with full name
+                        blocks[id].title = titleElement.textContent; // Update block data with display name
+
+                        currentMediaObjectUrl = URL.createObjectURL(file);
+
+                        if (file.type.startsWith('audio/')) {
+                            mediaIcon.classList.remove('hidden');
+                            mediaIconPath.setAttribute('d', 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z'); // Play icon
+                            
+                            mediaIcon.onclick = () => {
+                                if (!currentAudioPlayer) {
+                                    currentAudioPlayer = new Audio(currentMediaObjectUrl);
+                                    currentAudioPlayer.onended = () => {
+                                        mediaIconPath.setAttribute('d', 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z'); // Reset to play icon
+                                    };
+                                }
+                                if (currentAudioPlayer.paused) {
+                                    currentAudioPlayer.play();
+                                    mediaIconPath.setAttribute('d', 'M10 9h4V5h-4v4zm0 6h4v-4h-4v4zM4 4h16v16H4V4z'); // Pause icon (simple square)
+                                } else {
+                                    currentAudioPlayer.pause();
+                                    mediaIconPath.setAttribute('d', 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z'); // Play icon
+                                }
+                            };
+                        } else if (file.type.startsWith('video/')) {
+                            mediaIcon.classList.remove('hidden');
+                            mediaIconPath.setAttribute('d', 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z'); // Play icon
+                            mediaIcon.onclick = () => showVideoModal(currentMediaObjectUrl);
+                        } else {
+                            mediaIcon.classList.add('hidden'); // Hide icon for non-media files
+                            mediaIcon.onclick = null;
+                        }
+
+                    } else {
+                        blocks[id].content = '';
+                        titleElement.textContent = getDefaultTitle(type);
+                        titleElement.title = ''; // Clear tooltip
+                        blocks[id].title = getDefaultTitle(type);
+                        mediaIcon.classList.add('hidden');
+                        mediaIcon.onclick = null;
+                    }
+                });
+                block.appendChild(input);
+            } else if (type === 'json-list-box') {
+                block.classList.add('bg-yellow-100', 'border-yellow-300');
+                const textarea = document.createElement('textarea');
+                textarea.classList.add('w-full', 'h-20', 'p-2', 'text-sm', 'rounded-md', 'border', 'border-yellow-200', 'focus:outline-none', 'focus:ring-2', 'focus:ring-yellow-400', 'resize-none', 'font-mono'); // Monospaced font for code
+                textarea.placeholder = "Enter JSON or list items (e.g., ['item1', 'item2'] or { 'key': 'value' })...";
+                textarea.addEventListener('input', () => {
+                    blocks[id].content = textarea.value; // Update content in block data
+                });
+                block.appendChild(textarea);
+            }
+
+            // Add right-click listener for context menu
+            block.addEventListener('contextmenu', (e) => {
+                e.preventDefault(); // Prevent default browser context menu
+                showContextMenu(e.clientX, e.clientY, id);
+            });
+
+            // Add click listener for connection selection
+            block.addEventListener('click', (e) => {
+                // If context menu is open, don't trigger connection logic
+                if (!contextMenu.classList.contains('hidden')) {
+                    return;
+                }
+
+                if (selectedBlockForConnection === null) {
+                    // Select this block as the start of a connection
+                    selectedBlockForConnection = id;
+                    block.classList.add('selected-for-connection');
+                } else if (selectedBlockForConnection === id) {
+                    // Deselect if clicking the same block
+                    block.classList.remove('selected-for-connection');
+                    selectedBlockForConnection = null;
+                }
+                // If selectedBlockForConnection is not null and it's a different block,
+                // the connection will be handled by the context menu click, not here.
+            });
+
+            return block;
+        }
+
+        // --- Make Block Draggable within Workflow Area ---
+        function makeBlockDraggable(blockElement, id) {
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            blockElement.addEventListener('mousedown', (e) => {
+                // Only drag if not clicking on textarea or input
+                if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') {
+                    return;
+                }
+                isDragging = true;
+                offsetX = e.clientX - blockElement.getBoundingClientRect().left;
+                offsetY = e.clientY - blockElement.getBoundingClientRect().top;
+                blockElement.style.cursor = 'grabbing';
+                blockElement.style.zIndex = '20'; // Bring to front while dragging
+            });
+
+            workflowArea.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+
+                let newX = e.clientX - workflowArea.getBoundingClientRect().left - offsetX;
+                let newY = e.clientY - workflowArea.getBoundingClientRect().top - offsetY;
+
+                // Clamp to workflow area boundaries
+                newX = Math.max(0, Math.min(newX, workflowArea.offsetWidth - blockElement.offsetWidth));
+                newY = Math.max(0, Math.min(newY, workflowArea.offsetHeight - blockElement.offsetHeight));
+
+                blockElement.style.left = `${newX}px`;
+                blockElement.style.top = `${newY}px`;
+
+                blocks[id].x = newX;
+                blocks[id].y = newY;
+
+                updateConnectionsForBlock(id);
+            });
+
+            workflowArea.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    blockElement.style.cursor = 'grab';
+                    blockElement.style.zIndex = '10'; // Reset z-index
+                }
+            });
+
+            // Prevent text selection during drag
+            blockElement.addEventListener('dragstart', (e) => e.preventDefault());
+        }
+
+        // --- Context Menu Logic ---
+        function showContextMenu(x, y, blockId) {
+            currentContextMenuBlockId = blockId;
+            contextMenu.style.left = `${x}px`;
+            contextMenu.style.top = `${y}px`;
+            contextMenu.classList.remove('hidden');
+
+            // Show/hide connection options based on whether a block is already selected
+            const connectSolidItem = contextMenu.querySelector('[data-action="connect-solid"]');
+            const connectDashedItem = contextMenu.querySelector('[data-action="connect-dashed"]');
+            const connectArrowItem = contextMenu.querySelector('[data-action="connect-arrow"]');
+
+            if (selectedBlockForConnection && selectedBlockForConnection !== currentContextMenuBlockId) {
+                // If a different block is already selected, allow connecting
+                connectSolidItem.classList.remove('hidden');
+                connectDashedItem.classList.remove('hidden');
+                connectArrowItem.classList.remove('hidden');
+            } else {
+                // Otherwise, these options are not relevant for initiating a connection from here
+                connectSolidItem.classList.add('hidden');
+                connectDashedItem.classList.add('hidden');
+                connectArrowItem.classList.add('hidden');
+            }
+        }
+
+        // Hide context menu when clicking elsewhere
+        document.addEventListener('click', (e) => {
+            if (!contextMenu.contains(e.target) && !e.target.closest('.draggable-block')) {
+                contextMenu.classList.add('hidden');
+                // If a block was selected for connection but no connection was made, deselect it
+                if (selectedBlockForConnection) {
+                    const selectedElement = blocks[selectedBlockForConnection]?.element;
+                    if (selectedElement) {
+                        selectedElement.classList.remove('selected-for-connection');
+                    }
+                    selectedBlockForConnection = null;
+                }
+                currentContextMenuBlockId = null;
+            }
+        });
+
+        contextMenu.addEventListener('click', (e) => {
+            const action = e.target.dataset.action;
+            if (!action || !currentContextMenuBlockId) return;
+
+            contextMenu.classList.add('hidden');
+
+            if (action.startsWith('connect-')) {
+                if (selectedBlockForConnection && selectedBlockForConnection !== currentContextMenuBlockId) {
+                    const connectionType = action.split('-')[1]; // 'solid', 'dashed', 'arrow'
+                    connectBlocks(selectedBlockForConnection, currentContextMenuBlockId, connectionType);
+                    blocks[selectedBlockForConnection].element.classList.remove('selected-for-connection');
+                    selectedBlockForConnection = null;
+                } else {
+                    // If no block was selected, this click acts as the first selection
+                    if (selectedBlockForConnection) { // Deselect previous if any
+                        blocks[selectedBlockForConnection].element.classList.remove('selected-for-connection');
+                    }
+                    selectedBlockForConnection = currentContextMenuBlockId;
+                    blocks[currentContextMenuBlockId].element.classList.add('selected-for-connection');
+                }
+            } else if (action === 'remove-connection') {
+                removeConnectionsForBlock(currentContextMenuBlockId);
+            } else if (action === 'delete') {
+                deleteBlock(currentContextMenuBlockId);
+            }
+            currentContextMenuBlockId = null;
+        });
+
+        // --- Connection Logic ---
+        function connectBlocks(fromId, toId, type = 'solid') {
+            // Prevent self-connection
+            if (fromId === toId) {
+                showMessageBox("Connection Error", "Cannot connect a block to itself.");
+                return;
+            }
+
+            // Prevent duplicate connections (A->B and B->A are considered duplicates for simplicity)
+            const exists = connections.some(conn =>
+                (conn.from === fromId && conn.to === toId) ||
+                (conn.from === toId && conn.to === fromId)
+            );
+            if (exists) {
+                showMessageBox("Connection Error", "A connection between these two blocks already exists.");
+                return;
+            }
+
+            const fromBlock = blocks[fromId];
+            const toBlock = blocks[toId];
+
+            if (!fromBlock || !toBlock) {
+                console.error("One or both blocks not found for connection.");
+                return;
+            }
+
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('stroke', '#4b5563'); // Dark gray line
+            line.setAttribute('stroke-width', '2');
+            line.classList.add('connection-line');
+
+            if (type === 'dashed') {
+                line.classList.add('dashed');
+            } else if (type === 'arrow') {
+                line.classList.add('arrow');
+            }
+
+            connectionSvg.appendChild(line);
+
+            const connection = {
+                from: fromId,
+                to: toId,
+                type: type,
+                lineElement: line
+            };
+            connections.push(connection);
+
+            updateLinePosition(connection);
+        }
+
+        function updateLinePosition(connection) {
+            const fromBlock = blocks[connection.from];
+            const toBlock = blocks[connection.to];
+
+            if (!fromBlock || !toBlock || !connection.lineElement) return;
+
+            // Calculate center points of the blocks
+            const x1 = fromBlock.x + (fromBlock.width / 2);
+            const y1 = fromBlock.y + (fromBlock.height / 2);
+            const x2 = toBlock.x + (toBlock.width / 2);
+            const y2 = toBlock.y + (toBlock.height / 2);
+
+            connection.lineElement.setAttribute('x1', x1);
+            connection.lineElement.setAttribute('y1', y1);
+            connection.lineElement.setAttribute('x2', x2);
+            connection.lineElement.setAttribute('y2', y2);
+        }
+
+        function updateAllConnections() {
+            connections.forEach(updateLinePosition);
+        }
+
+        function updateConnectionsForBlock(blockId) {
+            connections.forEach(conn => {
+                if (conn.from === blockId || conn.to === blockId) {
+                    updateLinePosition(conn);
+                }
+            });
+        }
+
+        function removeConnection(fromId, toId) {
+            connections = connections.filter(conn => {
+                if ((conn.from === fromId && conn.to === toId) || (conn.from === toId && conn.to === fromId)) {
+                    conn.lineElement.remove();
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        function removeConnectionsForBlock(blockId) {
+            connections = connections.filter(conn => {
+                if (conn.from === blockId || conn.to === blockId) {
+                    conn.lineElement.remove();
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        // --- Delete Block Logic ---
+        function deleteBlock(id) {
+            const blockElement = blocks[id]?.element;
+            if (blockElement) {
+                blockElement.remove();
+                delete blocks[id];
+                removeConnectionsForBlock(id); // Remove any associated connections
+                updatePlaceholderVisibility();
+            }
+        }
+
+        // Initial check to remove placeholder text if blocks exist
+        function updatePlaceholderVisibility() {
+            const placeholder = workflowArea.querySelector('p.text-center');
+            if (Object.keys(blocks).length > 0) {
+                if (placeholder) placeholder.classList.add('hidden');
+            } else {
+                if (placeholder) placeholder.classList.remove('hidden');
+            }
+        }
+
+        // Observe changes in the workflowArea to update placeholder visibility
+        const observer = new MutationObserver(updatePlaceholderVisibility);
+        observer.observe(workflowArea, { childList: true });
+
+        // Handle window resize to update connection lines
+        window.addEventListener('resize', updateAllConnections);
+
+        // --- Display Connections Popup ---
+        displayConnectionsBtn.addEventListener('click', () => {
+            if (connections.length === 0) {
+                showMessageBox("Connections", "No connections have been established yet.");
+                return;
+            }
+
+            let connectionsSummary = "Current Connections:\n\n";
+            connections.forEach(conn => {
+                const fromBlockTitle = blocks[conn.from] ? blocks[conn.from].title : `Block ${conn.from}`;
+                const toBlockTitle = blocks[conn.to] ? blocks[conn.to].title : `Block ${conn.to}`;
+                connectionsSummary += `- "${fromBlockTitle}" (ID: ${conn.from}) -> "${toBlockTitle}" (ID: ${conn.to}) [Type: ${conn.type}]\n`;
+            });
+            showMessageBox("Workflow Connections", connectionsSummary);
+        });
+
+        // --- Save as Image Functionality ---
+        saveImageBtn.addEventListener('click', () => {
+            // Temporarily hide elements that shouldn't be in the screenshot, e.g., palette, header
+            // For this example, we'll capture only the workflowArea.
+            // If you want to capture the whole page, you'd target document.body or a specific container.
+            
+            // html2canvas will render the SVG lines correctly.
+            html2canvas(workflowArea, {
+                useCORS: true, // Important if you have external images/resources (though not in this current version)
+                scale: 2, // Increase scale for better resolution
+                backgroundColor: '#ffffff' // Ensure background is white if transparent
+            }).then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = 'workflow-automation.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }).catch(error => {
+                console.error('Error saving workflow as image:', error);
+                showMessageBox("Save Error", "Could not save image. Please try again.");
+            });
+        });
+
+        // --- Start Automation Process ---
+        startAutomationBtn.addEventListener('click', () => {
+            let automationSummary = "Workflow Automation Summary:\n\n";
+            let hasContent = false;
+            let validationFailed = false;
+
+            // Validate all relevant blocks for content
+            for (const id in blocks) {
+                const block = blocks[id];
+                if (block.type === 'text-box' || block.type === 'json-list-box') {
+                    const content = block.content.trim();
+                    if (!content) {
+                        showMessageBox("Validation Error", `Block "${block.title}" (ID: ${id}) cannot be empty. Please add content.`);
+                        validationFailed = true;
+                        break; // Stop validation on first error
+                    }
+                }
+            }
+
+            if (validationFailed) {
+                return; // Stop automation if validation failed
+            }
+
+            // Generate summary for blocks
+            for (const id in blocks) {
+                const block = blocks[id];
+                automationSummary += `Block ID: ${id}\n`;
+                automationSummary += `Type: ${block.type}\n`;
+                automationSummary += `Title: ${block.title}\n`;
+
+                if (block.type === 'text-box' || block.type === 'json-list-box') {
+                    const content = block.content;
+                    automationSummary += `Content: "${content}"\n`;
+                    if (content) hasContent = true;
+                } else if (block.type === 'file-upload') {
+                    const fileName = block.content; // Use stored full file name
+                    automationSummary += `File: "${fileName}"\n`;
+                    if (fileName) hasContent = true;
+                }
+                automationSummary += `\n`;
+            }
+
+            // Add connections to summary
+            if (connections.length > 0) {
+                automationSummary += "Connections:\n";
+                connections.forEach(conn => {
+                    const fromBlockTitle = blocks[conn.from] ? blocks[conn.from].title : 'Unknown Block';
+                    const toBlockTitle = blocks[conn.to] ? blocks[conn.to].title : 'Unknown Block';
+                    automationSummary += `- From: "${fromBlockTitle}" (ID: ${conn.from}) -> To: "${toBlockTitle}" (ID: ${conn.to}) [Type: ${conn.type}]\n`;
+                });
+                automationSummary += `\n`;
+            } else {
+                automationSummary += "No connections established.\n\n";
+            }
+
+
+            if (Object.keys(blocks).length === 0) {
+                showMessageBox("Automation Status", "No blocks in the workflow to automate.");
+            } else if (!hasContent) {
+                showMessageBox("Automation Status", "No content found in any blocks. Please add text or select files.");
+            }
+            else {
+                // Simulate progress bar
+                progressBarWrapper.classList.remove('hidden');
+                progressBarFill.style.width = '0%';
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    progressBarFill.style.width = `${progress}%`;
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => { // Give a slight delay before showing message and hiding bar
+                            progressBarWrapper.classList.add('hidden');
+                            showMessageBox("Automation Process Started!", automationSummary);
+                        }, 200);
+                    }
+                }, 100); // Update every 100ms
+            }
+        });
+
+        // Initial call to hide placeholder if blocks are somehow present on load (unlikely for new app)
+        updatePlaceholderVisibility();
+    </script>
+</body>
+</html>
