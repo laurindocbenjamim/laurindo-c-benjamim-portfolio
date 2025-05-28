@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dubbing Studio Pro</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Video.js CSS -->
+    <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet">
+    <!-- Tiptap Editor CSS -->
+    <link href="https://unpkg.com/@tiptap/core@2.0.0/dist/tiptap.css" rel="stylesheet">
+    <style>
+        /* Custom styles for the application */
+        /* Video player container */
+        .video-player-container {
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Tracks container */
+        .tracks-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .track-item {
+            background-color: #f8f9fa;
+            transition: all 0.2s;
+        }
+
+        .track-item:hover {
+            background-color: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        /* Merge area */
+        .merge-area {
+            min-height: 150px;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s;
+        }
+
+        .merge-area.bg-light {
+            background-color: #e9ecef !important;
+        }
+
+        .merge-items {
+            min-height: 50px;
+        }
+
+        /* Draggable modal */
+        .modal-dialog {
+            transition: none !important;
+        }
+
+        .draggable-handle {
+            cursor: move;
+        }
+
+        /* Fixed position script button */
+        .fixed-bottom-right {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        /* Progress bar for recording */
+        .progress {
+            background-color: #e9ecef;
+        }
+
+        .progress-bar {
+            transition: width 0.1s linear;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-microphone me-2"></i>Dubbing Studio Pro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" id="newProjectBtn">
+                            <i class="fas fa-plus-circle me-1"></i>New Project
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-save me-1"></i>Save
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-question-circle me-1"></i>Help
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content - Upload Page (Initially visible) -->
+    <div class="container mt-5" id="uploadPage">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="fas fa-video me-2"></i>Upload Video</h4>
+            </div>
+            <div class="card-body">
+                <form id="uploadForm">
+                    <div class="mb-3">
+                        <label for="videoInput" class="form-label">Select Video File</label>
+                        <input class="form-control" type="file" id="videoInput" accept="video/*">
+                    </div>
+                    <div class="video-preview-container mb-3">
+                        <video id="videoPreview" controls class="w-100 d-none"></video>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="uploadBtn">
+                        <i class="fas fa-upload me-2"></i>Upload
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dubbing Studio Page (Initially hidden) -->
+    <div class="container-fluid mt-3 d-none" id="dubbingPage">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <!-- Video Player -->
+                <div class="video-player-container mb-4">
+                    <video id="dubbingVideo" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" width="100%" height="auto">
+                        <source id="videoSource" type="video/mp4">
+                    </video>
+                </div>
+                
+                <!-- Audio Recorder -->
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5><i class="fas fa-microphone me-2"></i>Voice Recorder</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center align-items-center mb-3">
+                            <button id="recordBtn" class="btn btn-danger btn-lg rounded-circle mx-2">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                            <button id="stopBtn" class="btn btn-secondary btn-lg rounded-circle mx-2" disabled>
+                                <i class="fas fa-stop"></i>
+                            </button>
+                            <button id="playBtn" class="btn btn-success btn-lg rounded-circle mx-2" disabled>
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                        <div class="progress mb-3" style="height: 20px;">
+                            <div id="progressBar" class="progress-bar bg-warning" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <audio id="audioPlayback" controls class="w-100 d-none"></audio>
+                        <button id="saveRecordingBtn" class="btn btn-primary mt-2" disabled>
+                            <i class="fas fa-save me-2"></i>Save Recording
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Audio Tracks -->
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5><i class="fas fa-layer-group me-2"></i>Audio Tracks</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="tracksContainer" class="tracks-container">
+                            <!-- Tracks will be added here dynamically -->
+                            <div class="text-center text-muted py-3" id="noTracksMessage">
+                                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                                <p>No audio tracks yet. Record your first track above!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Merge Area -->
+                <div class="card mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h5><i class="fas fa-random me-2"></i>Merge Area</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="mergeArea" class="merge-area p-4 border rounded text-center">
+                            <p class="text-muted">Drag and drop tracks here to merge</p>
+                            <div id="mergeItems" class="merge-items d-flex flex-wrap gap-2 mt-3"></div>
+                            <button id="mergeBtn" class="btn btn-primary mt-3" disabled>
+                                <i class="fas fa-cogs me-2"></i>Merge Selected Items
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Editor Button -->
+    <button type="button" class="btn btn-dark fixed-bottom-right m-4 rounded-circle" style="width: 60px; height: 60px;" data-bs-toggle="modal" data-bs-target="#scriptModal" id="scriptButton">
+        <i class="fas fa-scroll fa-lg"></i>
+    </button>
+
+    <!-- Script Modal -->
+    <div class="modal fade" id="scriptModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white draggable-handle">
+                    <h5 class="modal-title">
+                        <i class="fas fa-scroll me-2"></i>Script Editor
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="scriptEditor" style="min-height: 400px;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveScriptBtn">Save Script</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Video.js -->
+    <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
+    <!-- RecordRTC -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/RecordRTC/5.6.2/RecordRTC.min.js"></script>
+    <!-- Tiptap Editor -->
+    <script src="https://unpkg.com/@tiptap/core@2.0.0/dist/tiptap.umd.min.js"></script>
+    <script src="https://unpkg.com/@tiptap/starter-kit@2.0.0/dist/starter-kit.umd.min.js"></script>
+    <script src="https://unpkg.com/@tiptap/extension-underline@2.0.0/dist/underline.umd.min.js"></script>
+    <script src="https://unpkg.com/@tiptap/extension-placeholder@2.0.0/dist/placeholder.umd.min.js"></script>
+
+    <!-- Application Script -->
+    <script>
+        // Global variables
+        let currentVideoId = null;
+        let mediaRecorder;
+        let audioChunks = [];
+        let recordingStartTime;
+        let progressInterval;
+        let editor;
+
+        // DOM Ready
+        $(document).ready(function() {
+            // Initialize Video.js player (will be configured when video is loaded)
+            const player = videojs('dubbingVideo');
+            
+            // Initialize script editor
+            editor = new tiptap.Editor({
+                element: document.getElementById('scriptEditor'),
+                extensions: [
+                    tiptap.StarterKit,
+                    tiptap.Underline,
+                    tiptap.Placeholder.configure({
+                        placeholder: 'Write your dubbing script here...'
+                    })
+                ],
+                content: '<p>Start writing your script...</p>'
+            });
+
+            // Make modal draggable
+            const modal = document.getElementById('scriptModal');
+            const modalHeader = modal.querySelector('.draggable-handle');
+            
+            let isDragging = false;
+            let offsetX, offsetY;
+            
+            modalHeader.addEventListener('mousedown', (e) => {
+                if (e.target === modalHeader || e.target.closest('.draggable-handle')) {
+                    isDragging = true;
+                    const modalRect = modal.querySelector('.modal-dialog').getBoundingClientRect();
+                    offsetX = e.clientX - modalRect.left;
+                    offsetY = e.clientY - modalRect.top;
+                }
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const dialog = modal.querySelector('.modal-dialog');
+                dialog.style.position = 'fixed';
+                dialog.style.left = `${e.clientX - offsetX}px`;
+                dialog.style.top = `${e.clientY - offsetY}px`;
+            });
+            
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            // Video upload and preview
+            $('#videoInput').change(function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const videoPreview = $('#videoPreview')[0];
+                const videoURL = URL.createObjectURL(file);
+                
+                videoPreview.src = videoURL;
+                videoPreview.classList.remove('d-none');
+                videoPreview.load();
+            });
+
+            $('#uploadForm').submit(async function(e) {
+                e.preventDefault();
+                const fileInput = $('#videoInput')[0];
+                const file = fileInput.files[0];
+                
+                if (!file) {
+                    alert('Please select a video file');
+                    return;
+                }
+                
+                // Simulate upload (in a real app, you would send to server)
+                currentVideoId = 'demo-' + Date.now();
+                const videoURL = URL.createObjectURL(file);
+                
+                // Hide upload page, show dubbing studio
+                $('#uploadPage').addClass('d-none');
+                $('#dubbingPage').removeClass('d-none');
+                
+                // Set up video player
+                const player = videojs('dubbingVideo');
+                player.src({ type: 'video/mp4', src: videoURL });
+                
+                // Store video ID for later use
+                window.currentVideoId = currentVideoId;
+                
+                // For demo purposes, add some sample tracks
+                setTimeout(() => {
+                    addNewTrack('track1', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+                    addNewTrack('track2', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3');
+                }, 1000);
+            });
+
+            // Audio recording functionality
+            $('#recordBtn').click(async () => {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    
+                    mediaRecorder.ondataavailable = (e) => {
+                        audioChunks.push(e.data);
+                    };
+                    
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        const audioPlayback = $('#audioPlayback')[0];
+                        
+                        audioPlayback.src = audioUrl;
+                        audioPlayback.classList.remove('d-none');
+                        $('#playBtn').prop('disabled', false);
+                        $('#saveRecordingBtn').prop('disabled', false);
+                        
+                        clearInterval(progressInterval);
+                        $('#progressBar').css('width', '0%');
+                    };
+                    
+                    audioChunks = [];
+                    mediaRecorder.start();
+                    recordingStartTime = Date.now();
+                    
+                    // Update progress bar
+                    progressInterval = setInterval(() => {
+                        const elapsed = Date.now() - recordingStartTime;
+                        const progress = Math.min((elapsed / (60 * 1000)) * 100, 100); // Max 1 minute
+                        $('#progressBar').css('width', `${progress}%`);
+                    }, 100);
+                    
+                    $('#recordBtn').prop('disabled', true);
+                    $('#stopBtn').prop('disabled', false);
+                } catch (error) {
+                    console.error('Error accessing microphone:', error);
+                    alert('Could not access microphone. Please check permissions.');
+                }
+            });
+
+            $('#stopBtn').click(() => {
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    $('#recordBtn').prop('disabled', false);
+                    $('#stopBtn').prop('disabled', true);
+                }
+            });
+
+            $('#playBtn').click(() => {
+                const audioPlayback = $('#audioPlayback')[0];
+                if (audioPlayback.paused) {
+                    audioPlayback.play();
+                    $(this).html('<i class="fas fa-pause"></i>');
+                } else {
+                    audioPlayback.pause();
+                    $(this).html('<i class="fas fa-play"></i>');
+                }
+            });
+
+            $('#saveRecordingBtn').click(async () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const recordingId = 'rec-' + Date.now();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                
+                // In a real app, you would send to server here
+                addNewTrack(recordingId, audioUrl);
+                
+                alert('Recording saved successfully!');
+            });
+
+            // New project button
+            $('#newProjectBtn').click(function() {
+                if (confirm('Start a new project? Any unsaved changes will be lost.')) {
+                    location.reload();
+                }
+            });
+
+            // Save script button
+            $('#saveScriptBtn').click(function() {
+                const scriptContent = editor.getHTML();
+                alert('Script saved!\n\n' + scriptContent);
+            });
+
+            // Initialize drag and drop for tracks
+            document.addEventListener('dragstart', function(e) {
+                if (e.target.classList.contains('track-item')) {
+                    e.dataTransfer.setData('text/plain', e.target.dataset.trackId);
+                    e.dataTransfer.effectAllowed = 'move';
+                }
+            });
+
+            // Merge area functionality
+            const mergeArea = $('#mergeArea')[0];
+            const mergeItems = $('#mergeItems')[0];
+            const mergeBtn = $('#mergeBtn')[0];
+            
+            // Allow dropping
+            mergeArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+                mergeArea.classList.add('bg-light');
+            });
+            
+            mergeArea.addEventListener('dragleave', () => {
+                mergeArea.classList.remove('bg-light');
+            });
+            
+            mergeArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                mergeArea.classList.remove('bg-light');
+                
+                const trackId = e.dataTransfer.getData('text/plain');
+                if (trackId) {
+                    addToMergeArea(trackId, 'track');
+                }
+            });
+            
+            function addToMergeArea(id, type) {
+                // Check if already added
+                if (document.querySelector(`.merge-item[data-id="${id}"]`)) return;
+                
+                const item = document.createElement('div');
+                item.className = 'merge-item badge bg-primary p-2';
+                item.dataset.id = id;
+                item.dataset.type = type;
+                
+                if (type === 'track') {
+                    const trackElement = document.querySelector(`.track-item[data-track-id="${id}"]`);
+                    const trackNumber = Array.from(document.querySelectorAll('.track-item')).indexOf(trackElement) + 1;
+                    item.innerHTML = `<i class="fas fa-music me-1"></i>Track ${trackNumber}`;
+                } else {
+                    item.innerHTML = `<i class="fas fa-video me-1"></i>Video`;
+                }
+                
+                // Add delete button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn btn-sm btn-outline-light ms-2 p-0 px-1';
+                deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+                deleteBtn.onclick = function() {
+                    item.remove();
+                    if (mergeItems.children.length === 0) {
+                        mergeBtn.disabled = true;
+                    }
+                };
+                item.appendChild(deleteBtn);
+                
+                mergeItems.appendChild(item);
+                mergeBtn.disabled = false;
+            }
+            
+            mergeBtn.addEventListener('click', async () => {
+                const items = Array.from(document.querySelectorAll('.merge-item')).map(item => ({
+                    id: item.dataset.id,
+                    type: item.dataset.type
+                }));
+                
+                alert('Merging items... (This would process the merge in a real application)');
+                console.log('Items to merge:', items);
+                
+                // In a real app, you would send to server here
+                // Simulate merge completion
+                setTimeout(() => {
+                    alert('Merge completed successfully!');
+                }, 1500);
+            });
+        });
+
+        // Function to add new track
+        function addNewTrack(trackId, trackUrl) {
+            const tracksContainer = $('#tracksContainer')[0];
+            const noTracksMessage = $('#noTracksMessage')[0];
+            
+            if (noTracksMessage) {
+                noTracksMessage.remove();
+            }
+            
+            const trackElement = document.createElement('div');
+            trackElement.className = 'track-item mb-3 p-3 border rounded';
+            trackElement.dataset.trackId = trackId;
+            trackElement.draggable = true;
+            
+            trackElement.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6>Recording ${$('.track-item').length + 1}</h6>
+                        <audio src="${trackUrl}" controls class="w-100"></audio>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-danger delete-track">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            tracksContainer.appendChild(trackElement);
+            
+            // Add drag events
+            trackElement.addEventListener('dragstart', function(e) {
+                e.dataTransfer.setData('text/plain', this.dataset.trackId);
+                e.dataTransfer.effectAllowed = 'move';
+            });
+            
+            // Add delete functionality
+            trackElement.querySelector('.delete-track').addEventListener('click', function() {
+                if (confirm('Are you sure you want to delete this track?')) {
+                    // In a real app, you would send delete request to server
+                    trackElement.remove();
+                    
+                    // Show "no tracks" message if last track was deleted
+                    if ($('.track-item').length === 0) {
+                        const noTracksMsg = document.createElement('div');
+                        noTracksMsg.className = 'text-center text-muted py-3';
+                        noTracksMsg.id = 'noTracksMessage';
+                        noTracksMsg.innerHTML = `
+                            <i class="fas fa-info-circle fa-2x mb-2"></i>
+                            <p>No audio tracks yet. Record your first track above!</p>
+                        `;
+                        tracksContainer.appendChild(noTracksMsg);
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

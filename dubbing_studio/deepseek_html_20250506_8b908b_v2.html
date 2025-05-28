@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Recorder with Track Listing</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .track-item {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .progress {
+            height: 20px;
+        }
+        #audioList {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="fas fa-microphone me-2"></i>Audio Recorder</h4>
+            </div>
+            <div class="card-body">
+                <!-- Recorder Controls -->
+                <div class="d-flex justify-content-center mb-3">
+                    <button id="recordBtn" class="btn btn-danger btn-lg rounded-circle mx-2">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button id="stopBtn" class="btn btn-secondary btn-lg rounded-circle mx-2" disabled>
+                        <i class="fas fa-stop"></i>
+                    </button>
+                    <button id="playBtn" class="btn btn-success btn-lg rounded-circle mx-2" disabled>
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+                
+                <!-- Recording Progress -->
+                <div class="progress mb-3">
+                    <div id="progressBar" class="progress-bar bg-warning" role="progressbar" style="width: 0%"></div>
+                </div>
+                
+                <!-- Current Recording Playback -->
+                <audio id="audioPlayback" controls class="w-100 mb-3 d-none"></audio>
+                
+                <!-- Save Recording -->
+                <div class="input-group mb-3">
+                    <input type="text" id="trackName" class="form-control" placeholder="Track name" value="Recording">
+                    <button id="saveBtn" class="btn btn-primary" disabled>
+                        <i class="fas fa-save me-2"></i>Save Track
+                    </button>
+                </div>
+                
+                <!-- Track List -->
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5><i class="fas fa-list me-2"></i>Recorded Tracks</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="audioList">
+                            <div class="text-center text-muted py-3" id="noTracksMessage">
+                                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                                <p>No tracks recorded yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Global variables
+        let mediaRecorder;
+        let audioChunks = [];
+        let recordingStartTime;
+        let progressInterval;
+        let tracks = [];
+        
+        // Check for microphone support
+        function checkMicrophoneSupport() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('Your browser doesn\'t support audio recording. Please try Chrome, Firefox, or Edge.');
+                $('#recordBtn').prop('disabled', true);
+                return false;
+            }
+            return true;
+        }
+        
+        // Initialize recorder
+        $(document).ready(function() {
+            checkMicrophoneSupport();
+            
+            // Record button click
+            $('#recordBtn').click(async function() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    
+                    mediaRecorder.ondataavailable = function(e) {
+                        audioChunks.push(e.data);
+                    };
+                    
+                    mediaRecorder.onstop = function() {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        const audioPlayback = $('#audioPlayback')[0];
+                        
+                        audioPlayback.src = audioUrl;
+                        audioPlayback.classList.remove('d-none');
+                        $('#playBtn').prop('disabled', false);
+                        $('#saveBtn').prop('disabled', false);
+                        
+                        clearInterval(progressInterval);
+                        $('#progressBar').css('width', '0%');
+                    };
+                    
+                    audioChunks = [];
+                    mediaRecorder.start();
+                    recordingStartTime = Date.now();
+                    
+                    // Update progress bar
+                    progressInterval = setInterval(function() {
+                        const elapsed = Date.now() - recordingStartTime;
+                        const progress = Math.min((elapsed / (60 * 1000)) * 100, 100); // Max 1 minute
+                        $('#progressBar').css('width', `${progress}%`);
+                    }, 100);
+                    
+                    $('#recordBtn').prop('disabled', true);
+                    $('#stopBtn').prop('disabled', false);
+                    $('#playBtn').prop('disabled', true);
+                    $('#saveBtn').prop('disabled', true);
+                    
+                } catch (error) {
+                    console.error('Recording error:', error);
+                    
+                    let message = 'Recording failed: ';
+                    if (error.name === 'NotAllowedError') {
+                        message += 'Microphone access was denied. Please allow microphone permissions.';
+                    } else if (error.name === 'NotFoundError') {
+                        message += 'No microphone found. Please connect a microphone.';
+                    } else {
+                        message += error.message;
+                    }
+                    
+                    alert(message);
+                    $('#recordBtn').prop('disabled', false);
+                }
+            });
+            
+            // Stop button click
+            $('#stopBtn').click(function() {
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    $('#recordBtn').prop('disabled', false);
+                    $('#stopBtn').prop('disabled', true);
+                    
+                    // Stop all tracks
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                }
+            });
+            
+            // Play button click
+            $('#playBtn').click(function() {
+                const audioPlayback = $('#audioPlayback')[0];
+                if (audioPlayback.paused) {
+                    audioPlayback.play();
+                    $(this).html('<i class="fas fa-pause"></i>');
+                } else {
+                    audioPlayback.pause();
+                    $(this).html('<i class="fas fa-play"></i>');
+                }
+            });
+            
+            // Save button click
+            $('#saveBtn').click(function() {
+                const trackName = $('#trackName').val().trim() || `Recording ${tracks.length + 1}`;
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                
+                // Add to tracks array
+                const trackId = Date.now();
+                tracks.push({
+                    id: trackId,
+                    name: trackName,
+                    blob: audioBlob,
+                    url: audioUrl,
+                    date: new Date().toLocaleString()
+                });
+                
+                // Add to UI
+                addTrackToList(trackId, trackName, audioUrl);
+                
+                // Reset for next recording
+                $('#audioPlayback').addClass('d-none');
+                $('#playBtn').prop('disabled', true).html('<i class="fas fa-play"></i>');
+                $('#saveBtn').prop('disabled', true);
+                audioChunks = [];
+            });
+        });
+        
+        // Add track to the list
+        function addTrackToList(trackId, trackName, audioUrl) {
+            const audioList = $('#audioList');
+            const noTracksMessage = $('#noTracksMessage');
+            
+            if (noTracksMessage.length) {
+                noTracksMessage.remove();
+            }
+            
+            const trackElement = $(`
+                <div class="track-item" data-track-id="${trackId}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">${trackName}</h6>
+                            <small class="text-muted">${new Date().toLocaleString()}</small>
+                            <audio src="${audioUrl}" controls class="w-100 mt-2"></audio>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-outline-danger delete-track">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary download-track ms-1">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `);
+            
+            // Add delete functionality
+            trackElement.find('.delete-track').click(function() {
+                if (confirm(`Delete "${trackName}"?`)) {
+                    // Remove from tracks array
+                    tracks = tracks.filter(track => track.id !== trackId);
+                    trackElement.remove();
+                    
+                    // Show "no tracks" message if empty
+                    if ($('.track-item').length === 0) {
+                        audioList.append(`
+                            <div class="text-center text-muted py-3" id="noTracksMessage">
+                                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                                <p>No tracks recorded yet</p>
+                            </div>
+                        `);
+                    }
+                }
+            });
+            
+            // Add download functionality
+            trackElement.find('.download-track').click(function() {
+                const track = tracks.find(t => t.id === trackId);
+                if (track) {
+                    const a = document.createElement('a');
+                    a.href = track.url;
+                    a.download = `${track.name}.wav`;
+                    a.click();
+                }
+            });
+            
+            audioList.prepend(trackElement);
+        }
+    </script>
+</body>
+</html>

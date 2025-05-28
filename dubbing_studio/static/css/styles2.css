@@ -1,0 +1,175 @@
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #3f37c9;
+    --accent-color: #4cc9f0;
+    --dark-color: #1a1a2e;
+    --dark-gray: #16213e;
+    --light-color: #f8f9fa;
+}
+
+body {
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.bg-dark-gray {
+    background-color: var(--dark-gray);
+}
+
+.border-dashed {
+    border: 2px dashed #4a4a4a;
+}
+
+.border-secondary {
+    border-color: #4a4a4a !important;
+}
+
+.text-gradient {
+    background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: bold;
+}
+
+.bg-dark-transparent {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.upload-area {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.upload-area:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(67, 97, 238, 0.1);
+}
+
+.video-container {
+    aspect-ratio: 16/9;
+}
+
+.video-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.video-container:hover .video-controls {
+    opacity: 1;
+}
+
+.form-control, .form-select {
+    background-color: var(--dark-color);
+    border-color: #4a4a4a;
+    color: var(--light-color);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.progress {
+    background-color: #4a4a4a;
+}
+
+/* Recording Controls */
+.record-btn {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.record-btn:hover {
+    transform: scale(1.05);
+}
+
+.record-btn:disabled {
+    opacity: 0.5;
+    transform: none !important;
+}
+
+.recording-indicator {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 15px;
+    background-color: rgba(220, 53, 69, 0.2);
+    border-radius: 20px;
+}
+
+.pulse-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+    100% { transform: scale(0.95); opacity: 1; }
+}
+
+/* Audio Tracks */
+.track-item {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-left: 3px solid var(--primary-color);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.track-item:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.track-item.active {
+    border-left-color: var(--accent-color);
+    background-color: rgba(67, 97, 238, 0.1);
+}
+
+.track-item .track-controls button {
+    padding: 3px 8px;
+    font-size: 0.8rem;
+}
+
+.waveform-container {
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    margin: 5px 0;
+}
+
+/* Audio Visualizer */
+#audioVisualizer {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .video-container {
+        aspect-ratio: 4/3;
+    }
+}

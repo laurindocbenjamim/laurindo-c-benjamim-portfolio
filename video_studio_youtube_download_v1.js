@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitUpload = document.getElementById('submitUpload');
     const mediaFilesInput = document.getElementById('mediaFiles');
     const videoPlayer = document.getElementById('videoPlayer');
-    
     const audioPlayer = document.getElementById('audioPlayer');
     const textContainer = document.getElementById('textContainer');
     const videoContainer = document.getElementById('videoContainer');
@@ -46,6 +45,69 @@ document.addEventListener('DOMContentLoaded', function () {
     const cookieUpload = document.getElementById('cookieUpload');
     const cookieInput = document.getElementById('cookieInput');
     const retryBtn = document.getElementById('retryBtn');
+
+    // Add these with other DOM selections at the top
+const minimizeBtn = document.querySelector('.minimize-modal');
+const maximizeBtn = document.querySelector('.maximize-modal');
+const modalElement = document.getElementById('uploadModal');
+const modalInstance = new bootstrap.Modal(modalElement);
+
+// Minimize functionality
+minimizeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    modalElement.classList.add('modal-minimized');
+    minimizeBtn.classList.add('d-none');
+    maximizeBtn.classList.remove('d-none');
+    
+    // Hide backdrop but keep modal functional
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.style.opacity = '0';
+    }
+});
+
+// Maximize functionality
+maximizeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    modalElement.classList.remove('modal-minimized');
+    maximizeBtn.classList.add('d-none');
+    minimizeBtn.classList.remove('d-none');
+    
+    // Show backdrop again
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.style.opacity = '0.5';
+    }
+});
+
+// Click minimized header to maximize
+modalElement.addEventListener('click', function(e) {
+    if (modalElement.classList.contains('modal-minimized') && 
+        !e.target.classList.contains('btn-modal-control') &&
+        !e.target.closest('.btn-modal-control')) {
+        modalElement.classList.remove('modal-minimized');
+        maximizeBtn.classList.add('d-none');
+        minimizeBtn.classList.remove('d-none');
+        
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+            backdrop.style.opacity = '0.5';
+        }
+    }
+});
+
+// Reset when modal closes
+modalElement.addEventListener('hidden.bs.modal', function() {
+    modalElement.classList.remove('modal-minimized');
+    maximizeBtn.classList.add('d-none');
+    minimizeBtn.classList.remove('d-none');
+    
+    // Reset backdrop
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.style.opacity = '0.5';
+    }
+});
 
     // Server configuration
     let baseURL = window.location.origin.includes('laurindocbenjamim.github.io')
@@ -372,7 +434,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // Set basic info
         document.getElementById('resultTitle').textContent = data.title || 'Downloaded Content';
         document.getElementById('resultThumbnail').src = data.thumbnail || '';
-        document.getElementById('resultDuration').textContent = formatDuration(data.duration);
+        document.getElementById('resultDuration').textContent = formatDuration(data.duration) +
+         ' ' + data.size_mb + 'MB';
 
         // Create download buttons
         let videoFilename = null;
