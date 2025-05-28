@@ -66,6 +66,8 @@
             top: 50%;
             transform: translateY(-50%);
         }
+        /* Connectors are only left and right now */
+        /* .draggable-block .connector.top, .draggable-block .connector.bottom { display: none; } */
 
         .context-menu {
             position: absolute;
@@ -185,33 +187,28 @@
 
         /* Settings Modal Specifics (override general message-box styles for size) */
         #settings-modal {
-            max-width: 280px; /* Smaller width */
-            padding: 0.75rem; /* Reduced padding */
+            max-width: 350px; /* Smaller width */
+            padding: 1rem;
         }
         #settings-modal h3 {
-            font-size: 0.95rem; /* Smaller font size */
-            margin-bottom: 0.4rem; /* Reduced margin */
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
         }
         #settings-modal button {
-            padding: 0.4rem 0.8rem; /* Reduced padding */
-            font-size: 0.75rem; /* Smaller font size */
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
         }
         #preprocessing-options {
-            margin-top: 0.6rem;
-            padding-left: 0.6rem;
+            margin-top: 0.75rem;
+            padding-left: 0.75rem;
             border-left: 1px solid #d1d5db;
         }
         #preprocessing-options.hidden {
             display: none;
         }
         #settings-modal-close {
-            margin-top: 1rem;
+            margin-top: 1.25rem;
         }
-        #settings-modal .form-radio + span,
-        #settings-modal .form-checkbox + span {
-            font-size: 0.8rem; /* Smaller font for labels in settings */
-        }
-
 
         /* LLM Modal */
         #llm-modal {
@@ -256,32 +253,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        /* New: Error Icon on blocks */
-        .error-icon {
-            position: absolute;
-            top: 4px; /* Adjust as needed */
-            right: 4px; /* Adjust as needed */
-            width: 18px;
-            height: 18px;
-            color: #ef4444; /* Red color for error */
-            cursor: pointer;
-            z-index: 25; /* Ensure it's above other block elements */
-        }
-        .error-icon:hover {
-            transform: scale(1.1);
-        }
-
-        /* Reduced size for left menu palette buttons */
-        .aside-palette-item {
-            padding: 0.6rem; /* Reduced padding */
-            font-size: 0.875rem; /* Equivalent to text-sm */
-        }
-        .aside-palette-item svg {
-            height: 1.25rem; /* Smaller icon size */
-            width: 1.25rem; /* Smaller icon size */
-            margin-bottom: 0.25rem; /* Adjusted margin */
-        }
     </style>
 </head>
 <body class="flex flex-col h-screen">
@@ -291,12 +262,6 @@
             <button id="display-connections-btn" class="p-2 bg-blue-700 hover:bg-blue-800 rounded-lg transition duration-200 ease-in-out shadow-md flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-            <button id="save-project-btn" class="p-2 bg-gray-700 hover:bg-gray-800 rounded-lg transition duration-200 ease-in-out shadow-md flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M15.5 13.5h-7A1.5 1.5 0 017 12V3.5A1.5 1.5 0 018.5 2h7A1.5 1.5 0 0117 3.5v8.5a1.5 1.5 0 01-1.5 1.5zM12 11a.5.5 0 00-.5.5v2a.5.5 0 001 0v-2a.5.5 0 00-.5-.5z" />
-                    <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v12.586a1 1 0 01-.293.707l-4 4a1 1 0 01-1.414-1.414l4-4A1 1 0 016 18.586V6a4 4 0 014-4zm7 0a4 4 0 014 4v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V6a4 4 0 014-4z" clip-rule="evenodd" />
                 </svg>
             </button>
             <button id="save-image-btn" class="p-2 bg-teal-600 hover:bg-teal-700 rounded-lg transition duration-200 ease-in-out shadow-md flex items-center justify-center">
@@ -313,25 +278,19 @@
     <div class="flex flex-1 overflow-hidden">
         <aside class="w-64 bg-gray-800 text-white p-4 flex flex-col space-y-4 shadow-lg overflow-y-auto">
             <h2 class="text-xl font-semibold mb-4 text-gray-200">Blocks</h2>
-            <div id="text-box-palette" draggable="true" class="aside-palette-item p-3 bg-blue-500 hover:bg-blue-600 rounded-lg cursor-grab text-center font-medium transition duration-200 ease-in-out shadow-md flex flex-col items-center">
+            <div id="text-box-palette" draggable="true" class="p-3 bg-blue-500 hover:bg-blue-600 rounded-lg cursor-grab text-center font-medium transition duration-200 ease-in-out shadow-md flex flex-col items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 Text Box
             </div>
-            <div id="file-input-palette" draggable="true" class="aside-palette-item p-3 bg-indigo-500 hover:bg-indigo-600 rounded-lg cursor-grab text-center font-medium transition duration-200 ease-in-out shadow-md flex flex-col items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.485L20.5 13.5" />
-                </svg>
-                File Input
-            </div>
-            <div id="file-upload-palette" draggable="true" class="aside-palette-item p-3 bg-green-500 hover:bg-green-600 rounded-lg cursor-grab text-center font-medium transition duration-200 ease-in-out shadow-md flex flex-col items-center">
+            <div id="file-upload-palette" draggable="true" class="p-3 bg-green-500 hover:bg-green-600 rounded-lg cursor-grab text-center font-medium transition duration-200 ease-in-out shadow-md flex flex-col items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                 </svg>
                 File Upload
             </div>
-            <div id="json-list-palette" draggable="true" class="aside-palette-item p-3 bg-yellow-500 hover:bg-yellow-600 rounded-lg cursor-grab text-center font-medium transition duration-200 ease-in-out shadow-md flex flex-col items-center">
+            <div id="json-list-palette" draggable="true" class="p-3 bg-yellow-500 hover:bg-yellow-600 rounded-lg cursor-grab text-center font-medium transition duration-200 ease-in-out shadow-md flex flex-col items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
@@ -356,34 +315,9 @@
                     <div id="progress-bar-fill" class="progress-bar-fill"></div>
                 </div>
             </div>
-
-            <div class="mt-6 pt-4 border-t border-gray-700">
-                <h2 class="text-xl font-semibold mb-2 text-gray-200">Default Connection Type</h2>
-                <div class="flex flex-col space-y-2 text-sm text-gray-300">
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="connectionType" value="solid" checked class="form-radio text-blue-600">
-                        <span>Solid Line</span>
-                    </label>
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="connectionType" value="dashed" class="form-radio text-blue-600">
-                        <span>Dashed Line</span>
-                    </label>
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="connectionType" value="arrow" class="form-radio text-blue-600">
-                        <span>Arrow Line</span>
-                    </label>
-                </div>
-            </div>
         </aside>
 
         <main id="workflow-area" class="flex-1 p-6 workflow-area overflow-auto">
-            <div class="w-full mb-8 flex justify-center">
-                <input type="text" id="workflow-title" placeholder="Enter Workflow Title" 
-                       class="text-center text-2xl font-bold text-gray-800 bg-transparent border-b-2 border-gray-300 
-                              focus:outline-none focus:border-blue-500 transition-colors duration-200 px-4 py-2 rounded-md"
-                       value="My Awesome Workflow">
-            </div>
-
             <p class="text-center text-gray-400 text-lg mt-20">Drag blocks here to start your workflow...</p>
 
             <canvas id="connection-canvas"></canvas>
@@ -415,17 +349,7 @@
         <div id="settings-modal" class="message-box">
             <h3 class="text-xl font-bold mb-4">Settings</h3>
             <div class="flex flex-col space-y-3">
-                <div class="flex flex-col space-y-2 text-sm text-gray-700">
-                    <p class="font-semibold mb-1">Model Creation:</p>
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="modelCreation" value="noModel" id="no-model-option" class="form-radio text-blue-600">
-                        <span>No Model</span>
-                    </label>
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="modelCreation" value="createModel" id="create-model-option" class="form-radio text-blue-600">
-                        <span>Create Model</span>
-                    </label>
-                </div>
+                <button id="create-model-option" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium">Create Model</button>
                 <button id="preprocessing-option" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium">Preprocessing</button>
             </div>
             <div id="preprocessing-options" class="hidden mt-4 text-left">
@@ -475,9 +399,7 @@
 
     <script>
         const workflowArea = document.getElementById('workflow-area');
-        const workflowTitleInput = document.getElementById('workflow-title'); // New: Workflow Title Input
         const textBoxPalette = document.getElementById('text-box-palette');
-        const fileInputPalette = document.getElementById('file-input-palette'); // New: File Input Palette
         const fileUploadPalette = document.getElementById('file-upload-palette');
         const jsonListPalette = document.getElementById('json-list-palette');
         const connectionCanvas = document.getElementById('connection-canvas');
@@ -485,7 +407,6 @@
         const contextMenu = document.getElementById('context-menu');
         const startAutomationBtn = document.getElementById('start-automation-btn');
         const displayConnectionsBtn = document.getElementById('display-connections-btn');
-        const saveProjectBtn = document.getElementById('save-project-btn'); // New: Save Project Button
         const saveImageBtn = document.getElementById('save-image-btn');
         const messageBoxContainer = document.getElementById('message-box-container');
         const messageBoxTitle = document.getElementById('message-box-title');
@@ -500,8 +421,7 @@
 
         const settingsModalContainer = document.getElementById('settings-modal-container');
         const settingsModalCloseBtn = document.getElementById('settings-modal-close');
-        const createModelOptionRadio = document.getElementById('create-model-option'); // Renamed for clarity
-        const noModelOptionRadio = document.getElementById('no-model-option'); // New radio button
+        const createModelOption = document.getElementById('create-model-option');
         const preprocessingOption = document.getElementById('preprocessing-option');
         const preprocessingOptionsDiv = document.getElementById('preprocessing-options');
 
@@ -513,17 +433,6 @@
         const llmModalApplyBtn = document.getElementById('llm-modal-apply-btn');
         const llmModalGenerateBtn = document.getElementById('llm-modal-generate-btn');
         const llmModalCloseBtn = document.getElementById('llm-modal-close-btn');
-
-        // New: Connection type radio buttons
-        const connectionTypeRadios = document.querySelectorAll('input[name="connectionType"]');
-        let defaultConnectionType = 'solid'; // Default connection type
-
-        connectionTypeRadios.forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                defaultConnectionType = e.target.value;
-            });
-        });
-
 
         let blockCounter = 0;
         let blocks = {}; // Stores block elements and their data
@@ -538,12 +447,6 @@
         let startConnector = null; // { blockId: 'block-id', side: 'left'|'right', element: HTMLElement }
         let currentMouseX = 0;
         let currentMouseY = 0;
-
-        // Store workflow title
-        let workflowTitle = workflowTitleInput.value;
-        workflowTitleInput.addEventListener('input', (e) => {
-            workflowTitle = e.target.value;
-        });
 
 
         // --- Canvas Setup ---
@@ -603,15 +506,16 @@
 
             if (connection.type === 'dashed') {
                 ctx.setLineDash([5, 5]);
-            } else if (connection.type === 'arrow') {
-                ctx.setLineDash([]); // Solid for arrow base
-                // Draw arrow head at the 'to' end
-                drawArrowhead(ctx, fromPoint.x, fromPoint.y, toPoint.x, toPoint.y, '#4b5563');
-            }
-            else {
+            } else {
                 ctx.setLineDash([]); // Solid line
             }
             ctx.stroke();
+
+            // Draw arrow if type is 'arrow'
+            // Note: Currently, only 'solid' type is used for connections, but keeping arrow logic for future.
+            if (connection.type === 'arrow') {
+                drawArrowhead(ctx, fromPoint.x, fromPoint.y, toPoint.x, toPoint.y, '#4b5563');
+            }
         }
 
         function drawArrowhead(context, fromX, fromY, toX, toY, color) {
@@ -680,13 +584,8 @@
             preprocessingOptionsDiv.classList.toggle('hidden');
         });
 
-        // Event listener for model creation radio buttons
-        document.querySelectorAll('input[name="modelCreation"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                if (activeSettingsBlockId && blocks[activeSettingsBlockId]) {
-                    blocks[activeSettingsBlockId].settings.createModel = (e.target.value === 'createModel');
-                }
-            });
+        createModelOption.addEventListener('click', () => {
+            showMessageBox("Create Model", "This feature is under development. Stay tuned!");
         });
 
         // Event listener for preprocessing checkboxes
@@ -778,7 +677,6 @@
 
         // --- Drag and Drop from Palette ---
         textBoxPalette.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', 'text-box'); });
-        fileInputPalette.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', 'file-input'); }); // New: File Input Palette
         fileUploadPalette.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', 'file-upload'); });
         jsonListPalette.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', 'json-list-box'); });
 
@@ -839,34 +737,29 @@
             blockElement.style.top = `${y}px`;
 
             workflowArea.appendChild(blockElement);
-            
-            // Use setTimeout to ensure element is rendered and has correct dimensions
-            setTimeout(() => {
-                blocks[newBlockId] = {
-                    element: blockElement,
-                    type: type,
-                    x: x,
-                    y: y,
-                    width: blockElement.offsetWidth,
-                    height: blockElement.offsetHeight,
-                    title: getDefaultTitle(type), // Default title based on type
-                    content: '', // For text boxes, store content; for file uploads, store file name
-                    settings: { // Unique settings for each block
-                        createModel: false, // Default to no model
-                        preprocessing: {
-                            cleanMissingValue: false,
-                            removeMissing: false,
-                            handleOutlier: false,
-                            handleAsymmetries: false,
-                            useAi: false
-                        }
-                    },
-                    hasError: false, // New: Error state for the block
-                    errorMessage: '' // New: Error message for the block
-                };
-                makeBlockDraggable(blockElement, newBlockId);
-                updatePlaceholderVisibility();
-            }, 0); // Small delay to allow rendering
+            blocks[newBlockId] = {
+                element: blockElement,
+                type: type,
+                x: x,
+                y: y,
+                width: blockElement.offsetWidth,
+                height: blockElement.offsetHeight,
+                title: getDefaultTitle(type), // Default title based on type
+                content: '', // For text boxes, store content; for file uploads, store file name
+                settings: { // Unique settings for each block
+                    createModel: false,
+                    preprocessing: {
+                        cleanMissingValue: false,
+                        removeMissing: false,
+                        handleOutlier: false,
+                        handleAsymmetries: false,
+                        useAi: false
+                    }
+                }
+            };
+
+            makeBlockDraggable(blockElement, newBlockId);
+            updatePlaceholderVisibility();
         });
 
         workflowArea.addEventListener('mouseup', (e) => {
@@ -885,7 +778,6 @@
         function getDefaultTitle(type) {
             switch (type) {
                 case 'text-box': return 'Text Block';
-                case 'file-input': return 'File Input'; // New: File Input Title
                 case 'file-upload': return 'File Upload';
                 case 'json-list-box': return 'JSON/List Block';
                 default: return 'Block';
@@ -948,41 +840,16 @@
                 activeSettingsBlockId = id; // Set the ID of the block whose settings are opened
                 
                 // Populate checkboxes based on the block's current settings
-                const blockSettings = blocks[id].settings;
-                document.getElementById('clean-missing-value').checked = blockSettings.preprocessing.cleanMissingValue;
-                document.getElementById('remove-missing').checked = blockSettings.preprocessing.removeMissing;
-                document.getElementById('handle-outlier').checked = blockSettings.preprocessing.handleOutlier;
-                document.getElementById('handle-asymmetries').checked = blockSettings.preprocessing.handleAsymmetries;
-                document.getElementById('use-ai').checked = blockSettings.preprocessing.useAi;
-
-                // Set model creation radio button
-                if (blockSettings.createModel) {
-                    createModelOptionRadio.checked = true;
-                } else {
-                    noModelOptionRadio.checked = true;
-                }
+                const blockSettings = blocks[id].settings.preprocessing;
+                document.getElementById('clean-missing-value').checked = blockSettings.cleanMissingValue;
+                document.getElementById('remove-missing').checked = blockSettings.removeMissing;
+                document.getElementById('handle-outlier').checked = blockSettings.handleOutlier;
+                document.getElementById('handle-asymmetries').checked = blockSettings.handleAsymmetries;
+                document.getElementById('use-ai').checked = blockSettings.useAi;
 
                 showModal(settingsModalContainer);
             });
             titleContainer.appendChild(settingsBtnBlock);
-
-            // New: Error Icon
-            const errorIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            errorIcon.classList.add('error-icon', 'hidden'); // Hidden by default
-            errorIcon.setAttribute('fill', 'none');
-            errorIcon.setAttribute('viewBox', '0 0 24 24');
-            errorIcon.setAttribute('stroke', 'currentColor');
-            errorIcon.setAttribute('stroke-width', '2');
-            errorIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />';
-            errorIcon.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const blockError = blocks[id];
-                if (blockError.hasError) {
-                    showMessageBox("Block Error", blockError.errorMessage);
-                }
-            });
-            block.appendChild(errorIcon);
-
 
             block.appendChild(titleContainer);
 
@@ -1010,33 +877,6 @@
                     showModal(llmModalContainer);
                 });
                 block.appendChild(aiButton);
-
-            } else if (type === 'file-input') { // New: File Input Block Type
-                block.classList.add('bg-indigo-100', 'border-indigo-300');
-                const input = document.createElement('input');
-                input.type = 'file';
-                // Define accepted file types
-                input.accept = ".txt,.pdf,image/*,.csv,.json";
-                input.classList.add('w-full', 'text-sm', 'text-gray-500', 'file:mr-4', 'file:py-2', 'file:px-4', 'file:rounded-full', 'file:border-0', 'file:text-sm', 'file:font-semibold', 'file:bg-indigo-50', 'file:text-indigo-700', 'hover:file:bg-indigo-100', 'cursor-pointer');
-                
-                input.addEventListener('change', (e) => {
-                    if (e.target.files.length > 0) {
-                        const file = e.target.files[0];
-                        const fileName = file.name;
-                        blocks[id].content = fileName; // Store full file name
-                        
-                        const displayFileName = fileName.length > 25 ? fileName.substring(0, 25) + '...' : fileName;
-                        titleElement.textContent = `File: ${displayFileName}`;
-                        titleElement.title = fileName; // Tooltip with full name
-                        blocks[id].title = titleElement.textContent; // Update block data with display name
-                    } else {
-                        blocks[id].content = '';
-                        titleElement.textContent = getDefaultTitle(type);
-                        titleElement.title = ''; // Clear tooltip
-                        blocks[id].title = getDefaultTitle(type);
-                    }
-                });
-                block.appendChild(input);
 
             } else if (type === 'file-upload') {
                 block.classList.add('bg-green-100', 'border-green-300');
@@ -1197,7 +1037,7 @@
 
                         // Only connect if it's a different block and not the same connector
                         if (startConnector.blockId !== endBlockId) { // Removed side check for now for simpler connections
-                            connectBlocks(startConnector.blockId, startConnector.side, endBlockId, endSide, defaultConnectionType); // Use selected default type
+                            connectBlocks(startConnector.blockId, startConnector.side, endBlockId, endSide, 'solid'); // Default to solid line
                         }
                         isDrawingConnection = false;
                         startConnector = null;
@@ -1232,8 +1072,8 @@
 
             blockElement.addEventListener('mousedown', (e) => {
                 // Only drag if not clicking on textarea, input, connector, media icon, or button
-                if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.classList.contains('connector') || e.target.closest('.media-icon') || e.target.closest('button') || e.target.classList.contains('error-icon')) {
-                    return; // Added error-icon to elements that prevent drag
+                if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.classList.contains('connector') || e.target.closest('.media-icon') || e.target.closest('button')) {
+                    return;
                 }
                 isDragging = true;
                 offsetX = e.clientX - blockElement.getBoundingClientRect().left;
@@ -1256,9 +1096,6 @@
 
                     blocks[id].x = newX;
                     blocks[id].y = newY;
-                    // Update width/height in case the block resized (e.g. due to text content)
-                    blocks[id].width = blockElement.offsetWidth;
-                    blocks[id].height = blockElement.offsetHeight;
 
                     updateConnectionsForBlock(id);
                 } else if (isDrawingConnection && startConnector) {
@@ -1293,35 +1130,12 @@
                     isDragging = false;
                     blockElement.style.cursor = 'grab';
                     blockElement.style.zIndex = '10'; // Reset z-index
-                    // Final update of dimensions after drag ends
-                    blocks[id].width = blockElement.offsetWidth;
-                    blocks[id].height = blockElement.offsetHeight;
-                    updateConnectionsForBlock(id); // Ensure connections are updated one last time
                 }
                 // Connection drawing mouseup is handled by connector.mouseup or workflowArea.mouseup (for cancelling)
             });
 
             // Prevent text selection during drag
             blockElement.addEventListener('dragstart', (e) => e.preventDefault());
-        }
-
-        // --- Notification/Error Icon Functionality ---
-        function toggleBlockError(blockId, showError, message = '') {
-            const block = blocks[blockId];
-            if (block) {
-                const errorIconElement = block.element.querySelector('.error-icon');
-                if (errorIconElement) {
-                    if (showError) {
-                        errorIconElement.classList.remove('hidden');
-                        block.hasError = true;
-                        block.errorMessage = message;
-                    } else {
-                        errorIconElement.classList.add('hidden');
-                        block.hasError = false;
-                        block.errorMessage = '';
-                    }
-                }
-            }
         }
 
         // --- Context Menu Logic ---
@@ -1442,40 +1256,6 @@
             showMessageBox("Workflow Connections", connectionsSummary);
         });
 
-        // --- Save Project Functionality ---
-        saveProjectBtn.addEventListener('click', () => {
-            const projectData = {
-                workflowTitle: workflowTitle,
-                blocks: Object.values(blocks).map(block => ({
-                    id: block.id,
-                    type: block.type,
-                    x: block.x,
-                    y: block.y,
-                    width: block.width,
-                    height: block.height,
-                    title: block.title,
-                    content: block.content,
-                    settings: block.settings,
-                    hasError: block.hasError,
-                    errorMessage: block.errorMessage
-                })),
-                connections: connections
-            };
-
-            const dataStr = JSON.stringify(projectData, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${workflowTitle.replace(/\s+/g, '-') || 'workflow'}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url); // Clean up the object URL
-            showMessageBox("Project Saved", `Workflow project "${a.download}" saved successfully!`);
-        });
-
-
         // --- Save as Image Functionality ---
         saveImageBtn.addEventListener('click', () => {
             // Temporarily hide canvas to capture only HTML elements
@@ -1518,27 +1298,24 @@
 
         // --- Start Automation Process ---
         startAutomationBtn.addEventListener('click', async () => {
-            let automationSummary = `Workflow Title: ${workflowTitle}\n\n`; // Include workflow title
+            let automationSummary = "Workflow Automation Summary:\n\n";
             let hasContent = false;
             let validationFailed = false;
 
             // Validate all relevant blocks for content
             for (const id in blocks) {
                 const block = blocks[id];
-                if (block.type === 'text-box' || block.type === 'json-list-box' || block.type === 'file-input') { // Added file-input to validation
+                if (block.type === 'text-box' || block.type === 'json-list-box') {
                     const content = block.content.trim();
                     if (!content) {
-                        toggleBlockError(id, true, `Block "${block.title}" cannot be empty. Please add content.`);
+                        showMessageBox("Validation Error", `Block "${block.title}" (ID: ${id}) cannot be empty. Please add content.`);
                         validationFailed = true;
-                        // Do not break here, so all errors can be marked
-                    } else {
-                        toggleBlockError(id, false); // Clear error if content is present
+                        break; // Stop validation on first error
                     }
                 }
             }
 
             if (validationFailed) {
-                showMessageBox("Validation Error", "Please fix the errors in the blocks before starting automation.");
                 return; // Stop automation if validation failed
             }
 
@@ -1578,7 +1355,7 @@
                 connectionsData.forEach(conn => {
                     const fromBlockTitle = blocks[conn.fromBlock] ? blocks[conn.fromBlock].title : 'Unknown Block';
                     const toBlockTitle = blocks[conn.toBlock] ? blocks[conn.toBlock].title : 'Unknown Block';
-                    automationSummary += `- "${fromBlockTitle}" (ID: ${conn.fromBlock}, Side: ${conn.fromSide}) -> "${toBlockTitle}" (ID: ${conn.toBlock}, Side: ${conn.toSide}) [Type: ${conn.type}]\n`;
+                    automationSummary += `- From: "${fromBlockTitle}" (ID: ${conn.fromBlock}, Side: ${conn.fromSide}) -> "${toBlockTitle}" (ID: ${conn.toBlock}, Side: ${conn.toSide}) [Type: ${conn.type}]\n`;
                 });
                 automationSummary += `\n`;
             } else {
@@ -1613,7 +1390,6 @@
         // Function to send workflow data (SIMULATED)
         async function sendWorkflowData(blocksData, connectionsData, automationSummary) {
             const payload = {
-                workflowTitle: workflowTitle, // Include workflow title in payload
                 blocks: blocksData,
                 connections: connectionsData
             };

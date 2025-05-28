@@ -1,0 +1,599 @@
+which was the concept use at this script to create te connectors and connections among the blocks: <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Automation Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overscroll-behavior: none; /* Prevents pull-to-refresh on mobile when dragging */
+        }
+        .workflow-canvas {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 80px); /* Adjust based on toolbar height */
+            background-color: #f0f2f5;
+            background-image:
+                linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            overflow: hidden; /* Important for SVG positioning */
+            touch-action: none; /* Disable default touch actions like pinch-zoom if not implemented */
+        }
+        .node {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 12px;
+            min-width: 150px;
+            min-height: 60px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            cursor: grab;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            user-select: none; /* Prevent text selection during drag */
+            z-index: 10; /* Default z-index for nodes */
+        }
+        .node.selected {
+            border-color: #3b82f6; /* Blue-500 */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+        }
+        .node-text {
+            width: 100%;
+            text-align: center;
+            padding: 5px;
+            border: 1px dashed transparent;
+            border-radius: 4px;
+            outline: none;
+            min-height: 24px; /* Ensure it's clickable even when empty */
+        }
+        .node-text:focus {
+            border-color: #9ca3af; /* Gray-400 */
+            background-color: #f9fafb; /* Gray-50 */
+        }
+        .connector-point {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #60a5fa; /* Blue-400 */
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: crosshair;
+            z-index: 11; /* Ensure it's above the node body */
+        }
+        .connector-point:hover {
+            background-color: #2563eb; /* Blue-600 */
+        }
+        .connector-point.input { left: -7px; top: calc(50% - 7px); }
+        .connector-point.output { right: -7px; top: calc(50% - 7px); }
+
+        #connections-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allows clicks to pass through to nodes */
+            z-index: 1; /* Behind nodes but above canvas background */
+        }
+        .connection-line {
+            stroke: #6b7280; /* Gray-500 */
+            stroke-width: 2.5;
+            fill: none;
+            pointer-events: stroke; /* Make the line clickable */
+            cursor: pointer;
+        }
+        .connection-line.selected {
+            stroke: #ef4444; /* Red-500 */
+            stroke-width: 3.5;
+        }
+        .delete-button-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        /* Context Menu Styling */
+        #nodeContextMenu {
+            /* Styles applied via JS, but can add base styles here if needed */
+        }
+    </style>
+</head>
+<body class="bg-slate-100 select-none">
+
+    <div class="bg-white shadow-md p-3 flex items-center justify-between h-[80px]">
+        <h1 class="text-xl font-semibold text-slate-700">Workflow Automator</h1>
+        <div>
+            <button id="addNodeBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-150 ease-in-out">
+                Add Step
+            </button>
+        </div>
+    </div>
+
+    <div id="workflowCanvas" class="workflow-canvas">
+        <svg id="connections-svg"></svg>
+        </div>
+    
+    <div id="deleteButtonContainer" class="delete-button-container hidden">
+        <button id="deleteSelectedItemBtn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-150 ease-in-out">
+            Delete Selected
+        </button>
+    </div>
+
+    <script>
+        const workflowCanvas = document.getElementById('workflowCanvas');
+        const addNodeBtn = document.getElementById('addNodeBtn');
+        const connectionsSvg = document.getElementById('connections-svg');
+        const deleteSelectedItemBtn = document.getElementById('deleteSelectedItemBtn');
+        const deleteButtonContainer = document.getElementById('deleteButtonContainer');
+
+        let nodes = [];
+        let connections = [];
+        let nodeIdCounter = 0;
+        let connectionIdCounter = 0;
+        
+        let selectedItem = null; 
+        let activeDrag = null; 
+        let currentlyDrawingLine = null; 
+        let contextMenuElement = null; // To store the current context menu
+
+        // --- Node Management ---
+        function createNode(x, y) {
+            nodeIdCounter++;
+            const nodeId = `node-${nodeIdCounter}`;
+            const nodeElement = document.createElement('div');
+            nodeElement.id = nodeId;
+            nodeElement.classList.add('node');
+            nodeElement.style.left = `${x}px`;
+            nodeElement.style.top = `${y}px`;
+
+            const textElement = document.createElement('div');
+            textElement.classList.add('node-text');
+            textElement.contentEditable = true;
+            textElement.innerText = `Step ${nodeIdCounter}`;
+            textElement.addEventListener('focus', () => {
+                nodeElement.style.cursor = 'text';
+                deselectAll(); 
+            });
+            textElement.addEventListener('blur', () => {
+                nodeElement.style.cursor = 'grab';
+                const node = nodes.find(n => n.id === nodeId);
+                if (node) {
+                    node.text = textElement.innerText;
+                    // Update dimensions and connections if text change affects size
+                    node.width = nodeElement.offsetWidth;
+                    node.height = nodeElement.offsetHeight;
+                    updateAllConnections();
+                }
+            });
+            textElement.addEventListener('mousedown', (e) => e.stopPropagation());
+            textElement.addEventListener('touchstart', (e) => e.stopPropagation());
+
+            const inputPoint = document.createElement('div');
+            inputPoint.classList.add('connector-point', 'input');
+            inputPoint.dataset.nodeId = nodeId;
+            inputPoint.dataset.type = 'input';
+
+            const outputPoint = document.createElement('div');
+            outputPoint.classList.add('connector-point', 'output');
+            outputPoint.dataset.nodeId = nodeId;
+            outputPoint.dataset.type = 'output';
+            
+            nodeElement.appendChild(textElement);
+            nodeElement.appendChild(inputPoint);
+            nodeElement.appendChild(outputPoint);
+            workflowCanvas.appendChild(nodeElement);
+
+            const nodeData = { 
+                id: nodeId, 
+                element: nodeElement, 
+                text: textElement.innerText,
+                x: x, 
+                y: y,
+                width: nodeElement.offsetWidth,
+                height: nodeElement.offsetHeight
+            };
+            nodes.push(nodeData);
+            
+            setupNodeEvents(nodeElement, nodeData);
+            setupConnectorPointEvents(inputPoint, nodeData);
+            setupConnectorPointEvents(outputPoint, nodeData);
+            
+            selectItem(nodeData);
+            return nodeData;
+        }
+
+        function setupNodeEvents(nodeElement, nodeData) {
+            const handleStart = (clientX, clientY, e) => {
+                if (e.target.contentEditable === 'true' || e.target.classList.contains('connector-point')) {
+                    return;
+                }
+                // Prevent default for touch to avoid scrolling, etc.
+                if (e.type === 'touchstart') e.preventDefault();
+                
+                selectItem(nodeData);
+                removeContextMenu(); // Remove context menu if node is dragged
+                nodeElement.style.cursor = 'grabbing';
+                const rect = nodeElement.getBoundingClientRect();
+                activeDrag = {
+                    element: nodeElement,
+                    data: nodeData,
+                    offsetX: clientX - rect.left,
+                    offsetY: clientY - rect.top
+                };
+                nodeElement.style.zIndex = '100'; 
+            };
+
+            nodeElement.addEventListener('mousedown', (e) => {
+                handleStart(e.clientX, e.clientY, e);
+            });
+            nodeElement.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    handleStart(e.touches[0].clientX, e.touches[0].clientY, e);
+                }
+            }, { passive: false });
+
+            // Context Menu Listener
+            nodeElement.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                selectItem(nodeData); // Ensure this node is selected
+                showContextMenu(e.clientX, e.clientY, nodeData);
+            });
+        }
+
+        function setupConnectorPointEvents(pointElement, nodeData) {
+            const handleStartConnector = (e) => {
+                e.stopPropagation(); 
+                deselectAll(); 
+                removeContextMenu();
+                
+                const type = pointElement.dataset.type;
+                if (type === 'output') { 
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.classList.add('connection-line');
+                    const startPos = getConnectorPosition(nodeData, 'output');
+                    line.setAttribute('x1', startPos.x);
+                    line.setAttribute('y1', startPos.y);
+                    line.setAttribute('x2', startPos.x); 
+                    line.setAttribute('y2', startPos.y);
+                    connectionsSvg.appendChild(line);
+                    currentlyDrawingLine = {
+                        startNodeId: nodeData.id,
+                        startPortType: 'output',
+                        lineElement: line
+                    };
+                }
+            };
+            
+            const handleEndConnector = (e) => {
+                e.stopPropagation();
+                const tempLineElement = currentlyDrawingLine ? currentlyDrawingLine.lineElement : null;
+
+                if (currentlyDrawingLine && pointElement.dataset.type === 'input' && currentlyDrawingLine.startNodeId !== nodeData.id) {
+                    createConnection(currentlyDrawingLine.startNodeId, nodeData.id); // This might set currentlyDrawingLine to null
+                    if (tempLineElement && connectionsSvg.contains(tempLineElement)) { 
+                       connectionsSvg.removeChild(tempLineElement);
+                    }
+                } else if (tempLineElement && connectionsSvg.contains(tempLineElement)) {
+                    // Invalid connection or dropped on non-input
+                    connectionsSvg.removeChild(tempLineElement);
+                }
+                currentlyDrawingLine = null; 
+            };
+
+            if (pointElement.dataset.type === 'output') {
+                pointElement.addEventListener('mousedown', handleStartConnector);
+                pointElement.addEventListener('touchstart', (e) => {
+                    e.stopPropagation();
+                    if (e.touches.length === 1) handleStartConnector(e);
+                }, { passive: false });
+            }
+
+            if (pointElement.dataset.type === 'input') {
+                 pointElement.addEventListener('mouseup', handleEndConnector);
+                 pointElement.addEventListener('touchend', (e) => {
+                    e.stopPropagation();
+                    handleEndConnector(e);
+                });
+            }
+        }
+
+        function deleteNode(nodeId) {
+            const nodeIndex = nodes.findIndex(n => n.id === nodeId);
+            if (nodeIndex > -1) {
+                const node = nodes[nodeIndex];
+                workflowCanvas.removeChild(node.element);
+                nodes.splice(nodeIndex, 1);
+                const connectionsToRemove = connections.filter(c => c.from === nodeId || c.to === nodeId);
+                connectionsToRemove.forEach(c => deleteConnection(c.id, false)); 
+                if (selectedItem && selectedItem.id === nodeId) {
+                    deselectAll();
+                }
+                removeContextMenu(); // Ensure menu is gone if node is deleted
+                updateAllConnections();
+            }
+        }
+
+        // --- Connection Management ---
+        function createConnection(fromNodeId, toNodeId) {
+            if (fromNodeId === toNodeId || connections.some(c => c.from === fromNodeId && c.to === toNodeId)) {
+                // If the temporary line exists (because connection is invalid/duplicate), remove it.
+                const tempLine = currentlyDrawingLine ? currentlyDrawingLine.lineElement : null;
+                if (tempLine && connectionsSvg.contains(tempLine)) {
+                    connectionsSvg.removeChild(tempLine);
+                }
+                currentlyDrawingLine = null;
+                return;
+            }
+            connectionIdCounter++;
+            const connectionId = `conn-${connectionIdCounter}`;
+            const connection = { id: connectionId, from: fromNodeId, to: toNodeId };
+            connections.push(connection);
+            drawConnection(connection);
+            // The temporary drawing line is handled/removed by handleEndConnector using tempLineElement
+            // So, just set currentlyDrawingLine to null here.
+            currentlyDrawingLine = null;
+        }
+
+        function drawConnection(connection) {
+            const fromNode = nodes.find(n => n.id === connection.from);
+            const toNode = nodes.find(n => n.id === connection.to);
+            if (!fromNode || !toNode) return;
+
+            let line = document.getElementById(connection.id);
+            if (!line) {
+                line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                line.id = connection.id;
+                line.classList.add('connection-line');
+                connectionsSvg.appendChild(line);
+                line.addEventListener('mousedown', (e) => {
+                    e.stopPropagation(); 
+                    selectItem(connection);
+                    removeContextMenu();
+                });
+                line.addEventListener('touchstart', (e) => {
+                    e.stopPropagation();
+                    selectItem(connection);
+                    removeContextMenu();
+                }, { passive: true });
+            }
+            const startPos = getConnectorPosition(fromNode, 'output');
+            const endPos = getConnectorPosition(toNode, 'input');
+            const dx = Math.abs(startPos.x - endPos.x);
+            const cp1x = startPos.x + dx * 0.5;
+            const cp1y = startPos.y;
+            const cp2x = endPos.x - dx * 0.5;
+            const cp2y = endPos.y;
+            line.setAttribute('d', `M ${startPos.x} ${startPos.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${endPos.x} ${endPos.y}`);
+        }
+        
+        function getConnectorPosition(node, type) {
+            node.width = node.element.offsetWidth;
+            node.height = node.element.offsetHeight;
+            const x = type === 'output' ? node.x + node.width : node.x;
+            const y = node.y + node.height / 2;
+            return { x, y };
+        }
+
+        function updateAllConnections() {
+            connections.forEach(conn => drawConnection(conn));
+        }
+
+        function deleteConnection(connectionId, shouldSelect = true) {
+            const connIndex = connections.findIndex(c => c.id === connectionId);
+            if (connIndex > -1) {
+                const lineElement = document.getElementById(connectionId);
+                if (lineElement) connectionsSvg.removeChild(lineElement);
+                connections.splice(connIndex, 1);
+                if (shouldSelect && selectedItem && selectedItem.id === connectionId) {
+                    deselectAll();
+                }
+                removeContextMenu(); // Ensure menu is gone
+            }
+        }
+
+        // --- Selection Management ---
+        function selectItem(item) {
+            deselectAll(); 
+            selectedItem = item;
+            if (item.element) { 
+                item.element.classList.add('selected');
+            } else { 
+                const lineElement = document.getElementById(item.id);
+                if (lineElement) lineElement.classList.add('selected');
+            }
+            deleteButtonContainer.classList.remove('hidden');
+        }
+
+        function deselectAll() {
+            if (selectedItem) {
+                if (selectedItem.element) { 
+                    selectedItem.element.classList.remove('selected');
+                } else { 
+                    const lineElement = document.getElementById(selectedItem.id);
+                    if (lineElement) lineElement.classList.remove('selected');
+                }
+            }
+            selectedItem = null;
+            deleteButtonContainer.classList.add('hidden');
+        }
+
+        // --- Context Menu ---
+        function showContextMenu(x, y, nodeData) {
+            removeContextMenu(); // Remove any existing menu
+
+            const menu = document.createElement('div');
+            menu.id = 'nodeContextMenu';
+            // Tailwind classes for styling the context menu
+            menu.className = 'absolute bg-white shadow-xl rounded-md py-1 z-50 border border-gray-200';
+            menu.style.left = `${x}px`;
+            menu.style.top = `${y}px`;
+
+            const renameOption = document.createElement('div');
+            renameOption.className = 'px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer rounded-t-md transition-colors duration-150';
+            renameOption.textContent = 'Rename';
+            renameOption.onclick = () => {
+                const textElement = nodeData.element.querySelector('.node-text');
+                if (textElement) {
+                    textElement.focus();
+                    // Select all text within the contentEditable element for easier editing
+                    const range = document.createRange();
+                    range.selectNodeContents(textElement);
+                    const sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                }
+                removeContextMenu();
+            };
+
+            const deleteOption = document.createElement('div');
+            deleteOption.className = 'px-4 py-2 text-sm text-red-600 hover:bg-red-500 hover:text-white cursor-pointer rounded-b-md transition-colors duration-150';
+            deleteOption.textContent = 'Delete';
+            deleteOption.onclick = () => {
+                deleteNode(nodeData.id); 
+                removeContextMenu(); // deleteNode might also call it, but good to be explicit
+            };
+
+            menu.appendChild(renameOption);
+            menu.appendChild(deleteOption);
+            document.body.appendChild(menu); // Append to body to ensure it's on top of other elements
+            contextMenuElement = menu; 
+        }
+
+        function removeContextMenu() {
+            if (contextMenuElement) {
+                contextMenuElement.remove();
+                contextMenuElement = null;
+            }
+        }
+
+        // --- Global Event Listeners ---
+        addNodeBtn.addEventListener('click', () => {
+            const canvasRect = workflowCanvas.getBoundingClientRect();
+            const defaultX = canvasRect.width / 2 - 75 + workflowCanvas.scrollLeft;
+            const defaultY = canvasRect.height / 2 - 30 + workflowCanvas.scrollTop;
+            createNode(Math.max(20, defaultX), Math.max(20, defaultY));
+            removeContextMenu(); // Close menu if open
+        });
+
+        deleteSelectedItemBtn.addEventListener('click', () => {
+            if (selectedItem) {
+                if (selectedItem.element) { 
+                    deleteNode(selectedItem.id);
+                } else { 
+                    deleteConnection(selectedItem.id);
+                }
+            }
+            removeContextMenu(); // Close menu if open
+        });
+        
+        const handleMove = (clientX, clientY) => {
+            if (activeDrag) {
+                activeDrag.data.x = clientX - activeDrag.offsetX;
+                activeDrag.data.y = clientY - activeDrag.offsetY;
+                activeDrag.element.style.left = `${activeDrag.data.x}px`;
+                activeDrag.element.style.top = `${activeDrag.data.y}px`;
+                updateAllConnections();
+            } else if (currentlyDrawingLine) {
+                const line = currentlyDrawingLine.lineElement;
+                const canvasRect = workflowCanvas.getBoundingClientRect();
+                const svgPoint = connectionsSvg.createSVGPoint();
+                svgPoint.x = clientX - canvasRect.left;
+                svgPoint.y = clientY - canvasRect.top;
+                line.setAttribute('x2', svgPoint.x);
+                line.setAttribute('y2', svgPoint.y);
+            }
+        };
+
+        const handleEnd = () => {
+            if (activeDrag) {
+                activeDrag.element.style.cursor = 'grab';
+                activeDrag.element.style.zIndex = '10'; 
+                activeDrag.data.width = activeDrag.element.offsetWidth;
+                activeDrag.data.height = activeDrag.element.offsetHeight;
+                activeDrag = null;
+                updateAllConnections(); 
+            }
+            // If line drawing ends without connecting, remove the temporary line
+            if (currentlyDrawingLine && currentlyDrawingLine.lineElement && connectionsSvg.contains(currentlyDrawingLine.lineElement)) { 
+                connectionsSvg.removeChild(currentlyDrawingLine.lineElement);
+            }
+            currentlyDrawingLine = null; // Always reset after any kind of drop/end
+        };
+
+        // Combined mouse/touch move listeners for canvas
+        workflowCanvas.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+        workflowCanvas.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1) {
+                e.preventDefault(); // Prevent page scroll while dragging on canvas
+                handleMove(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: false });
+
+        // Combined mouse/touch end listeners for canvas
+        workflowCanvas.addEventListener('mouseup', handleEnd);
+        workflowCanvas.addEventListener('touchend', handleEnd);
+        workflowCanvas.addEventListener('mouseleave', handleEnd); // Stop actions if mouse leaves canvas
+
+
+        // Global mousedown listener for closing context menu and deselecting items
+        document.addEventListener('mousedown', (e) => {
+            let clickedOnContextMenu = false;
+            if (contextMenuElement && contextMenuElement.contains(e.target)) {
+                clickedOnContextMenu = true;
+            }
+
+            if (contextMenuElement && !clickedOnContextMenu) {
+                removeContextMenu();
+            }
+
+            // Deselect if clicking on canvas background (and not on context menu or starting a line)
+            if (!clickedOnContextMenu && (e.target === workflowCanvas || e.target === connectionsSvg)) {
+                if (!currentlyDrawingLine) { 
+                    deselectAll();
+                }
+            }
+        }, true); // Use capture phase
+
+        // Global keydown listener
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (contextMenuElement) {
+                    removeContextMenu();
+                } else if (document.activeElement && document.activeElement.classList.contains('node-text') && document.activeElement.isContentEditable) {
+                     document.activeElement.blur(); // Remove focus from text input
+                } else if (currentlyDrawingLine && currentlyDrawingLine.lineElement) {
+                    // Cancel drawing line
+                    if (connectionsSvg.contains(currentlyDrawingLine.lineElement)) {
+                        connectionsSvg.removeChild(currentlyDrawingLine.lineElement);
+                    }
+                    currentlyDrawingLine = null;
+                }
+                 else {
+                    deselectAll(); // Fallback
+                }
+            }
+            if (e.key === 'Delete' || e.key === 'Backspace') {
+                if (document.activeElement && (document.activeElement.isContentEditable || 
+                    ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName))) {
+                    return; 
+                }
+                if (selectedItem) {
+                    deleteSelectedItemBtn.click(); 
+                }
+                // Ensure context menu is closed if an item is deleted via keyboard
+                if (contextMenuElement) removeContextMenu();
+            }
+        });
+
+        // Initial example nodes
+        createNode(50, 50);
+        createNode(250, 150);
+    </script>
+</body>
+</html>
