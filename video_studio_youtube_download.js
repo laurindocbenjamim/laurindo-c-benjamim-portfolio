@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitUpload = document.getElementById('submitUpload');
     const mediaFilesInput = document.getElementById('mediaFiles');
     const videoPlayer = document.getElementById('videoPlayer');
+    
     const audioPlayer = document.getElementById('audioPlayer');
     const textContainer = document.getElementById('textContainer');
     const videoContainer = document.getElementById('videoContainer');

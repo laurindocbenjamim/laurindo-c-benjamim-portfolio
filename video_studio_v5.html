@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,7 +60,7 @@
             width: 100%;
         }
 
-        
+
 
         #errorAlert {
             display: none;
@@ -80,13 +81,14 @@
         }
     </style>
 </head>
+
 <body class="dark-theme">
     <div class="wrapper">
         <!-- Sidebar Toggle for Mobile -->
         <button class="btn sidebar-toggle d-lg-none" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button>
-        
+
         <!-- Sidebar -->
         <nav class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -110,11 +112,12 @@
                 </li>
             </ul>
             <div class="border-top pt-3 mt-3">
-                <a class="nav-link" href="index.html"><i class="fas fa-link me-2"></i><span style="color: rgb(74, 247, 40);">PIDIO</span></a>
+                <a class="nav-link" href="index.html"><i class="fas fa-link me-2"></i><span
+                        style="color: rgb(74, 247, 40);">PIDIO</span></a>
                 <a class="nav-link" href="#"><i class="fas fa-question-circle me-2"></i>Help</a>
             </div>
         </nav>
-        
+
         <!-- Main Content -->
         <main class="main-content">
             <div class="header d-flex justify-content-between align-items-center mb-4">
@@ -124,7 +127,7 @@
                     <span class="d-inline d-md-none"><i class="fas fa-upload"></i></span>
                 </button>
             </div>
-            
+
             <!-- Video Player Section -->
             <div class="card mb-4">
                 <div class="card-header">
@@ -140,7 +143,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Results Section -->
             <div class="card mt-4" id="resultSection" style="display: none;">
                 <div class="card-body">
@@ -157,15 +160,69 @@
 
                             <div class="download-btn-container text-left" id="downloadButtons"></div>
                         </div>
-                        
+
                     </div>
 
                     <!--   Text speech Editor-->
                     <div class="col-md-10 ">
-                            
 
+                        <style>
+                            .transcript-editor {
+                                position: relative;
+                                /* Essential for positioning the child button */
+                                min-height: 150px;
+                                /* Or whatever height you prefer */
+                                border: 1px solid #ced4da;
+                                padding: 15px;
+                                /* Add padding to prevent text from going under the button */
+                                padding-top: 40px;
+                                /* More padding at the top to make space for the button */
+                                border-radius: 0.25rem;
+                                overflow-y: auto;
+                                /* Enable scrolling if content overflows */
+                                white-space: pre-wrap;
+                                /* Preserves whitespace and wraps text */
+                                word-wrap: break-word;
+                                /* Breaks long words if necessary */
+                            }
+
+                            .copy-text-top-btn {
+                                position: absolute;
+                                top: 5px;
+                                /* Adjust as needed for vertical positioning */
+                                right: 5px;
+                                /* Adjust as needed for horizontal positioning */
+                                background-color: rgba(0, 0, 0, 0.1);
+                                /* Slightly transparent background */
+                                color: #6c757d;
+                                /* Muted color for the icon */
+                                border: none;
+                                border-radius: 0.25rem;
+                                padding: 5px 8px;
+                                cursor: pointer;
+                                font-size: 0.85rem;
+                                opacity: 0;
+                                /* Hidden by default */
+                                transition: opacity 0.3s ease-in-out, background-color 0.3s ease;
+                                /* Smooth transition */
+                                z-index: 10;
+                                /* Ensure it's above the text */
+                            }
+
+                            .transcript-editor:hover .copy-text-top-btn {
+                                opacity: 1;
+                                /* Fully visible on hover over the transcript-editor */
+                            }
+
+                            .copy-text-top-btn:hover {
+                                background-color: rgba(0, 0, 0, 0.2);
+                                /* Darker on button hover */
+                                color: #495057;
+                                /* Slightly darker icon on button hover */
+                            }
+                        </style>
                         <!-- Updated Transcript Container -->
-                        <div id="transcriptContainer" class="mt-4" style="display: none;">
+                        <!--<div id="transcriptContainer" class="mt-4" style="display: none;">
                             <div class="transcript-header">
                                 <h5><i class="bi bi-text-paragraph me-2"></i>Transcript</h5>
                                 <button class="copy-btn" id="copyTranscriptBtn" title="Copy to clipboard">
@@ -173,11 +230,27 @@
                                 </button>
                             </div>
                             <div id="transcriptText" class="transcript-editor" contenteditable="true"></div>
+                        </div>-->
+
+                        <div id="transcriptContainer" class="mt-4" style="display: none;">
+                            <div class="transcript-header">
+                                <h5><i class="bi bi-text-paragraph me-2"></i>Transcript</h5>
+                                <button class="copy-btn" id="copyTranscriptBtn"
+                                    title="Copy entire transcript to clipboard">
+                                    <i class="bi bi-clipboard"></i>
+                                </button>
+                            </div>
+                            <div id="transcriptText" class="transcript-editor" contenteditable="true">
+                                <button class="copy-text-top-btn" id="copyTranscriptTextContentBtn"
+                                    title="Copy transcript content">
+                                    <i class="bi bi-clipboard"></i>
+                                </button>
+                            </div>
                         </div>
 
 
                     </div>
-                    
+
                 </div>
             </div>
 
@@ -202,8 +275,8 @@
                 </div>
             </div>
 
-            
-            
+
+
             <!-- Text Content Section -->
             <div class="card text-section d-none" id="textSection">
                 <div class="card-header">
@@ -238,26 +311,29 @@
             <i class="bi bi-arrow-clockwise me-1"></i>Retry Download
         </button>
     </div>
-    
-    
+
+
     <!-- Upload Modal -->
     <div class="modal fade" id="uploadModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content dark-theme">
                 <div class="modal-header">
                     <h5 class="modal-title">Upload Media Files</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <ul class="nav nav-tabs mb-4" id="uploadTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="file-tab" data-bs-toggle="tab" data-bs-target="#file-tab-pane" type="button" role="tab">File Upload</button>
+                            <button class="nav-link active" id="file-tab" data-bs-toggle="tab"
+                                data-bs-target="#file-tab-pane" type="button" role="tab">File Upload</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="url-tab" data-bs-toggle="tab" data-bs-target="#url-tab-pane" type="button" role="tab">From Youtube URL</button>
+                            <button class="nav-link" id="url-tab" data-bs-toggle="tab" data-bs-target="#url-tab-pane"
+                                type="button" role="tab">From Youtube URL</button>
                         </li>
                     </ul>
-                    
+
                     <div class="tab-content" id="uploadTabsContent">
                         <!-- File Upload Tab -->
                         <div class="tab-pane fade show active" id="file-tab-pane" role="tabpanel">
@@ -268,7 +344,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="fileName" class="form-label">File name (optional)</label>
-                                    <input type="text" class="form-control" id="fileName" placeholder="Enter custom file name">
+                                    <input type="text" class="form-control" id="fileName"
+                                        placeholder="Enter custom file name">
                                 </div>
                                 <div class="form-check mb-3">
                                     <input class="form-check-input" type="checkbox" id="autoPlay" checked>
@@ -278,7 +355,7 @@
                                 </div>
                             </form>
                         </div>
-                        
+
                         <!-- URL Upload Tab -->
                         <div class="tab-pane fade" id="url-tab-pane" role="tabpanel">
                             <form id="urlUploadForm">
@@ -290,8 +367,8 @@
                                             <option value="audio">Audio</option>
                                             <option value="text">Text</option>
                                         </select>
-                                        <input type="url" class="form-control" id="videoUrl" 
-                                        placeholder="https://www.youtube.com/watch?v=..." required>
+                                        <input type="url" class="form-control" id="videoUrl"
+                                            placeholder="https://www.youtube.com/watch?v=..." required>
                                     </div>
                                 </div>
                                 <div class="form-check mb-3">
@@ -305,18 +382,18 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Format</label>
                                         <div class="btn-group w-100" role="group">
-                                            <input type="radio" class="btn-check" name="format" id="formatMp4" value="mp4"
-                                                autocomplete="off" checked>
+                                            <input type="radio" class="btn-check" name="format" id="formatMp4"
+                                                value="mp4" autocomplete="off" checked>
                                             <label class="btn btn-outline-primary" for="formatMp4"><i
                                                     class="bi bi-film me-1"></i> MP4</label>
-    
-                                            <input type="radio" class="btn-check" name="format" id="formatMp3" value="mp3"
-                                                autocomplete="off">
+
+                                            <input type="radio" class="btn-check" name="format" id="formatMp3"
+                                                value="mp3" autocomplete="off">
                                             <label class="btn btn-outline-primary" for="formatMp3"><i
                                                     class="bi bi-music-note me-1"></i> MP3</label>
                                         </div>
                                     </div>
-    
+
                                     <div class="col-md-6">
                                         <label class="form-label">Options</label>
                                         <div class="d-flex flex-column">
@@ -326,7 +403,8 @@
                                             </div>
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="speechToText">
-                                                <label class="form-check-label" for="speechToText">Speech to Text</label>
+                                                <label class="form-check-label" for="speechToText">Speech to
+                                                    Text</label>
                                             </div>
                                         </div>
                                     </div>
@@ -340,7 +418,7 @@
 
 
 
-                               <!-- <form id="downloadForm">
+                                <!-- <form id="downloadForm">
                                   
                                     <div class="d-grid">
                                         <button type="submit" class="btn btn-primary text-center btn-lg">
@@ -357,7 +435,7 @@
         
                                     </div>
                                 </form>-->
-                                
+
                             </form>
                         </div>
                     </div>
@@ -369,11 +447,13 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
+    <script src="copy_button_controller.js"></script>
     <script src="video_studio_youtube_download.js"></script>
     <!--<script src="youtube_video_download.js" type="module"></script>-->
 </body>
+
 </html>

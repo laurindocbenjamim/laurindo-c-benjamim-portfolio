@@ -1,0 +1,153 @@
+:root {
+    --node-bg: #f8f9fa;
+    --node-border: #dee2e6;
+    --primary-color: #0d6efd;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.canvas-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-height: 70vh;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+}
+
+.component-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.component-item {
+    padding: 10px 15px;
+    background-color: white;
+    border: 1px solid var(--node-border);
+    border-radius: 6px;
+    cursor: grab;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.component-item:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.workflow-node {
+    position: absolute;
+    width: 180px;
+    background-color: var(--node-bg);
+    border: 1px solid var(--node-border);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: move;
+    z-index: 10;
+    transition: box-shadow 0.2s;
+}
+
+.workflow-node:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.node-header {
+    padding: 8px 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.node-header i {
+    cursor: pointer;
+}
+
+.node-body {
+    padding: 12px;
+    min-height: 60px;
+}
+
+.node-connector {
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    position: absolute;
+    cursor: pointer;
+    z-index: 20;
+}
+
+.node-connector.source {
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.node-connector.target {
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.jtk-connector path {
+    stroke: var(--primary-color);
+    stroke-width: 2px;
+}
+
+.jtk-endpoint {
+    fill: var(--primary-color);
+}
+
+#node-context-menu {
+    position: absolute;
+    display: none;
+    z-index: 1000;
+}
+
+/* Node type specific styles */
+.node-type-text .node-header {
+    background-color: var(--primary-color);
+}
+
+.node-type-input .node-header {
+    background-color: var(--success-color);
+}
+
+.node-type-decision .node-header {
+    background-color: var(--warning-color);
+    color: #212529;
+}
+
+.node-type-action .node-header {
+    background-color: var(--danger-color);
+}
+
+/* Connection mode indicator */
+.connection-mode {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 100;
+}
