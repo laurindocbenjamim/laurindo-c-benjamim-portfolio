@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alarm Clock & Calendar</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="alarm_app.css">
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="flex flex-col lg:flex-row bg-white rounded-xl shadow-2xl p-6 lg:p-8 space-y-8 lg:space-y-0 lg:space-x-8 max-w-7xl w-full">
+        <!-- Left Section -->
+        <div class="flex-1 space-y-6">
+            <div class="flex justify-between items-center mb-4">
+                <div class="text-center flex-1">
+                    <h1 class="text-4xl font-extrabold text-gray-800 mb-2">Alarm Clock</h1>
+                    <p id="current-time" class="text-6xl font-light text-blue-600 animate-pulse"></p>
+                    <p id="current-date" class="text-xl text-gray-500 mt-2"></p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="request-notification-permission" class="btn-icon" title="Enable Notifications"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></button>
+                    <button id="open-settings" class="btn-icon" title="Settings"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.78 1.28a2 2 0 0 0 .73 2.73l.15.08a2 2 0 0 1 1 1.73v.44a2 2 0 0 0 2 2v.18a2 2 0 0 1 1 1.73l.43.25a2 2 0 0 1 2 0l.15-.08a2 2 0 0 0 2.73.73l.78-1.28a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.73v-.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.78-1.28a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    <label class="toggle-switch" title="Toggle Dark Mode"><input type="checkbox" id="dark-mode-toggle"><span class="slider"></span></label>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 p-6 rounded-lg shadow-inner space-y-4">
+                <h2 class="text-2xl font-bold text-gray-700 text-center">Set New Alarm</h2>
+                <div class="flex items-end gap-2"><div class="flex-1"><label for="alarm-name" class="block text-gray-700 text-sm font-medium mb-1">Alarm Name (optional)</label><input type="text" id="alarm-name" placeholder="Morning meeting, wake up, etc." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></div><button id="generate-name-idea-btn" class="btn-secondary text-sm px-3 py-2 rounded-lg whitespace-nowrap">Idea ✨</button></div>
+                <div class="flex items-end gap-2"><div class="flex-1"><label for="alarm-description" class="block text-gray-700 text-sm font-medium mb-1">Description (optional)</label><textarea id="alarm-description" rows="3" placeholder="Details about this alarm or task..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea></div><button id="enhance-description-btn" class="btn-secondary text-sm px-3 py-2 rounded-lg whitespace-nowrap">Enhance ✨</button></div>
+                <div><label for="alarm-address" class="block text-gray-700 text-sm font-medium mb-1">Address (optional for map link)</label><input type="text" id="alarm-address" placeholder="e.g., Eiffel Tower, Paris" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></div>
+                <div class="flex flex-col sm:flex-row gap-4"><div class="flex-1"><label for="alarm-date" class="block text-gray-700 text-sm font-medium mb-1">Date</label><input type="date" id="alarm-date" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></div><div class="flex-1"><label for="alarm-time" class="block text-gray-700 text-sm font-medium mb-1">Time</label><input type="time" id="alarm-time" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></div></div>
+                <div><label for="recurrence-type" class="block text-gray-700 text-sm font-medium mb-1">Recurrence</label><select id="recurrence-type" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"><option value="once">Once</option><option value="daily">Daily</option><option value="weekly">Weekly</option></select></div>
+                <div id="weekly-days-container" class="grid grid-cols-3 sm:grid-cols-7 gap-2 hidden"><label class="flex items-center text-gray-700"><input type="checkbox" class="form-checkbox mr-1 weekly-day" value="0"> Sun</label><label class="flex items-center text-gray-700"><input type="checkbox" class="form-checkbox mr-1 weekly-day" value="1"> Mon</label><label class="flex items-center text-gray-700"><input type="checkbox" class="form-checkbox mr-1 weekly-day" value="2"> Tue</label><label class="flex items-center text-gray-700"><input type="checkbox" class="form-checkbox mr-1 weekly-day" value="3"> Wed</label><label class="flex items-center text-gray-700"><input type="checkbox" class="form-checkbox mr-1 weekly-day" value="4"> Thu</label><label class="flex items-center text-gray-700"><input type="checkbox" class="form-checkbox mr-1 weekly-day" value="5"> Fri</label><label class="flex items-center text-gray-700"><input type="checkbox" class="form-checkbox mr-1 weekly-day" value="6"> Sat</label></div>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-lg shadow-inner space-y-4">
+                <h2 class="text-2xl font-bold text-gray-700 text-center mb-4">Upcoming Alarms</h2>
+                <div id="alarms-list" class="alarm-list-container h-48 overflow-y-auto pr-2"><p class="text-gray-500 text-center">No alarms set yet.</p></div>
+            </div>
+        </div>
+
+        <!-- Right Section: Calendar -->
+        <div class="flex-1 space-y-6">
+            <h2 class="text-3xl font-extrabold text-gray-800 text-center">Calendar</h2>
+            <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-center mb-4"><button id="prev-month" class="btn-nav p-2 rounded">&lt; Prev</button><h3 id="calendar-month-year" class="text-xl font-semibold text-blue-700"></h3><button id="next-month" class="btn-nav p-2 rounded">Next &gt;</button></div>
+                <div class="grid grid-cols-7 gap-1 text-center text-sm font-medium text-gray-600 mb-2"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+                <div id="calendar-grid" class="grid grid-cols-7 gap-1"></div>
+            </div>
+            <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold text-blue-700 text-center mb-4">Alarms for Selected Date</h2>
+                <p id="selected-date-display" class="text-gray-600 text-center mb-4 text-lg font-medium">Please select a date on the calendar.</p>
+                <div id="selected-day-alarms" class="alarm-list-container h-48 overflow-y-auto pr-2"><p class="text-gray-500 text-center">No alarms for this date.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Buttons -->
+    <button id="set-alarm-btn" class="btn-primary floating-btn">➕ Set Alarm</button>
+    <button id="chatbot-btn" class="btn-secondary floating-btn" title="Open Chat Assistant"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></button>
+
+    <!-- Modals -->
+    <div id="custom-modal" class="modal hidden"><div class="modal-content"><h4 id="modal-title" class="text-xl font-bold text-gray-800 mb-3"></h4><p id="modal-message" class="text-gray-700 mb-4"></p><div id="modal-speaker-container"></div><div class="modal-buttons"><button id="modal-confirm-btn" class="btn-primary hidden"></button><button id="modal-cancel-btn" class="btn-secondary hidden"></button><button id="modal-ok-btn" class="btn-primary hidden">OK</button></div></div></div>
+    <div id="settings-modal" class="modal hidden"><div class="modal-content"><h4 class="text-xl font-bold text-gray-800 mb-4">Settings</h4><div class="space-y-4 text-left"><div><label for="alarm-sound-select" class="block text-gray-700 text-sm font-medium mb-1">Alarm Sound</label><select id="alarm-sound-select" class="w-full px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"></select></div><div><label for="speaker-voice-select" class="block text-gray-700 text-sm font-medium mb-1">Speaker Voice</label><select id="speaker-voice-select" class="w-full px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"></select></div><div class="flex items-center justify-between"><label for="prioritize-natural-voices-toggle" class="text-gray-700 text-sm font-medium">Prioritize Natural Voices</label><label class="toggle-switch"><input type="checkbox" id="prioritize-natural-voices-toggle"><span class="slider"></span></label></div></div><div class="modal-buttons"><button id="save-settings-btn" class="btn-primary">Save</button><button id="cancel-settings-btn" class="btn-secondary">Cancel</button></div></div></div>
+    <div id="chatbot-modal" class="modal hidden"><div class="modal-content"><h4 class="text-xl font-bold text-gray-800 mb-4">Chat Assistant</h4><div id="chatbot-messages" class="chatbot-messages"><div class="chat-message bot-message">Hello! How can I help you find your tasks? Try asking "show my alarms for tomorrow" or "what's scheduled for 2025-12-25?".</div></div><div class="flex gap-2 mt-4"><input type="text" id="chatbot-input" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Ask about your alarms..."><button id="chatbot-send-btn" class="btn-primary px-4">Send</button></div><button id="chatbot-close-btn" class="btn-secondary mt-4 w-full">Close</button></div></div>
+
+    <audio id="alarm-sound" loop></audio>
+    <div id="calendar-tooltip" class="rounded-lg shadow-lg hidden"></div>
+    <script src="alarm_app.js"></script>
+</body>
+</html>

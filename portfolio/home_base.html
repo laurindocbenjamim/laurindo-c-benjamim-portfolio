@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Open Graph Tags -->
+    <meta property="title" content="Speech to Text Converter">
+    <meta property="description" content="Laurindo C. Benjamim. Upload audio or video files and split it">
+    <link rel="canonical" href="http://www.laurindocbenjamim.pt/split-audio">
+
+    <meta property="image"
+        content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
+
+    <title>Audio Splitter | Laurindo C. Benjamim</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://github.com/laurindocbenjamim/dev-images/raw/refs/heads/main/icons8-developer-96.ico">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body>
+
+    <!-- Auth Buttons - Now positioned top-right -->
+
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">Laurindo C. Benjamim <span style="color: #23acd6;">.PID<span
+                        style="color: #38d840;">IO</span></span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="experiences.html">Experience</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="projects.html">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog.html">Blog</a>
+                    </li>
+
+                    <a href="../new_register.html" class="btn btn-auth btn-register">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Register</span>
+                    </a>
+                    <a href="../new_login.html" class="btn btn-auth btn-login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Login</span>
+                    </a>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <div class="row">
+            <!-- Desktop Sidebar Menu -->
+            <aside class="col-lg-3 d-none d-lg-block">
+                <div class="sidebar">
+                    <h3 class="sidebar-title">Related Tools</h3>
+                    <ul class="article-list">
+                        <li>
+                            <a href="#">
+                                <strong>Audio Transcription Service</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-clock"></i> Fast processing</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <strong>Video to Text Converter</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-clock"></i> Supports multiple formats</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <strong>Speech Recognition API</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-clock"></i> Developer friendly</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <strong>Batch Processing</strong>
+                                <div class="article-meta">
+                                    <span><i class="far fa-clock"></i> Process multiple files</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h3 class="sidebar-title mt-5">Features</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">High accuracy</a></li>
+                        <li><a href="#">Multi-language support</a></li>
+                        <li><a href="#">Secure processing</a></li>
+                        <li><a href="#">Download results</a></li>
+                        <li><a href="#">API access</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Mobile Sidebar Menu (Hidden by default) -->
+            <div class="mobile-sidebar-overlay"></div>
+            <aside class="mobile-sidebar">
+                <button class="mobile-sidebar-close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h3 class="sidebar-title">Related Tools</h3>
+                <ul class="article-list">
+                    <li>
+                        <a href="#">
+                            <strong>Audio Transcription Service</strong>
+                            <div class="article-meta">
+                                <span><i class="far fa-clock"></i> Fast processing</span>
+                            </div>
+                        </a>
+                    </li>
+
+                </ul>
+
+                <h3 class="sidebar-title mt-5">Features</h3>
+                <ul class="footer-links">
+                    <li><a href="#">High accuracy</a></li>
+                    <li><a href="#">Multi-language support</a></li>
+                    <li><a href="#">Secure processing</a></li>
+                    <li><a href="#">Download results</a></li>
+                    <li><a href="#">API access</a></li>
+                </ul>
+            </aside>
+
+            <!-- Mobile Toggle Button -->
+            <button class="mobile-sidebar-toggle d-lg-none">
+                <i class="fas fa-book-open"></i>
+            </button>
+
+            <!-- Main Content -->
+
+            <div class="col-lg-9">
+
+
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">Speech to Text</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Supported Formats</a></li>
+                    <li><a href="#">Languages</a></li>
+                    <li><a href="#">Pricing</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 class="footer-title">Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="#">API Documentation</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Tutorials</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 class="footer-title">Company</h3>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Laurindo C. Benjamim. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="projects_sidebar_populate.js"></script>
+    <script src="w_podcaster.js"></script>
+
+</body>
+
+</html>

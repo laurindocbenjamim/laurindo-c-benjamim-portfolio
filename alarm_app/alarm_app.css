@@ -1,0 +1,474 @@
+body.dark-theme {
+    background-color: #1a202c;
+    /* Dark background */
+    color: #e2e8f0;
+    /* Light text */
+}
+
+body.dark-theme .bg-white {
+    background-color: #2d3748;
+    /* Darker card background */
+}
+
+body.dark-theme .text-gray-800 {
+    color: #e2e8f0;
+}
+
+body.dark-theme .text-gray-700 {
+    color: #cbd5e0;
+}
+
+body.dark-theme .text-gray-500 {
+    color: #a0aec0;
+}
+
+body.dark-theme .text-blue-600,
+body.dark-theme .text-blue-700 {
+    color: #90cdf4;
+    /* Lighter blue for dark theme */
+}
+
+body.dark-theme .bg-gray-50 {
+    background-color: #4a5568;
+    /* Darker input/list background */
+}
+
+body.dark-theme .bg-blue-50 {
+    background-color: #3182ce;
+    /* Darker blue background for calendar */
+    color: #e2e8f0;
+}
+
+body.dark-theme input,
+body.dark-theme select,
+body.dark-theme textarea {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+}
+
+body.dark-theme input:focus,
+body.dark-theme select:focus,
+body.dark-theme textarea:focus {
+    --tw-ring-color: #90cdf4;
+}
+
+body.dark-theme .btn-nav {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+
+body.dark-theme .btn-nav:hover {
+    background-color: #636b7b;
+}
+
+body.dark-theme .calendar-day {
+    background-color: #2d3748;
+    color: #e2e8f0;
+}
+
+body.dark-theme .calendar-day:hover {
+    background-color: #4a5568;
+}
+
+body.dark-theme .calendar-day.current-day {
+    background-color: #48bb78;
+    /* Green for current day in dark theme */
+    border-color: #38a169;
+}
+
+body.dark-theme .calendar-day.selected-day {
+    background-color: #63b3ed;
+    /* Selected day in dark theme */
+    border-color: #4299e1;
+}
+
+body.dark-theme .calendar-day.has-alarm {
+    background-color: #2b6cb0;
+    /* Light blue for days with alarms in dark theme */
+    border-color: #3182ce;
+}
+
+body.dark-theme .modal-content {
+    background-color: #2d3748;
+    color: #e2e8f0;
+}
+
+body.dark-theme .modal-content h4 {
+    color: #e2e8f0;
+}
+
+body.dark-theme .modal-content p {
+    color: #cbd5e0;
+}
+
+/* Custom scrollbar for alarm list */
+.alarm-list-container::-webkit-scrollbar,
+.chatbot-messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+.alarm-list-container::-webkit-scrollbar-track,
+.chatbot-messages::-webkit-scrollbar-track {
+    background: #e0e0e0;
+    border-radius: 10px;
+}
+
+.alarm-list-container::-webkit-scrollbar-thumb,
+.chatbot-messages::-webkit-scrollbar-thumb {
+    background: #a0a0a0;
+    border-radius: 10px;
+}
+
+.alarm-list-container::-webkit-scrollbar-thumb:hover,
+.chatbot-messages::-webkit-scrollbar-thumb:hover {
+    background: #808080;
+}
+
+body.dark-theme .alarm-list-container::-webkit-scrollbar-track,
+body.dark-theme .chatbot-messages::-webkit-scrollbar-track {
+    background: #4a5568;
+}
+
+body.dark-theme .alarm-list-container::-webkit-scrollbar-thumb,
+body.dark-theme .chatbot-messages::-webkit-scrollbar-thumb {
+    background: #636b7b;
+}
+
+body.dark-theme .alarm-list-container::-webkit-scrollbar-thumb:hover,
+body.dark-theme .chatbot-messages::-webkit-scrollbar-thumb:hover {
+    background: #718096;
+}
+
+.calendar-day.has-alarm {
+    background-color: #e0f2fe;
+    border: 1px solid #0ea5e9;
+    position: relative;
+}
+
+.calendar-day.current-day {
+    background-color: #d1e7dd;
+    border: 1px solid #28a745;
+}
+
+.calendar-day.selected-day {
+    background-color: #cce5ff;
+    border: 2px solid #007bff;
+}
+
+.calendar-day.current-day.selected-day {
+    background-color: #b8e2b8;
+    border: 2px solid #28a745;
+}
+
+/* Basic button styling */
+.btn-primary {
+    @apply bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-700 transition-all duration-300 ease-in-out transform hover:scale-105;
+}
+
+.btn-secondary {
+    @apply bg-gradient-to-r from-gray-400 to-gray-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:from-gray-500 hover:to-gray-600 transition-all duration-300 ease-in-out transform hover:scale-105;
+}
+
+.btn-danger {
+    @apply bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold py-1 px-3 rounded-lg shadow-sm hover:from-red-600 hover:to-red-700 transition-all duration-300 ease-in-out transform hover:scale-105 text-sm;
+}
+
+.btn-icon {
+    @apply bg-white text-gray-700 p-2 rounded-full shadow-md hover:bg-gray-100 transition-all duration-300 ease-in-out flex items-center justify-center;
+}
+
+body.dark-theme .btn-icon {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+
+body.dark-theme .btn-icon:hover {
+    background-color: #636b7b;
+}
+
+.btn-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Modal specific styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    transform: translateY(-20px);
+    opacity: 0;
+    animation: fadeInModal 0.3s forwards;
+}
+
+@keyframes fadeInModal {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+#settings-modal .modal-content,
+#chatbot-modal .modal-content {
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 420px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+    animation: fadeInGrow 0.3s ease-out forwards;
+}
+
+@keyframes fadeInGrow {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+#settings-modal .modal-content h4,
+#chatbot-modal .modal-content h4 {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+/* Toggle switch styling */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 28px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 28px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #2196F3;
+}
+
+input:checked+.slider:before {
+    transform: translateX(20px);
+}
+
+/* Tooltip styles */
+#calendar-tooltip {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 1001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    max-width: 250px;
+    text-align: left;
+    line-height: 1.4;
+    transform: translateY(-10px);
+    /* Initial subtle lift */
+}
+
+body.dark-theme #calendar-tooltip {
+    background-color: #e2e8f0;
+    color: #1a202c;
+}
+
+#calendar-tooltip ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#calendar-tooltip li {
+    margin-bottom: 4px;
+}
+
+#calendar-tooltip li:last-child {
+    margin-bottom: 0;
+}
+
+.speaker-btn-small {
+    @apply bg-blue-100 text-blue-700 p-1 rounded-full hover:bg-blue-200 transition-colors duration-200 ml-2 flex-shrink-0;
+}
+
+.speaker-btn-small svg {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+body.dark-theme .speaker-btn-small {
+    background-color: #3182ce;
+    color: #e2e8f0;
+}
+
+body.dark-theme .speaker-btn-small:hover {
+    background-color: #4299e1;
+}
+
+/* Floating buttons style */
+.floating-btn {
+    position: fixed;
+    z-index: 999;
+    border-radius: 9999px;
+    width: auto;
+    padding: 1rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+}
+
+.floating-btn:hover {
+    transform: scale(1.1);
+}
+
+#set-alarm-btn {
+    bottom: 20px;
+    right: 20px;
+    font-size: 1.25rem;
+    padding: 1rem 2rem;
+}
+
+#chatbot-btn {
+    bottom: 20px;
+    left: 20px;
+}
+
+/* Chatbot Modal Styles */
+#chatbot-modal .modal-content {
+    max-width: 450px;
+}
+
+.chatbot-messages {
+    height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+body.dark-theme .chatbot-messages {
+    background-color: #4a5568;
+    border-color: #2d3748;
+}
+
+.chat-message {
+    padding: 8px 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.user-message {
+    background-color: #dbeafe;
+    color: #1e40af;
+    margin-left: auto;
+    border-bottom-right-radius: 2px;
+}
+
+.bot-message {
+    background-color: #e5e7eb;
+    color: #374151;
+    margin-right: auto;
+    border-bottom-left-radius: 2px;
+}
+
+body.dark-theme .user-message {
+    background-color: #4299e1;
+    color: #1a202c;
+}
+
+body.dark-theme .bot-message {
+    background-color: #2d3748;
+    color: #e2e8f0;
+}
+
+@media (max-width: 768px) {
+    #set-alarm-btn {
+        bottom: 15px;
+        right: 15px;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    #chatbot-btn {
+        bottom: 15px;
+        left: 15px;
+    }
+}
+
+/* Custom style for struck-through blue text */
+.strike-blue {
+    text-decoration: line-through;
+    text-decoration-color: #3b82f6;
+    /* Tailwind blue-500 */
+}
+
+body.dark-theme .strike-blue {
+    text-decoration-color: #60a5fa;
+    /* A slightly lighter blue for dark theme readability */
+}
