@@ -29,7 +29,7 @@
                       
                     listItem.innerHTML += `</div>
                     <div class="project-links">
-                        <a href="${project.url}" target="">
+                        <a href="${project.url}" target="${project.target}">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i> Demo
                         </a>
                         <a href="${project.repository}" target="_blank">

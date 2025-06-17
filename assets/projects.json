@@ -11,7 +11,8 @@
       "OpenAI API": "fab fa-js",
       "Bootstrap": "fab fa-bootstrap",
       "HTML & CSS": "fab fa-html5"
-    }
+    },
+    "target": ""
   },
   {
     "title": "AI Audio Book generator",
@@ -25,12 +26,13 @@
       "OpenAI API": "fab fa-js",
       "Bootstrap": "fab fa-bootstrap",
       "HTML & CSS": "fab fa-html5"
-    }
+    },
+    "target": ""
   },
   {
     "title": "Clone Voice with AI",
     "description": "Clone your voice using AI technology.",
-    "url": "http://localhost:5000/api/v1/video/clone-voice",
+    "url": "https:www.d-tuning.com/api/v1/video/clone-voice",
     "repository": "https://github.com/laurindocbenjamim/pidio-audio-book-frontend",
     "techStacks": {
       "Python": "fas fa-robot",
@@ -39,13 +41,14 @@
       "OpenAI API": "fab fa-js",
       "Bootstrap": "fab fa-bootstrap",
       "HTML & CSS": "fab fa-html5"
-    }
+    },
+    "target": ""
   },
 
   {
     "title": "Workflow Automated Data Processing",
     "description": "Automate data processing tasks with Python and Flask.",
-    "url": "../workflow_automation_data_processing.html",
+    "url": "../workflow.html",
     "repository": "https://github.com/laurindocbenjamim/pidio-audio-book-frontend",
     "techStacks": {
       "Python": "fas fa-robot",
@@ -54,7 +57,8 @@
       "OpenAI API": "fab fa-js",
       "Bootstrap": "fab fa-bootstrap",
       "HTML & CSS": "fab fa-html5"
-    }
+    },
+    "target": "_blank"
   },
 
   {
@@ -69,7 +73,8 @@
       "OpenAI API": "fab fa-js",
       "Bootstrap": "fab fa-bootstrap",
       "HTML & CSS": "fab fa-html5"
-    }
+    },
+    "target": ""
   },
   {
     "title": "Video Studio",
@@ -83,7 +88,23 @@
       "OpenAI API": "fab fa-js",
       "Bootstrap": "fab fa-bootstrap",
       "HTML & CSS": "fab fa-html5"
-    }
+    },
+    "target": ""
+  },
+  {
+    "title": "WPodcaster",
+    "description": "Create and edit podcasts with advanced tools and effects",
+    "url": "../podcast_creator/w_podcaster.html",
+    "repository": "https://github.com/laurindocbenjamim/podcast_creator",
+    "techStacks": {
+      "Python": "fas fa-robot",
+      "Flask": "fab fa-python",
+      "JavaScript": "fas fa-flask",
+      "OpenAI API": "fab fa-js",
+      "Bootstrap": "fab fa-bootstrap",
+      "HTML & CSS": "fab fa-html5"
+    },
+    "target": "_blank"
   },
   {
     "title": "Countries API",
@@ -94,7 +115,8 @@
       "Python": "fas fa-robot",
       "Flask": "fab fa-python",
       "JavaScript": "fas fa-flask"
-    }
+    },
+    "target": ""
   },
   {
     "title": "Dubbing Studio",
@@ -105,7 +127,8 @@
       "Python": "fas fa-robot",
       "Flask": "fab fa-python",
       "JavaScript": "fas fa-film"
-    }
+    },
+    "target": ""
   },
   {
     "title": "Sentiment Analysis",
@@ -119,7 +142,8 @@
       "OpenAI API": "fab fa-js",
       "Bootstrap": "fab fa-bootstrap",
       "HTML & CSS": "fab fa-html5"
-    }
+    },
+    "target": ""
   },
   {
     "title": "Stream Speech Test",
@@ -133,7 +157,8 @@
       "OpenAI API": "fab fa-js",
       "Bootstrap": "fab fa-bootstrap",
       "HTML & CSS": "fab fa-html5"
-    }
+    },
+    "target": ""
   },
   {
     "title": "Audio Splitter",
@@ -147,6 +172,7 @@
       "OpenAI API": "fab fa-js",
       "Bootstrap": "fab fa-bootstrap",
       "HTML & CSS": "fab fa-html5"
-    }
+    },
+    "target": ""
   }
 ]
