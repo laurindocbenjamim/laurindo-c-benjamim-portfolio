@@ -107,6 +107,21 @@
     "target": ""
   },
   {
+    "title": "WakeUp Alarm",
+    "description": "Wake up with a personalized alarm that plays your favorite music.",
+    "url": "../alarm_app/index.html",
+    "repository": "",
+    "techStacks": {
+      "Python": "fas fa-robot",
+      "Flask": "fab fa-python",
+      "JavaScript": "fas fa-flask",
+      "OpenAI API": "fab fa-js",
+      "Bootstrap": "fab fa-bootstrap",
+      "HTML & CSS": "fab fa-html5"
+    },
+    "target": "_blank"
+  },
+  {
     "title": "Countries API",
     "description": "API of international country calling phone codes.",
     "url": "https://www.d-tuning.com/api/v1/web-scrapping/countries",
