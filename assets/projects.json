@@ -104,7 +104,7 @@
       "Bootstrap": "fab fa-bootstrap",
       "HTML & CSS": "fab fa-html5"
     },
-    "target": "_blank"
+    "target": ""
   },
   {
     "title": "Countries API",
