@@ -48,7 +48,7 @@
   {
     "title": "Workflow Automated Data Processing",
     "description": "Automate data processing tasks with Python and Flask.",
-    "url": "../workflow_automation_data_processing.html",
+    "url": "../workflow.html",
     "repository": "https://github.com/laurindocbenjamim/pidio-audio-book-frontend",
     "techStacks": {
       "Python": "fas fa-robot",
@@ -58,7 +58,7 @@
       "Bootstrap": "fab fa-bootstrap",
       "HTML & CSS": "fab fa-html5"
     },
-    "target": ""
+    "target": "_blank"
   },
 
   {
