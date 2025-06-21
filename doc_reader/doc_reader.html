@@ -1,0 +1,2581 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leitor de PDF Moderno</title>
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Estilos Personalizados -->
+    <style>
+        /* Variáveis CSS para temas */
+        :root {
+            --bs-body-font-family: 'Inter', sans-serif;
+            --main-bg-color: #f8f9fa; /* Fundo principal claro */
+            --card-bg-color: #ffffff; /* Fundo de cartão claro */
+            --card-header-bg-color: #f8f9fa; /* Fundo de cabeçalho de cartão claro */
+            --border-color: #e9ecef; /* Cor da borda clara */
+            --text-color: #212529; /* Cor do texto escuro */
+            --muted-text-color: #6c757d; /* Cor do texto "muted" claro */
+            --drop-zone-border-color: #adb5bd; /* Cor da borda da zona de arrastar */
+            --drop-zone-bg-hover-color: #e9ecef; /* Cor de fundo da zona de arrastar no hover */
+            --spinner-bg-color: rgba(255, 255, 255, 0.8); /* Fundo do spinner claro */
+            --selection-bg-color: rgba(255, 160, 160, 0.5); /* Cor de seleção clara */
+            --navbar-height: 56px; /* Altura padrão da barra de navegação */
+            --pdf-controls-height: 60px; /* Altura da barra de controlo do PDF */
+        }
+
+        /* Tema Escuro */
+        [data-bs-theme="dark"] {
+            --main-bg-color: #121212;
+            --card-bg-color: #1e1e1e;
+            --card-header-bg-color: #2a2a2a;
+            --border-color: #333;
+            --text-color: #e0e0e0;
+            --muted-text-color: #b0b0b0;
+            --drop-zone-border-color: #555;
+            --drop-zone-bg-hover-color: #3a3a3a;
+            --spinner-bg-color: rgba(0, 0, 0, 0.6);
+            --selection-bg-color: rgba(100, 100, 255, 0.5); /* Seleção azulada para o modo escuro */
+        }
+
+        /* Tema Cristalino - Aprimorado */
+        [data-bs-theme="crystalline"] {
+            --main-bg-color: #e0e6ed; /* Um cinza-azul bem claro para o fundo principal */
+            --card-bg-color: rgba(240, 248, 255, 0.4); /* AliceBlue com mais transparência para cartões e modals */
+            --card-header-bg-color: rgba(220, 230, 240, 0.5); /* Mais transparente para cabeçalhos */
+            --border-color: rgba(180, 195, 210, 0.7); /* Borda mais presente, mas ainda translúcida */
+            --text-color: #2a333d; /* Texto mais escuro para contraste no cristalino */
+            --muted-text-color: #6a7683; /* Texto mais claro e subtil */
+            --drop-zone-border-color: rgba(150, 160, 170, 0.7);
+            --drop-zone-bg-hover-color: rgba(200, 210, 220, 0.4);
+            --spinner-bg-color: rgba(255, 255, 255, 0.5);
+            --selection-bg-color: rgba(173, 216, 230, 0.7); /* Seleção azulada clara */
+
+            /* Aplica backdrop-filter aos elementos para um efeito de vidro fosco mais visível */
+            .navbar,
+            .card,
+            .text-box-with-speech,
+            #language-selection-form .input-group .form-select,
+            .form-control,
+            .input-group-text {
+                backdrop-filter: blur(12px) saturate(1.5) brightness(1.1); /* Blur mais forte, saturação e brilho aumentados */
+                -webkit-backdrop-filter: blur(12px) saturate(1.5) brightness(1.1);
+            }
+            /* Aplicar o backdrop-filter ao pdf-viewer-container e à barra de controlo dentro dele */
+            #pdf-viewer-container,
+            #pdf-viewer-container .d-flex.bg-light.p-2.border-bottom {
+                backdrop-filter: blur(12px) saturate(1.5) brightness(1.1); /* Blur mais forte, saturação e brilho aumentados */
+                -webkit-backdrop-filter: blur(12px) saturate(1.5) brightness(1.1);
+            }
+            /* Modal-content no tema cristalino, mais transparente e com backdrop-filter */
+            .modal-content {
+                background-color: var(--card-bg-color); /* Usa a cor de fundo do cartão, agora mais transparente */
+                border: 1px solid var(--border-color);
+                backdrop-filter: blur(12px) saturate(1.5) brightness(1.1);
+                -webkit-backdrop-filter: blur(12px) saturate(1.5) brightness(1.1);
+            }
+
+
+            /* Ajusta as sombras para um visual mais cristalino e notável */
+            .card, #pdf-viewer-container, .modal-content {
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Sombra ligeiramente mais proeminente */
+            }
+        }
+
+        /* Estilos Gerais do Corpo e Layout Fixo */
+        body {
+            background-color: var(--main-bg-color);
+            color: var(--text-color);
+            --bs-body-font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            padding-top: var(--navbar-height); /* Ajusta o padding para o navbar fixo */
+            overflow: hidden; /* Previne a rolagem do corpo; o conteúdo rolável estará dentro de containers fixos */
+            height: 100vh; /* Garante que o corpo ocupa a altura total da viewport */
+        }
+
+        /* Barra de Navegação Fixa */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030; /* Garante que o navbar está acima de outros elementos */
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+            background-color: var(--card-header-bg-color) !important; /* Usa a variável para o fundo */
+            border-bottom-color: var(--border-color) !important; /* Usa a variável para a borda */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Wrapper principal para o conteúdo da aplicação, fixo abaixo do navbar */
+        #app-content-wrapper {
+            position: fixed;
+            top: var(--navbar-height); /* Começa abaixo do navbar */
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column; /* Permite que o conteúdo interno empilhe verticalmente */
+            overflow-y: auto; /* Permite rolagem dentro desta área */
+            padding: 1rem; /* Padding geral para o conteúdo */
+        }
+
+        /* A linha principal dentro do app-content-wrapper, ocupa a altura restante */
+        #main-content-row {
+            flex-grow: 1; /* Ocupa todo o espaço vertical disponível */
+            display: flex; /* Torna a linha um container flex para as colunas */
+            height: 100%; /* Garante que a linha se estende verticalmente */
+            margin-left: 0; /* Remove margens do Bootstrap para melhor controlo com flex */
+            margin-right: 0;
+        }
+
+        /* Colunas do layout, ocupam a altura total da linha */
+        .col-md-8, .col-md-4 {
+            height: 100%;
+            display: flex;
+            flex-direction: column; /* Permite que o conteúdo dentro das colunas empilhe */
+            padding-left: calc(var(--bs-gutter-x) * .5); /* Recria o padding do gutter do Bootstrap */
+            padding-right: calc(var(--bs-gutter-x) * .5);
+            transition: all 0.3s ease-in-out; /* Transição para expansão/contração */
+        }
+        
+        /* Ajustes para quando uma coluna se expande/contrai */
+        .col-md-8.expanded {
+            flex: 0 0 100%; /* Ocupa a largura total */
+            max-width: 100%;
+        }
+        .col-md-4.collapsed {
+            flex: 0 0 0%; /* Colapsa para zero largura */
+            max-width: 0%;
+            overflow: hidden; /* Esconde o conteúdo colapsado */
+            padding-right: 0; /* Remove padding quando colapsado */
+        }
+
+        .col-md-4.expanded {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+        .col-md-8.collapsed {
+            flex: 0 0 0%;
+            max-width: 0%;
+            overflow: hidden;
+            padding-left: 0;
+        }
+
+        .navbar-brand, .navbar-brand svg {
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+        
+        .btn-outline-secondary {
+            border-color: var(--drop-zone-border-color);
+            color: var(--muted-text-color);
+            transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: var(--drop-zone-bg-hover-color);
+            color: var(--text-color);
+        }
+
+        .card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-header {
+            background-color: var(--card-header-bg-color);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        #drop-zone {
+            border: 2px dashed var(--drop-zone-border-color);
+            border-radius: 0.5rem;
+            padding: 4rem 1rem;
+            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1; /* Permite que a zona de upload preencha o espaço disponível */
+        }
+
+        #drop-zone.drag-over {
+            background-color: var(--drop-zone-bg-hover-color);
+            border-color: #0d6efd;
+        }
+
+        /* O container do visualizador de PDF (agora preenche a altura da coluna) */
+        #pdf-viewer-container {
+            flex-grow: 1; /* Permite que o visualizador preencha a altura da coluna .col-md-8 */
+            display: flex;
+            flex-direction: column; /* Permite que a barra de controlo e a área de renderização empilhem */
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Importante para o border-radius e para conter os seus filhos */
+            background-color: var(--card-bg-color);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            margin: 0; /* Remove margens que podem interferir com o layout flex */
+        }
+
+        /* Barra de controlo do PDF (agora fixa dentro do container) */
+        #pdf-viewer-container .d-flex.bg-light.p-2.border-bottom {
+            position: sticky; /* Torna esta barra fixa dentro do seu container pai rolavel */
+            top: 0; /* Fixa no topo do container */
+            z-index: 1000; /* Garante que está acima do conteúdo do PDF */
+            background-color: var(--card-header-bg-color) !important; /* Usa a variável para o fundo */
+            border-bottom: 1px solid var(--border-color) !important; /* Borda inferior */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        /* Área de Renderização do PDF - agora rolável */
+        #pdf-render-area {
+            background-color: var(--main-bg-color); /* Combina com o fundo do corpo */
+            overflow-x: auto; /* Permite rolagem horizontal se o PDF for muito largo */
+            overflow-y: auto; /* Permite rolagem vertical para o conteúdo do PDF */
+            padding: 1rem 0; /* Espaçamento vertical para o conteúdo */
+            position: relative;
+            flex-grow: 1; /* Ocupa todo o espaço vertical restante dentro do pdf-viewer-container */
+            transition: background-color 0.3s ease;
+        }
+
+        #pdf-content-wrapper {
+            position: relative;
+            margin: 0 auto;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        #pdf-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .textLayer {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 1; 
+            line-height: 1.0;
+            overflow: hidden;
+            pointer-events: none; 
+        }
+
+        .textLayer span {
+            pointer-events: auto;
+        }
+
+        .textLayer ::selection {
+             background: var(--selection-bg-color);
+        }
+
+        .textLayer > span {
+            color: transparent;
+            position: absolute;
+            white-space: pre;
+            cursor: text;
+            transform-origin: 0% 0%;
+        }
+
+        .spinner-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--spinner-bg-color);
+            z-index: 10;
+        }
+
+        .error-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+            text-align: center;
+        }
+
+        [data-bs-theme="dark"] .error-message {
+            color: #ffbaba;
+            background-color: #6a1a21;
+            border-color: #8d2e37;
+        }
+
+        #no-pdf-message {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--muted-text-color);
+        }
+
+        .copy-popup-style {
+            position: fixed;
+            background-color: #28a745;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+        }
+
+        /* Barra Lateral de Tradução - Agora preenche a altura da coluna */
+        #translation-sidebar {
+            background-color: var(--card-bg-color);
+            border-left: 1px solid var(--border-color);
+            padding: 1rem;
+            overflow-y: auto; /* Permite rolagem para o conteúdo da barra lateral */
+            flex-grow: 1; /* Ocupa todo o espaço vertical disponível na sua coluna */
+            position: static; /* Não é sticky, a posição é gerida pelo app-content-wrapper flexbox */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .text-box-with-speech {
+            display: flex;
+            flex-direction: column;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+            min-height: 100px;
+            max-height: 180px; /* Definindo altura máxima para permitir scroll */
+            overflow-y: auto; /* Adiciona scroll vertical quando o conteúdo excede a altura */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .text-box-with-speech:focus-within,
+        .text-box-with-speech:hover {
+            border-color: #0d6efd;
+            box-shadow: 0 0.5rem 1rem rgba(13, 110, 253, 0.25);
+        }
+
+        .text-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .text-box-header .language-label {
+            margin-bottom: 0;
+            font-size: 1em;
+        }
+
+        .text-box-header .icon-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .text-box-content {
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        .text-box-content p {
+            margin-bottom: 0;
+        }
+
+        .speech-button, .save-button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--muted-text-color);
+            transition: color 0.2s ease-in-out;
+        }
+
+        .speech-button:hover, .save-button:hover {
+            color: #007bff;
+        }
+
+        .speech-button.playing {
+            color: #28a745;
+        }
+
+        #translation-loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+        }
+
+        #language-selection-form .input-group .form-select {
+            border-radius: 0.5rem;
+            background-color: var(--card-bg-color);
+            color: var(--text-color);
+            border-color: var(--border-color);
+        }
+
+        #language-selection-form .input-group .form-select:first-child {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        #language-selection-form .input-group .form-select:last-child {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        #language-selection-form .input-group .btn {
+            border-radius: 0;
+        }
+
+        .form-control, .form-select {
+            background-color: var(--card-bg-color);
+            color: var(--text-color);
+            border-color: var(--border-color);
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .form-control::placeholder {
+            color: var(--muted-text-color);
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: var(--card-bg-color);
+            color: var(--text-color);
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .input-group-text {
+            background-color: var(--card-header-bg-color) !important;
+            color: var(--text-color);
+            border-color: var(--border-color);
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .text-muted {
+            color: var(--muted-text-color) !important;
+        }
+
+        /* Estilo para realce de pesquisa */
+        .highlight {
+            background-color: yellow;
+            border-radius: 3px;
+            padding: 1px 0;
+        }
+
+        .current-highlight {
+            background-color: orange;
+        }
+
+        /* Novos estilos para realce e sublinhado temporário */
+        .highlighted-blue {
+            background-color: rgba(66, 135, 245, 0.4); /* Azul claro com transparência */
+            border-radius: 2px;
+            padding: 0 1px;
+        }
+
+        .underlined-text {
+            text-decoration: underline;
+            text-decoration-color: rgba(66, 135, 245, 0.8); /* Azul mais escuro para sublinhado */
+            text-decoration-thickness: 2px;
+        }
+
+        /* Ajustar seleção para texto com realce para ainda mostrar seleção do utilizador */
+        .highlighted-blue::selection, .underlined-text::selection {
+            background: rgba(255, 255, 0, 0.7); /* Amarelo para seleção do utilizador sobre realce azul */
+        }
+
+        /* Estilos do modal para o tema cristalino */
+        .modal-content {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .modal-header, .modal-footer {
+            background-color: var(--card-header-bg-color);
+            border-color: var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .modal-title {
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+        .modal-body {
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        /* Estilos para o modal arrastável */
+        .modal.draggable .modal-dialog {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%); /* Centraliza inicialmente */
+            margin: 0;
+        }
+
+        .modal.draggable .modal-header {
+            cursor: grab;
+        }
+
+        .modal.draggable.dragging .modal-header {
+            cursor: grabbing;
+        }
+
+        /* Styling for the Add Note button in the toolbar */
+        #add-note-btn {
+            background-color: transparent;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            color: var(--muted-text-color); /* Matches other toolbar icons */
+            transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        #add-note-btn:hover {
+            color: #007bff; /* Hover effect */
+        }
+        /* Style for when a note exists for the selected text */
+        #add-note-btn.note-exists {
+            color: #0d6efd; /* Bootstrap primary blue */
+            /* You can also add a background color or border to make it stand out more */
+            /* background-color: rgba(13, 110, 253, 0.1); */
+            /* border: 1px solid #0d6efd; */
+        }
+
+
+        /* Specific styling for the note modal in crystalline theme */
+        [data-bs-theme="crystalline"] #noteModal .modal-content {
+            background-color: var(--card-bg-color); /* Match card-bg-color, now more transparent */
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(12px) saturate(1.5) brightness(1.1);
+            -webkit-backdrop-filter: blur(12px) saturate(1.5) brightness(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        [data-bs-theme="crystalline"] #noteModal .modal-header,
+        [data-bs-theme="crystalline"] #noteModal .modal-footer {
+            background-color: var(--card-header-bg-color); /* Match header-bg-color, now more transparent */
+            border-color: var(--border-color);
+        }
+        /* Custom width for the note modal */
+        #noteModal .modal-dialog {
+            max-width: 450px; /* Adjust as needed for a smaller size */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho da Aplicação (Navbar Fixo) -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#" aria-label="Leitor de PDF - Início">
+                <i class="fas fa-file-pdf me-2"></i> <!-- Ícone PDF por Font Awesome -->
+                Leitor de PDF
+            </a>
+            <div class="ms-auto">
+                <!-- Novo botão para carregar PDF na navbar -->
+                <button id="upload-pdf-navbar-btn" class="btn btn-outline-secondary me-2" title="Carregar PDF" aria-label="Carregar novo ficheiro PDF">
+                    <i class="fas fa-upload"></i> <!-- Ícone de upload por Font Awesome -->
+                </button>
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#settingsModal" title="Configurações" aria-label="Abrir Configurações">
+                    <i class="fas fa-cogs"></i> <!-- Ícone de engrenagens por Font Awesome -->
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Wrapper Principal para o Conteúdo da Aplicação (Fixo e Rolável Internamente) -->
+    <div id="app-content-wrapper" class="container-fluid py-4">
+        <div class="row h-100" id="main-content-row">
+            <!-- Coluna Principal para o Visualizador de PDF (8/12 da largura em md e acima) -->
+            <div class="col-md-8" id="pdf-viewer-col">
+                <!-- Secção de Upload (visível no início) -->
+                <div id="upload-section">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center" id="drop-zone" role="button" tabindex="0" aria-label="Arraste e solte o seu ficheiro PDF">
+                            <i class="fas fa-cloud-upload-alt text-primary mb-3" style="font-size: 64px;"></i> <!-- Ícone de upload por Font Awesome -->
+                            <h5 class="card-title">Arraste e solte o seu ficheiro PDF aqui</h5>
+                            <p class="text-muted">ou</p>
+                            <input type="file" id="pdf-upload" class="d-none" accept=".pdf" aria-label="Selecione um ficheiro PDF">
+                            <!-- Botão para selecionar ficheiro, agora com id próprio e não um label -->
+                            <button id="select-file-btn" class="btn btn-primary" role="button">
+                                Selecione um ficheiro do seu computador
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Mensagem de erro para upload -->
+                    <div id="upload-error-message" class="error-message d-none" role="alert"></div>
+                </div>
+
+                <!-- Visualizador de PDF (oculto no início) -->
+                <div id="pdf-viewer-container" class="d-none">
+                    <!-- Barra de Controlo (Fixa dentro do container do PDF) -->
+                    <div class="d-flex justify-content-between align-items-center bg-light p-2 border-bottom flex-wrap">
+                        <div class="me-3 mb-2 mb-md-0">
+                            <strong id="file-name" class="text-truncate" style="max-width: 250px;" aria-live="polite"></strong>
+                        </div>
+                        <div class="btn-toolbar d-flex flex-wrap align-items-center" role="toolbar" aria-label="Controles de documento">
+                            <!-- Botões de Ação Principal (alinhados à esquerda dentro do toolbar) -->
+                            <button id="copy-text-btn" class="btn btn-outline-primary btn-sm me-2" title="Copiar Texto Selecionado" aria-label="Copiar Texto Selecionado">
+                                <i class="far fa-copy"></i> <!-- Ícone por Font Awesome -->
+                            </button>
+                            <button id="save-pdf-btn" class="btn btn-outline-success btn-sm me-2" title="Guardar Documento Original" aria-label="Guardar Documento Original">
+                                <i class="fas fa-file-download"></i> <!-- Ícone por Font Awesome -->
+                            </button>
+                            <button id="highlight-text-btn" class="btn btn-outline-info btn-sm me-2" title="Realçar Texto Selecionado" aria-label="Realçar Texto Selecionado">
+                                <i class="fas fa-highlighter"></i> <!-- Ícone por Font Awesome -->
+                            </button>
+                            <button id="underline-text-btn" class="btn btn-outline-info btn-sm me-2" title="Sublinhar Texto Selecionado" aria-label="Sublinhar Texto Selecionado">
+                                <i class="fas fa-underline"></i> <!-- Ícone por Font Awesome -->
+                            </button>
+                            <button id="add-note-btn" class="btn btn-outline-primary btn-sm me-2" title="Adicionar Nota ao Texto Selecionado" aria-label="Adicionar Nota">
+                                <i class="fas fa-sticky-note"></i> <!-- Ícone por Font Awesome -->
+                            </button>
+
+                            <!-- Barra de Pesquisa (próxima aos botões de ação) -->
+                            <div class="input-group input-group-sm me-2">
+                                <input type="text" id="search-input" class="form-control" placeholder="Procurar texto..." aria-label="Procurar texto no PDF">
+                                <button id="search-prev" class="btn btn-outline-secondary btn-sm" title="Resultado Anterior" aria-label="Resultado anterior da pesquisa">
+                                    <i class="fas fa-chevron-up"></i> <!-- Ícone por Font Awesome -->
+                                </button>
+                                <button id="search-next" class="btn btn-outline-secondary btn-sm" title="Próximo Resultado" aria-label="Próximo resultado da pesquisa">
+                                    <i class="fas fa-chevron-down"></i> <!-- Ícone por Font Awesome -->
+                                </button>
+                            </div>
+                            <span id="search-results-count" class="me-2 text-muted" aria-live="polite"></span>
+
+                            <!-- Paginação e Botão de Expandir (empurrados para a direita) -->
+                            <div class="d-flex align-items-center ms-auto"> <!-- ms-auto empurra este grupo para a direita -->
+                                <div class="input-group input-group-sm align-items-center me-2">
+                                    <label for="current-page-input" class="input-group-text bg-transparent border-0">Página:</label>
+                                    <input type="number" id="current-page-input" class="form-control" style="width: 70px; text-align: center;" aria-label="Número da página atual">
+                                    <span class="input-group-text bg-transparent border-0">de <span id="page-count" aria-live="polite">0</span></span>
+                                </div>
+                                <div class="btn-group me-2" role="group">
+                                    <button id="prev-page" class="btn btn-outline-secondary btn-sm" title="Página Anterior" aria-label="Página Anterior">
+                                        <i class="fas fa-chevron-left"></i> <!-- Ícone por Font Awesome -->
+                                    </button>
+                                    <button id="next-page" class="btn btn-outline-secondary btn-sm" title="Próxima Página" aria-label="Próxima Página">
+                                        <i class="fas fa-chevron-right"></i> <!-- Ícone por Font Awesome -->
+                                    </button>
+                                </div>
+                                <button id="expand-pdf-viewer-btn" class="btn btn-outline-secondary btn-sm" title="Expandir/Reduzir Visualizador de PDF" aria-label="Expandir ou reduzir visualizador de PDF">
+                                    <i class="fas fa-expand-alt" data-expand-icon="true"></i> <!-- Ícone por Font Awesome -->
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Área de Renderização do PDF -->
+                    <div id="pdf-render-area">
+                        <!-- Wrapper adicionado para sincronizar o scaling -->
+                        <div id="pdf-content-wrapper">
+                            <canvas id="pdf-canvas" role="img" aria-label="Conteúdo do documento PDF"></canvas>
+                            <!-- A camada de texto é uma sobreposição invisível para permitir a seleção de texto.
+                                 O PDF real é renderizado no canvas como uma imagem. -->
+                            <div id="text-layer" class="textLayer" aria-hidden="true"></div> 
+                        </div>
+                        <div id="spinner-container" class="spinner-container d-none" role="status" aria-live="assertive" aria-label="A carregar página">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">A carregar...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mensagem de erro para o visualizador -->
+                    <div id="viewer-error-message" class="error-message d-none" role="alert"></div>
+                </div>
+            </div> <!-- Fim da coluna principal -->
+
+            <!-- Coluna para a Barra Lateral de Tradução (4/12 da largura em md e acima) -->
+            <div class="col-md-4 mt-4 mt-md-0" id="translation-sidebar-col">
+                <div id="translation-sidebar" class="card shadow-sm h-100">
+                    <div class="card-header bg-light fw-bold d-flex justify-content-between align-items-center">
+                        Seleção e Tradução
+                        <!-- Botão de expandir/contrair para a barra lateral de tradução -->
+                        <button id="expand-translation-sidebar-btn" class="btn btn-outline-secondary btn-sm" title="Expandir/Reduzir Barra Lateral de Tradução" aria-label="Expandir ou reduzir barra lateral de tradução">
+                            <i class="fas fa-expand-alt" data-expand-icon="true"></i> <!-- Ícone por Font Awesome -->
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <!-- Formulário de seleção de idioma de tradução -->
+                        <div id="language-selection-form" class="mb-4">
+                            <label for="from-language-select" class="form-label visually-hidden">Traduzir de:</label>
+                            <label for="to-language-select" class="form-label visually-hidden">Traduzir para:</label>
+                            <div class="input-group">
+                                <select id="from-language-select" class="form-select">
+                                    <option value="auto">Detectar idioma</option>
+                                    <option value="en">Inglês</option>
+                                    <option value="pt">Português</option>
+                                    <option value="es">Espanhol</option>
+                                    <option value="fr">Francês</option>
+                                    <option value="de">Alemão</option>
+                                </select>
+                                <button id="swap-languages-btn" class="btn btn-outline-secondary" title="Trocar idiomas" aria-label="Trocar idiomas">
+                                    <i class="fas fa-exchange-alt"></i> <!-- Ícone por Font Awesome -->
+                                </button>
+                                <select id="to-language-select" class="form-select">
+                                    <option value="pt">Português</option>
+                                    <option value="en">Inglês</option>
+                                    <option value="es">Espanhol</option>
+                                    <option value="fr">Francês</option>
+                                    <option value="de">Alemão</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <h6>Texto Selecionado:</h6>
+                        <div id="selected-text-container" class="text-box-with-speech">
+                            <div class="text-box-header">
+                                <span class="language-label fw-bold" id="selected-text-label">Texto Selecionado:</span>
+                                <div class="icon-buttons">
+                                    <button id="play-selected-text" class="speech-button d-none" title="Ouvir texto selecionado" aria-label="Ouvir texto selecionado">
+                                        <i class="fas fa-volume-up"></i> <!-- Ícone por Font Awesome -->
+                                    </button>
+                                    <button id="save-selected-text" class="save-button d-none" title="Guardar texto selecionado" aria-label="Guardar texto selecionado">
+                                        <i class="fas fa-download"></i> <!-- Ícone por Font Awesome -->
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-box-content">
+                                <p class="text-muted" id="selected-text-placeholder">Selecione texto no PDF para vê-lo aqui.</p>
+                                <p id="actual-selected-text" class="d-none"></p>
+                            </div>
+                        </div>
+
+                        <h6>Tradução:</h6>
+                        <div id="translated-text-container">
+                            <div id="translation-loading-spinner" class="d-none">
+                                <div class="spinner-border text-secondary spinner-border-sm" role="status">
+                                    <span class="visually-hidden">A traduzir...</span>
+                                </div>
+                            </div>
+                            <p class="text-muted" id="translation-placeholder">A tradução aparecerá aqui.</p>
+                            
+                            <div id="english-translation-box" class="text-box-with-speech d-none">
+                                <div class="text-box-header">
+                                    <span class="language-label fw-bold" id="english-label">Inglês:</span>
+                                    <div class="icon-buttons">
+                                        <button id="play-english-translation" class="speech-button" title="Ouvir tradução em inglês" aria-label="Ouvir tradução em inglês" data-lang="en-US">
+                                            <i class="fas fa-volume-up"></i> <!-- Ícone por Font Awesome -->
+                                        </button>
+                                        <button id="save-english-translation" class="save-button" title="Guardar tradução em inglês" aria-label="Guardar tradução em inglês">
+                                            <i class="fas fa-download"></i> <!-- Ícone por Font Awesome -->
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="text-box-content">
+                                    <p id="english-translation-text"></p>
+                                </div>
+                            </div>
+                            <div id="portuguese-translation-box" class="text-box-with-speech d-none">
+                                <div class="text-box-header">
+                                    <span class="language-label fw-bold" id="portuguese-label">Português:</span>
+                                    <div class="icon-buttons">
+                                        <button id="play-portuguese-translation" class="speech-button" title="Ouvir tradução em português" aria-label="Ouvir tradução em português" data-lang="pt-PT">
+                                            <i class="fas fa-volume-up"></i> <!-- Ícone por Font Awesome -->
+                                        </button>
+                                        <button id="save-portuguese-translation" class="save-button" title="Guardar tradução em português" aria-label="Guardar tradução em português">
+                                            <i class="fas fa-download"></i> <!-- Ícone por Font Awesome -->
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="text-box-content">
+                                    <p id="portuguese-translation-text"></p>
+                                </div>
+                            </div>
+                            <div id="translation-error-message" class="error-message d-none" role="alert"></div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Fim da coluna da barra lateral -->
+        </div>
+    </div>
+
+    <!-- Modal de Configurações -->
+    <div class="modal fade draggable" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="settingsModalLabel">Configurações</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="settingsForm">
+                        <div class="mb-3">
+                            <label for="defaultTranslationLang" class="form-label">Idioma de Tradução Padrão:</label>
+                            <select class="form-select" id="defaultTranslationLang">
+                                <option value="pt">Português (Padrão)</option>
+                                <option value="en">Inglês</option>
+                                <option value="es">Espanhol</option>
+                                <option value="fr">Francês</option>
+                                <option value="de">Alemão</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="defaultLlmModel" class="form-label">Modelo LLM Padrão:</label>
+                            <select class="form-select" id="defaultLlmModel">
+                                <option value="gemini-2.0-flash">Gemini 2.0 Flash (Ativo)</option>
+                                <option value="openai">OpenAI (Apenas placeholder)</option>
+                                <option value="deepseek">DeepSeek (Apenas placeholder)</option>
+                                <option value="elevenlabs">ElevenLabs (Apenas placeholder)</option>
+                                <option value="stc">STC (Apenas placeholder)</option>
+                            </select>
+                            <div class="form-text">Apenas o Gemini 2.0 Flash é suportado neste ambiente. Outros modelos são apenas para demonstração.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tema da Página:</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="pageTheme" id="themeLight" value="light">
+                                    <label class="form-check-label" for="themeLight">Claro</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="pageTheme" id="themeDark" value="dark">
+                                    <label class="form-check-label" for="themeDark">Escuro</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="pageTheme" id="themeCrystalline" value="crystalline">
+                                    <label class="form-check-label" for="themeCrystalline">Cristalino</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="saveSettingsBtn">Guardar Alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar/Editar Nota -->
+    <div class="modal fade draggable" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="noteModalLabel">Adicionar/Editar Nota</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-2">Texto selecionado:</p>
+                    <div class="alert alert-info py-2 px-3 small" id="note-selected-text-display"></div>
+                    <div class="mb-3">
+                        <label for="note-textarea" class="form-label">Sua Nota:</label>
+                        <textarea class="form-control" id="note-textarea" rows="5" placeholder="Digite sua nota aqui..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveNoteBtn">Guardar Nota</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap 5.3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- PDF.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+      // Aponta para o ficheiro 'worker' da CDN. Essencial para o PDF.js funcionar.
+      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;
+    </script>
+    
+    <!-- Lógica da Aplicação -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elementos da UI
+            const uploadSection = document.getElementById('upload-section');
+            const dropZone = document.getElementById('drop-zone');
+            const pdfUploadInput = document.getElementById('pdf-upload');
+            const viewerContainer = document.getElementById('pdf-viewer-container');
+            const spinner = document.getElementById('spinner-container');
+            const pdfContentWrapper = document.getElementById('pdf-content-wrapper');
+            const pdfCanvas = document.getElementById('pdf-canvas');
+            const textLayerDiv = document.getElementById('text-layer');
+            const fileNameSpan = document.getElementById('file-name');
+            const uploadErrorMessage = document.getElementById('upload-error-message');
+            const viewerErrorMessage = document.getElementById('viewer-error-message');
+
+            // Controles de Paginação
+            const prevPageBtn = document.getElementById('prev-page');
+            const nextPageBtn = document.getElementById('next-page');
+            const currentPageInput = document.getElementById('current-page-input');
+            const pageCountSpan = document.getElementById('page-count');
+            const copyTextBtn = document.getElementById('copy-text-btn');
+
+            // Elementos de Pesquisa
+            const searchInput = document.getElementById('search-input');
+            const searchPrevBtn = document.getElementById('search-prev');
+            const searchNextBtn = document.getElementById('search-next');
+            const searchResultsCountSpan = document.getElementById('search-results-count');
+
+            // Elementos da barra lateral de tradução
+            const selectedTextPlaceholder = document.getElementById('selected-text-placeholder');
+            const actualSelectedText = document.getElementById('actual-selected-text');
+            const selectedTextLabel = document.getElementById('selected-text-label');
+
+            const englishTranslationTextBox = document.getElementById('english-translation-box');
+            const englishTranslationText = document.getElementById('english-translation-text');
+            const portugueseTranslationTextBox = document.getElementById('portuguese-translation-box');
+            const portugueseTranslationText = document.getElementById('portuguese-translation-text');
+            const englishLabel = document.getElementById('english-label');
+            const portugueseLabel = document.getElementById('portuguese-label');
+
+            const translationPlaceholder = document.getElementById('translation-placeholder');
+            const translationLoadingSpinner = document.getElementById('translation-loading-spinner');
+            const translationErrorMessage = document.getElementById('translation-error-message');
+
+            // Botões de áudio
+            const playSelectedTextBtn = document.getElementById('play-selected-text');
+            const playEnglishTranslationBtn = document.getElementById('play-english-translation');
+            const playPortugueseTranslationBtn = document.getElementById('play-portuguese-translation');
+
+            // Botões de guardar texto traduzido
+            const saveSelectedTextBtn = document.getElementById('save-selected-text');
+            const saveEnglishTranslationBtn = document.getElementById('save-english-translation');
+            const savePortugueseTranslationBtn = document.getElementById('save-portuguese-translation');
+
+            // Novos elementos de seleção de idioma
+            const fromLanguageSelect = document.getElementById('from-language-select');
+            const toLanguageSelect = document.getElementById('to-language-select');
+            const swapLanguagesBtn = document.getElementById('swap-languages-btn');
+
+            // Elementos do Modal de Configurações
+            const settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
+            const defaultTranslationLangSelect = document.getElementById('defaultTranslationLang');
+            const defaultLlmModelSelect = document.getElementById('defaultLlmModel');
+            const themeLightRadio = document.getElementById('themeLight');
+            const themeDarkRadio = document.getElementById('themeDark');
+            const themeCrystallineRadio = document.getElementById('themeCrystalline'); // Novo radio button
+            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+
+            // Novos botões para ações no documento
+            const savePdfBtn = document.getElementById('save-pdf-btn');
+            const highlightTextBtn = document.getElementById('highlight-text-btn');
+            const underlineTextBtn = document.getElementById('underline-text-btn');
+
+            // Elemento do novo botão de upload na navbar
+            const uploadPdfNavbarBtn = document.getElementById('upload-pdf-navbar-btn');
+
+            // Elementos para o ícone de notas (AGORA NO TOOLBAR DO PDF)
+            const addNoteBtn = document.getElementById('add-note-btn'); 
+            const noteModal = new bootstrap.Modal(document.getElementById('noteModal'));
+            const noteSelectedTextDisplay = document.getElementById('note-selected-text-display');
+            const noteTextarea = document.getElementById('note-textarea');
+            const saveNoteBtn = document.getElementById('saveNoteBtn');
+
+            let currentSelectedTextForNote = '';
+            // Armazenamento em memória para notas: { "pageNumber": { "selectedText": "sua nota aqui" } }
+            const notesStore = {}; 
+
+            // Elementos para expansão de containers
+            const pdfViewerCol = document.getElementById('pdf-viewer-col');
+            const translationSidebarCol = document.getElementById('translation-sidebar-col');
+            const expandPdfViewerBtn = document.getElementById('expand-pdf-viewer-btn');
+            const expandTranslationSidebarBtn = document.getElementById('expand-translation-sidebar-btn');
+            const expandIconPdf = expandPdfViewerBtn.querySelector('[data-expand-icon="true"]');
+            const expandIconTranslation = expandTranslationSidebarBtn.querySelector('[data-expand-icon="true"]');
+
+
+            // Mapeamento de códigos de idioma para códigos de fala (lang para SpeechSynthesisUtterance)
+            const langCodeToSpeechLang = {
+                'en': 'en-US',
+                'pt': 'pt-PT',
+                'es': 'es-ES',
+                'fr': 'fr-FR',
+                'de': 'de-DE'
+            };
+            const speechLangToLangCode = {
+                'en-US': 'en',
+                'pt-PT': 'pt',
+                'es-ES': 'es',
+                'fr-FR': 'fr',
+                'de-DE': 'de'
+            };
+            const langCodeToDisplayName = {
+                'en': 'Inglês',
+                'pt': 'Português',
+                'es': 'Espanhol',
+                'fr': 'Francês',
+                'de': 'Alemão'
+            };
+
+            // Estado da aplicação
+            let pdfDoc = null;
+            let currentPageNum = 1;
+            let pageRendering = false;
+            let pageNumPending = null;
+            const scale = 1.8; // Escala de renderização para melhor qualidade
+            let originalPdfBytes = null; // Para armazenar os bytes do PDF original
+
+            // Variáveis para Text-to-Speech
+            const synth = window.speechSynthesis;
+            let currentUtterance = null;
+            let speakingButton = null; // Para controlar qual botão está a falar
+
+            // Variáveis de Pesquisa de Texto
+            let searchQuery = '';
+            let searchResults = [];
+            let currentSearchResultIndex = -1;
+            let lastFoundPage = -1;
+
+            // Ícones de áudio (SVG)
+            // Atualizados para Font Awesome
+            const playIcon = `<i class="fas fa-volume-up"></i>`;
+            const pauseIcon = `<i class="fas fa-pause"></i>`;
+            const expandIcon = `<i class="fas fa-expand-alt" data-expand-icon="true"></i>`;
+            const compressIcon = `<i class="fas fa-compress-alt" data-expand-icon="true"></i>`;
+            const defaultNoteIcon = `<i class="fas fa-sticky-note"></i>`; // Ícone padrão para adicionar nota
+            const existingNoteIcon = `<i class="fas fa-comment-dots"></i>`; // Ícone para nota existente
+            
+            /**
+             * Atualiza o ícone de um botão de áudio.
+             * @param {HTMLElement} button - O botão cujo ícone será atualizado.
+             * @param {boolean} isPlaying - True se o áudio estiver a tocar, false caso contrário.
+             */
+            const updateSpeechButtonIcon = (button, isPlaying) => {
+                button.innerHTML = isPlaying ? pauseIcon : playIcon;
+                button.classList.toggle('playing', isPlaying);
+            };
+
+            /**
+             * Para qualquer fala em curso e redefine o ícone do botão.
+             */
+            const stopSpeech = () => {
+                if (synth.speaking || synth.paused) {
+                    synth.cancel();
+                }
+                if (speakingButton) {
+                    updateSpeechButtonIcon(speakingButton, false);
+                    speakingButton = null;
+                }
+                currentUtterance = null; // Garante que currentUtterance é resetado
+            };
+
+            /**
+             * Inicia uma nova reprodução de texto.
+             * @param {string} text - O texto a ser falado.
+             * @param {string} lang - O código do idioma (ex: 'en-US', 'pt-PT').
+             * @param {HTMLElement} buttonElement - O botão que acionou a fala.
+             */
+            const startNewSpeech = (text, lang, buttonElement) => {
+                currentUtterance = new SpeechSynthesisUtterance(text);
+                currentUtterance.lang = lang;
+                
+                currentUtterance.onend = () => {
+                    updateSpeechButtonIcon(buttonElement, false);
+                    speakingButton = null;
+                    currentUtterance = null; 
+                };
+                currentUtterance.onpause = () => updateSpeechButtonIcon(buttonElement, false);
+                currentUtterance.onresume = () => updateSpeechButtonIcon(buttonElement, true);
+                currentUtterance.onerror = (event) => {
+                    // Ignora o erro 'interrupted' que ocorre quando a síntese é cancelada intencionalmente
+                    if (event.error === 'interrupted') {
+                        console.log('Speech interrupted intentionally.');
+                        // Não mostra popup, e o onpause/onend já devem ter atualizado o UI
+                    } else {
+                        console.error('SpeechSynthesis Utterance Error:', event.error);
+                        showLocalizedCopyPopup("Erro ao falar: " + event.error, buttonElement, 3000);
+                        updateSpeechButtonIcon(buttonElement, false);
+                        speakingButton = null;
+                        currentUtterance = null; 
+                    }
+                };
+
+                synth.speak(currentUtterance);
+                speakingButton = buttonElement;
+                updateSpeechButtonIcon(buttonElement, true);
+            };
+
+            /**
+             * Inicia ou continua a reprodução de texto.
+             * @param {string} text - O texto a ser falado.
+             * @param {string} lang - O código do idioma (ex: 'en-US', 'pt-PT').
+             * @param {HTMLElement} buttonElement - O botão que acionou a fala.
+             */
+            const toggleSpeech = (text, lang, buttonElement) => {
+                if (!text.trim()) {
+                    showLocalizedCopyPopup("Não há texto para falar.", buttonElement, 2000);
+                    return;
+                }
+
+                if (speakingButton === buttonElement) {
+                    // Se o mesmo botão é clicado novamente
+                    if (synth.speaking) {
+                        synth.pause();
+                        updateSpeechButtonIcon(buttonElement, false);
+                    } else if (synth.paused) {
+                        synth.resume();
+                        updateSpeechButtonIcon(buttonElement, true);
+                    } else {
+                        // Pode acontecer se a fala terminou naturalmente
+                        startNewSpeech(text, lang, buttonElement);
+                    }
+                } else {
+                    // Um botão diferente foi clicado, ou nenhuma fala está ativa
+                    stopSpeech(); // Para qualquer fala existente primeiro (e redefine o ícone)
+                    startNewSpeech(text, lang, buttonElement);
+                }
+            };
+
+            /**
+             * Mostra uma mensagem de erro na secção especificada.
+             * @param {HTMLElement} targetElement - O elemento onde a mensagem será exibida.
+             * @param {string} message - A mensagem de erro a ser exibida.
+             */
+            const showErrorMessage = (targetElement, message) => {
+                targetElement.textContent = message;
+                targetElement.classList.remove('d-none');
+            };
+
+            /**
+             * Esconde a mensagem de erro da secção especificada.
+             * @param {HTMLElement} targetElement - O elemento da mensagem de erro a ser escondido.
+             */
+            const hideErrorMessage = (targetElement) => {
+                targetElement.classList.add('d-none');
+                targetElement.textContent = '';
+            };
+
+            /**
+             * Mostra um popup temporário perto do botão de copiar.
+             * @param {string} message - A mensagem a ser exibida.
+             * @param {HTMLElement} targetElement - O elemento de referência para posicionamento.
+             * @param {number} duration - Duração em milissegundos.
+             */
+            const showLocalizedCopyPopup = (message, targetElement, duration = 2000) => {
+                // Remove qualquer popup existente para evitar sobreposição
+                const existingPopup = document.getElementById('localized-copy-popup');
+                if (existingPopup) {
+                    existingPopup.remove();
+                }
+
+                const popup = document.createElement('div');
+                popup.id = 'localized-copy-popup';
+                popup.className = 'copy-popup-style'; // Estilos definidos no CSS
+                popup.textContent = message;
+                popup.setAttribute('role', 'status');
+                popup.setAttribute('aria-live', 'polite');
+
+                document.body.appendChild(popup); // Anexar ao body para posicionamento fixo
+
+                // Posicionar o popup
+                const rect = targetElement.getBoundingClientRect();
+                // É necessário um pequeno atraso para que o navegador calcule o offsetWidth/offsetHeight
+                // corretamente após o appendChild
+                setTimeout(() => {
+                    popup.style.left = `${rect.left + rect.width / 2 - popup.offsetWidth / 2}px`;
+                    popup.style.top = `${rect.top - popup.offsetHeight - 10}px`; // 10px acima do botão
+                    popup.style.opacity = '1'; // Inicia a transição de opacidad
+                }, 0);
+
+
+                setTimeout(() => {
+                    popup.style.opacity = '0';
+                    // Remove o popup do DOM após a transição de fade-out
+                    popup.addEventListener('transitionend', () => popup.remove(), { once: true });
+                }, duration);
+            };
+
+            /**
+             * Mostra ou esconde o spinner de carregamento principal.
+             * @param {boolean} show - True para mostrar, false para esconder.
+             */
+            const showSpinner = (show) => {
+                spinner.classList.toggle('d-none', !show);
+            };
+
+            /**
+             * Mostra ou esconde o spinner de carregamento da tradução.
+             * @param {boolean} show - True para mostrar, false para esconder.
+             */
+            const showTranslationSpinner = (show) => {
+                translationLoadingSpinner.classList.toggle('d-none', !show);
+            };
+
+            /**
+             * Remove todos os realces de pesquisa da camada de texto.
+             */
+            const removeHighlights = () => {
+                const highlights = textLayerDiv.querySelectorAll('.highlight');
+                highlights.forEach(span => {
+                    const parent = span.parentNode;
+                    // Move todos os filhos do realce de volta para o pai, depois remove o realce
+                    while (span.firstChild) {
+                        parent.insertBefore(span.firstChild, span);
+                    }
+                    parent.removeChild(span);
+                });
+                // Garante que a classe de destaque atual é removida de todos os elementos
+                const currentHighlights = textLayerDiv.querySelectorAll('.current-highlight');
+                currentHighlights.forEach(span => span.classList.remove('current-highlight'));
+            };
+
+            /**
+             * Realça todas as ocorrências do termo de pesquisa na página atual.
+             * @param {number} pageNumber - O número da página atual.
+             */
+            const highlightAllOccurrences = async (pageNumber) => {
+                removeHighlights(); // Remove realces anteriores
+                searchResults = []; // Limpa resultados anteriores
+
+                if (!searchQuery.trim() || !pdfDoc) {
+                    searchResultsCountSpan.textContent = '';
+                    return;
+                }
+
+                const page = await pdfDoc.getPage(pageNumber);
+                const textContent = await page.getTextContent();
+                const textItems = textContent.items;
+
+                let pageText = textItems.map(item => item.str).join('');
+                const regex = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'); // Escape special chars for regex
+                let match;
+                let foundOnPage = 0;
+
+                const textSpans = Array.from(textLayerDiv.children); 
+
+                while ((match = regex.exec(pageText)) !== null) {
+                    const matchStart = match.index;
+                    const matchEnd = match.index + match[0].length;
+                    
+                    let startSpanIndex = -1;
+                    let endSpanIndex = -1;
+                    let charsCount = 0;
+
+                    for (let i = 0; i < textItems.length; i++) {
+                        const item = textItems[i];
+                        if (matchStart >= charsCount && matchStart < charsCount + item.str.length) {
+                            startSpanIndex = i;
+                        }
+                        if (matchEnd > charsCount && matchEnd <= charsCount + item.str.length) {
+                            endSpanIndex = i;
+                            break;
+                        }
+                        charsCount += item.str.length;
+                    }
+
+                    if (startSpanIndex !== -1 && endSpanIndex !== -1) {
+                        for (let i = startSpanIndex; i <= endSpanIndex; i++) {
+                            const originalSpan = textSpans[i];
+                            if (originalSpan) {
+                                const newSpan = document.createElement('span');
+                                newSpan.className = 'highlight';
+                                newSpan.textContent = originalSpan.textContent;
+                                originalSpan.replaceWith(newSpan);
+
+                                searchResults.push({
+                                    pageNum: pageNumber,
+                                    element: newSpan
+                                });
+                                foundOnPage++;
+                            }
+                        }
+                    }
+                }
+                
+                searchResultsCountSpan.textContent = `Página ${pageNumber}: ${foundOnPage} resultados.`;
+                if (foundOnPage > 0 && currentSearchResultIndex === -1) {
+                    currentSearchResultIndex = 0;
+                    scrollToHighlight(currentSearchResultIndex);
+                } else if (foundOnPage > 0 && currentSearchResultIndex !== -1) {
+                    scrollToHighlight(currentSearchResultIndex);
+                } else {
+                    searchResultsCountSpan.textContent = `Página ${pageNumber}: 0 resultados.`;
+                }
+
+                lastFoundPage = pageNumber;
+            };
+
+            /**
+             * Rola para o realce de pesquisa especificado.
+             * @param {number} index - O índice do resultado da pesquisa em `searchResults`.
+             */
+            const scrollToHighlight = (index) => {
+                removeHighlights();
+
+                if (searchResults.length === 0 || index < 0 || index >= searchResults.length) {
+                    return;
+                }
+
+                const highlight = searchResults[index];
+                if (highlight.pageNum !== currentPageNum) {
+                    currentPageNum = highlight.pageNum;
+                    queueRenderPage(currentPageNum).then(() => {
+                        setTimeout(() => {
+                            const foundSpans = textLayerDiv.querySelectorAll('.highlight');
+                            if (foundSpans.length > 0) {
+                                if (highlight.element && textLayerDiv.contains(highlight.element)) {
+                                    highlight.element.classList.add('current-highlight');
+                                    highlight.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                } else {
+                                    textLayerDiv.firstElementChild?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }
+                            }
+                        }, 100);
+                    });
+                } else {
+                    if (highlight.element && textLayerDiv.contains(highlight.element)) {
+                        highlight.element.classList.add('current-highlight');
+                        highlight.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            };
+
+            /**
+             * Inicia uma nova pesquisa de texto no PDF.
+             */
+            const performSearch = async () => {
+                searchQuery = searchInput.value.trim();
+                removeHighlights();
+                searchResults = [];
+                currentSearchResultIndex = -1;
+                lastFoundPage = -1;
+
+                if (!searchQuery || !pdfDoc) {
+                    searchResultsCountSpan.textContent = '';
+                    return;
+                }
+
+                searchResultsCountSpan.textContent = 'A procurar...';
+
+                for (let i = 1; i <= pdfDoc.numPages; i++) {
+                    const page = await pdfDoc.getPage(i);
+                    const textContent = await page.getTextContent();
+                    let pageText = textContent.items.map(item => item.str).join('');
+                    const regex = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                    let match;
+                    let pageHighlights = [];
+                    
+                    let tempTextLayerDiv = document.createElement('div');
+                    await pdfjsLib.renderTextLayer({
+                        textContent: textContent,
+                        container: tempTextLayerDiv,
+                        viewport: page.getViewport({scale: scale}),
+                        textDivs: []
+                    }).promise;
+
+                    const tempTextSpans = Array.from(tempTextLayerDiv.children);
+
+                    let textMapping = [];
+                    let currentOffset = 0;
+                    tempTextSpans.forEach(span => {
+                        textMapping.push({span: span, text: span.textContent, offset: currentOffset});
+                        currentOffset += span.textContent.length;
+                    });
+
+                    while ((match = regex.exec(pageText)) !== null) {
+                        const matchStart = match.index;
+                        const matchEnd = match.index + match[0].length;
+                        
+                        let currentMatchElements = [];
+                        for (let j = 0; j < textMapping.length; j++) {
+                            const item = textMapping[j];
+                            const itemStart = item.offset;
+                            const itemEnd = item.offset + item.text.length;
+
+                            if (Math.max(matchStart, itemStart) < Math.min(matchEnd, itemEnd)) {
+                                const newSpan = document.createElement('span');
+                                newSpan.className = 'highlight';
+                                
+                                const overlapStart = Math.max(matchStart, itemStart) - itemStart;
+                                const overlapEnd = Math.min(matchEnd, itemEnd) - itemStart;
+                                newSpan.textContent = item.text.substring(overlapStart, overlapEnd);
+                                
+                                pageHighlights.push({
+                                    originalSpan: item.span,
+                                    newHighlightSpan: newSpan,
+                                    rect: item.span.getBoundingClientRect()
+                                });
+                            }
+                        }
+                    }
+                    if (pageHighlights.length > 0) {
+                        searchResults.push({ pageNum: i, count: pageHighlights.length });
+                    }
+                }
+                
+                searchResultsCountSpan.textContent = `${searchResults.length} resultados encontrados.`;
+
+                if (searchResults.length > 0) {
+                    currentSearchResultIndex = 0;
+                    currentPageNum = searchResults[currentSearchResultIndex].pageNum;
+                    await renderPage(currentPageNum);
+                } else {
+                    searchResultsCountSpan.textContent = '0 resultados encontrados.';
+                }
+            };
+
+            /**
+             * Navega para o próximo resultado da pesquisa.
+             */
+            const nextSearchResult = () => {
+                if (searchResults.length === 0) return;
+
+                currentSearchResultIndex++;
+                if (currentSearchResultIndex >= searchResults.length) {
+                    currentSearchResultIndex = 0;
+                }
+                const targetPageNum = searchResults[currentSearchResultIndex].pageNum;
+                if (targetPageNum !== currentPageNum) {
+                    currentPageNum = targetPageNum;
+                    queueRenderPage(currentPageNum);
+                } else {
+                    updateSearchHighlightOnPage(searchResults[currentSearchResultIndex].pageNum, currentSearchResultIndex);
+                }
+                updateSearchResultsUI();
+            };
+
+            /**
+             * Navega para o resultado anterior da pesquisa.
+             */
+            const prevSearchResult = () => {
+                if (searchResults.length === 0) return;
+
+                currentSearchResultIndex--;
+                if (currentSearchResultIndex < 0) {
+                    currentSearchResultIndex = searchResults.length - 1;
+                }
+                const targetPageNum = searchResults[currentSearchResultIndex].pageNum;
+                if (targetPageNum !== currentPageNum) {
+                    currentPageNum = targetPageNum;
+                    queueRenderPage(currentPageNum);
+                } else {
+                    updateSearchHighlightOnPage(searchResults[currentSearchResultIndex].pageNum, currentSearchResultIndex);
+                }
+                updateSearchResultsUI();
+            };
+
+            /**
+             * Atualiza o UI da contagem de resultados da pesquisa e o realce da posição atual.
+             */
+            const updateSearchResultsUI = () => {
+                if (searchResults.length > 0) {
+                    searchResultsCountSpan.textContent = `${currentSearchResultIndex + 1} / ${searchResults.length}`;
+                    highlightAllOccurrences(currentPageNum);
+                } else {
+                    searchResultsCountSpan.textContent = '';
+                }
+            };
+
+            /**
+             * Renderiza uma página específica do PDF no canvas e a sua camada de texto.
+             * @param {number} num - O número da página a renderizar.
+             */
+            const renderPage = async (num) => {
+                pageRendering = true;
+                showSpinner(true);
+                hideErrorMessage(viewerErrorMessage);
+                removeHighlights(); // Remove realces antes de renderizar a nova página
+
+                try {
+                    const page = await pdfDoc.getPage(num);
+                    const viewport = page.getViewport({ scale });
+                    const canvasContext = pdfCanvas.getContext('2d');
+
+                    pdfCanvas.height = viewport.height;
+                    pdfCanvas.width = viewport.width;
+
+                    pdfContentWrapper.style.width = `${viewport.width}px`;
+                    pdfContentWrapper.style.height = `${viewport.height}px`;
+
+                    const renderContext = { canvasContext, viewport };
+                    const renderTask = page.render(renderContext);
+
+                    textLayerDiv.innerHTML = '';
+
+                    const textContent = await page.getTextContent();
+                    
+                    const textLayerTask = pdfjsLib.renderTextLayer({
+                        textContent: textContent,
+                        container: textLayerDiv,
+                        viewport: viewport,
+                        textDivs: []
+                    }).promise;
+                    
+                    await Promise.all([renderTask.promise, textLayerTask]);
+
+                    if (searchQuery.trim()) {
+                        await highlightAllOccurrences(num);
+                        if (currentSearchResultIndex !== -1 && searchResults[currentSearchResultIndex].pageNum === num) {
+                            scrollToHighlight(currentSearchResultIndex);
+                        }
+                    }
+
+                } catch (error) {
+                    console.error("Erro ao renderizar a página:", error);
+                    showErrorMessage(viewerErrorMessage, "Ocorreu um erro ao carregar ou renderizar esta página do PDF. Por favor, tente outro ficheiro ou recarregue.");
+                } finally {
+                    pageRendering = false;
+                    showSpinner(false);
+                    updateControls();
+
+                    if (pageNumPending !== null) {
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
+                }
+            };
+            
+            /**
+             * Adiciona uma página à fila de renderização para evitar conflitos.
+             * @param {number} num - O número da página.
+             */
+            const queueRenderPage = (num) => {
+                if (pageRendering) {
+                    pageNumPending = num;
+                } else {
+                    return renderPage(num);
+                }
+            };
+            
+            /**
+             * Atualiza o estado dos botões de controlo e do input da página.
+             */
+            const updateControls = () => {
+                currentPageInput.value = currentPageNum;
+                prevPageBtn.disabled = (currentPageNum <= 1);
+                nextPageBtn.disabled = (currentPageNum >= pdfDoc.numPages);
+                currentPageInput.setAttribute('aria-valuenow', currentPageNum);
+                currentPageInput.setAttribute('aria-valuemin', 1);
+                currentPageInput.setAttribute('aria-valuemax', pdfDoc.numPages);
+            };
+
+            /**
+             * Carrega e processa o ficheiro PDF selecionado.
+             * @param {File} file - O ficheiro PDF.
+             */
+            const loadPdf = async (file) => {
+                hideErrorMessage(uploadErrorMessage);
+                hideErrorMessage(viewerErrorMessage);
+                const existingPopup = document.getElementById('localized-copy-popup');
+                if (existingPopup) {
+                    existingPopup.remove();
+                }
+                clearTranslationSidebar();
+                searchQuery = '';
+                searchInput.value = '';
+                removeHighlights();
+                searchResults = [];
+                currentSearchResultIndex = -1;
+                searchResultsCountSpan.textContent = '';
+
+
+                if (!file || file.type !== 'application/pdf') {
+                    showErrorMessage(uploadErrorMessage, 'Por favor, selecione um ficheiro PDF válido.');
+                    return;
+                }
+
+                uploadSection.classList.add('d-none');
+                viewerContainer.classList.remove('d-none');
+                showSpinner(true);
+                
+                fileNameSpan.textContent = file.name;
+                
+                const fileReader = new FileReader();
+                fileReader.onload = async (event) => {
+                    originalPdfBytes = event.target.result; // Armazena os bytes do PDF original
+                    const typedarray = new Uint8Array(originalPdfBytes);
+                    try {
+                        const loadingTask = pdfjsLib.getDocument({data: typedarray});
+                        pdfDoc = await loadingTask.promise;
+                        
+                        currentPageNum = 1;
+                        pageCountSpan.textContent = pdfDoc.numPages;
+                        currentPageInput.max = pdfDoc.numPages;
+                        currentPageInput.min = 1;
+                        renderPage(currentPageNum);
+
+                    } catch(error) {
+                        console.error("Erro ao carregar o PDF:", error);
+                        showErrorMessage(uploadErrorMessage, "Não foi possível carregar o ficheiro PDF. Pode estar corrompido ou num formato não suportado.");
+                        uploadSection.classList.remove('d-none');
+                        viewerContainer.classList.add('d-none');
+                        showSpinner(false);
+                    }
+                };
+                fileReader.readAsArrayBuffer(file);
+            };
+
+            /**
+             * Limpa o conteúdo da barra lateral de tradução.
+             */
+            const clearTranslationSidebar = () => {
+                selectedTextPlaceholder.classList.remove('d-none');
+                actualSelectedText.classList.add('d-none');
+                actualSelectedText.textContent = '';
+                playSelectedTextBtn.classList.add('d-none');
+                saveSelectedTextBtn.classList.add('d-none');
+
+                translationPlaceholder.classList.remove('d-none');
+                englishTranslationTextBox.classList.add('d-none');
+                englishTranslationText.textContent = '';
+                portugueseTranslationTextBox.classList.add('d-none');
+                portugueseTranslationText.textContent = '';
+                
+                hideErrorMessage(translationErrorMessage);
+                showTranslationSpinner(false);
+                stopSpeech();
+            };
+
+            /**
+             * Guarda o texto fornecido como um ficheiro de texto (.txt).
+             * @param {string} text - O texto a ser guardado.
+             * @param {string} filename - O nome do ficheiro (sem extensão, .txt será adicionado).
+             */
+            const saveTextAsFile = (text, filename) => {
+                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `${filename}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(a.href);
+                showLocalizedCopyPopup("Texto guardado!", a);
+            };
+
+            /**
+             * Guarda o PDF original carregado.
+             */
+            const saveOriginalPdf = () => {
+                if (pdfDoc && originalPdfBytes) {
+                    const blob = new Blob([originalPdfBytes], { type: 'application/pdf' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    // Adiciona "_original" ao nome do ficheiro, mantendo a extensão .pdf
+                    a.download = fileNameSpan.textContent.replace(/\.pdf$/, '_original.pdf');
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(a.href);
+                    showLocalizedCopyPopup("PDF original guardado!", savePdfBtn);
+                } else {
+                    showLocalizedCopyPopup("Nenhum PDF para guardar.", savePdfBtn);
+                }
+            };
+
+            /**
+             * Aplica um realce visual temporário ou sublinhado ao texto selecionado.
+             * @param {string} className - A classe CSS a aplicar (e.g., 'highlighted-blue' ou 'underlined-text').
+             * @param {HTMLElement} targetButton - O botão que acionou a ação, para posicionamento do popup.
+             */
+            const applyTemporaryTextEffect = (className, targetButton) => {
+                const selection = window.getSelection();
+                if (!selection.rangeCount) {
+                    showLocalizedCopyPopup("Selecione texto primeiro.", targetButton);
+                    return;
+                }
+
+                const range = selection.getRangeAt(0);
+                // Garante que a seleção está dentro da camada de texto do PDF
+                if (!textLayerDiv.contains(selection.anchorNode) && !textLayerDiv.contains(selection.focusNode)) {
+                    showLocalizedCopyPopup("Selecione texto dentro do documento PDF.", targetButton);
+                    return;
+                }
+
+                try {
+                    const selectedNodes = [];
+                    let currentNode = range.startContainer;
+                    
+                    // Collect all text nodes within the selection that are children of textLayerDiv
+                    const walk = document.createTreeWalker(textLayerDiv, NodeFilter.SHOW_TEXT, null, false);
+                    let node;
+                    while (node = walk.nextNode()) {
+                        if (selection.containsNode(node, true)) { // Check if the node is fully or partially within the selection
+                            selectedNodes.push(node);
+                        }
+                    }
+
+                    selectedNodes.forEach(node => {
+                        const originalText = node.textContent;
+                        let textToWrap = originalText;
+                        let startIndex = 0;
+                        let endIndex = originalText.length;
+
+                        // Adjust start/end index if the node is only partially selected
+                        if (node === range.startContainer) {
+                            startIndex = range.startOffset;
+                        }
+                        if (node === range.endContainer) {
+                            endIndex = range.endOffset;
+                        }
+                        textToWrap = originalText.substring(startIndex, endIndex);
+
+                        const beforeText = originalText.substring(0, startIndex);
+                        const afterText = originalText.substring(endIndex);
+
+                        const fragment = document.createDocumentFragment();
+
+                        if (beforeText.length > 0) {
+                            fragment.appendChild(document.createTextNode(beforeText));
+                        }
+
+                        const span = document.createElement('span');
+                        span.classList.add(className);
+                        span.setAttribute('data-temp-effect', 'true');
+                        span.textContent = textToWrap;
+                        fragment.appendChild(span);
+
+                        if (afterText.length > 0) {
+                            fragment.appendChild(document.createTextNode(afterText));
+                        }
+                        node.parentNode.replaceChild(fragment, node);
+                    });
+                    
+                    showLocalizedCopyPopup("Efeito aplicado (temporário)!", targetButton);
+                    
+                    selection.removeAllRanges();
+
+                    showLocalizedCopyPopup("As alterações visuais não são guardadas no ficheiro PDF original.", targetButton, 4000);
+
+                } catch (e) {
+                    console.error("Erro ao aplicar efeito no texto:", e);
+                    showLocalizedCopyPopup("Não foi possível aplicar o efeito ao texto.", targetButton);
+                }
+            };
+
+            /**
+             * Realiza a tradução do texto usando a Gemini API.
+             * @param {string} textToTranslate - O texto a ser traduzido.
+             */
+            const translateText = async (textToTranslate) => {
+                if (!textToTranslate.trim()) {
+                    clearTranslationSidebar();
+                    return;
+                }
+                
+                selectedTextPlaceholder.classList.add('d-none');
+                actualSelectedText.classList.remove('d-none');
+                actualSelectedText.textContent = textToTranslate;
+                playSelectedTextBtn.classList.remove('d-none');
+                saveSelectedTextBtn.classList.add('d-none'); // Hide save button for selected text by default
+
+                playSelectedTextBtn.setAttribute('data-text', textToTranslate);
+
+                translationPlaceholder.classList.add('d-none');
+                englishTranslationTextBox.classList.add('d-none');
+                englishTranslationText.textContent = '';
+                portugueseTranslationTextBox.classList.add('d-none');
+                portugueseTranslationText.textContent = '';
+                hideErrorMessage(translationErrorMessage);
+                showTranslationSpinner(true);
+                stopSpeech();
+
+                const fromLangCode = fromLanguageSelect.value;
+                const toLangCode = toLanguageSelect.value;
+
+                let chatHistory = [];
+                let generationConfigSchema;
+
+                if (fromLangCode === 'auto') {
+                    chatHistory.push({
+                        role: "user",
+                        parts: [{ text: `Detect the language of the following text and translate it to both English and Portuguese. Text: "${textToTranslate}"\n\nProvide the response in JSON format with fields "original_language" (ISO 639-1 code, e.g., "en", "pt"), "english_translation", and "portuguese_translation". If a translation is not applicable based on the rules, its field should be null.` }]
+                    });
+                    generationConfigSchema = {
+                        type: "OBJECT",
+                        properties: {
+                            "original_language": { "type": "STRING" },
+                            "english_translation": { "type": "STRING", "nullable": true },
+                            "portuguese_translation": { "type": "STRING", "nullable": true }
+                        },
+                        "propertyOrdering": ["original_language", "english_translation", "portuguese_translation"]
+                    };
+                } else {
+                    const fromLangDisplayName = langCodeToDisplayName[fromLangCode] || fromLangCode;
+                    const toLangDisplayName = langCodeToDisplayName[toLangCode] || toLangCode;
+                    chatHistory.push({
+                        role: "user",
+                        parts: [{ text: `Translate the following text from ${fromLangDisplayName} to ${toLangDisplayName}: "${textToTranslate}". Provide the response in JSON format with fields "original_language" (ISO 639-1 code, e.g., "en", "pt"), "translated_text".` }]
+                    });
+                    generationConfigSchema = {
+                        type: "OBJECT",
+                        properties: {
+                            "original_language": { "type": "STRING" },
+                            "translated_text": { "type": "STRING", "nullable": true }
+                        },
+                        "propertyOrdering": ["original_language", "translated_text"]
+                    };
+                }
+
+                const payload = {
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: generationConfigSchema
+                    }
+                };
+
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                let rawResponseText = '';
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    rawResponseText = await response.text(); 
+                    console.log("Raw API response for translation:", rawResponseText);
+
+                    if (!response.ok) {
+                        let errorDetails = `Status: ${response.status} ${response.statusText}`;
+                        try {
+                            const parsedError = JSON.parse(rawResponseText);
+                            errorDetails += ` - ${parsedError.error?.message || JSON.stringify(parsedError)}`;
+                        } catch (e) {
+                            errorDetails += ` - Non-JSON error response: ${rawResponseText.substring(0, Math.min(rawResponseText.length, 200))}...`;
+                        }
+                        throw new Error(`Erro da API: ${errorDetails}`);
+                    }
+
+                    if (!rawResponseText || rawResponseText.trim() === '') {
+                        throw new Error("Resposta bruta da API está vazia ou contém apenas espaços em branco.");
+                    }
+
+                    let result;
+                    try {
+                        result = JSON.parse(rawResponseText);
+                    } catch (jsonParseError) {
+                        console.error("Erro ao analisar JSON da API (primeiro nível):", jsonParseError);
+                        throw new Error("Resposta da API não é JSON válido: " + rawResponseText.substring(0, Math.min(rawResponseText.length, 200)) + "...");
+                    }
+
+                    if (!result.candidates || result.candidates.length === 0 ||
+                        !result.candidates[0].content || !result.candidates[0].content.parts ||
+                        result.candidates[0].content.parts.length === 0) {
+                        throw new Error("Resposta da API em formato inesperado ou sem conteúdo válido para tradução.");
+                    }
+                    
+                    const jsonString = result.candidates[0].content.parts[0].text;
+                    if (!jsonString || jsonString.trim() === '') {
+                        throw new Error("Resposta da API contém um JSON vazio ou nulo no campo de conteúdo.");
+                    }
+
+                    let parsedJson;
+                    try {
+                        parsedJson = JSON.parse(jsonString);
+                    } catch (innerJsonParseError) {
+                        console.error("Erro ao analisar JSON do conteúdo da resposta (segundo nível):", innerJsonParseError);
+                        throw new Error("Conteúdo da resposta da API não é JSON válido: " + jsonString.substring(0, Math.min(jsonString.length, 200)) + "...");
+                    }
+
+                    const originalLang = parsedJson.original_language ? parsedJson.original_language.toLowerCase() : '';
+                    
+                    const speechLangForSelectedText = langCodeToSpeechLang[originalLang] || 'en-US';
+                    playSelectedTextBtn.setAttribute('data-lang', speechLangForSelectedText);
+
+                    englishTranslationTextBox.classList.add('d-none');
+                    englishTranslationText.textContent = '';
+                    portugueseTranslationTextBox.classList.add('d-none');
+                    portugueseTranslationText.textContent = '';
+
+                    playEnglishTranslationBtn.classList.add('d-none');
+                    saveEnglishTranslationBtn.classList.add('d-none');
+                    playPortugueseTranslationBtn.classList.add('d-none');
+                    savePortugueseTranslationBtn.classList.add('d-none');
+
+
+                    if (fromLangCode === 'auto') {
+                        if (parsedJson.english_translation) {
+                            englishTranslationTextBox.classList.remove('d-none');
+                            englishTranslationText.textContent = parsedJson.english_translation;
+                            englishLabel.classList.remove('d-none');
+                            playEnglishTranslationBtn.classList.remove('d-none');
+                            saveEnglishTranslationBtn.classList.remove('d-none');
+                            playEnglishTranslationBtn.setAttribute('data-text', parsedJson.english_translation);
+                        }
+                        
+                        if (parsedJson.portuguese_translation) {
+                            portugueseTranslationTextBox.classList.remove('d-none');
+                            portugueseTranslationText.textContent = parsedJson.portuguese_translation;
+                            portugueseLabel.classList.remove('d-none');
+                            playPortugueseTranslationBtn.classList.remove('d-none');
+                            savePortugueseTranslationBtn.classList.remove('d-none');
+                            playPortugueseTranslationBtn.setAttribute('data-text', parsedJson.portuguese_translation);
+                        }
+
+                        if (!parsedJson.english_translation && !parsedJson.portuguese_translation) {
+                            translationPlaceholder.textContent = `Não foi possível traduzir o texto. Idioma original: ${originalLang || 'desconhecido'}.`;
+                            translationPlaceholder.classList.remove('d-none');
+                        } else {
+                            translationPlaceholder.classList.add('d-none');
+                        }
+
+                    } else {
+                        if (parsedJson.translated_text) {
+                            if (toLangCode === 'en') {
+                                englishTranslationTextBox.classList.remove('d-none');
+                                englishTranslationText.textContent = parsedJson.translated_text;
+                                englishLabel.classList.add('d-none');
+                                portugueseTranslationTextBox.classList.add('d-none'); 
+                                playEnglishTranslationBtn.classList.remove('d-none');
+                                saveEnglishTranslationBtn.classList.remove('d-none');
+                                playEnglishTranslationBtn.setAttribute('data-text', parsedJson.translated_text);
+                            } else if (toLangCode === 'pt') {
+                                portugueseTranslationTextBox.classList.remove('d-none');
+                                portugueseTranslationText.textContent = parsedJson.translated_text;
+                                portugueseLabel.classList.add('d-none');
+                                englishTranslationTextBox.classList.add('d-none'); 
+                                playPortugueseTranslationBtn.classList.remove('d-none');
+                                savePortugueseTranslationBtn.classList.remove('d-none');
+                                playPortugueseTranslationBtn.setAttribute('data-text', parsedJson.translated_text);
+                            } else {
+                                portugueseTranslationTextBox.classList.remove('d-none');
+                                portugueseTranslationText.textContent = parsedJson.translated_text;
+                                portugueseLabel.textContent = `${langCodeToDisplayName[toLangCode] || toLangCode}:`;
+                                portugueseLabel.classList.remove('d-none');
+                                playPortugueseTranslationBtn.classList.remove('d-none');
+                                savePortugueseTranslationBtn.classList.remove('d-none');
+                                playPortugueseTranslationBtn.setAttribute('data-text', parsedJson.translated_text);
+                                playPortugueseTranslationBtn.setAttribute('data-lang', langCodeToSpeechLang[toLangCode] || 'pt-PT');
+                            }
+                            translationPlaceholder.classList.add('d-none');
+                        } else {
+                             translationPlaceholder.textContent = `Não foi possível traduzir de ${langCodeToDisplayName[fromLangCode] || fromLangCode} para ${langCodeToDisplayName[toLangCode] || toLangCode}.`;
+                             translationPlaceholder.classList.remove('d-none');
+                             englishTranslationTextBox.classList.add('d-none');
+                             portugueseTranslationTextBox.classList.add('d-none');
+                        }
+                    }
+
+                } catch (error) {
+                    console.error("Erro na tradução (detalhes):", error);
+                    showErrorMessage(translationErrorMessage, `Não foi possível obter a tradução. Detalhes: ${error.message}.`);
+                    translationPlaceholder.classList.remove('d-none');
+                    translationPlaceholder.textContent = "Erro ao traduzir.";
+                    englishTranslationTextBox.classList.add('d-none');
+                    portugueseTranslationTextBox.classList.add('d-none');
+                } finally {
+                    showTranslationSpinner(false);
+                }
+            };
+
+            /**
+             * Realça as ocorrências do termo de pesquisa na página atual.
+             * Esta função é agora chamada dentro de renderPage para garantir que
+             * os realces são aplicados após a camada de texto ser construída.
+             *
+             * @param {number} pageNum - O número da página a realçar.
+             */
+            const updateSearchHighlightOnPage = async (pageNum, highlightIndex = -1) => {
+                removeHighlights();
+
+                if (!searchQuery.trim() || !pdfDoc) {
+                    return;
+                }
+
+                const page = await pdfDoc.getPage(pageNum);
+                const textContent = await page.getTextContent();
+                let pageText = textContent.items.map(item => item.str).join('');
+                const regex = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                let match;
+                let currentMatchCount = 0;
+
+                const textSpans = Array.from(textLayerDiv.children);
+
+                searchResults = [];
+                
+                for (let i = 0; i < textSpans.length; i++) {
+                    const originalSpan = textSpans[i];
+                    const spanText = originalSpan.textContent;
+                    
+                    let localMatch;
+                    let localRegex = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                    
+                    let lastIndex = 0;
+                    while((localMatch = localRegex.exec(spanText)) !== null) {
+                        const matchStartInSpan = localMatch.index;
+                        const matchEndInSpan = localMatch.index + localMatch[0].length;
+                        
+                        const textBefore = spanText.substring(lastIndex, matchStartInSpan);
+                        const textMatch = spanText.substring(matchStartInSpan, matchEndInSpan);
+                        
+                        if (textBefore) {
+                            const newTextSpan = document.createElement('span');
+                            newTextSpan.style.cssText = originalSpan.style.cssText;
+                            newTextSpan.textContent = textBefore;
+                            originalSpan.parentNode.insertBefore(newTextSpan, originalSpan);
+                        }
+
+                        const highlightSpan = document.createElement('span');
+                        highlightSpan.className = 'highlight';
+                        highlightSpan.style.cssText = originalSpan.style.cssText;
+                        highlightSpan.textContent = textMatch;
+                        originalSpan.parentNode.insertBefore(highlightSpan, originalSpan);
+
+                        searchResults.push({ pageNum: pageNum, element: highlightSpan, globalIndex: currentMatchCount });
+
+                        if (currentMatchCount === highlightIndex) {
+                            highlightSpan.classList.add('current-highlight');
+                            highlightSpan.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                        
+                        lastIndex = matchEndInSpan;
+                        currentMatchCount++;
+                    }
+
+                    if (lastIndex < spanText.length) {
+                        const remainingTextSpan = document.createElement('span');
+                        remainingTextSpan.style.cssText = originalSpan.style.cssText;
+                        remainingTextSpan.textContent = spanText.substring(lastIndex);
+                        originalSpan.parentNode.insertBefore(remainingTextSpan, originalSpan);
+                    }
+                    originalSpan.remove();
+                }
+
+                if (highlightIndex === -1 && searchResults.length > 0) {
+                    currentSearchResultIndex = 0;
+                    searchResults[0].element.classList.add('current-highlight');
+                    searchResults[0].element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            };
+
+
+            // --- Funções de Configuração ---
+
+            /**
+             * Guarda as configurações atuais no localStorage.
+             */
+            const saveSettings = () => {
+                const settings = {
+                    defaultTranslationLang: defaultTranslationLangSelect.value,
+                    defaultLlmModel: defaultLlmModelSelect.value,
+                    pageTheme: document.querySelector('input[name="pageTheme"]:checked').value
+                };
+                localStorage.setItem('pdfReaderSettings', JSON.stringify(settings));
+                showLocalizedCopyPopup("Configurações guardadas!", saveSettingsBtn);
+            };
+
+            /**
+             * Carrega as configurações do localStorage e as aplica.
+             */
+            const loadSettings = () => {
+                const savedSettings = localStorage.getItem('pdfReaderSettings');
+                if (savedSettings) {
+                    const settings = JSON.parse(savedSettings);
+                    
+                    defaultTranslationLangSelect.value = settings.defaultTranslationLang || 'pt';
+                    toLanguageSelect.value = settings.defaultTranslationLang || 'pt';
+
+                    defaultLlmModelSelect.value = settings.defaultLlmModel || 'gemini-2.0-flash';
+
+                    const selectedTheme = settings.pageTheme || 'light';
+                    document.documentElement.setAttribute('data-bs-theme', selectedTheme);
+                    // Atualiza o estado dos radio buttons
+                    if (selectedTheme === 'light') {
+                        themeLightRadio.checked = true;
+                    } else if (selectedTheme === 'dark') {
+                        themeDarkRadio.checked = true;
+                    } else if (selectedTheme === 'crystalline') {
+                        themeCrystallineRadio.checked = true;
+                    }
+                } else {
+                    defaultTranslationLangSelect.value = 'pt';
+                    toLanguageSelect.value = 'pt';
+                    defaultLlmModelSelect.value = 'gemini-2.0-flash';
+                    document.documentElement.setAttribute('data-bs-theme', 'light');
+                    themeLightRadio.checked = true;
+                }
+            };
+
+            // --- Gerenciamento de Layout (Expandir/Reduzir) ---
+            let currentLayout = 'both'; // 'both', 'pdf-expanded', 'translation-expanded'
+
+            const setViewLayout = (layout) => {
+                if (layout === 'pdf-expanded') {
+                    pdfViewerCol.classList.remove('col-md-8');
+                    pdfViewerCol.classList.remove('collapsed');
+                    pdfViewerCol.classList.remove('d-none'); // Ensure it's visible
+                    pdfViewerCol.classList.add('col-md-12', 'expanded');
+                    
+                    translationSidebarCol.classList.remove('col-md-4');
+                    translationSidebarCol.classList.remove('expanded');
+                    translationSidebarCol.classList.add('d-none', 'collapsed'); // Use d-none for full hide
+
+                    expandIconPdf.innerHTML = compressIcon;
+                    expandIconTranslation.innerHTML = expandIcon;
+                } else if (layout === 'translation-expanded') {
+                    translationSidebarCol.classList.remove('col-md-4');
+                    translationSidebarCol.classList.remove('collapsed');
+                    translationSidebarCol.classList.remove('d-none'); // Ensure it's visible
+                    translationSidebarCol.classList.add('col-md-12', 'expanded');
+                    
+                    pdfViewerCol.classList.remove('col-md-8');
+                    pdfViewerCol.classList.remove('expanded');
+                    pdfViewerCol.classList.add('d-none', 'collapsed'); // Use d-none for full hide
+
+                    expandIconTranslation.innerHTML = compressIcon;
+                    expandIconPdf.innerHTML = expandIcon;
+                } else { // 'both'
+                    pdfViewerCol.classList.remove('col-md-12', 'expanded', 'collapsed', 'd-none');
+                    pdfViewerCol.classList.add('col-md-8');
+                    
+                    translationSidebarCol.classList.remove('col-md-12', 'expanded', 'collapsed', 'd-none');
+                    translationSidebarCol.classList.add('col-md-4');
+
+                    expandIconPdf.innerHTML = expandIcon;
+                    expandIconTranslation.innerHTML = expandIcon;
+                }
+                currentLayout = layout;
+                // Força o re-render da página PDF para ajustar o viewport ao novo tamanho da coluna
+                if (pdfDoc && !pageRendering) {
+                    queueRenderPage(currentPageNum);
+                }
+            };
+
+            // --- Event Listeners ---
+            // Adicionado elemento `selectFileBtn`
+            const selectFileBtn = document.getElementById('select-file-btn');
+
+
+            prevPageBtn.addEventListener('click', () => {
+                if (currentPageNum > 1) {
+                    currentPageNum--;
+                    queueRenderPage(currentPageNum);
+                }
+            });
+
+            nextPageBtn.addEventListener('click', () => {
+                if (pdfDoc && currentPageNum < pdfDoc.numPages) {
+                    currentPageNum++;
+                    queueRenderPage(currentPageNum);
+                }
+            });
+            
+            currentPageInput.addEventListener('change', () => {
+                let requestedPage = parseInt(currentPageInput.value, 10);
+                if (pdfDoc && requestedPage >= 1 && requestedPage <= pdfDoc.numPages) {
+                    currentPageNum = requestedPage;
+                    queueRenderPage(currentPageNum);
+                } else {
+                    currentPageInput.value = currentPageNum;
+                    showErrorMessage(viewerErrorMessage, `Por favor, insira um número de página entre 1 e ${pdfDoc ? pdfDoc.numPages : '...'}.`);
+                }
+            });
+
+            // Adiciona uma flag para evitar cliques duplos ou reabertura rápida do diálogo de ficheiros
+            let isFileDialogOpen = false;
+
+            pdfUploadInput.addEventListener('change', (event) => {
+                isFileDialogOpen = false; // Reinicia a flag assim que a interação do diálogo termina (ficheiro selecionado ou cancelado)
+                const file = event.target.files[0];
+                loadPdf(file);
+            });
+
+            // Lógica de Arrastar e Soltar (Drag and Drop)
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.add('drag-over');
+            });
+
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.remove('drag-over');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.remove('drag-over');
+                const file = e.dataTransfer.files[0];
+                loadPdf(file);
+            });
+
+            // Adiciona um listener de clique direto ao input de arquivo oculto
+            // Isso evita a necessidade de um listener na dropZone para disparar o clique.
+            // O botão "Selecione um ficheiro do seu computador" agora dispara diretamente este input.
+            // A dropZone continuará a funcionar para arrastar e soltar.
+
+            // Removido o listener de clique na dropZone que disparava o pdfUploadInput.click()
+            // dropZone.addEventListener('click', (event) => { /* ... */ });
+
+            // Adicionar listener de clique para o novo botão 'select-file-btn'
+            selectFileBtn.addEventListener('click', (event) => {
+                // Não há necessidade de event.stopPropagation() aqui, pois o botão já tem sua própria ação direta
+                if (!isFileDialogOpen) {
+                    pdfUploadInput.click();
+                    isFileDialogOpen = true;
+                }
+            });
+
+            // Adicionar suporte para teclado na dropZone (para acessibilidade)
+            dropZone.addEventListener('keydown', (e) => {
+                // O evento de teclado deve ser associado ao botão ou label, não à dropZone em si se for para abrir o diálogo de ficheiros.
+                // Como o selectFileBtn já lida com isso, este listener pode ser mais específico para o drag-and-drop visual.
+                // Se a intenção é que a tecla Enter/Espaço na dropZone abra o seletor, isso já é tratado pelo selectFileBtn.
+                // Mantendo este listener para garantir que a dropZone ainda responda a certas interações de teclado se necessário.
+                if (e.key === 'Enter' || e.key === ' ') {
+                    // Previne a rolagem da página e qualquer comportamento padrão
+                    e.preventDefault(); 
+                }
+            });
+
+            // Event listener para o novo botão de copiar texto
+            copyTextBtn.addEventListener('click', () => {
+                const selectedText = window.getSelection().toString();
+                if (selectedText.length > 0) {
+                    try {
+                        const success = document.execCommand('copy');
+                        if (success) {
+                            showLocalizedCopyPopup("Texto copiado!", copyTextBtn);
+                        } else {
+                            showLocalizedCopyPopup("Não foi possível copiar. Use Ctrl+C / Cmd+C.", copyTextBtn, 3000);
+                        }
+                    } catch (err) {
+                        console.error('Erro ao copiar texto:', err);
+                        showLocalizedCopyPopup("Erro ao copiar. Use Ctrl+C / Cmd+C.", copyTextBtn, 3000);
+                    }
+                } else {
+                    showLocalizedCopyPopup("Selecione texto para copiar.", copyTextBtn, 2000);
+                }
+            });
+
+            // Listener para seleção de texto na página
+            document.addEventListener('selectionchange', () => {
+                const selection = window.getSelection();
+                const selectedText = selection.toString().trim();
+                
+                // Verifica se a seleção está dentro da camada de texto do PDF
+                if (selectedText.length > 0 && textLayerDiv.contains(selection.anchorNode) && textLayerDiv.contains(selection.focusNode)) {
+                    currentSelectedTextForNote = selectedText;
+                    translateText(selectedText);
+
+                    // Verifica se já existe uma nota para esta seleção na página atual
+                    const pageNotes = notesStore[currentPageNum] || {};
+                    if (pageNotes[currentSelectedTextForNote]) {
+                        addNoteBtn.classList.add('btn-primary'); 
+                        addNoteBtn.classList.remove('btn-outline-primary');
+                        addNoteBtn.innerHTML = existingNoteIcon; 
+                        addNoteBtn.title = 'Ver Nota Existente';
+                    } else {
+                        addNoteBtn.classList.remove('btn-primary');
+                        addNoteBtn.classList.add('btn-outline-primary');
+                        addNoteBtn.innerHTML = defaultNoteIcon; 
+                        addNoteBtn.title = 'Adicionar Nota ao Texto Selecionado';
+                    }
+                    addNoteBtn.disabled = false; // Habilita o botão
+                } else if (selectedText.length === 0) {
+                    clearTranslationSidebar();
+                    currentSelectedTextForNote = '';
+                    addNoteBtn.classList.remove('btn-primary');
+                    addNoteBtn.classList.add('btn-outline-primary'); // Estilo padrão
+                    addNoteBtn.innerHTML = defaultNoteIcon; 
+                    addNoteBtn.title = 'Adicionar Nota ao Texto Selecionado (selecione texto primeiro)';
+                    addNoteBtn.disabled = true; // Desabilita se nenhum texto estiver selecionado
+                }
+            });
+
+            // Event listeners para os botões de áudio
+            playSelectedTextBtn.addEventListener('click', () => {
+                const text = actualSelectedText.textContent;
+                const lang = playSelectedTextBtn.getAttribute('data-lang') || 'pt-PT';
+                toggleSpeech(text, lang, playSelectedTextBtn);
+            });
+
+            playEnglishTranslationBtn.addEventListener('click', () => {
+                const text = englishTranslationText.textContent;
+                const lang = playEnglishTranslationBtn.getAttribute('data-lang');
+                toggleSpeech(text, lang, playEnglishTranslationBtn);
+            });
+
+            playPortugueseTranslationBtn.addEventListener('click', () => {
+                const text = portugueseTranslationText.textContent;
+                const lang = playPortugueseTranslationBtn.getAttribute('data-lang');
+                toggleSpeech(text, lang, playPortugueseTranslationBtn);
+            });
+
+            // Event listeners para os botões de guardar
+            saveSelectedTextBtn.addEventListener('click', () => {
+                const textToSave = actualSelectedText.textContent;
+                if (textToSave) {
+                    saveTextAsFile(textToSave, 'texto_selecionado');
+                } else {
+                    showLocalizedCopyPopup("Nenhum texto selecionado para guardar.", saveSelectedTextBtn);
+                }
+            });
+
+            saveEnglishTranslationBtn.addEventListener('click', () => {
+                const textToSave = englishTranslationText.textContent;
+                if (textToSave) {
+                    saveTextAsFile(textToSave, 'traducao_ingles');
+                } else {
+                    showLocalizedCopyPopup("Nenhuma tradução em inglês para guardar.", saveEnglishTranslationBtn);
+                }
+            });
+
+            savePortugueseTranslationBtn.addEventListener('click', () => {
+                const textToSave = portugueseTranslationText.textContent;
+                if (textToSave) {
+                    saveTextAsFile(textToSave, 'traducao_portugues');
+                } else {
+                    showLocalizedCopyPopup("Nenhuma tradução em português para guardar.", savePortugueseTranslationBtn);
+                }
+            });
+
+            // Listener para o botão de troca de idiomas
+            swapLanguagesBtn.addEventListener('click', () => {
+                const fromVal = fromLanguageSelect.value;
+                const toVal = toLanguageSelect.value;
+                fromLanguageSelect.value = toVal;
+                toLanguageSelect.value = fromVal;
+                const selectedText = window.getSelection().toString().trim();
+                if (selectedText.length > 0) {
+                    translateText(selectedText);
+                }
+            });
+
+            // Event listeners para a pesquisa
+            searchInput.addEventListener('input', () => {
+                performSearch();
+            });
+            searchInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            searchNextBtn.addEventListener('click', nextSearchResult);
+            searchPrevBtn.addEventListener('click', prevSearchResult);
+
+            // Event listeners para as configurações
+            saveSettingsBtn.addEventListener('click', () => {
+                saveSettings();
+                settingsModal.hide();
+            });
+
+            // Adiciona listeners para atualizar o tema instantaneamente ao mudar o rádio button
+            themeLightRadio.addEventListener('change', () => {
+                if (themeLightRadio.checked) {
+                    document.documentElement.setAttribute('data-bs-theme', 'light');
+                }
+            });
+
+            themeDarkRadio.addEventListener('change', () => {
+                if (themeDarkRadio.checked) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                }
+            });
+
+            themeCrystallineRadio.addEventListener('change', () => {
+                if (themeCrystallineRadio.checked) {
+                    document.documentElement.setAttribute('data-bs-theme', 'crystalline');
+                }
+            });
+
+            savePdfBtn.addEventListener('click', saveOriginalPdf);
+            highlightTextBtn.addEventListener('click', () => applyTemporaryTextEffect('highlighted-blue', highlightTextBtn));
+            underlineTextBtn.addEventListener('click', () => applyTemporaryTextEffect('underlined-text', underlineTextBtn));
+
+            // Função para redimensionar o canvas e a camada de texto
+            const resizePdfViewer = () => {
+                if (pdfDoc && !pageRendering) {
+                    queueRenderPage(currentPageNum);
+                }
+            };
+
+            // Event listener para redimensionamento da janela
+            window.addEventListener('resize', resizePdfViewer);
+
+            // Inicializa os ícones dos botões de áudio no carregamento
+            updateSpeechButtonIcon(playSelectedTextBtn, false);
+            updateSpeechButtonIcon(playEnglishTranslationBtn, false);
+            updateSpeechButtonIcon(playPortugueseTranslationBtn, false);
+
+            // Carrega as configurações ao iniciar a página
+            loadSettings();
+
+            // --- Lógica do Modal Arrastável (Configurações) ---
+            const settingsModalDialog = document.querySelector('#settingsModal .modal-dialog');
+            const settingsModalHeader = document.querySelector('#settingsModal .modal-header');
+            const settingsModalElement = document.getElementById('settingsModal');
+
+            let isDraggingSettings = false;
+            let currentXSettings;
+            let currentYSettings;
+            let initialXSettings;
+            let initialYSettings;
+            let xOffsetSettings = 0;
+            let yOffsetSettings = 0;
+
+            if (settingsModalHeader && settingsModalDialog) {
+                settingsModalHeader.addEventListener('mousedown', dragStartSettings);
+                settingsModalHeader.addEventListener('mouseup', dragEndSettings); 
+                settingsModalElement.addEventListener('mouseup', dragEndSettings); 
+
+                function dragStartSettings(e) {
+                    initialXSettings = e.clientX - xOffsetSettings;
+                    initialYSettings = e.clientY - yOffsetSettings;
+                    isDraggingSettings = true;
+                    settingsModalElement.classList.add('dragging'); 
+                    document.addEventListener('mousemove', dragSettings);
+                }
+
+                function dragEndSettings(e) {
+                    isDraggingSettings = false;
+                    settingsModalElement.classList.remove('dragging');
+                    document.removeEventListener('mousemove', dragSettings);
+                }
+
+                function dragSettings(e) {
+                    if (!isDraggingSettings) return;
+                    e.preventDefault();
+
+                    currentXSettings = e.clientX - initialXSettings;
+                    currentYSettings = e.clientY - initialYSettings;
+
+                    xOffsetSettings = currentXSettings;
+                    yOffsetSettings = currentYSettings;
+
+                    settingsModalDialog.style.transform = `translate(${currentXSettings}px, ${currentYSettings}px)`;
+                    settingsModalDialog.style.removeProperty('left'); 
+                    settingsModalDialog.style.removeProperty('top');
+                }
+            }
+
+
+            // --- Lógica do Modal de Notas Arrastável ---
+            const noteModalDialog = document.querySelector('#noteModal .modal-dialog');
+            const noteModalHeader = document.querySelector('#noteModal .modal-header');
+            const noteModalElement = document.getElementById('noteModal');
+
+            if (noteModalHeader && noteModalDialog) {
+                let isDraggingNote = false;
+                let currentXNote, currentYNote, initialXNote, initialYNote, xOffsetNote = 0, yOffsetNote = 0;
+
+                noteModalHeader.addEventListener('mousedown', dragStartNote);
+                noteModalHeader.addEventListener('mouseup', dragEndNote);
+                noteModalElement.addEventListener('mouseup', dragEndNote);
+
+                function dragStartNote(e) {
+                    initialXNote = e.clientX - xOffsetNote;
+                    initialYNote = e.clientY - yOffsetNote;
+                    isDraggingNote = true;
+                    noteModalElement.classList.add('dragging');
+                    document.addEventListener('mousemove', dragNote);
+                }
+
+                function dragEndNote(e) {
+                    isDraggingNote = false;
+                    noteModalElement.classList.remove('dragging');
+                    document.removeEventListener('mousemove', dragNote);
+                }
+
+                function dragNote(e) {
+                    if (!isDraggingNote) return;
+                    e.preventDefault();
+
+                    currentXNote = e.clientX - initialXNote;
+                    currentYNote = e.clientY - initialYNote;
+
+                    xOffsetNote = currentXNote;
+                    yOffsetNote = currentYNote;
+
+                    noteModalDialog.style.transform = `translate(${currentXNote}px, ${currentYNote}px)`;
+                    noteModalDialog.style.removeProperty('left');
+                    noteModalDialog.style.removeProperty('top');
+                }
+            }
+
+            // Listener para o clique no botão de nota (AGORA NO TOOLBAR)
+            addNoteBtn.addEventListener('click', () => {
+                if (currentSelectedTextForNote) {
+                    noteSelectedTextDisplay.textContent = currentSelectedTextForNote;
+                    const pageNotes = notesStore[currentPageNum] || {};
+                    noteTextarea.value = pageNotes[currentSelectedTextForNote] || ''; // Carrega a nota existente
+                    noteModal.show();
+                } else {
+                    showLocalizedCopyPopup("Selecione texto para adicionar uma nota.", addNoteBtn);
+                }
+            });
+
+            // Listener para guardar a nota
+            saveNoteBtn.addEventListener('click', () => {
+                if (currentSelectedTextForNote) {
+                    // Garante que notesStore[currentPageNum] existe
+                    if (!notesStore[currentPageNum]) {
+                        notesStore[currentPageNum] = {};
+                    }
+                    notesStore[currentPageNum][currentSelectedTextForNote] = noteTextarea.value;
+                    showLocalizedCopyPopup("Nota guardada!", saveNoteBtn);
+                    noteModal.hide();
+                    // Atualiza imediatamente o estado do botão de nota após guardar
+                    // Isso reflete a presença da nota no texto atualmente selecionado
+                    addNoteBtn.classList.remove('btn-outline-primary');
+                    addNoteBtn.classList.add('btn-primary');
+                    addNoteBtn.innerHTML = existingNoteIcon;
+                    addNoteBtn.title = 'Ver Nota Existente';
+                }
+            });
+
+
+            // --- Lógica do Botão de Upload na Navbar ---
+            if (uploadPdfNavbarBtn && pdfUploadInput) {
+                uploadPdfNavbarBtn.addEventListener('click', () => {
+                    if (!isFileDialogOpen) {
+                        pdfUploadInput.click(); // Dispara o clique no input de ficheiro oculto
+                        isFileDialogOpen = true;
+                    }
+                });
+            }
+
+            // --- Lógica dos Botões de Expandir/Reduzir ---
+            expandPdfViewerBtn.addEventListener('click', () => {
+                if (currentLayout === 'pdf-expanded') {
+                    setViewLayout('both'); // Volta para o layout original
+                } else {
+                    setViewLayout('pdf-expanded'); // Expande o PDF
+                }
+            });
+
+            expandTranslationSidebarBtn.addEventListener('click', () => {
+                if (currentLayout === 'translation-expanded') {
+                    setViewLayout('both'); // Volta para o layout original
+                } else {
+                    setViewLayout('translation-expanded'); // Expande a tradução
+                }
+            });
+
+            // Define o estado inicial do botão de notas
+            addNoteBtn.disabled = true;
+            addNoteBtn.innerHTML = defaultNoteIcon;
+            addNoteBtn.title = 'Adicionar Nota ao Texto Selecionado (selecione texto primeiro)';
+        });
+    </script>
+</body>
+</html>

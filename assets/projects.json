@@ -176,6 +176,21 @@
     "target": ""
   },
   {
+    "title": "Doc Reader",
+    "description": "Read documents aloud using AI technology.",
+    "url": "../doc_reader/doc_reader.html",
+    "repository": "",
+    "techStacks": {
+      "Python": "fas fa-robot",
+      "Flask": "fab fa-python",
+      "JavaScript": "fas fa-flask",
+      "OpenAI API": "fab fa-js",
+      "Bootstrap": "fab fa-bootstrap",
+      "HTML & CSS": "fab fa-html5"
+    },
+    "target": "_blank"
+  },
+  {
     "title": "Audio Splitter",
     "description": "Split audio files into smaller segments ",
     "url": "split-audio.html",
