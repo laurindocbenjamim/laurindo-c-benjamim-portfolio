@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leitor de Documentos Moderno</title>
+    <title>Leitor de PDF Moderno</title>
 
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- Font Awesome para ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Estilos Personalizados -->
     <style>
@@ -220,7 +220,7 @@
         }
 
         /* O container do visualizador de PDF (agora preenche a altura da coluna) */
-        #doc-viewer-container {
+        #pdf-viewer-container {
             flex-grow: 1; /* Permite que o visualizador preencha a altura da coluna .col-md-8 */
             display: flex;
             flex-direction: column; /* Permite que a barra de controlo e a área de renderização empilhem */
@@ -232,22 +232,22 @@
             margin: 0; /* Remove margens que podem interferir com o layout flex */
         }
 
-        /* Barra de controlo do documento (fixa dentro do container) */
-        #doc-controls {
+        /* Barra de controlo do PDF (agora fixa dentro do container) */
+        #pdf-viewer-container .d-flex.bg-light.p-2.border-bottom {
             position: sticky; /* Torna esta barra fixa dentro do seu container pai rolavel */
             top: 0; /* Fixa no topo do container */
-            z-index: 1000; /* Garante que está acima do conteúdo do documento */
+            z-index: 1000; /* Garante que está acima do conteúdo do PDF */
             background-color: var(--card-header-bg-color) !important; /* Usa a variável para o fundo */
             border-bottom: 1px solid var(--border-color) !important; /* Borda inferior */
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         
-        /* Área de Renderização do Documento - agora rolável */
-        #doc-render-area {
+        /* Área de Renderização do PDF - agora rolável */
+        #pdf-render-area {
             background-color: var(--main-bg-color); /* Combina com o fundo do corpo */
-            overflow-x: auto; /* Permite rolagem horizontal se o conteúdo for muito largo */
-            overflow-y: auto; /* Permite rolagem vertical para o conteúdo do documento */
-            padding: 1rem; /* Espaçamento geral para o conteúdo */
+            overflow-x: auto; /* Permite rolagem horizontal se o PDF for muito largo */
+            overflow-y: auto; /* Permite rolagem vertical para o conteúdo do PDF */
+            padding: 1rem 0; /* Espaçamento vertical para o conteúdo */
             position: relative;
             flex-grow: 1; /* Ocupa todo o espaço vertical restante dentro do pdf-viewer-container */
             transition: background-color 0.3s ease;
@@ -293,44 +293,6 @@
             cursor: text;
             transform-origin: 0% 0%;
         }
-
-        /* Novo estilo para a área de exibição de texto/HTML */
-        #text-display-area {
-            padding: 1rem;
-            max-width: 800px; /* Largura máxima para melhor legibilidade de texto */
-            margin: 0 auto; /* Centraliza o conteúdo */
-            word-wrap: break-word; /* Quebra de linha para palavras longas */
-        }
-
-        /* Estilos adicionados para melhor responsividade de conteúdo dentro de #text-display-area */
-        #text-display-area img {
-            max-width: 100%;
-            height: auto;
-            display: block; /* Prevents extra space below images */
-            margin: 0.5rem auto; /* Centers images and adds some margin */
-            border-radius: 0.25rem; /* Rounded corners */
-        }
-
-        #text-display-area table {
-            width: 100%; /* Make tables take full width of container */
-            max-width: 100%; /* Ensure tables don't overflow parent */
-            border-collapse: collapse; /* For clean table borders */
-            margin: 1rem 0; /* Add margin above and below tables */
-            overflow-x: auto; /* Enable horizontal scrolling for large tables */
-            display: block; /* Allows overflow-x to work on table element */
-        }
-
-        #text-display-area th, #text-display-area td {
-            padding: 0.75rem;
-            border: 1px solid var(--border-color); /* Use theme border color */
-            text-align: left;
-        }
-
-        #text-display-area h1, #text-display-area h2, #text-display-area h3,
-        #text-display-area h4, #text-display-area h5, #text-display-area h6 {
-            word-break: break-word; /* Ensure long headings break properly */
-        }
-
 
         .spinner-container {
             position: absolute;
@@ -463,7 +425,7 @@
             color: #28a745;
         }
 
-        #translation-loading-spinner, #summary-loading-spinner, #keywords-loading-spinner {
+        #translation-loading-spinner {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -520,7 +482,7 @@
             color: var(--muted-text-color) !important;
         }
 
-        /* Estilo para realce de pesquisa (apenas para PDF) */
+        /* Estilo para realce de pesquisa */
         .highlight {
             background-color: yellow;
             border-radius: 3px;
@@ -633,13 +595,13 @@
     <!-- Cabeçalho da Aplicação (Navbar Fixo) -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#" aria-label="Leitor de Documentos - Início">
-                <i class="fas fa-file-alt me-2"></i> <!-- Ícone genérico de documento -->
-                Leitor de Documentos
+            <a class="navbar-brand fw-bold" href="#" aria-label="Leitor de PDF - Início">
+                <i class="fas fa-file-pdf me-2"></i> <!-- Ícone PDF por Font Awesome -->
+                Leitor de PDF
             </a>
             <div class="ms-auto">
                 <!-- Novo botão para carregar PDF na navbar -->
-                <button id="upload-pdf-navbar-btn" class="btn btn-outline-secondary me-2" title="Carregar Documento" aria-label="Carregar novo ficheiro de documento">
+                <button id="upload-pdf-navbar-btn" class="btn btn-outline-secondary me-2" title="Carregar PDF" aria-label="Carregar novo ficheiro PDF">
                     <i class="fas fa-upload"></i> <!-- Ícone de upload por Font Awesome -->
                 </button>
                 <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#settingsModal" title="Configurações" aria-label="Abrir Configurações">
@@ -652,16 +614,16 @@
     <!-- Wrapper Principal para o Conteúdo da Aplicação (Fixo e Rolável Internamente) -->
     <div id="app-content-wrapper" class="container-fluid py-4">
         <div class="row h-100" id="main-content-row">
-            <!-- Coluna Principal para o Visualizador de Documentos (8/12 da largura em md e acima) -->
-            <div class="col-md-8" id="doc-viewer-col">
+            <!-- Coluna Principal para o Visualizador de PDF (8/12 da largura em md e acima) -->
+            <div class="col-md-8" id="pdf-viewer-col">
                 <!-- Secção de Upload (visível no início) -->
                 <div id="upload-section">
                     <div class="card border-0 shadow-sm">
-                        <div class="card-body text-center" id="drop-zone" role="button" tabindex="0" aria-label="Arraste e solte o seu ficheiro PDF, DOCX ou TXT">
+                        <div class="card-body text-center" id="drop-zone" role="button" tabindex="0" aria-label="Arraste e solte o seu ficheiro PDF">
                             <i class="fas fa-cloud-upload-alt text-primary mb-3" style="font-size: 64px;"></i> <!-- Ícone de upload por Font Awesome -->
-                            <h5 class="card-title">Arraste e solte o seu ficheiro PDF, DOCX ou TXT aqui</h5>
+                            <h5 class="card-title">Arraste e solte o seu ficheiro PDF aqui</h5>
                             <p class="text-muted">ou</p>
-                            <input type="file" id="pdf-upload" class="d-none" accept=".pdf,.docx,.txt" aria-label="Selecione um ficheiro PDF, DOCX ou TXT">
+                            <input type="file" id="pdf-upload" class="d-none" accept=".pdf" aria-label="Selecione um ficheiro PDF">
                             <!-- Botão para selecionar ficheiro, agora com id próprio e não um label -->
                             <button id="select-file-btn" class="btn btn-primary" role="button">
                                 Selecione um ficheiro do seu computador
@@ -672,10 +634,10 @@
                     <div id="upload-error-message" class="error-message d-none" role="alert"></div>
                 </div>
 
-                <!-- Visualizador de Documentos (oculto no início) -->
-                <div id="doc-viewer-container" class="d-none">
-                    <!-- Barra de Controlo (Fixa dentro do container do documento) -->
-                    <div id="doc-controls" class="d-flex justify-content-between align-items-center bg-light p-2 border-bottom flex-wrap">
+                <!-- Visualizador de PDF (oculto no início) -->
+                <div id="pdf-viewer-container" class="d-none">
+                    <!-- Barra de Controlo (Fixa dentro do container do PDF) -->
+                    <div class="d-flex justify-content-between align-items-center bg-light p-2 border-bottom flex-wrap">
                         <div class="me-3 mb-2 mb-md-0">
                             <strong id="file-name" class="text-truncate" style="max-width: 250px;" aria-live="polite"></strong>
                         </div>
@@ -684,7 +646,7 @@
                             <button id="copy-text-btn" class="btn btn-outline-primary btn-sm me-2" title="Copiar Texto Selecionado" aria-label="Copiar Texto Selecionado">
                                 <i class="far fa-copy"></i> <!-- Ícone por Font Awesome -->
                             </button>
-                            <button id="save-original-file-btn" class="btn btn-outline-success btn-sm me-2" title="Guardar Documento Original" aria-label="Guardar Documento Original">
+                            <button id="save-pdf-btn" class="btn btn-outline-success btn-sm me-2" title="Guardar Documento Original" aria-label="Guardar Documento Original">
                                 <i class="fas fa-file-download"></i> <!-- Ícone por Font Awesome -->
                             </button>
                             <button id="highlight-text-btn" class="btn btn-outline-info btn-sm me-2" title="Realçar Texto Selecionado" aria-label="Realçar Texto Selecionado">
@@ -698,8 +660,8 @@
                             </button>
 
                             <!-- Barra de Pesquisa (próxima aos botões de ação) -->
-                            <div class="input-group input-group-sm me-2" id="search-controls-group">
-                                <input type="text" id="search-input" class="form-control" placeholder="Procurar texto..." aria-label="Procurar texto no documento">
+                            <div class="input-group input-group-sm me-2">
+                                <input type="text" id="search-input" class="form-control" placeholder="Procurar texto..." aria-label="Procurar texto no PDF">
                                 <button id="search-prev" class="btn btn-outline-secondary btn-sm" title="Resultado Anterior" aria-label="Resultado anterior da pesquisa">
                                     <i class="fas fa-chevron-up"></i> <!-- Ícone por Font Awesome -->
                                 </button>
@@ -710,7 +672,7 @@
                             <span id="search-results-count" class="me-2 text-muted" aria-live="polite"></span>
 
                             <!-- Paginação e Botão de Expandir (empurrados para a direita) -->
-                            <div class="d-flex align-items-center ms-auto" id="pagination-controls-group"> <!-- ms-auto empurra este grupo para a direita -->
+                            <div class="d-flex align-items-center ms-auto"> <!-- ms-auto empurra este grupo para a direita -->
                                 <div class="input-group input-group-sm align-items-center me-2">
                                     <label for="current-page-input" class="input-group-text bg-transparent border-0">Página:</label>
                                     <input type="number" id="current-page-input" class="form-control" style="width: 70px; text-align: center;" aria-label="Número da página atual">
@@ -724,26 +686,23 @@
                                         <i class="fas fa-chevron-right"></i> <!-- Ícone por Font Awesome -->
                                     </button>
                                 </div>
-                                <button id="expand-doc-viewer-btn" class="btn btn-outline-secondary btn-sm" title="Expandir/Reduzir Visualizador de Documentos" aria-label="Expandir ou reduzir visualizador de documentos">
+                                <button id="expand-pdf-viewer-btn" class="btn btn-outline-secondary btn-sm" title="Expandir/Reduzir Visualizador de PDF" aria-label="Expandir ou reduzir visualizador de PDF">
                                     <i class="fas fa-expand-alt" data-expand-icon="true"></i> <!-- Ícone por Font Awesome -->
                                 </button>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Área de Renderização do Documento -->
-                    <div id="doc-render-area">
-                        <!-- PDF Content Wrapper (para PDF.js) -->
+                    <!-- Área de Renderização do PDF -->
+                    <div id="pdf-render-area">
+                        <!-- Wrapper adicionado para sincronizar o scaling -->
                         <div id="pdf-content-wrapper">
                             <canvas id="pdf-canvas" role="img" aria-label="Conteúdo do documento PDF"></canvas>
                             <!-- A camada de texto é uma sobreposição invisível para permitir a seleção de texto.
                                  O PDF real é renderizado no canvas como uma imagem. -->
                             <div id="text-layer" class="textLayer" aria-hidden="true"></div> 
                         </div>
-                        <!-- Nova área para exibir texto/HTML de DOCX/TXT -->
-                        <div id="text-display-area" class="d-none"></div>
-
-                        <div id="spinner-container" class="spinner-container d-none" role="status" aria-live="assertive" aria-label="A carregar documento">
+                        <div id="spinner-container" class="spinner-container d-none" role="status" aria-live="assertive" aria-label="A carregar página">
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">A carregar...</span>
                             </div>
@@ -805,7 +764,7 @@
                                 </div>
                             </div>
                             <div class="text-box-content">
-                                <p class="text-muted" id="selected-text-placeholder">Selecione texto no documento para vê-lo aqui.</p>
+                                <p class="text-muted" id="selected-text-placeholder">Selecione texto no PDF para vê-lo aqui.</p>
                                 <p id="actual-selected-text" class="d-none"></p>
                             </div>
                         </div>
@@ -853,65 +812,6 @@
                             </div>
                             <div id="translation-error-message" class="error-message d-none" role="alert"></div>
                         </div>
-
-                        <!-- Nova secção para ferramentas LLM -->
-                        <h6 class="mt-4">Ferramentas de IA ✨:</h6>
-                        <div id="llm-tools-container">
-                            <button id="summarize-text-btn" class="btn btn-info btn-sm w-100 mb-2" title="Resumir o texto selecionado (requer Gemini)" aria-label="Resumir o texto selecionado">
-                                Resumir Texto Selecionado ✨
-                            </button>
-                            <div id="summary-text-box" class="text-box-with-speech d-none">
-                                <div class="text-box-header">
-                                    <span class="language-label fw-bold">Resumo:</span>
-                                    <div class="icon-buttons">
-                                        <button id="play-summary" class="speech-button" title="Ouvir resumo" aria-label="Ouvir resumo" data-lang="pt-PT">
-                                            <i class="fas fa-volume-up"></i>
-                                        </button>
-                                        <button id="save-summary" class="save-button" title="Guardar resumo" aria-label="Guardar resumo">
-                                            <i class="fas fa-download"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="text-box-content">
-                                    <p id="summary-text"></p>
-                                </div>
-                            </div>
-                            <div id="summary-loading-spinner" class="d-none">
-                                <div class="spinner-border text-secondary spinner-border-sm" role="status">
-                                    <span class="visually-hidden">A resumir...</span>
-                                </div>
-                            </div>
-                            <p class="text-muted d-none" id="summary-placeholder">O resumo aparecerá aqui. (Requer Gemini)</p>
-                            <div id="summary-error-message" class="error-message d-none" role="alert"></div>
-
-
-                            <button id="extract-keywords-btn" class="btn btn-warning btn-sm w-100 mt-3 mb-2" title="Extrair palavras-chave do texto selecionado (requer Gemini)" aria-label="Extrair palavras-chave">
-                                Extrair Palavras-Chave ✨
-                            </button>
-                            <div id="keywords-text-box" class="text-box-with-speech d-none">
-                                <div class="text-box-header">
-                                    <span class="language-label fw-bold">Palavras-Chave:</span>
-                                    <div class="icon-buttons">
-                                        <button id="play-keywords" class="speech-button" title="Ouvir palavras-chave" aria-label="Ouvir palavras-chave" data-lang="pt-PT">
-                                            <i class="fas fa-volume-up"></i>
-                                        </button>
-                                        <button id="save-keywords" class="save-button" title="Guardar palavras-chave" aria-label="Guardar palavras-chave">
-                                            <i class="fas fa-download"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="text-box-content">
-                                    <p id="keywords-text"></p>
-                                </div>
-                            </div>
-                            <div id="keywords-loading-spinner" class="d-none">
-                                <div class="spinner-border text-secondary spinner-border-sm" role="status">
-                                    <span class="visually-hidden">A extrair...</span>
-                                </div>
-                            </div>
-                            <p class="text-muted d-none" id="keywords-placeholder">As palavras-chave aparecerão aqui. (Requer Gemini)</p>
-                            <div id="keywords-error-message" class="error-message d-none" role="alert"></div>
-                        </div>
                     </div>
                 </div>
             </div> <!-- Fim da coluna da barra lateral -->
@@ -942,12 +842,12 @@
                             <label for="defaultLlmModel" class="form-label">Modelo LLM Padrão:</label>
                             <select class="form-select" id="defaultLlmModel">
                                 <option value="gemini-2.0-flash">Gemini 2.0 Flash (Ativo)</option>
-                                <option value="openai">OpenAI (Personalizado)</option>
+                                <option value="openai">OpenAI (Apenas placeholder)</option>
                                 <option value="deepseek">DeepSeek (Apenas placeholder)</option>
                                 <option value="elevenlabs">ElevenLabs (Apenas placeholder)</option>
                                 <option value="stc">STC (Apenas placeholder)</option>
                             </select>
-                            <div class="form-text">Apenas o Gemini 2.0 Flash é suportado por padrão para as novas funcionalidades. A opção OpenAI usará um endpoint personalizado para tradução.</div>
+                            <div class="form-text">Apenas o Gemini 2.0 Flash é suportado neste ambiente. Outros modelos são apenas para demonstração.</div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Tema da Página:</label>
@@ -1009,42 +909,31 @@
       // Aponta para o ficheiro 'worker' da CDN. Essencial para o PDF.js funcionar.
       pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;
     </script>
-    <!-- mammoth.js para conversão de DOCX para HTML -->
-    <!-- Movido para aqui para garantir que esteja disponível antes do script principal e alterado para usar unpkg.com para consistência com o seu 'index.html' de exemplo -->
-    <script src="https://unpkg.com/mammoth@1.4.15/mammoth.browser.min.js"></script>
     
     <!-- Lógica da Aplicação -->
     <script>
-        window.onload = () => {
+        document.addEventListener('DOMContentLoaded', () => {
             // Elementos da UI
             const uploadSection = document.getElementById('upload-section');
             const dropZone = document.getElementById('drop-zone');
             const pdfUploadInput = document.getElementById('pdf-upload');
-            const docViewerContainer = document.getElementById('doc-viewer-container');
+            const viewerContainer = document.getElementById('pdf-viewer-container');
             const spinner = document.getElementById('spinner-container');
             const pdfContentWrapper = document.getElementById('pdf-content-wrapper');
-            const textDisplayArea = document.getElementById('text-display-area');
             const pdfCanvas = document.getElementById('pdf-canvas');
             const textLayerDiv = document.getElementById('text-layer');
             const fileNameSpan = document.getElementById('file-name');
             const uploadErrorMessage = document.getElementById('upload-error-message');
             const viewerErrorMessage = document.getElementById('viewer-error-message');
 
-            // Controles de Documento (barra de ferramentas)
-            const docControls = document.getElementById('doc-controls');
-
-            // Controles de Paginação (PDF-specific)
-            const paginationControlsGroup = document.getElementById('pagination-controls-group');
+            // Controles de Paginação
             const prevPageBtn = document.getElementById('prev-page');
             const nextPageBtn = document.getElementById('next-page');
             const currentPageInput = document.getElementById('current-page-input');
             const pageCountSpan = document.getElementById('page-count');
-            const saveOriginalFileBtn = document.getElementById('save-original-file-btn');
-
             const copyTextBtn = document.getElementById('copy-text-btn');
 
             // Elementos de Pesquisa
-            const searchControlsGroup = document.getElementById('search-controls-group');
             const searchInput = document.getElementById('search-input');
             const searchPrevBtn = document.getElementById('search-prev');
             const searchNextBtn = document.getElementById('search-next');
@@ -1065,26 +954,6 @@
             const translationPlaceholder = document.getElementById('translation-placeholder');
             const translationLoadingSpinner = document.getElementById('translation-loading-spinner');
             const translationErrorMessage = document.getElementById('translation-error-message');
-
-            // Elementos para as novas funcionalidades LLM
-            const summarizeTextBtn = document.getElementById('summarize-text-btn');
-            const summaryTextBox = document.getElementById('summary-text-box');
-            const summaryText = document.getElementById('summary-text');
-            const summaryLoadingSpinner = document.getElementById('summary-loading-spinner');
-            const summaryPlaceholder = document.getElementById('summary-placeholder');
-            const summaryErrorMessage = document.getElementById('summary-error-message');
-            const playSummaryBtn = document.getElementById('play-summary');
-            const saveSummaryBtn = document.getElementById('save-summary');
-
-            const extractKeywordsBtn = document.getElementById('extract-keywords-btn');
-            const keywordsTextBox = document.getElementById('keywords-text-box');
-            const keywordsText = document.getElementById('keywords-text');
-            const keywordsLoadingSpinner = document.getElementById('keywords-loading-spinner');
-            const keywordsPlaceholder = document.getElementById('keywords-placeholder');
-            const keywordsErrorMessage = document.getElementById('keywords-error-message');
-            const playKeywordsBtn = document.getElementById('play-keywords');
-            const saveKeywordsBtn = document.getElementById('save-keywords');
-
 
             // Botões de áudio
             const playSelectedTextBtn = document.getElementById('play-selected-text');
@@ -1107,17 +976,18 @@
             const defaultLlmModelSelect = document.getElementById('defaultLlmModel');
             const themeLightRadio = document.getElementById('themeLight');
             const themeDarkRadio = document.getElementById('themeDark');
-            const themeCrystallineRadio = document.getElementById('themeCrystalline');
+            const themeCrystallineRadio = document.getElementById('themeCrystalline'); // Novo radio button
             const saveSettingsBtn = document.getElementById('saveSettingsBtn');
 
             // Novos botões para ações no documento
+            const savePdfBtn = document.getElementById('save-pdf-btn');
             const highlightTextBtn = document.getElementById('highlight-text-btn');
             const underlineTextBtn = document.getElementById('underline-text-btn');
 
             // Elemento do novo botão de upload na navbar
             const uploadPdfNavbarBtn = document.getElementById('upload-pdf-navbar-btn');
 
-            // Elementos para o ícone de notas
+            // Elementos para o ícone de notas (AGORA NO TOOLBAR DO PDF)
             const addNoteBtn = document.getElementById('add-note-btn'); 
             const noteModal = new bootstrap.Modal(document.getElementById('noteModal'));
             const noteSelectedTextDisplay = document.getElementById('note-selected-text-display');
@@ -1129,11 +999,11 @@
             const notesStore = {}; 
 
             // Elementos para expansão de containers
-            const docViewerCol = document.getElementById('doc-viewer-col');
+            const pdfViewerCol = document.getElementById('pdf-viewer-col');
             const translationSidebarCol = document.getElementById('translation-sidebar-col');
-            const expandDocViewerBtn = document.getElementById('expand-doc-viewer-btn');
+            const expandPdfViewerBtn = document.getElementById('expand-pdf-viewer-btn');
             const expandTranslationSidebarBtn = document.getElementById('expand-translation-sidebar-btn');
-            const expandIconDoc = expandDocViewerBtn.querySelector('[data-expand-icon="true"]');
+            const expandIconPdf = expandPdfViewerBtn.querySelector('[data-expand-icon="true"]');
             const expandIconTranslation = expandTranslationSidebarBtn.querySelector('[data-expand-icon="true"]');
 
 
@@ -1161,14 +1031,12 @@
             };
 
             // Estado da aplicação
-            let docType = null; // 'pdf', 'docx', 'txt'
-            let pdfDoc = null; // Apenas para PDFs
+            let pdfDoc = null;
             let currentPageNum = 1;
             let pageRendering = false;
             let pageNumPending = null;
             const scale = 1.8; // Escala de renderização para melhor qualidade
-            let originalFileBytes = null; // Para armazenar os bytes do ficheiro original
-            let originalFileName = null; // Para armazenar o nome do ficheiro original
+            let originalPdfBytes = null; // Para armazenar os bytes do PDF original
 
             // Variáveis para Text-to-Speech
             const synth = window.speechSynthesis;
@@ -1182,12 +1050,13 @@
             let lastFoundPage = -1;
 
             // Ícones de áudio (SVG)
+            // Atualizados para Font Awesome
             const playIcon = `<i class="fas fa-volume-up"></i>`;
             const pauseIcon = `<i class="fas fa-pause"></i>`;
             const expandIcon = `<i class="fas fa-expand-alt" data-expand-icon="true"></i>`;
             const compressIcon = `<i class="fas fa-compress-alt" data-expand-icon="true"></i>`;
-            const defaultNoteIcon = `<i class="fas fa-sticky-note"></i>`;
-            const existingNoteIcon = `<i class="fas fa-comment-dots"></i>`;
+            const defaultNoteIcon = `<i class="fas fa-sticky-note"></i>`; // Ícone padrão para adicionar nota
+            const existingNoteIcon = `<i class="fas fa-comment-dots"></i>`; // Ícone para nota existente
             
             /**
              * Atualiza o ícone de um botão de áudio.
@@ -1210,7 +1079,7 @@
                     updateSpeechButtonIcon(speakingButton, false);
                     speakingButton = null;
                 }
-                currentUtterance = null;
+                currentUtterance = null; // Garante que currentUtterance é resetado
             };
 
             /**
@@ -1231,8 +1100,10 @@
                 currentUtterance.onpause = () => updateSpeechButtonIcon(buttonElement, false);
                 currentUtterance.onresume = () => updateSpeechButtonIcon(buttonElement, true);
                 currentUtterance.onerror = (event) => {
+                    // Ignora o erro 'interrupted' que ocorre quando a síntese é cancelada intencionalmente
                     if (event.error === 'interrupted') {
                         console.log('Speech interrupted intentionally.');
+                        // Não mostra popup, e o onpause/onend já devem ter atualizado o UI
                     } else {
                         console.error('SpeechSynthesis Utterance Error:', event.error);
                         showLocalizedCopyPopup("Erro ao falar: " + event.error, buttonElement, 3000);
@@ -1260,6 +1131,7 @@
                 }
 
                 if (speakingButton === buttonElement) {
+                    // Se o mesmo botão é clicado novamente
                     if (synth.speaking) {
                         synth.pause();
                         updateSpeechButtonIcon(buttonElement, false);
@@ -1267,10 +1139,12 @@
                         synth.resume();
                         updateSpeechButtonIcon(buttonElement, true);
                     } else {
+                        // Pode acontecer se a fala terminou naturalmente
                         startNewSpeech(text, lang, buttonElement);
                     }
                 } else {
-                    stopSpeech();
+                    // Um botão diferente foi clicado, ou nenhuma fala está ativa
+                    stopSpeech(); // Para qualquer fala existente primeiro (e redefine o ícone)
                     startNewSpeech(text, lang, buttonElement);
                 }
             };
@@ -1301,6 +1175,7 @@
              * @param {number} duration - Duração em milissegundos.
              */
             const showLocalizedCopyPopup = (message, targetElement, duration = 2000) => {
+                // Remove qualquer popup existente para evitar sobreposição
                 const existingPopup = document.getElementById('localized-copy-popup');
                 if (existingPopup) {
                     existingPopup.remove();
@@ -1308,23 +1183,27 @@
 
                 const popup = document.createElement('div');
                 popup.id = 'localized-copy-popup';
-                popup.className = 'copy-popup-style';
+                popup.className = 'copy-popup-style'; // Estilos definidos no CSS
                 popup.textContent = message;
                 popup.setAttribute('role', 'status');
                 popup.setAttribute('aria-live', 'polite');
 
-                document.body.appendChild(popup);
+                document.body.appendChild(popup); // Anexar ao body para posicionamento fixo
 
+                // Posicionar o popup
+                const rect = targetElement.getBoundingClientRect();
+                // É necessário um pequeno atraso para que o navegador calcule o offsetWidth/offsetHeight
+                // corretamente após o appendChild
                 setTimeout(() => {
-                    const rect = targetElement.getBoundingClientRect();
                     popup.style.left = `${rect.left + rect.width / 2 - popup.offsetWidth / 2}px`;
-                    popup.style.top = `${rect.top - popup.offsetHeight - 10}px`;
-                    popup.style.opacity = '1';
+                    popup.style.top = `${rect.top - popup.offsetHeight - 10}px`; // 10px acima do botão
+                    popup.style.opacity = '1'; // Inicia a transição de opacidad
                 }, 0);
 
 
                 setTimeout(() => {
                     popup.style.opacity = '0';
+                    // Remove o popup do DOM após a transição de fade-out
                     popup.addEventListener('transitionend', () => popup.remove(), { once: true });
                 }, duration);
             };
@@ -1346,54 +1225,30 @@
             };
 
             /**
-             * Mostra ou esconde o spinner de carregamento do resumo.
-             * @param {boolean} show - True para mostrar, false para esconder.
-             */
-            const showSummarySpinner = (show) => {
-                summaryLoadingSpinner.classList.toggle('d-none', !show);
-            };
-
-            /**
-             * Mostra ou esconde o spinner de carregamento das palavras-chave.
-             * @param {boolean} show - True para mostrar, false para esconder.
-             */
-            const showKeywordsSpinner = (show) => {
-                keywordsLoadingSpinner.classList.toggle('d-none', !show);
-            };
-
-            /**
              * Remove todos os realces de pesquisa da camada de texto.
              */
             const removeHighlights = () => {
-                if (docType === 'pdf') {
-                    const highlights = textLayerDiv.querySelectorAll('.highlight');
-                    highlights.forEach(span => {
-                        const parent = span.parentNode;
-                        while (span.firstChild) {
-                            parent.insertBefore(span.firstChild, span);
-                        }
-                        parent.removeChild(span);
-                    });
-                    const currentHighlights = textLayerDiv.querySelectorAll('.current-highlight');
-                    currentHighlights.forEach(span => span.classList.remove('current-highlight'));
-                } else if (docType === 'txt' || docType === 'docx') {
-                    const highlights = textDisplayArea.querySelectorAll('span.highlight, span.current-highlight');
-                    highlights.forEach(span => {
-                        const parent = span.parentNode;
-                        while (span.firstChild) {
-                            parent.insertBefore(span.firstChild, span);
-                        }
-                        parent.removeChild(span);
-                    });
-                }
+                const highlights = textLayerDiv.querySelectorAll('.highlight');
+                highlights.forEach(span => {
+                    const parent = span.parentNode;
+                    // Move todos os filhos do realce de volta para o pai, depois remove o realce
+                    while (span.firstChild) {
+                        parent.insertBefore(span.firstChild, span);
+                    }
+                    parent.removeChild(span);
+                });
+                // Garante que a classe de destaque atual é removida de todos os elementos
+                const currentHighlights = textLayerDiv.querySelectorAll('.current-highlight');
+                currentHighlights.forEach(span => span.classList.remove('current-highlight'));
             };
 
             /**
-             * Realça todas as ocorrências do termo de pesquisa na página atual (para PDF).
+             * Realça todas as ocorrências do termo de pesquisa na página atual.
+             * @param {number} pageNumber - O número da página atual.
              */
-            const highlightAllOccurrencesPDF = async (pageNumber) => {
-                removeHighlights();
-                searchResults = [];
+            const highlightAllOccurrences = async (pageNumber) => {
+                removeHighlights(); // Remove realces anteriores
+                searchResults = []; // Limpa resultados anteriores
 
                 if (!searchQuery.trim() || !pdfDoc) {
                     searchResultsCountSpan.textContent = '';
@@ -1405,7 +1260,7 @@
                 const textItems = textContent.items;
 
                 let pageText = textItems.map(item => item.str).join('');
-                const regex = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                const regex = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'); // Escape special chars for regex
                 let match;
                 let foundOnPage = 0;
 
@@ -1475,7 +1330,7 @@
                 }
 
                 const highlight = searchResults[index];
-                if (highlight.pageNum !== currentPageNum && docType === 'pdf') {
+                if (highlight.pageNum !== currentPageNum) {
                     currentPageNum = highlight.pageNum;
                     queueRenderPage(currentPageNum).then(() => {
                         setTimeout(() => {
@@ -1491,7 +1346,7 @@
                         }, 100);
                     });
                 } else {
-                    if (highlight.element && (textLayerDiv.contains(highlight.element) || textDisplayArea.contains(highlight.element))) {
+                    if (highlight.element && textLayerDiv.contains(highlight.element)) {
                         highlight.element.classList.add('current-highlight');
                         highlight.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
@@ -1499,7 +1354,7 @@
             };
 
             /**
-             * Inicia uma nova pesquisa de texto no documento.
+             * Inicia uma nova pesquisa de texto no PDF.
              */
             const performSearch = async () => {
                 searchQuery = searchInput.value.trim();
@@ -1508,92 +1363,66 @@
                 currentSearchResultIndex = -1;
                 lastFoundPage = -1;
 
-                if (!searchQuery || !docType) {
+                if (!searchQuery || !pdfDoc) {
                     searchResultsCountSpan.textContent = '';
                     return;
                 }
 
                 searchResultsCountSpan.textContent = 'A procurar...';
 
-                if (docType === 'pdf' && pdfDoc) {
-                    for (let i = 1; i <= pdfDoc.numPages; i++) {
-                        const page = await pdfDoc.getPage(i);
-                        const textContent = await page.getTextContent();
-                        let pageText = textContent.items.map(item => item.str).join('');
-                        const regex = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-                        let match;
-                        let pageHighlights = [];
-                        
-                        let tempTextLayerDiv = document.createElement('div');
-                        await pdfjsLib.renderTextLayer({
-                            textContent: textContent,
-                            container: tempTextLayerDiv,
-                            viewport: page.getViewport({scale: scale}),
-                            textDivs: []
-                        }).promise;
-
-                        const tempTextSpans = Array.from(tempTextLayerDiv.children);
-
-                        let textMapping = [];
-                        let currentOffset = 0;
-                        tempTextSpans.forEach(span => {
-                            textMapping.push({span: span, text: span.textContent, offset: currentOffset});
-                            currentOffset += span.textContent.length;
-                        });
-
-                        while ((match = regex.exec(pageText)) !== null) {
-                            const matchStart = match.index;
-                            const matchEnd = match.index + match[0].length;
-                            
-                            let currentMatchElements = [];
-                            for (let j = 0; j < textMapping.length; j++) {
-                                const item = textMapping[j];
-                                const itemStart = item.offset;
-                                const itemEnd = item.offset + item.text.length;
-
-                                if (Math.max(matchStart, itemStart) < Math.min(matchEnd, itemEnd)) {
-                                    const newSpan = document.createElement('span');
-                                    newSpan.className = 'highlight';
-                                    
-                                    const overlapStart = Math.max(matchStart, itemStart) - itemStart;
-                                    const overlapEnd = Math.min(matchEnd, itemEnd) - itemStart;
-                                    newSpan.textContent = item.text.substring(overlapStart, overlapEnd);
-                                    
-                                    pageHighlights.push({
-                                        originalSpan: item.span,
-                                        newHighlightSpan: newSpan,
-                                        rect: item.span.getBoundingClientRect()
-                                    });
-                                }
-                            }
-                        }
-                        if (pageHighlights.length > 0) {
-                            searchResults.push({ pageNum: i, count: pageHighlights.length });
-                        }
-                    }
-                } else if (docType === 'txt' || docType === 'docx') {
-                    const content = textDisplayArea.textContent;
+                for (let i = 1; i <= pdfDoc.numPages; i++) {
+                    const page = await pdfDoc.getPage(i);
+                    const textContent = await page.getTextContent();
+                    let pageText = textContent.items.map(item => item.str).join('');
                     const regex = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
                     let match;
-                    let tempContent = textDisplayArea.innerHTML;
+                    let pageHighlights = [];
+                    
+                    let tempTextLayerDiv = document.createElement('div');
+                    await pdfjsLib.renderTextLayer({
+                        textContent: textContent,
+                        container: tempTextLayerDiv,
+                        viewport: page.getViewport({scale: scale}),
+                        textDivs: []
+                    }).promise;
 
-                    let matchCount = 0;
-                    while ((match = regex.exec(content)) !== null) {
-                        searchResults.push({ element: null, globalIndex: matchCount });
-                        matchCount++;
-                    }
+                    const tempTextSpans = Array.from(tempTextLayerDiv.children);
 
-                    if (matchCount > 0) {
-                        let highlightedHtml = content.replace(regex, (match) => {
-                            return `<span class="highlight">${match}</span>`;
-                        });
-                        textDisplayArea.innerHTML = highlightedHtml;
-                        const highlightElements = textDisplayArea.querySelectorAll('.highlight');
-                        highlightElements.forEach((el, index) => {
-                            if (searchResults[index]) {
-                                searchResults[index].element = el;
+                    let textMapping = [];
+                    let currentOffset = 0;
+                    tempTextSpans.forEach(span => {
+                        textMapping.push({span: span, text: span.textContent, offset: currentOffset});
+                        currentOffset += span.textContent.length;
+                    });
+
+                    while ((match = regex.exec(pageText)) !== null) {
+                        const matchStart = match.index;
+                        const matchEnd = match.index + match[0].length;
+                        
+                        let currentMatchElements = [];
+                        for (let j = 0; j < textMapping.length; j++) {
+                            const item = textMapping[j];
+                            const itemStart = item.offset;
+                            const itemEnd = item.offset + item.text.length;
+
+                            if (Math.max(matchStart, itemStart) < Math.min(matchEnd, itemEnd)) {
+                                const newSpan = document.createElement('span');
+                                newSpan.className = 'highlight';
+                                
+                                const overlapStart = Math.max(matchStart, itemStart) - itemStart;
+                                const overlapEnd = Math.min(matchEnd, itemEnd) - itemStart;
+                                newSpan.textContent = item.text.substring(overlapStart, overlapEnd);
+                                
+                                pageHighlights.push({
+                                    originalSpan: item.span,
+                                    newHighlightSpan: newSpan,
+                                    rect: item.span.getBoundingClientRect()
+                                });
                             }
-                        });
+                        }
+                    }
+                    if (pageHighlights.length > 0) {
+                        searchResults.push({ pageNum: i, count: pageHighlights.length });
                     }
                 }
                 
@@ -1601,7 +1430,8 @@
 
                 if (searchResults.length > 0) {
                     currentSearchResultIndex = 0;
-                    scrollToHighlight(currentSearchResultIndex);
+                    currentPageNum = searchResults[currentSearchResultIndex].pageNum;
+                    await renderPage(currentPageNum);
                 } else {
                     searchResultsCountSpan.textContent = '0 resultados encontrados.';
                 }
@@ -1617,8 +1447,13 @@
                 if (currentSearchResultIndex >= searchResults.length) {
                     currentSearchResultIndex = 0;
                 }
-                
-                scrollToHighlight(currentSearchResultIndex);
+                const targetPageNum = searchResults[currentSearchResultIndex].pageNum;
+                if (targetPageNum !== currentPageNum) {
+                    currentPageNum = targetPageNum;
+                    queueRenderPage(currentPageNum);
+                } else {
+                    updateSearchHighlightOnPage(searchResults[currentSearchResultIndex].pageNum, currentSearchResultIndex);
+                }
                 updateSearchResultsUI();
             };
 
@@ -1632,8 +1467,13 @@
                 if (currentSearchResultIndex < 0) {
                     currentSearchResultIndex = searchResults.length - 1;
                 }
-                
-                scrollToHighlight(currentSearchResultIndex);
+                const targetPageNum = searchResults[currentSearchResultIndex].pageNum;
+                if (targetPageNum !== currentPageNum) {
+                    currentPageNum = targetPageNum;
+                    queueRenderPage(currentPageNum);
+                } else {
+                    updateSearchHighlightOnPage(searchResults[currentSearchResultIndex].pageNum, currentSearchResultIndex);
+                }
                 updateSearchResultsUI();
             };
 
@@ -1643,6 +1483,7 @@
             const updateSearchResultsUI = () => {
                 if (searchResults.length > 0) {
                     searchResultsCountSpan.textContent = `${currentSearchResultIndex + 1} / ${searchResults.length}`;
+                    highlightAllOccurrences(currentPageNum);
                 } else {
                     searchResultsCountSpan.textContent = '';
                 }
@@ -1656,7 +1497,7 @@
                 pageRendering = true;
                 showSpinner(true);
                 hideErrorMessage(viewerErrorMessage);
-                removeHighlights();
+                removeHighlights(); // Remove realces antes de renderizar a nova página
 
                 try {
                     const page = await pdfDoc.getPage(num);
@@ -1686,14 +1527,14 @@
                     await Promise.all([renderTask.promise, textLayerTask]);
 
                     if (searchQuery.trim()) {
-                        await highlightAllOccurrencesPDF(num);
-                        if (currentSearchResultIndex !== -1 && searchResults[currentSearchResultIndex]?.pageNum === num) {
+                        await highlightAllOccurrences(num);
+                        if (currentSearchResultIndex !== -1 && searchResults[currentSearchResultIndex].pageNum === num) {
                             scrollToHighlight(currentSearchResultIndex);
                         }
                     }
 
                 } catch (error) {
-                    console.error("Erro ao renderizar a página PDF:", error);
+                    console.error("Erro ao renderizar a página:", error);
                     showErrorMessage(viewerErrorMessage, "Ocorreu um erro ao carregar ou renderizar esta página do PDF. Por favor, tente outro ficheiro ou recarregue.");
                 } finally {
                     pageRendering = false;
@@ -1723,27 +1564,19 @@
              * Atualiza o estado dos botões de controlo e do input da página.
              */
             const updateControls = () => {
-                const isPdf = docType === 'pdf';
-                paginationControlsGroup.classList.toggle('d-none', !isPdf);
-                searchControlsGroup.classList.toggle('d-none', !isPdf);
-
-                if (isPdf) {
-                    currentPageInput.value = currentPageNum;
-                    prevPageBtn.disabled = (currentPageNum <= 1);
-                    nextPageBtn.disabled = (currentPageNum >= pdfDoc.numPages);
-                    currentPageInput.setAttribute('aria-valuenow', currentPageNum);
-                    currentPageInput.setAttribute('aria-valuemin', 1);
-                    currentPageInput.setAttribute('aria-valuemax', pdfDoc.numPages);
-                }
+                currentPageInput.value = currentPageNum;
+                prevPageBtn.disabled = (currentPageNum <= 1);
+                nextPageBtn.disabled = (currentPageNum >= pdfDoc.numPages);
+                currentPageInput.setAttribute('aria-valuenow', currentPageNum);
+                currentPageInput.setAttribute('aria-valuemin', 1);
+                currentPageInput.setAttribute('aria-valuemax', pdfDoc.numPages);
             };
 
             /**
-             * Carrega e processa o ficheiro selecionado (PDF, DOCX, TXT).
-             * @param {File} file - O ficheiro.
+             * Carrega e processa o ficheiro PDF selecionado.
+             * @param {File} file - O ficheiro PDF.
              */
-            const loadFile = async (file) => {
-                console.log('--- Início da função loadFile ---');
-                console.log('Ficheiro recebido:', file);
+            const loadPdf = async (file) => {
                 hideErrorMessage(uploadErrorMessage);
                 hideErrorMessage(viewerErrorMessage);
                 const existingPopup = document.getElementById('localized-copy-popup');
@@ -1757,106 +1590,46 @@
                 searchResults = [];
                 currentSearchResultIndex = -1;
                 searchResultsCountSpan.textContent = '';
-                
-                pdfContentWrapper.classList.add('d-none');
-                textDisplayArea.classList.add('d-none');
-                textDisplayArea.innerHTML = '';
 
-                if (!file) {
-                    showErrorMessage(uploadErrorMessage, 'Por favor, selecione um ficheiro.');
-                    console.error('Nenhum ficheiro selecionado.');
+
+                if (!file || file.type !== 'application/pdf') {
+                    showErrorMessage(uploadErrorMessage, 'Por favor, selecione um ficheiro PDF válido.');
                     return;
                 }
 
-                originalFileBytes = null;
-                originalFileName = file.name;
-                fileNameSpan.textContent = file.name;
-
                 uploadSection.classList.add('d-none');
-                docViewerContainer.classList.remove('d-none');
+                viewerContainer.classList.remove('d-none');
                 showSpinner(true);
+                
+                fileNameSpan.textContent = file.name;
+                
+                const fileReader = new FileReader();
+                fileReader.onload = async (event) => {
+                    originalPdfBytes = event.target.result; // Armazena os bytes do PDF original
+                    const typedarray = new Uint8Array(originalPdfBytes);
+                    try {
+                        const loadingTask = pdfjsLib.getDocument({data: typedarray});
+                        pdfDoc = await loadingTask.promise;
+                        
+                        currentPageNum = 1;
+                        pageCountSpan.textContent = pdfDoc.numPages;
+                        currentPageInput.max = pdfDoc.numPages;
+                        currentPageInput.min = 1;
+                        renderPage(currentPageNum);
 
-                const fileExtension = file.name.split('.').pop().toLowerCase();
-                console.log('Nome do ficheiro detetado:', file.name);
-                console.log('Extensão do ficheiro detetada:', fileExtension); 
-
-                try {
-                    switch (fileExtension) {
-                        case 'pdf':
-                            console.log('Caso: Processando como PDF.');
-                            docType = 'pdf';
-                            pdfContentWrapper.classList.remove('d-none');
-                            const pdfBytes = await file.arrayBuffer();
-                            originalFileBytes = pdfBytes;
-                            const loadingTask = pdfjsLib.getDocument({data: new Uint8Array(pdfBytes)});
-                            pdfDoc = await loadingTask.promise;
-                            currentPageNum = 1;
-                            pageCountSpan.textContent = pdfDoc.numPages;
-                            currentPageInput.max = pdfDoc.numPages;
-                            currentPageInput.min = 1;
-                            console.log('PDF carregado com sucesso. Iniciando renderização da página.');
-                            renderPage(currentPageNum);
-                            break;
-                        case 'docx':
-                            console.log('Caso: Processando como DOCX.');
-                            docType = 'docx';
-                            pdfContentWrapper.classList.add('d-none');
-                            textDisplayArea.classList.remove('d-none');
-                            
-                            originalFileBytes = await file.arrayBuffer();
-                            // Verifica se mammoth.js está disponível.
-                            if (typeof mammoth === 'undefined') {
-                                throw new Error("Erro interno: A biblioteca Mammoth.js não está disponível globalmente. Por favor, recarregue a página ou tente novamente mais tarde.");
-                            }
-                            console.log('Mammoth.js está disponível. Chamando convertToHtml.');
-                            const result = await mammoth.convertToHtml({arrayBuffer: originalFileBytes});
-                            textDisplayArea.innerHTML = result.value;
-                            console.log('DOCX convertido para HTML com sucesso. Conteúdo HTML gerado (primeiros 200 chars):', result.value.substring(0,200));
-                            paginationControlsGroup.classList.add('d-none');
-                            searchControlsGroup.classList.remove('d-none');
-                            showSpinner(false);
-                            break;
-                        case 'txt':
-                            console.log('Caso: Processando como TXT.');
-                            docType = 'txt';
-                            pdfContentWrapper.classList.add('d-none');
-                            textDisplayArea.classList.remove('d-none');
-                            console.log('Lendo conteúdo do ficheiro TXT...');
-                            const txtContent = await file.text();
-                            originalFileBytes = new TextEncoder().encode(txtContent).buffer;
-                            textDisplayArea.textContent = txtContent;
-                            console.log('Conteúdo do TXT exibido com sucesso. Conteúdo (primeiros 200 chars):', txtContent.substring(0,200));
-                            paginationControlsGroup.classList.add('d-none');
-                            searchControlsGroup.classList.remove('d-none');
-                            showSpinner(false);
-                            break;
-                        default:
-                            console.log('Caso: Tipo de ficheiro não suportado. Extensão:', fileExtension);
-                            throw new Error('Formato de ficheiro não suportado. Por favor, carregue um PDF, DOCX ou TXT.');
+                    } catch(error) {
+                        console.error("Erro ao carregar o PDF:", error);
+                        showErrorMessage(uploadErrorMessage, "Não foi possível carregar o ficheiro PDF. Pode estar corrompido ou num formato não suportado.");
+                        uploadSection.classList.remove('d-none');
+                        viewerContainer.classList.add('d-none');
+                        showSpinner(false);
                     }
-                    searchQuery = '';
-                    searchInput.value = '';
-                    searchResults = [];
-                    currentSearchResultIndex = -1;
-                    searchResultsCountSpan.textContent = '';
-                    console.log('Controles de pesquisa e tradução redefinidos.');
-
-
-                } catch(error) {
-                    console.error("Erro na função loadFile:", error);
-                    showErrorMessage(uploadErrorMessage, `Não foi possível carregar o ficheiro: ${error.message}.`);
-                    
-                    uploadSection.classList.remove('d-none');
-                    docViewerContainer.classList.add('d-none');
-                    showSpinner(false);
-                    docType = null;
-                }
-                updateControls();
-                console.log('--- Fim da função loadFile ---');
+                };
+                fileReader.readAsArrayBuffer(file);
             };
 
             /**
-             * Limpa o conteúdo da barra lateral de tradução e das ferramentas LLM.
+             * Limpa o conteúdo da barra lateral de tradução.
              */
             const clearTranslationSidebar = () => {
                 selectedTextPlaceholder.classList.remove('d-none');
@@ -1871,24 +1644,8 @@
                 portugueseTranslationTextBox.classList.add('d-none');
                 portugueseTranslationText.textContent = '';
                 
-                summaryTextBox.classList.add('d-none');
-                summaryText.textContent = '';
-                summaryPlaceholder.classList.remove('d-none');
-                playSummaryBtn.classList.add('d-none');
-                saveSummaryBtn.classList.add('d-none');
-
-                keywordsTextBox.classList.add('d-none');
-                keywordsText.textContent = '';
-                keywordsPlaceholder.classList.remove('d-none');
-                playKeywordsBtn.classList.add('d-none');
-                saveKeywordsBtn.classList.add('d-none');
-
                 hideErrorMessage(translationErrorMessage);
-                hideErrorMessage(summaryErrorMessage);
-                hideErrorMessage(keywordsErrorMessage);
                 showTranslationSpinner(false);
-                showSummarySpinner(false);
-                showKeywordsSpinner(false);
                 stopSpeech();
             };
 
@@ -1910,34 +1667,22 @@
             };
 
             /**
-             * Guarda o ficheiro original carregado.
+             * Guarda o PDF original carregado.
              */
-            const saveOriginalFile = () => {
-                if (originalFileBytes && originalFileName) {
-                    let mimeType;
-                    if (docType === 'pdf') mimeType = 'application/pdf';
-                    else if (docType === 'docx') mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-                    else if (docType === 'txt') mimeType = 'text/plain';
-                    else {
-                        showLocalizedCopyPopup("Tipo de ficheiro desconhecido para guardar.", saveOriginalFileBtn);
-                        return;
-                    }
-
-                    const blob = new Blob([originalFileBytes], { type: mimeType });
+            const saveOriginalPdf = () => {
+                if (pdfDoc && originalPdfBytes) {
+                    const blob = new Blob([originalPdfBytes], { type: 'application/pdf' });
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(blob);
-                    const parts = originalFileName.split('.');
-                    const name = parts.slice(0, -1).join('.');
-                    const ext = parts[parts.length - 1];
-                    a.download = `${name}_original.${ext}`;
-                    
+                    // Adiciona "_original" ao nome do ficheiro, mantendo a extensão .pdf
+                    a.download = fileNameSpan.textContent.replace(/\.pdf$/, '_original.pdf');
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
                     URL.revokeObjectURL(a.href);
-                    showLocalizedCopyPopup("Ficheiro original guardado!", saveOriginalFileBtn);
+                    showLocalizedCopyPopup("PDF original guardado!", savePdfBtn);
                 } else {
-                    showLocalizedCopyPopup("Nenhum ficheiro para guardar.", saveOriginalFileBtn);
+                    showLocalizedCopyPopup("Nenhum PDF para guardar.", savePdfBtn);
                 }
             };
 
@@ -1954,27 +1699,21 @@
                 }
 
                 const range = selection.getRangeAt(0);
-                let targetContainer;
-                if (docType === 'pdf') {
-                    targetContainer = textLayerDiv;
-                } else if (docType === 'docx' || docType === 'txt') {
-                    targetContainer = textDisplayArea;
-                } else {
-                    showLocalizedCopyPopup("Selecione texto dentro do documento.", targetButton);
-                    return;
-                }
-
-                if (!targetContainer.contains(selection.anchorNode) && !targetContainer.contains(selection.focusNode)) {
-                    showLocalizedCopyPopup("Selecione texto dentro do documento.", targetButton);
+                // Garante que a seleção está dentro da camada de texto do PDF
+                if (!textLayerDiv.contains(selection.anchorNode) && !textLayerDiv.contains(selection.focusNode)) {
+                    showLocalizedCopyPopup("Selecione texto dentro do documento PDF.", targetButton);
                     return;
                 }
 
                 try {
                     const selectedNodes = [];
-                    const walk = document.createTreeWalker(targetContainer, NodeFilter.SHOW_TEXT, null, false);
+                    let currentNode = range.startContainer;
+                    
+                    // Collect all text nodes within the selection that are children of textLayerDiv
+                    const walk = document.createTreeWalker(textLayerDiv, NodeFilter.SHOW_TEXT, null, false);
                     let node;
                     while (node = walk.nextNode()) {
-                        if (selection.containsNode(node, true)) {
+                        if (selection.containsNode(node, true)) { // Check if the node is fully or partially within the selection
                             selectedNodes.push(node);
                         }
                     }
@@ -1985,6 +1724,7 @@
                         let startIndex = 0;
                         let endIndex = originalText.length;
 
+                        // Adjust start/end index if the node is only partially selected
                         if (node === range.startContainer) {
                             startIndex = range.startOffset;
                         }
@@ -2018,17 +1758,16 @@
                     
                     selection.removeAllRanges();
 
-                    showLocalizedCopyPopup("As alterações visuais não são guardadas no ficheiro original.", targetButton, 4000);
+                    showLocalizedCopyPopup("As alterações visuais não são guardadas no ficheiro PDF original.", targetButton, 4000);
 
-                }
-                catch (e) {
+                } catch (e) {
                     console.error("Erro ao aplicar efeito no texto:", e);
                     showLocalizedCopyPopup("Não foi possível aplicar o efeito ao texto.", targetButton);
                 }
             };
 
             /**
-             * Realiza a tradução do texto usando a Gemini API ou um endpoint personalizado.
+             * Realiza a tradução do texto usando a Gemini API.
              * @param {string} textToTranslate - O texto a ser traduzido.
              */
             const translateText = async (textToTranslate) => {
@@ -2041,7 +1780,7 @@
                 actualSelectedText.classList.remove('d-none');
                 actualSelectedText.textContent = textToTranslate;
                 playSelectedTextBtn.classList.remove('d-none');
-                saveSelectedTextBtn.classList.add('d-none');
+                saveSelectedTextBtn.classList.add('d-none'); // Hide save button for selected text by default
 
                 playSelectedTextBtn.setAttribute('data-text', textToTranslate);
 
@@ -2056,75 +1795,51 @@
 
                 const fromLangCode = fromLanguageSelect.value;
                 const toLangCode = toLanguageSelect.value;
-                const selectedModel = defaultLlmModelSelect.value; // Get the selected LLM model
 
-                let apiUrl;
-                let payload;
+                let chatHistory = [];
+                let generationConfigSchema;
 
-                // Debugging logs
-                console.log("Modelo LLM selecionado:", selectedModel);
-                console.log("Texto a traduzir:", textToTranslate);
-                console.log("Idioma de origem:", fromLangCode);
-                console.log("Idioma de destino:", toLangCode);
-
-                if (selectedModel === 'openai') {
-                    // Custom endpoint logic for OpenAI
-                    apiUrl = `https://192.168.11.252:8843/translate/text`;
-                    payload = {
-                        text: textToTranslate,
-                        target_language: toLangCode,
-                        source_language: fromLangCode === 'auto' ? null : fromLangCode // Send null if auto-detect
+                if (fromLangCode === 'auto') {
+                    chatHistory.push({
+                        role: "user",
+                        parts: [{ text: `Detect the language of the following text and translate it to both English and Portuguese. Text: "${textToTranslate}"\n\nProvide the response in JSON format with fields "original_language" (ISO 639-1 code, e.g., "en", "pt"), "english_translation", and "portuguese_translation". If a translation is not applicable based on the rules, its field should be null.` }]
+                    });
+                    generationConfigSchema = {
+                        type: "OBJECT",
+                        properties: {
+                            "original_language": { "type": "STRING" },
+                            "english_translation": { "type": "STRING", "nullable": true },
+                            "portuguese_translation": { "type": "STRING", "nullable": true }
+                        },
+                        "propertyOrdering": ["original_language", "english_translation", "portuguese_translation"]
                     };
-                    console.log("Usando endpoint personalizado. URL:", apiUrl, "Payload:", payload);
-
                 } else {
-                    // Default to Gemini API logic
-                    const apiKey = ""; // API key will be provided by the Canvas environment at runtime
-                    apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                    let chatHistory = [];
-                    let generationConfigSchema;
-
-                    if (fromLangCode === 'auto') {
-                        chatHistory.push({
-                            role: "user",
-                            parts: [{ text: `Detect the language of the following text and translate it to both English and Portuguese. Text: "${textToTranslate}"\n\nProvide the response in JSON format with fields "original_language" (ISO 639-1 code, e.g., "en", "pt"), "english_translation", and "portuguese_translation". If a translation is not applicable based on the rules, its field should be null.` }]
-                        });
-                        generationConfigSchema = {
-                            type: "OBJECT",
-                            properties: {
-                                "original_language": { "type": "STRING" },
-                                "english_translation": { "type": "STRING", "nullable": true },
-                                "portuguese_translation": { "type": "STRING", "nullable": true }
-                            },
-                            "propertyOrdering": ["original_language", "english_translation", "portuguese_translation"]
-                        };
-                    } else {
-                        const fromLangDisplayName = langCodeToDisplayName[fromLangCode] || fromLangCode;
-                        const toLangDisplayName = langCodeToDisplayName[toLangCode] || toLangCode;
-                        chatHistory.push({
-                            role: "user",
-                            parts: [{ text: `Translate the following text from ${fromLangDisplayName} to ${toLangDisplayName}: "${textToTranslate}". Provide the response in JSON format with fields "original_language" (ISO 639-1 code, e.g., "en", "pt"), "translated_text".` }]
-                        });
-                        generationConfigSchema = {
-                            type: "OBJECT",
-                            properties: {
-                                "original_language": { "type": "STRING" },
-                                "translated_text": { "type": "STRING", "nullable": true }
-                            },
-                            "propertyOrdering": ["original_language", "translated_text"]
-                        };
-                    }
-
-                    payload = {
-                        contents: chatHistory,
-                        generationConfig: {
-                            responseMimeType: "application/json",
-                            responseSchema: generationConfigSchema
-                        }
+                    const fromLangDisplayName = langCodeToDisplayName[fromLangCode] || fromLangCode;
+                    const toLangDisplayName = langCodeToDisplayName[toLangCode] || toLangCode;
+                    chatHistory.push({
+                        role: "user",
+                        parts: [{ text: `Translate the following text from ${fromLangDisplayName} to ${toLangDisplayName}: "${textToTranslate}". Provide the response in JSON format with fields "original_language" (ISO 639-1 code, e.g., "en", "pt"), "translated_text".` }]
+                    });
+                    generationConfigSchema = {
+                        type: "OBJECT",
+                        properties: {
+                            "original_language": { "type": "STRING" },
+                            "translated_text": { "type": "STRING", "nullable": true }
+                        },
+                        "propertyOrdering": ["original_language", "translated_text"]
                     };
-                    console.log("Usando API Gemini. URL:", apiUrl, "Payload:", payload);
                 }
+
+                const payload = {
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: generationConfigSchema
+                    }
+                };
+
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 let rawResponseText = '';
                 try {
@@ -2135,7 +1850,7 @@
                     });
 
                     rawResponseText = await response.text(); 
-                    console.log("Resposta bruta da API:", rawResponseText);
+                    console.log("Raw API response for translation:", rawResponseText);
 
                     if (!response.ok) {
                         let errorDetails = `Status: ${response.status} ${response.statusText}`;
@@ -2143,158 +1858,118 @@
                             const parsedError = JSON.parse(rawResponseText);
                             errorDetails += ` - ${parsedError.error?.message || JSON.stringify(parsedError)}`;
                         } catch (e) {
-                            errorDetails += ` - Resposta de erro não-JSON: ${rawResponseText.substring(0, Math.min(rawResponseText.length, 200))}...`;
+                            errorDetails += ` - Non-JSON error response: ${rawResponseText.substring(0, Math.min(rawResponseText.length, 200))}...`;
                         }
                         throw new Error(`Erro da API: ${errorDetails}`);
                     }
 
-                    let parsedResponse;
+                    if (!rawResponseText || rawResponseText.trim() === '') {
+                        throw new Error("Resposta bruta da API está vazia ou contém apenas espaços em branco.");
+                    }
+
+                    let result;
                     try {
-                        parsedResponse = JSON.parse(rawResponseText);
+                        result = JSON.parse(rawResponseText);
                     } catch (jsonParseError) {
-                        console.error("Erro ao analisar JSON da API:", jsonParseError);
+                        console.error("Erro ao analisar JSON da API (primeiro nível):", jsonParseError);
                         throw new Error("Resposta da API não é JSON válido: " + rawResponseText.substring(0, Math.min(rawResponseText.length, 200)) + "...");
                     }
 
-                    let translatedContent = '';
-                    let originalLangDetected = '';
+                    if (!result.candidates || result.candidates.length === 0 ||
+                        !result.candidates[0].content || !result.candidates[0].content.parts ||
+                        result.candidates[0].content.parts.length === 0) {
+                        throw new Error("Resposta da API em formato inesperado ou sem conteúdo válido para tradução.");
+                    }
+                    
+                    const jsonString = result.candidates[0].content.parts[0].text;
+                    if (!jsonString || jsonString.trim() === '') {
+                        throw new Error("Resposta da API contém um JSON vazio ou nulo no campo de conteúdo.");
+                    }
 
-                    if (selectedModel === 'openai') {
-                        // Handle custom API response
-                        translatedContent = parsedResponse.translated_text || '';
-                        originalLangDetected = parsedResponse.original_language || ''; // Assuming custom API might return this
-                        console.log("Resposta do endpoint personalizado. Conteúdo traduzido:", translatedContent);
+                    let parsedJson;
+                    try {
+                        parsedJson = JSON.parse(jsonString);
+                    } catch (innerJsonParseError) {
+                        console.error("Erro ao analisar JSON do conteúdo da resposta (segundo nível):", innerJsonParseError);
+                        throw new Error("Conteúdo da resposta da API não é JSON válido: " + jsonString.substring(0, Math.min(jsonString.length, 200)) + "...");
+                    }
 
-                        // Clear previous translations
-                        englishTranslationTextBox.classList.add('d-none');
-                        portugueseTranslationTextBox.classList.add('d-none');
-                        playEnglishTranslationBtn.classList.add('d-none');
-                        saveEnglishTranslationBtn.classList.add('d-none');
-                        playPortugueseTranslationBtn.classList.add('d-none');
-                        savePortugueseTranslationBtn.classList.add('d-none');
+                    const originalLang = parsedJson.original_language ? parsedJson.original_language.toLowerCase() : '';
+                    
+                    const speechLangForSelectedText = langCodeToSpeechLang[originalLang] || 'en-US';
+                    playSelectedTextBtn.setAttribute('data-lang', speechLangForSelectedText);
 
-                        if (translatedContent) {
+                    englishTranslationTextBox.classList.add('d-none');
+                    englishTranslationText.textContent = '';
+                    portugueseTranslationTextBox.classList.add('d-none');
+                    portugueseTranslationText.textContent = '';
+
+                    playEnglishTranslationBtn.classList.add('d-none');
+                    saveEnglishTranslationBtn.classList.add('d-none');
+                    playPortugueseTranslationBtn.classList.add('d-none');
+                    savePortugueseTranslationBtn.classList.add('d-none');
+
+
+                    if (fromLangCode === 'auto') {
+                        if (parsedJson.english_translation) {
+                            englishTranslationTextBox.classList.remove('d-none');
+                            englishTranslationText.textContent = parsedJson.english_translation;
+                            englishLabel.classList.remove('d-none');
+                            playEnglishTranslationBtn.classList.remove('d-none');
+                            saveEnglishTranslationBtn.classList.remove('d-none');
+                            playEnglishTranslationBtn.setAttribute('data-text', parsedJson.english_translation);
+                        }
+                        
+                        if (parsedJson.portuguese_translation) {
+                            portugueseTranslationTextBox.classList.remove('d-none');
+                            portugueseTranslationText.textContent = parsedJson.portuguese_translation;
+                            portugueseLabel.classList.remove('d-none');
+                            playPortugueseTranslationBtn.classList.remove('d-none');
+                            savePortugueseTranslationBtn.classList.remove('d-none');
+                            playPortugueseTranslationBtn.setAttribute('data-text', parsedJson.portuguese_translation);
+                        }
+
+                        if (!parsedJson.english_translation && !parsedJson.portuguese_translation) {
+                            translationPlaceholder.textContent = `Não foi possível traduzir o texto. Idioma original: ${originalLang || 'desconhecido'}.`;
+                            translationPlaceholder.classList.remove('d-none');
+                        } else {
+                            translationPlaceholder.classList.add('d-none');
+                        }
+
+                    } else {
+                        if (parsedJson.translated_text) {
                             if (toLangCode === 'en') {
                                 englishTranslationTextBox.classList.remove('d-none');
-                                englishTranslationText.textContent = translatedContent;
-                                englishLabel.classList.add('d-none'); // Hide specific label if only one target
+                                englishTranslationText.textContent = parsedJson.translated_text;
+                                englishLabel.classList.add('d-none');
+                                portugueseTranslationTextBox.classList.add('d-none'); 
                                 playEnglishTranslationBtn.classList.remove('d-none');
                                 saveEnglishTranslationBtn.classList.remove('d-none');
-                                playEnglishTranslationBtn.setAttribute('data-text', translatedContent);
-                                playEnglishTranslationBtn.setAttribute('data-lang', langCodeToSpeechLang[toLangCode] || 'en-US');
-                            } else { // Assume it's Portuguese or any other, show in Portuguese box for simplicity
+                                playEnglishTranslationBtn.setAttribute('data-text', parsedJson.translated_text);
+                            } else if (toLangCode === 'pt') {
                                 portugueseTranslationTextBox.classList.remove('d-none');
-                                portugueseTranslationText.textContent = translatedContent;
-                                portugueseLabel.textContent = `${langCodeToDisplayName[toLangCode] || toLangCode}:`;
-                                portugueseLabel.classList.remove('d-none'); // Hide specific label if only one target
+                                portugueseTranslationText.textContent = parsedJson.translated_text;
+                                portugueseLabel.classList.add('d-none');
+                                englishTranslationTextBox.classList.add('d-none'); 
                                 playPortugueseTranslationBtn.classList.remove('d-none');
                                 savePortugueseTranslationBtn.classList.remove('d-none');
-                                playPortugueseTranslationBtn.setAttribute('data-text', translatedContent);
+                                playPortugueseTranslationBtn.setAttribute('data-text', parsedJson.translated_text);
+                            } else {
+                                portugueseTranslationTextBox.classList.remove('d-none');
+                                portugueseTranslationText.textContent = parsedJson.translated_text;
+                                portugueseLabel.textContent = `${langCodeToDisplayName[toLangCode] || toLangCode}:`;
+                                portugueseLabel.classList.remove('d-none');
+                                playPortugueseTranslationBtn.classList.remove('d-none');
+                                savePortugueseTranslationBtn.classList.remove('d-none');
+                                playPortugueseTranslationBtn.setAttribute('data-text', parsedJson.translated_text);
                                 playPortugueseTranslationBtn.setAttribute('data-lang', langCodeToSpeechLang[toLangCode] || 'pt-PT');
                             }
                             translationPlaceholder.classList.add('d-none');
                         } else {
-                            translationPlaceholder.textContent = `Nenhuma tradução disponível do endpoint personalizado para ${langCodeToDisplayName[toLangCode] || toLangCode}.`;
-                            translationPlaceholder.classList.remove('d-none');
-                        }
-
-                    } else {
-                        // Handle Gemini API response
-                        if (!parsedResponse.candidates || parsedResponse.candidates.length === 0 ||
-                            !parsedResponse.candidates[0].content || !parsedResponse.candidates[0].content.parts ||
-                            parsedResponse.candidates[0].content.parts.length === 0) {
-                            throw new Error("Resposta da API Gemini em formato inesperado ou sem conteúdo válido para tradução.");
-                        }
-                        
-                        const jsonString = parsedResponse.candidates[0].content.parts[0].text;
-                        if (!jsonString || jsonString.trim() === '') {
-                            throw new Error("Resposta da API Gemini contém um JSON vazio ou nulo no campo de conteúdo.");
-                        }
-
-                        let geminiParsedJson;
-                        try {
-                            geminiParsedJson = JSON.parse(jsonString);
-                        } catch (innerJsonParseError) {
-                            console.error("Erro ao analisar JSON do conteúdo da resposta Gemini:", innerJsonParseError);
-                            throw new Error("Conteúdo da resposta da API Gemini não é JSON válido: " + jsonString.substring(0, Math.min(jsonString.length, 200)) + "...");
-                        }
-                        
-                        originalLangDetected = geminiParsedJson.original_language ? geminiParsedJson.original_language.toLowerCase() : '';
-                        
-                        const speechLangForSelectedText = langCodeToSpeechLang[originalLangDetected] || 'en-US';
-                        playSelectedTextBtn.setAttribute('data-lang', speechLangForSelectedText);
-
-                        englishTranslationTextBox.classList.add('d-none');
-                        englishTranslationText.textContent = '';
-                        portugueseTranslationTextBox.classList.add('d-none');
-                        portugueseTranslationText.textContent = '';
-
-                        playEnglishTranslationBtn.classList.add('d-none');
-                        saveEnglishTranslationBtn.classList.add('d-none');
-                        playPortugueseTranslationBtn.classList.add('d-none');
-                        savePortugueseTranslationBtn.classList.add('d-none');
-
-                        if (fromLangCode === 'auto') {
-                            if (geminiParsedJson.english_translation) {
-                                englishTranslationTextBox.classList.remove('d-none');
-                                englishTranslationText.textContent = geminiParsedJson.english_translation;
-                                englishLabel.classList.remove('d-none');
-                                playEnglishTranslationBtn.classList.remove('d-none');
-                                saveEnglishTranslationBtn.classList.remove('d-none');
-                                playEnglishTranslationBtn.setAttribute('data-text', geminiParsedJson.english_translation);
-                            }
-                            
-                            if (geminiParsedJson.portuguese_translation) {
-                                portugueseTranslationTextBox.classList.remove('d-none');
-                                portugueseTranslationText.textContent = geminiParsedJson.portuguese_translation;
-                                portugueseLabel.classList.remove('d-none');
-                                playPortugueseTranslationBtn.classList.remove('d-none');
-                                savePortugueseTranslationBtn.classList.remove('d-none');
-                                playPortugueseTranslationBtn.setAttribute('data-text', geminiParsedJson.portuguese_translation);
-                            }
-
-                            if (!geminiParsedJson.english_translation && !geminiParsedJson.portuguese_translation) {
-                                translationPlaceholder.textContent = `Não foi possível traduzir o texto. Idioma original: ${originalLangDetected || 'desconhecido'}.`;
-                                translationPlaceholder.classList.remove('d-none');
-                            } else {
-                                translationPlaceholder.classList.add('d-none');
-                            }
-
-                        } else {
-                            if (geminiParsedJson.translated_text) {
-                                if (toLangCode === 'en') {
-                                    englishTranslationTextBox.classList.remove('d-none');
-                                    englishTranslationText.textContent = geminiParsedJson.translated_text;
-                                    englishLabel.classList.add('d-none');
-                                    portugueseTranslationTextBox.classList.add('d-none'); 
-                                    playEnglishTranslationBtn.classList.remove('d-none');
-                                    saveEnglishTranslationBtn.classList.remove('d-none');
-                                    playEnglishTranslationBtn.setAttribute('data-text', geminiParsedJson.translated_text);
-                                } else if (toLangCode === 'pt') {
-                                    portugueseTranslationTextBox.classList.remove('d-none');
-                                    portugueseTranslationText.textContent = geminiParsedJson.translated_text;
-                                    portugueseLabel.classList.add('d-none');
-                                    englishTranslationTextBox.classList.add('d-none'); 
-                                    playPortugueseTranslationBtn.classList.remove('d-none');
-                                    savePortugueseTranslationBtn.classList.remove('d-none');
-                                    playPortugueseTranslationBtn.setAttribute('data-text', geminiParsedJson.translated_text);
-                                } else {
-                                    portugueseTranslationTextBox.classList.remove('d-none');
-                                    portugueseTranslationText.textContent = geminiParsedJson.translated_text;
-                                    portugueseLabel.textContent = `${langCodeToDisplayName[toLangCode] || toLangCode}:`;
-                                    portugueseLabel.classList.remove('d-none');
-                                    playPortugueseTranslationBtn.classList.remove('d-none');
-                                    savePortugueseTranslationBtn.classList.remove('d-none');
-                                    playPortugueseTranslationBtn.setAttribute('data-text', geminiParsedJson.translated_text);
-                                    playPortugueseTranslationBtn.setAttribute('data-lang', langCodeToSpeechLang[toLangCode] || 'pt-PT');
-                                }
-                                translationPlaceholder.classList.add('d-none');
-                            } else {
-                                translationPlaceholder.textContent = `Não foi possível traduzir de ${langCodeToDisplayName[fromLangCode] || fromLangCode} para ${langCodeToDisplayName[toLangCode] || toLangCode}.`;
-                                translationPlaceholder.classList.remove('d-none');
-                                englishTranslationTextBox.classList.add('d-none');
-                                portugueseTranslationTextBox.classList.add('d-none');
-                            }
+                             translationPlaceholder.textContent = `Não foi possível traduzir de ${langCodeToDisplayName[fromLangCode] || fromLangCode} para ${langCodeToDisplayName[toLangCode] || toLangCode}.`;
+                             translationPlaceholder.classList.remove('d-none');
+                             englishTranslationTextBox.classList.add('d-none');
+                             portugueseTranslationTextBox.classList.add('d-none');
                         }
                     }
 
@@ -2311,319 +1986,84 @@
             };
 
             /**
-             * Resumo do texto selecionado usando a Gemini API.
-             * @param {string} textToSummarize - O texto a ser resumido.
+             * Realça as ocorrências do termo de pesquisa na página atual.
+             * Esta função é agora chamada dentro de renderPage para garantir que
+             * os realces são aplicados após a camada de texto ser construída.
+             *
+             * @param {number} pageNum - O número da página a realçar.
              */
-            const summarizeText = async (textToSummarize) => {
-                if (!textToSummarize.trim()) {
-                    summaryPlaceholder.textContent = "Selecione texto para resumir.";
-                    summaryPlaceholder.classList.remove('d-none');
-                    summaryTextBox.classList.add('d-none');
+            const updateSearchHighlightOnPage = async (pageNum, highlightIndex = -1) => {
+                removeHighlights();
+
+                if (!searchQuery.trim() || !pdfDoc) {
                     return;
                 }
 
-                summaryPlaceholder.classList.add('d-none');
-                summaryTextBox.classList.add('d-none');
-                summaryText.textContent = '';
-                hideErrorMessage(summaryErrorMessage);
-                showSummarySpinner(true);
-                playSummaryBtn.classList.add('d-none');
-                saveSummaryBtn.classList.add('d-none');
-                stopSpeech(); // Stop any ongoing speech
+                const page = await pdfDoc.getPage(pageNum);
+                const textContent = await page.getTextContent();
+                let pageText = textContent.items.map(item => item.str).join('');
+                const regex = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                let match;
+                let currentMatchCount = 0;
 
-                const apiKey = ""; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const textSpans = Array.from(textLayerDiv.children);
 
-                const chatHistory = [{
-                    role: "user",
-                    parts: [{ text: `Summarize the following text briefly and concisely, in Portuguese. Text: "${textToSummarize}"\n\nProvide the response in JSON format with a single field "summary".` }]
-                }];
-
-                const payload = {
-                    contents: chatHistory,
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        responseSchema: {
-                            type: "OBJECT",
-                            properties: {
-                                "summary": { "type": "STRING" }
-                            },
-                            "propertyOrdering": ["summary"]
-                        }
-                    }
-                };
-
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    const rawResponseText = await response.text();
-                    if (!response.ok) {
-                        let errorDetails = `Status: ${response.status} ${response.statusText}`;
-                        try {
-                            const parsedError = JSON.parse(rawResponseText);
-                            errorDetails += ` - ${parsedError.error?.message || JSON.stringify(parsedError)}`;
-                        } catch (e) {
-                            errorDetails += ` - Resposta de erro não-JSON: ${rawResponseText.substring(0, Math.min(rawResponseText.length, 200))}...`;
-                        }
-                        throw new Error(`Erro da API: ${errorDetails}`);
-                    }
-
-                    let parsedResponse;
-                    try {
-                        parsedResponse = JSON.parse(rawResponseText);
-                    } catch (jsonParseError) {
-                        console.error("Erro ao analisar JSON da API para resumo:", jsonParseError);
-                        throw new Error("Resposta da API não é JSON válido para resumo: " + rawResponseText.substring(0, Math.min(rawResponseText.length, 200)) + "...");
-                    }
-
-                    if (!parsedResponse.candidates || parsedResponse.candidates.length === 0 ||
-                        !parsedResponse.candidates[0].content || !parsedResponse.candidates[0].content.parts ||
-                        parsedResponse.candidates[0].content.parts.length === 0) {
-                        throw new Error("Resposta da API Gemini em formato inesperado ou sem conteúdo válido para resumo.");
-                    }
-                    
-                    const jsonString = parsedResponse.candidates[0].content.parts[0].text;
-                    let geminiParsedJson;
-                    try {
-                        geminiParsedJson = JSON.parse(jsonString);
-                    } catch (innerJsonParseError) {
-                        console.error("Erro ao analisar JSON do conteúdo da resposta Gemini para resumo:", innerJsonParseError);
-                        throw new Error("Conteúdo da resposta da API Gemini não é JSON válido para resumo: " + jsonString.substring(0, Math.min(jsonString.length, 200)) + "...");
-                    }
-
-                    const summary = geminiParsedJson.summary || '';
-                    if (summary) {
-                        summaryTextBox.classList.remove('d-none');
-                        summaryText.textContent = summary;
-                        playSummaryBtn.classList.remove('d-none');
-                        saveSummaryBtn.classList.remove('d-none');
-                        playSummaryBtn.setAttribute('data-text', summary);
-                        playSummaryBtn.setAttribute('data-lang', 'pt-PT');
-                        summaryPlaceholder.classList.add('d-none');
-                    } else {
-                        summaryPlaceholder.textContent = "Não foi possível gerar um resumo para o texto selecionado.";
-                        summaryPlaceholder.classList.remove('d-none');
-                    }
-
-                } catch (error) {
-                    console.error("Erro ao resumir texto:", error);
-                    showErrorMessage(summaryErrorMessage, `Erro ao gerar resumo: ${error.message}.`);
-                    summaryPlaceholder.classList.remove('d-none');
-                    summaryPlaceholder.textContent = "Erro ao resumir.";
-                    summaryTextBox.classList.add('d-none');
-                } finally {
-                    showSummarySpinner(false);
-                }
-            };
-
-            /**
-             * Extrai palavras-chave do texto selecionado usando a Gemini API.
-             * @param {string} textToExtractFrom - O texto de onde as palavras-chave serão extraídas.
-             */
-            const extractKeywords = async (textToExtractFrom) => {
-                if (!textToExtractFrom.trim()) {
-                    keywordsPlaceholder.textContent = "Selecione texto para extrair palavras-chave.";
-                    keywordsPlaceholder.classList.remove('d-none');
-                    keywordsTextBox.classList.add('d-none');
-                    return;
-                }
-
-                keywordsPlaceholder.classList.add('d-none');
-                keywordsTextBox.classList.add('d-none');
-                keywordsText.textContent = '';
-                hideErrorMessage(keywordsErrorMessage);
-                showKeywordsSpinner(true);
-                playKeywordsBtn.classList.add('d-none');
-                saveKeywordsBtn.classList.add('d-none');
-                stopSpeech(); // Stop any ongoing speech
-
-                const apiKey = ""; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                const chatHistory = [{
-                    role: "user",
-                    parts: [{ text: `Extract the most important keywords from the following text, providing them as a comma-separated list, in Portuguese. Text: "${textToExtractFrom}"\n\nProvide the response in JSON format with a single field "keywords" as an array of strings.` }]
-                }];
-
-                const payload = {
-                    contents: chatHistory,
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        responseSchema: {
-                            type: "OBJECT",
-                            properties: {
-                                "keywords": {
-                                    type: "ARRAY",
-                                    items: { "type": "STRING" }
-                                }
-                            },
-                            "propertyOrdering": ["keywords"]
-                        }
-                    }
-                };
-
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    const rawResponseText = await response.text();
-                    if (!response.ok) {
-                        let errorDetails = `Status: ${response.status} ${response.statusText}`;
-                        try {
-                            const parsedError = JSON.parse(rawResponseText);
-                            errorDetails += ` - ${parsedError.error?.message || JSON.stringify(parsedError)}`;
-                        } catch (e) {
-                            errorDetails += ` - Resposta de erro não-JSON: ${rawResponseText.substring(0, Math.min(rawResponseText.length, 200))}...`;
-                        }
-                        throw new Error(`Erro da API: ${errorDetails}`);
-                    }
-
-                    let parsedResponse;
-                    try {
-                        parsedResponse = JSON.parse(rawResponseText);
-                    } catch (jsonParseError) {
-                        console.error("Erro ao analisar JSON da API para palavras-chave:", jsonParseError);
-                        throw new Error("Resposta da API não é JSON válido para palavras-chave: " + rawResponseText.substring(0, Math.min(rawResponseText.length, 200)) + "...");
-                    }
-
-                    if (!parsedResponse.candidates || parsedResponse.candidates.length === 0 ||
-                        !parsedResponse.candidates[0].content || !parsedResponse.candidates[0].content.parts ||
-                        parsedResponse.candidates[0].content.parts.length === 0) {
-                        throw new Error("Resposta da API Gemini em formato inesperado ou sem conteúdo válido para palavras-chave.");
-                    }
-                    
-                    const jsonString = parsedResponse.candidates[0].content.parts[0].text;
-                    let geminiParsedJson;
-                    try {
-                        geminiParsedJson = JSON.parse(jsonString);
-                    } catch (innerJsonParseError) {
-                        console.error("Erro ao analisar JSON do conteúdo da resposta Gemini para palavras-chave:", innerJsonParseError);
-                        throw new Error("Conteúdo da resposta da API Gemini não é JSON válido para palavras-chave: " + jsonString.substring(0, Math.min(jsonString.length, 200)) + "...");
-                    }
-
-                    const keywords = geminiParsedJson.keywords || [];
-                    if (keywords.length > 0) {
-                        keywordsTextBox.classList.remove('d-none');
-                        keywordsText.textContent = keywords.join(', ');
-                        playKeywordsBtn.classList.remove('d-none');
-                        saveKeywordsBtn.classList.remove('d-none');
-                        playKeywordsBtn.setAttribute('data-text', keywords.join(', '));
-                        playKeywordsBtn.setAttribute('data-lang', 'pt-PT');
-                        keywordsPlaceholder.classList.add('d-none');
-                    } else {
-                        keywordsPlaceholder.textContent = "Não foi possível extrair palavras-chave do texto selecionado.";
-                        keywordsPlaceholder.classList.remove('d-none');
-                    }
-
-                } catch (error) {
-                    console.error("Erro ao extrair palavras-chave:", error);
-                    showErrorMessage(keywordsErrorMessage, `Erro ao extrair palavras-chave: ${error.message}.`);
-                    keywordsPlaceholder.classList.remove('d-none');
-                    keywordsPlaceholder.textContent = "Erro ao extrair palavras-chave.";
-                    keywordsTextBox.classList.add('d-none');
-                } finally {
-                    showKeywordsSpinner(false);
-                }
-            };
-
-
-            // Event listener para seleção de texto na página
-            document.addEventListener('selectionchange', () => {
-                const selection = window.getSelection();
-                const selectedText = selection.toString().trim();
-                const selectedModel = defaultLlmModelSelect.value;
+                searchResults = [];
                 
-                let targetContainer;
-                if (docType === 'pdf') {
-                    targetContainer = textLayerDiv;
-                } else if (docType === 'docx' || docType === 'txt') {
-                    targetContainer = textDisplayArea;
-                } else {
-                    clearTranslationSidebar();
-                    currentSelectedTextForNote = '';
-                    addNoteBtn.disabled = true;
-                    addNoteBtn.innerHTML = defaultNoteIcon; 
-                    addNoteBtn.title = 'Adicionar Nota ao Texto Selecionado (selecione texto primeiro)';
+                for (let i = 0; i < textSpans.length; i++) {
+                    const originalSpan = textSpans[i];
+                    const spanText = originalSpan.textContent;
                     
-                    // Disable LLM buttons if no document or no selection
-                    summarizeTextBtn.disabled = true;
-                    summarizeTextBtn.title = "Selecione texto para resumir (requer Gemini)";
-                    extractKeywordsBtn.disabled = true;
-                    extractKeywordsBtn.title = "Selecione texto para extrair palavras-chave (requer Gemini)";
-                    summaryPlaceholder.classList.remove('d-none');
-                    summaryTextBox.classList.add('d-none');
-                    keywordsPlaceholder.classList.remove('d-none');
-                    keywordsTextBox.classList.add('d-none');
+                    let localMatch;
+                    let localRegex = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                    
+                    let lastIndex = 0;
+                    while((localMatch = localRegex.exec(spanText)) !== null) {
+                        const matchStartInSpan = localMatch.index;
+                        const matchEndInSpan = localMatch.index + localMatch[0].length;
+                        
+                        const textBefore = spanText.substring(lastIndex, matchStartInSpan);
+                        const textMatch = spanText.substring(matchStartInSpan, matchEndInSpan);
+                        
+                        if (textBefore) {
+                            const newTextSpan = document.createElement('span');
+                            newTextSpan.style.cssText = originalSpan.style.cssText;
+                            newTextSpan.textContent = textBefore;
+                            originalSpan.parentNode.insertBefore(newTextSpan, originalSpan);
+                        }
 
-                    return;
-                }
+                        const highlightSpan = document.createElement('span');
+                        highlightSpan.className = 'highlight';
+                        highlightSpan.style.cssText = originalSpan.style.cssText;
+                        highlightSpan.textContent = textMatch;
+                        originalSpan.parentNode.insertBefore(highlightSpan, originalSpan);
 
-                if (selectedText.length > 0 && targetContainer.contains(selection.anchorNode) && targetContainer.contains(selection.focusNode)) {
-                    currentSelectedTextForNote = selectedText;
-                    translateText(selectedText);
+                        searchResults.push({ pageNum: pageNum, element: highlightSpan, globalIndex: currentMatchCount });
 
-                    const pageNotes = notesStore[currentPageNum] || {};
-                    if (pageNotes[currentSelectedTextForNote]) {
-                        addNoteBtn.classList.add('btn-primary'); 
-                        addNoteBtn.classList.remove('btn-outline-primary');
-                        addNoteBtn.innerHTML = existingNoteIcon; 
-                        addNoteBtn.title = 'Ver Nota Existente';
-                    } else {
-                        addNoteBtn.classList.remove('btn-primary');
-                        addNoteBtn.classList.add('btn-outline-primary');
-                        addNoteBtn.innerHTML = defaultNoteIcon; 
-                        addNoteBtn.title = 'Adicionar Nota ao Texto Selecionado';
-                    }
-                    addNoteBtn.disabled = false;
-
-                    // Enable LLM features only if Gemini is selected
-                    if (selectedModel === 'gemini-2.0-flash') {
-                        summarizeTextBtn.disabled = false;
-                        summarizeTextBtn.title = "Resumir o texto selecionado";
-                        extractKeywordsBtn.disabled = false;
-                        extractKeywordsBtn.title = "Extrair palavras-chave do texto selecionado";
-                        summaryPlaceholder.textContent = "O resumo aparecerá aqui.";
-                        keywordsPlaceholder.textContent = "As palavras-chave aparecerão aqui.";
-                    } else {
-                        summarizeTextBtn.disabled = true;
-                        summarizeTextBtn.title = "Funcionalidade de resumo requer o modelo Gemini.";
-                        extractKeywordsBtn.disabled = true;
-                        extractKeywordsBtn.title = "Funcionalidade de palavras-chave requer o modelo Gemini.";
-                        summaryPlaceholder.textContent = "O resumo aparecerá aqui. (Requer Gemini)";
-                        keywordsPlaceholder.textContent = "As palavras-chave aparecerão aqui. (Requer Gemini)";
-                        summaryTextBox.classList.add('d-none');
-                        summaryText.textContent = '';
-                        keywordsTextBox.classList.add('d-none');
-                        keywordsText.textContent = '';
+                        if (currentMatchCount === highlightIndex) {
+                            highlightSpan.classList.add('current-highlight');
+                            highlightSpan.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                        
+                        lastIndex = matchEndInSpan;
+                        currentMatchCount++;
                     }
 
-                } else if (selectedText.length === 0) {
-                    clearTranslationSidebar();
-                    currentSelectedTextForNote = '';
-                    addNoteBtn.classList.remove('btn-primary');
-                    addNoteBtn.classList.add('btn-outline-primary');
-                    addNoteBtn.innerHTML = defaultNoteIcon; 
-                    addNoteBtn.title = 'Adicionar Nota ao Texto Selecionado (selecione texto primeiro)';
-                    addNoteBtn.disabled = true;
-
-                    // Always disable LLM buttons when no text is selected
-                    summarizeTextBtn.disabled = true;
-                    summarizeTextBtn.title = "Selecione texto para resumir (requer Gemini)";
-                    extractKeywordsBtn.disabled = true;
-                    extractKeywordsBtn.title = "Selecione texto para extrair palavras-chave (requer Gemini)";
-                    summaryPlaceholder.classList.remove('d-none');
-                    summaryTextBox.classList.add('d-none');
-                    keywordsPlaceholder.classList.remove('d-none');
-                    keywordsTextBox.classList.add('d-none');
+                    if (lastIndex < spanText.length) {
+                        const remainingTextSpan = document.createElement('span');
+                        remainingTextSpan.style.cssText = originalSpan.style.cssText;
+                        remainingTextSpan.textContent = spanText.substring(lastIndex);
+                        originalSpan.parentNode.insertBefore(remainingTextSpan, originalSpan);
+                    }
+                    originalSpan.remove();
                 }
-            });
+
+                if (highlightIndex === -1 && searchResults.length > 0) {
+                    currentSearchResultIndex = 0;
+                    searchResults[0].element.classList.add('current-highlight');
+                    searchResults[0].element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            };
 
 
             // --- Funções de Configuração ---
@@ -2656,6 +2096,7 @@
 
                     const selectedTheme = settings.pageTheme || 'light';
                     document.documentElement.setAttribute('data-bs-theme', selectedTheme);
+                    // Atualiza o estado dos radio buttons
                     if (selectedTheme === 'light') {
                         themeLightRadio.checked = true;
                     } else if (selectedTheme === 'dark') {
@@ -2673,86 +2114,87 @@
             };
 
             // --- Gerenciamento de Layout (Expandir/Reduzir) ---
-            let currentLayout = 'both';
+            let currentLayout = 'both'; // 'both', 'pdf-expanded', 'translation-expanded'
 
             const setViewLayout = (layout) => {
-                if (layout === 'doc-expanded') {
-                    docViewerCol.classList.remove('col-md-8');
-                    docViewerCol.classList.remove('collapsed');
-                    docViewerCol.classList.remove('d-none');
-                    docViewerCol.classList.add('col-md-12', 'expanded');
+                if (layout === 'pdf-expanded') {
+                    pdfViewerCol.classList.remove('col-md-8');
+                    pdfViewerCol.classList.remove('collapsed');
+                    pdfViewerCol.classList.remove('d-none'); // Ensure it's visible
+                    pdfViewerCol.classList.add('col-md-12', 'expanded');
                     
                     translationSidebarCol.classList.remove('col-md-4');
                     translationSidebarCol.classList.remove('expanded');
-                    translationSidebarCol.classList.add('d-none', 'collapsed');
+                    translationSidebarCol.classList.add('d-none', 'collapsed'); // Use d-none for full hide
 
-                    expandIconDoc.innerHTML = compressIcon;
+                    expandIconPdf.innerHTML = compressIcon;
                     expandIconTranslation.innerHTML = expandIcon;
                 } else if (layout === 'translation-expanded') {
                     translationSidebarCol.classList.remove('col-md-4');
                     translationSidebarCol.classList.remove('collapsed');
-                    translationSidebarCol.classList.remove('d-none');
+                    translationSidebarCol.classList.remove('d-none'); // Ensure it's visible
                     translationSidebarCol.classList.add('col-md-12', 'expanded');
                     
-                    docViewerCol.classList.remove('col-md-8');
-                    docViewerCol.classList.remove('expanded');
-                    docViewerCol.classList.add('d-none', 'collapsed');
+                    pdfViewerCol.classList.remove('col-md-8');
+                    pdfViewerCol.classList.remove('expanded');
+                    pdfViewerCol.classList.add('d-none', 'collapsed'); // Use d-none for full hide
 
                     expandIconTranslation.innerHTML = compressIcon;
-                    expandIconDoc.innerHTML = expandIcon;
-                } else {
-                    docViewerCol.classList.remove('col-md-12', 'expanded', 'collapsed', 'd-none');
-                    docViewerCol.classList.add('col-md-8');
+                    expandIconPdf.innerHTML = expandIcon;
+                } else { // 'both'
+                    pdfViewerCol.classList.remove('col-md-12', 'expanded', 'collapsed', 'd-none');
+                    pdfViewerCol.classList.add('col-md-8');
                     
                     translationSidebarCol.classList.remove('col-md-12', 'expanded', 'collapsed', 'd-none');
                     translationSidebarCol.classList.add('col-md-4');
 
-                    expandIconDoc.innerHTML = expandIcon;
+                    expandIconPdf.innerHTML = expandIcon;
                     expandIconTranslation.innerHTML = expandIcon;
                 }
                 currentLayout = layout;
-                if (docType === 'pdf' && pdfDoc && !pageRendering) {
+                // Força o re-render da página PDF para ajustar o viewport ao novo tamanho da coluna
+                if (pdfDoc && !pageRendering) {
                     queueRenderPage(currentPageNum);
                 }
             };
 
             // --- Event Listeners ---
+            // Adicionado elemento `selectFileBtn`
             const selectFileBtn = document.getElementById('select-file-btn');
 
 
             prevPageBtn.addEventListener('click', () => {
-                if (docType === 'pdf' && currentPageNum > 1) {
+                if (currentPageNum > 1) {
                     currentPageNum--;
                     queueRenderPage(currentPageNum);
                 }
             });
 
             nextPageBtn.addEventListener('click', () => {
-                if (docType === 'pdf' && pdfDoc && currentPageNum < pdfDoc.numPages) {
+                if (pdfDoc && currentPageNum < pdfDoc.numPages) {
                     currentPageNum++;
                     queueRenderPage(currentPageNum);
                 }
             });
             
             currentPageInput.addEventListener('change', () => {
-                if (docType === 'pdf') {
-                    let requestedPage = parseInt(currentPageInput.value, 10);
-                    if (pdfDoc && requestedPage >= 1 && requestedPage <= pdfDoc.numPages) {
-                        currentPageNum = requestedPage;
-                        queueRenderPage(currentPageNum);
-                    } else {
-                        currentPageInput.value = currentPageNum;
-                        showErrorMessage(viewerErrorMessage, `Por favor, insira um número de página entre 1 e ${pdfDoc ? pdfDoc.numPages : '...'}.`);
-                    }
+                let requestedPage = parseInt(currentPageInput.value, 10);
+                if (pdfDoc && requestedPage >= 1 && requestedPage <= pdfDoc.numPages) {
+                    currentPageNum = requestedPage;
+                    queueRenderPage(currentPageNum);
+                } else {
+                    currentPageInput.value = currentPageNum;
+                    showErrorMessage(viewerErrorMessage, `Por favor, insira um número de página entre 1 e ${pdfDoc ? pdfDoc.numPages : '...'}.`);
                 }
             });
 
+            // Adiciona uma flag para evitar cliques duplos ou reabertura rápida do diálogo de ficheiros
             let isFileDialogOpen = false;
 
             pdfUploadInput.addEventListener('change', (event) => {
-                isFileDialogOpen = false;
+                isFileDialogOpen = false; // Reinicia a flag assim que a interação do diálogo termina (ficheiro selecionado ou cancelado)
                 const file = event.target.files[0];
-                loadFile(file);
+                loadPdf(file);
             });
 
             // Lógica de Arrastar e Soltar (Drag and Drop)
@@ -2773,12 +2215,20 @@
                 e.stopPropagation();
                 dropZone.classList.remove('drag-over');
                 const file = e.dataTransfer.files[0];
-                loadFile(file);
+                loadPdf(file);
             });
 
-            // Adicionar listener de clique para o botão 'select-file-btn'
+            // Adiciona um listener de clique direto ao input de arquivo oculto
+            // Isso evita a necessidade de um listener na dropZone para disparar o clique.
+            // O botão "Selecione um ficheiro do seu computador" agora dispara diretamente este input.
+            // A dropZone continuará a funcionar para arrastar e soltar.
+
+            // Removido o listener de clique na dropZone que disparava o pdfUploadInput.click()
+            // dropZone.addEventListener('click', (event) => { /* ... */ });
+
+            // Adicionar listener de clique para o novo botão 'select-file-btn'
             selectFileBtn.addEventListener('click', (event) => {
-                event.stopPropagation();
+                // Não há necessidade de event.stopPropagation() aqui, pois o botão já tem sua própria ação direta
                 if (!isFileDialogOpen) {
                     pdfUploadInput.click();
                     isFileDialogOpen = true;
@@ -2787,12 +2237,13 @@
 
             // Adicionar suporte para teclado na dropZone (para acessibilidade)
             dropZone.addEventListener('keydown', (e) => {
-                if ((e.key === 'Enter' || e.key === ' ') && e.target === dropZone) {
+                // O evento de teclado deve ser associado ao botão ou label, não à dropZone em si se for para abrir o diálogo de ficheiros.
+                // Como o selectFileBtn já lida com isso, este listener pode ser mais específico para o drag-and-drop visual.
+                // Se a intenção é que a tecla Enter/Espaço na dropZone abra o seletor, isso já é tratado pelo selectFileBtn.
+                // Mantendo este listener para garantir que a dropZone ainda responda a certas interações de teclado se necessário.
+                if (e.key === 'Enter' || e.key === ' ') {
+                    // Previne a rolagem da página e qualquer comportamento padrão
                     e.preventDefault(); 
-                    if (!isFileDialogOpen) {
-                        pdfUploadInput.click();
-                        isFileDialogOpen = true;
-                    }
                 }
             });
 
@@ -2816,6 +2267,41 @@
                 }
             });
 
+            // Listener para seleção de texto na página
+            document.addEventListener('selectionchange', () => {
+                const selection = window.getSelection();
+                const selectedText = selection.toString().trim();
+                
+                // Verifica se a seleção está dentro da camada de texto do PDF
+                if (selectedText.length > 0 && textLayerDiv.contains(selection.anchorNode) && textLayerDiv.contains(selection.focusNode)) {
+                    currentSelectedTextForNote = selectedText;
+                    translateText(selectedText);
+
+                    // Verifica se já existe uma nota para esta seleção na página atual
+                    const pageNotes = notesStore[currentPageNum] || {};
+                    if (pageNotes[currentSelectedTextForNote]) {
+                        addNoteBtn.classList.add('btn-primary'); 
+                        addNoteBtn.classList.remove('btn-outline-primary');
+                        addNoteBtn.innerHTML = existingNoteIcon; 
+                        addNoteBtn.title = 'Ver Nota Existente';
+                    } else {
+                        addNoteBtn.classList.remove('btn-primary');
+                        addNoteBtn.classList.add('btn-outline-primary');
+                        addNoteBtn.innerHTML = defaultNoteIcon; 
+                        addNoteBtn.title = 'Adicionar Nota ao Texto Selecionado';
+                    }
+                    addNoteBtn.disabled = false; // Habilita o botão
+                } else if (selectedText.length === 0) {
+                    clearTranslationSidebar();
+                    currentSelectedTextForNote = '';
+                    addNoteBtn.classList.remove('btn-primary');
+                    addNoteBtn.classList.add('btn-outline-primary'); // Estilo padrão
+                    addNoteBtn.innerHTML = defaultNoteIcon; 
+                    addNoteBtn.title = 'Adicionar Nota ao Texto Selecionado (selecione texto primeiro)';
+                    addNoteBtn.disabled = true; // Desabilita se nenhum texto estiver selecionado
+                }
+            });
+
             // Event listeners para os botões de áudio
             playSelectedTextBtn.addEventListener('click', () => {
                 const text = actualSelectedText.textContent;
@@ -2834,19 +2320,6 @@
                 const lang = playPortugueseTranslationBtn.getAttribute('data-lang');
                 toggleSpeech(text, lang, playPortugueseTranslationBtn);
             });
-
-            playSummaryBtn.addEventListener('click', () => {
-                const text = summaryText.textContent;
-                const lang = playSummaryBtn.getAttribute('data-lang') || 'pt-PT';
-                toggleSpeech(text, lang, playSummaryBtn);
-            });
-
-            playKeywordsBtn.addEventListener('click', () => {
-                const text = keywordsText.textContent;
-                const lang = playKeywordsBtn.getAttribute('data-lang') || 'pt-PT';
-                toggleSpeech(text, lang, playKeywordsBtn);
-            });
-
 
             // Event listeners para os botões de guardar
             saveSelectedTextBtn.addEventListener('click', () => {
@@ -2876,25 +2349,6 @@
                 }
             });
 
-            saveSummaryBtn.addEventListener('click', () => {
-                const textToSave = summaryText.textContent;
-                if (textToSave) {
-                    saveTextAsFile(textToSave, 'resumo_texto');
-                } else {
-                    showLocalizedCopyPopup("Nenhum resumo para guardar.", saveSummaryBtn);
-                }
-            });
-
-            saveKeywordsBtn.addEventListener('click', () => {
-                const textToSave = keywordsText.textContent;
-                if (textToSave) {
-                    saveTextAsFile(textToSave, 'palavras_chave');
-                } else {
-                    showLocalizedCopyPopup("Nenhuma palavra-chave para guardar.", saveKeywordsBtn);
-                }
-            });
-
-
             // Listener para o botão de troca de idiomas
             swapLanguagesBtn.addEventListener('click', () => {
                 const fromVal = fromLanguageSelect.value;
@@ -2904,25 +2358,6 @@
                 const selectedText = window.getSelection().toString().trim();
                 if (selectedText.length > 0) {
                     translateText(selectedText);
-                }
-            });
-
-            // Event listeners para as novas funcionalidades LLM
-            summarizeTextBtn.addEventListener('click', () => {
-                const selectedText = actualSelectedText.textContent.trim();
-                if (selectedText) {
-                    summarizeText(selectedText);
-                } else {
-                    showLocalizedCopyPopup("Selecione texto para resumir.", summarizeTextBtn);
-                }
-            });
-
-            extractKeywordsBtn.addEventListener('click', () => {
-                const selectedText = actualSelectedText.textContent.trim();
-                if (selectedText) {
-                    extractKeywords(selectedText);
-                } else {
-                    showLocalizedCopyPopup("Selecione texto para extrair palavras-chave.", extractKeywordsBtn);
                 }
             });
 
@@ -2942,8 +2377,6 @@
             saveSettingsBtn.addEventListener('click', () => {
                 saveSettings();
                 settingsModal.hide();
-                // Re-evaluate LLM button states after settings save (model might change)
-                document.dispatchEvent(new Event('selectionchange')); // Trigger selectionchange to update buttons
             });
 
             // Adiciona listeners para atualizar o tema instantaneamente ao mudar o rádio button
@@ -2965,34 +2398,24 @@
                 }
             });
 
-            // Listener para mudanças no select do modelo LLM
-            defaultLlmModelSelect.addEventListener('change', () => {
-                // Trigger selectionchange to update LLM-powered buttons
-                document.dispatchEvent(new Event('selectionchange'));
-            });
-
-
-            saveOriginalFileBtn.addEventListener('click', saveOriginalFile);
+            savePdfBtn.addEventListener('click', saveOriginalPdf);
             highlightTextBtn.addEventListener('click', () => applyTemporaryTextEffect('highlighted-blue', highlightTextBtn));
             underlineTextBtn.addEventListener('click', () => applyTemporaryTextEffect('underlined-text', underlineTextBtn));
 
             // Função para redimensionar o canvas e a camada de texto
-            const resizeDocViewer = () => {
-                if (docType === 'pdf' && pdfDoc && !pageRendering) {
+            const resizePdfViewer = () => {
+                if (pdfDoc && !pageRendering) {
                     queueRenderPage(currentPageNum);
                 }
             };
 
             // Event listener para redimensionamento da janela
-            window.addEventListener('resize', resizeDocViewer);
+            window.addEventListener('resize', resizePdfViewer);
 
             // Inicializa os ícones dos botões de áudio no carregamento
             updateSpeechButtonIcon(playSelectedTextBtn, false);
             updateSpeechButtonIcon(playEnglishTranslationBtn, false);
             updateSpeechButtonIcon(playPortugueseTranslationBtn, false);
-            updateSpeechButtonIcon(playSummaryBtn, false);
-            updateSpeechButtonIcon(playKeywordsBtn, false);
-
 
             // Carrega as configurações ao iniciar a página
             loadSettings();
@@ -3089,12 +2512,12 @@
                 }
             }
 
-            // Listener para o clique no botão de nota
+            // Listener para o clique no botão de nota (AGORA NO TOOLBAR)
             addNoteBtn.addEventListener('click', () => {
                 if (currentSelectedTextForNote) {
                     noteSelectedTextDisplay.textContent = currentSelectedTextForNote;
                     const pageNotes = notesStore[currentPageNum] || {};
-                    noteTextarea.value = pageNotes[currentSelectedTextForNote] || '';
+                    noteTextarea.value = pageNotes[currentSelectedTextForNote] || ''; // Carrega a nota existente
                     noteModal.show();
                 } else {
                     showLocalizedCopyPopup("Selecione texto para adicionar uma nota.", addNoteBtn);
@@ -3104,12 +2527,15 @@
             // Listener para guardar a nota
             saveNoteBtn.addEventListener('click', () => {
                 if (currentSelectedTextForNote) {
+                    // Garante que notesStore[currentPageNum] existe
                     if (!notesStore[currentPageNum]) {
                         notesStore[currentPageNum] = {};
                     }
                     notesStore[currentPageNum][currentSelectedTextForNote] = noteTextarea.value;
                     showLocalizedCopyPopup("Nota guardada!", saveNoteBtn);
                     noteModal.hide();
+                    // Atualiza imediatamente o estado do botão de nota após guardar
+                    // Isso reflete a presença da nota no texto atualmente selecionado
                     addNoteBtn.classList.remove('btn-outline-primary');
                     addNoteBtn.classList.add('btn-primary');
                     addNoteBtn.innerHTML = existingNoteIcon;
@@ -3122,39 +2548,34 @@
             if (uploadPdfNavbarBtn && pdfUploadInput) {
                 uploadPdfNavbarBtn.addEventListener('click', () => {
                     if (!isFileDialogOpen) {
-                        pdfUploadInput.click();
+                        pdfUploadInput.click(); // Dispara o clique no input de ficheiro oculto
                         isFileDialogOpen = true;
                     }
                 });
             }
 
             // --- Lógica dos Botões de Expandir/Reduzir ---
-            expandDocViewerBtn.addEventListener('click', () => {
-                if (currentLayout === 'doc-expanded') {
-                    setViewLayout('both');
+            expandPdfViewerBtn.addEventListener('click', () => {
+                if (currentLayout === 'pdf-expanded') {
+                    setViewLayout('both'); // Volta para o layout original
                 } else {
-                    setViewLayout('doc-expanded');
+                    setViewLayout('pdf-expanded'); // Expande o PDF
                 }
             });
 
             expandTranslationSidebarBtn.addEventListener('click', () => {
                 if (currentLayout === 'translation-expanded') {
-                    setViewLayout('both');
+                    setViewLayout('both'); // Volta para o layout original
                 } else {
-                    setViewLayout('translation-expanded');
+                    setViewLayout('translation-expanded'); // Expande a tradução
                 }
             });
 
-            // Define o estado inicial do botão de notas e das novas ferramentas LLM
+            // Define o estado inicial do botão de notas
             addNoteBtn.disabled = true;
             addNoteBtn.innerHTML = defaultNoteIcon;
             addNoteBtn.title = 'Adicionar Nota ao Texto Selecionado (selecione texto primeiro)';
-
-            summarizeTextBtn.disabled = true;
-            summarizeTextBtn.title = "Selecione texto para resumir (requer Gemini)";
-            extractKeywordsBtn.disabled = true;
-            extractKeywordsBtn.title = "Selecione texto para extrair palavras-chave (requer Gemini)";
-        };
+        });
     </script>
 </body>
 </html>
