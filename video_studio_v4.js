@@ -16,23 +16,23 @@ document.addEventListener("DOMContentLoaded", () => {
         ? window.location.origin + '/laurindo-c-benjamim-portfolio'
         : window.location.origin;
 
-    let serverDomain = 'http://localhost:5000';
+    let serverDomain = 'https://192.168.1.167:8443';//'http://localhost:5000';
 
     if (baseURL.includes('.github.io') || baseURL.includes('laurindocbenjamim.pt')) {
         serverDomain = 'https://www.d-tuning.com';
     }
 
     // Simulate fetching files from the server
-    fetch(`${serverDomain}/api/v1/video/select/files`)
+    fetch(`${serverDomain}/api/v1/cloud_storage/files/list`)
         .then(response => response.json())
         .then(data => {
             console.log("Files.....")
-            //console.log(data)
+            console.log(data)
             
-            if (data.files) {
+            if (data.files) { 
                 fileList.innerHTML = ""; // Clear existing list items
                 data.files.forEach(file => {
-
+                    
                     const listItem = document.createElement("li"); //class="list-group-item"
                     listItem.className = "file-item";
                     /*listItem.innerHTML = `<span class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" >

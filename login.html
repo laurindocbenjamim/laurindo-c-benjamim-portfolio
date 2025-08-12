@@ -274,12 +274,12 @@
             // Prevent SQL Injection - Allow only letters, numbers, and underscores
             const sqlInjectionPattern = /^[a-zA-Z0-9_]+$/;
             if (!sqlInjectionPattern.test(formD.get('username'))) {
-                errorMessage.textContent = 'Invalid username! Use only letters, numbers, and underscores.';
-                return;
+                //errorMessage.textContent = 'Invalid username! Use only letters, numbers, and underscores.';
+                //return;
             }
 
             // Password strength validation
-            const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 
             const formData = JSON.stringify({ "username": formD.get('username'), "password": formD.get('password') });
@@ -293,15 +293,22 @@
                     'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
                 },
             };
-            console.log("Login with cookies tarting...")
+            console.log("Login with cookies started...")
             //const response = await auth.login(options)
-            const response = await auth.makeRequest(options, 'api/v1/auth/login')
-            
-            if(response===null){
-                cleanAlerts()
+            let response = await auth.makeRequest(options, 'api/v1/auth/login')
+            console.log(response)
+            if(!response.ok){
+                response = await response.text();
+                cleanAlerts() 
                 errorMessage.textContent = 'Failed to login! Please try again later.';
-                return;
-            } if (!response.ok) {
+                alert(response)
+                throw new Error(response);
+            }else{
+                response = await response.json();
+                console.log(response)
+            } 
+            
+            if (!response.ok) {
                 //const message = await auth.handlingErrors(response)
                 console.error("Login failed! " + response)
                 const message = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
@@ -359,13 +366,14 @@
             };
             console.log("Accessing protected route with cookies tarting...")
             const endpoint = 'protected';
-            const response = await auth.makeRequest(options, endpoint)
+            let response = await auth.makeRequest(options, endpoint)
             console.log(response)
 
-            if (!response.ok && !response.status_code) {
+            if (!response.ok) {
                 const message = await auth.handlingErrors(response)
                 console.log(message)
             } else {
+                response = await response.json();
                 if (response.status_code === 200) {
                     localStorage.setItem('user_id', response.id)
                     localStorage.setItem('username', response.username)

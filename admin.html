@@ -556,6 +556,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 
+    <script src="/auth_factory.js"></script>
     <script>
 
 
@@ -571,22 +572,44 @@
             const userInfo = document.getElementById('user-info');
 
             prolyfillForOldBrowser() // for old browsers
+            const auth = new AuthUser()
 
             let response = null;
 
-            console.log("Checking the cookies")
-            //console.log(document.cookie)
             try {
                 response = await getUserData();
+
+                if (!response.ok || response === null) {
+                    throw new Error("Error to get User data: " + await response.text())
+                } else {
+                    const data = await response.json()
+                    if (data.status_code === 200) {
+                        localStorage.setItem('user_id', data.id)
+                        localStorage.setItem('username', data.username)
+                        localStorage.setItem('fullname', data.full_name)
+                        localStorage.setItem('typeOfUser', data.type_of_user)
+                        localStorage.setItem('isAdminUser', data.is_administrator)
+                        localStorage.setItem('isCeoUser', data.is_ceo_user)
+                        localStorage.setItem("pageRefreshed", "false");
+                        
+                        /*window.dispatchEvent(new Event('userDataLoaded'))
+
+                        console.log("Accessed protected successfully!")
+                        //document.querySelector(".spinner-container").style.display = "none";
+                        return true;*/
+                    } else {
+                        document.querySelector(".spinner-container").style.display = "none";
+                        window.location.href = auth.baseURL + '/new_login.html'
+                    }
+
+                }
             } catch (error) {
-                console.error("Error: " + error);
+                window.location.href = auth.baseURL + '/new_login.html'
+                throw new Error("Error: " + error)
             }
 
             pageRefreshed = localStorage.getItem("pageRefreshed");
             userId = localStorage.getItem('user_id');
-
-
-            const auth = new AuthUser();
 
             if (!response) {
                 setTimeout(() => {
@@ -596,7 +619,7 @@
             }
             document.querySelector(".spinner-container").style.display = "none";
             localStorage.setItem("pageRefreshed", "true");
-          
+
 
             document.getElementById('main-content').style.display = 'block';
             document.getElementById('user-info').style.display = 'block';
@@ -651,7 +674,7 @@
                             'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
                         },
                     };
-                    console.log("Logout process with cookies tarting...")
+                    console.log("Logout process with cookies starting...")
                     const endpoint = 'api/v1/auth/logout';//'logout_with_cookies';
                     const response = await auth.makeRequest(options, endpoint)
                     console.log(response)

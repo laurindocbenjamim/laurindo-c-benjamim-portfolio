@@ -176,7 +176,7 @@
     "target": ""
   },
   {
-    "title": "Doc Reader",
+    "title": "Smart Reader",
     "description": "Read documents aloud using AI technology.",
     "url": "../doc_reader/doc_reader.html",
     "repository": "",
