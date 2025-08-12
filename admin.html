@@ -662,7 +662,7 @@
             });
 
             if (logoutLink) {
-                logoutLink.addEventListener('click', async (event) => {
+                /*logoutLink.addEventListener('click', async (event) => {
                     event.preventDefault();
                     localStorage.clear()
                     const options = {
@@ -678,7 +678,8 @@
                     const endpoint = 'api/v1/auth/logout';//'logout_with_cookies';
                     const response = await auth.makeRequest(options, endpoint)
                     console.log(response)
-
+                    
+                    return
                     if (!response.ok) {
                         const message = await auth.handlingErrors(response)
                         console.log(message)
@@ -691,7 +692,7 @@
                         window.location.href = auth.baseURL + '/new_login.html'
                     }, 2000)
                     console.log('Process  finished!')
-                });
+                });*/
 
             }
 

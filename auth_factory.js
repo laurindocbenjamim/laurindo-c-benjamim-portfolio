@@ -19,7 +19,7 @@ class AuthUser {
 
     async makeRequest(options, endpoint) {
         let response = null;
-
+        
         try {
             response = await fetch(`${this.serverDomain}/${endpoint}`, options);
             return response
@@ -30,7 +30,7 @@ class AuthUser {
         }
     }
 
-    async logout(options) {
+    async logout_request(options) {
         const response = fetch(`${this.serverDomain}/logout_with_cookies`, options);
         return response.json();
     }
@@ -208,7 +208,7 @@ async function prolyfillForOldBrowser() {
 }
 
 
-async function logout(e) {
+async function logout(e) { 
     localStorage.clear()
     const auth = new AuthUser();
     let response = null;
@@ -221,21 +221,24 @@ async function logout(e) {
         },
     };
     console.log("Logout process with cookies tarting...")
-    const endpoint = 'api/v1/auth/logout';
+    const endpoint = 'api/v1/auth/logout'; 
     response = await auth.makeRequest(options, endpoint)
-    //console.log(response)
+
     if (!response.ok) {
         const message = await auth.handlingErrors(response)
         if (message.logout || message.msg) {
             console.info(message.logout + ". " + message.msg)
         }
-
-        console.error("Logout process failed!")
-    } else {
+        throw new Error("Logout process failed: " + response.text())
+    } else { 
         console.log("Logout process done successfully!")
+        const data = await response.json();
+        console.log(data.logout)
+        console.log(data.msg)
     }
+    
     setTimeout(() => {
-        console.log("Accessing login page...")
+        console.log("Moving to the login page...")
         window.location.href = auth.baseURL + '/new_login.html'
     }, 400)
     console.log('Process  finished!')
