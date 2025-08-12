@@ -1,6 +1,8 @@
 
 import { RequestFactory } from './request_factory.js'
 
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById('paymentForm');
 
@@ -61,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.error(session.error)
                 return ;
             }
-            const stripe = Stripe(pk);
+            const stripe = window.Stripe(pk);
         
             const { error } = await stripe.redirectToCheckout({ sessionId: session.id });
         

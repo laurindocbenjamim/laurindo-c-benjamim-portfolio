@@ -1,12 +1,12 @@
 
 class AuthUser {
     constructor() {
-        let ip = "192.168.1.216"; //localhost
+        let ip = "192.168.1.201"; //localhost
         this.baseURL = window.location.origin.includes('laurindocbenjamim.github.io')
             ? window.location.origin + '/laurindo-c-benjamim-portfolio'
             : window.location.origin;
 
-            this.serverDomain = `http://${ip}:5000`;
+            this.serverDomain = `https://${ip}:8443`;
 
             if (this.baseURL.includes('.github.io') || this.baseURL.includes('laurindocbenjamim.pt')) {
                 this.serverDomain = 'https://www.d-tuning.com';
@@ -22,7 +22,7 @@ class AuthUser {
 
         try {
             response = await fetch(`${this.serverDomain}/${endpoint}`, options);
-            return await response.json();
+            return response
         } catch (error) {
             console.error("Request failed:", error);
             console.error("Failed to connect to the server. Please try again later.");
@@ -37,7 +37,7 @@ class AuthUser {
 
     async getCookie(name) {
         const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
+        const parts = value.split(`; ${name}=`); console.log(parts)
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
@@ -45,6 +45,7 @@ class AuthUser {
         const cookies = document.cookie.split(';');
         for (let cookie of cookies) {
             const [cookieName, cookieValue] = cookie.trim().split('=');
+            //console.log("COOKIE NAME: ", cookieName)
             if (cookieName === name) return cookieValue;
         }
         return null;
@@ -164,7 +165,6 @@ class AuthUser {
 
 async function getUserData() {
     
-    
 
     let response = null;
     const auth = new AuthUser();
@@ -184,63 +184,12 @@ async function getUserData() {
     const endpoint = 'api/v1/admin/user'; //'protected';
     try {
         response = await auth.makeRequest(options, endpoint)
+        return response
     } catch (error) {
         localStorage.clear()
         document.querySelector(".spinner-container").style.display = "none";
         throw new Error("Error to get the user data! " + error);
     }
-    console.log("Response on getting User Data...")
-   
-    console.log(`Is "response.ok" Null? ${response===null}`)
-    
-    if (response ===null ||!response.ok===undefined) {
-        console.error("Error to get the user data! ")
-        localStorage.clear()
-        const message = await auth.handlingErrors(response)
-        //console.log(response.status_code)
-        if(document.getElementById('spinnerText')){
-            document.getElementById('spinnerText').innerHTML = `
-            <p style="color: red;">Error to get user information.</p>
-            <p>Redirecting...</p>
-            `;
-        }
-        
-        setTimeout(() => {
-            document.querySelector(".spinner-container").style.display = "none";
-            window.location.href = auth.baseURL + '/new_login.html'
-        }, 3000)
-        return false;
-    } else {
-        
-        if (response.status_code === 200) {
-            localStorage.setItem('user_id', response.id)
-            localStorage.setItem('username', response.username)
-            localStorage.setItem('fullname', response.full_name)
-            localStorage.setItem('typeOfUser', response.type_of_user)
-            localStorage.setItem('isAdminUser', response.is_administrator)
-            localStorage.setItem('isCeoUser', response.is_ceo_user)
-            localStorage.setItem("pageRefreshed", "false");
-
-            window.dispatchEvent(new Event('userDataLoaded'))
-
-            console.log("Accessed protected successfully!")
-            //document.querySelector(".spinner-container").style.display = "none";
-            return true;
-        } else {
-            
-            console.error("Failed to check the user data! ")
-            localStorage.clear()
-            const message = await auth.getErrorsSuccessMessage(response.message ? response.message : '!!!', response.status_code)
-            console.error(message)
-            setTimeout(() => {
-                document.querySelector(".spinner-container").style.display = "none";
-                window.location.href = auth.baseURL + '/new_login.html'
-            }, 3000)
-            return false;
-        }
-
-    }
-    console.log('Process  finished!')
     return false;
 }
 

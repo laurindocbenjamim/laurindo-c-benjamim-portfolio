@@ -614,7 +614,7 @@
             }
         }
     </style>
-     <link rel="stylesheet" href="assets/css/spinner_style.css">
+    <link rel="stylesheet" href="assets/css/spinner_style.css">
 </head>
 
 <body>
@@ -622,7 +622,7 @@
     <div class="spinner-container" style="display: none;">
         <div class="spinner-wrapper">
             <div class="spinner"></div>
-        <p id="spinnerText" style="color: #50fa7b; margin-top: 10px; font-size: 1.2rem;">Loading...</p>
+            <p id="spinnerText" style="color: #50fa7b; margin-top: 10px; font-size: 1.2rem;">Loading...</p>
         </div>
     </div>
     <!-- Auth Buttons - Now positioned top-right -->
@@ -823,7 +823,7 @@
                 <span role="status">Loading...</span>`;
 
         try {
-            
+
             /*if(getUserData()){
                 document.getElementById('spinnerText').innerHTML = '<p>You are already logged in</p>';
                 document.getElementById('spinnerText').innerHTML += '<p>Redirecting...</p>';
@@ -890,8 +890,8 @@
             // Prevent SQL Injection - Allow only letters, numbers, and underscores
             const sqlInjectionPattern = /^[a-zA-Z0-9_]+$/;
             if (!sqlInjectionPattern.test(formD.get('username'))) {
-                errorMessage.textContent = 'Invalid username! Use only letters, numbers, and underscores.';
-                return;
+                //errorMessage.textContent = 'Invalid username! Use only letters, numbers, and underscores.';
+                //return;
             }
 
             // Password strength validation
@@ -906,18 +906,31 @@
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
+                    //'X-CSRF-TOKEN': auth.getCookie('csrf_access_token'),
                 },
             };
             console.log("Login with cookies tarting...")
             //const response = await auth.login(options)
             const response = await auth.makeRequest(options, 'api/v1/auth/login')
 
-            if (response === null) {
+            if (response === null || !response.ok) {
+                alert("Error to login")
                 cleanAlerts()
+                console.log(response.text());
+                const message = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
                 errorMessage.textContent = 'Failed to login! Please try again later.';
                 return;
-            } if (!response.ok) {
+            } else {
+                const data = response.json();
+                console.log(data)
+                setTimeout(() => {
+                    window.location.href = auth.baseURL + '/admin.html';
+                }, 1000);
+                return
+            }
+
+
+            if (!response.ok) {
                 //const message = await auth.handlingErrors(response)
                 console.error("Login failed! " + response)
                 const message = await auth.getErrorsSuccessMessage(response.error ? response.error : response.message, response.status_code)
@@ -932,7 +945,7 @@
                         console.log(response)
                         successMessage.textContent = response.message;
                         setTimeout(() => {
-                            window.location.href = auth.baseURL + '/admin.html';
+                            //window.location.href = auth.baseURL + '/admin.html';
                         }, 1000);
                     } else {
 
