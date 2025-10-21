@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio de Projetos - Slides</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .slide { display: none; }
+        .slide.active { display: block; animation: fadeIn 0.8s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen p-4 md:p-8">
+
+    <div class="max-w-4xl w-full bg-white rounded-xl shadow-2xl p-6 md:p-10 flex flex-col items-center">
+        
+        <div id="slides-container" class="w-full">
+            <!-- Slides will be generated here by JavaScript -->
+        </div>
+
+        <div class="flex items-center mt-8 gap-4">
+            <button id="prev-btn" class="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-indigo-700 shadow-md">
+                Anterior
+            </button>
+            <span id="slide-counter" class="text-lg font-medium text-gray-700"></span>
+            <button id="next-btn" class="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-indigo-700 shadow-md">
+                Próximo
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const projectsData = [
+            {
+                title: 'Visão Geral do Portfólio',
+                overview: 'Este portfólio demonstra a experiência em **engenharia de dados** através de projetos práticos que abordam desafios comuns no ciclo de vida dos dados. Os projetos incluem o desenvolvimento de pipelines automatizados, sincronização entre bases de dados, e a utilização de ferramentas de big data como **Hadoop** e **Spark**. Cada projeto foi concebido para resolver um problema específico, desde a orquestração de tarefas com o Apache Airflow até a monitorização e depuração de aplicações distribuídas.'
+            },
+            {
+                title: 'Senior Software Developer',
+                scenario: 'Liderança no desenvolvimento de um sistema de gestão de arquivos para uma instituição de ensino, abrangendo desde a conceção arquitetural até a implantação e a garantia de segurança.',
+                objectives: ['Desenvolver uma aplicação web robusta para gestão de arquivos.', 'Implementar um sistema de autenticação seguro (OAuth2 ou JWT).', 'Garantir a integridade e segurança dos dados e arquivos.', 'Configurar o ambiente de deployment para um servidor local.'],
+                challenge: 'Criar um sistema de gestão de arquivos que fosse seguro, escalável e de fácil acesso para os utilizadores, enquanto se mantinham altos padrões de segurança e integridade de dados. O maior desafio foi garantir a segurança dos acessos e o armazenamento de arquivos em um ambiente local com múltiplos utilizadores e diferentes níveis de permissão.',
+                solution: 'A solução foi desenvolver um sistema utilizando **Java com Spring Boot** para o backend, adotando o padrão **MVC (Model-View-Controller)** para uma arquitetura organizada. O sistema de segurança foi construído com **JSON Web Tokens (JWT)** para a autenticação, garantindo que apenas utilizadores autorizados pudessem aceder aos ficheiros. A aplicação foi implementada em um servidor local com base de dados **MySQL** ou **PostgreSQL** para o armazenamento de metadados, enquanto os arquivos foram guardados no sistema de ficheiros do servidor. Além disso, foi construído um sistema de API para acesso externo via nuvem, que exigia uma comunicação segura e autenticada entre os sistemas.',
+                tools: ['Java 10', 'Spring Boot MVC', 'Bootstrap', 'Javascript', 'JQuery', 'RESTful APIs', 'JWT'],
+                why: 'A escolha por **Java e Spring Boot** deveu-se à sua robustez, maturidade e ao ecossistema de segurança (Spring Security). O padrão **MVC** permitiu uma separação clara de responsabilidades, facilitando a manutenção. Para o frontend, **Bootstrap, Javascript e JQuery** foram escolhidos por serem leves e eficientes para a criação de uma interface de utilizador responsiva, sem a necessidade de um framework mais pesado como Angular ou React, que seria um exagero para os requisitos do projeto. A utilização de **JWT** para a autenticação em vez de sessões tradicionais garantiu uma solução mais escalável e sem estado, ideal para APIs.'
+            },
+            {
+                title: 'Pipeline de Análise de Logs',
+                scenario: 'Criação de um pipeline automatizado para processar logs de servidor web, extrair informações cruciais e armazená-las de forma estruturada para análise posterior.',
+                objectives: ['Processar logs em tempo real.', 'Extrair métricas de tráfego e erro.', 'Automatizar o fluxo de dados de forma confiável.'],
+                challenge: 'Garantir a coleta e o processamento de grandes volumes de dados de log de forma escalável e tolerante a falhas, sem a necessidade de intervenção manual diária.',
+                solution: 'Orquestração de um pipeline ETL (Extrair, Transformar, Carregar) usando Apache Airflow. As tarefas de extração, transformação e carregamento foram encadeadas em uma DAG (Grafo Acíclico Dirigido), garantindo a automação e a execução correta, mesmo em caso de falhas parciais.',
+                tools: ['Apache Airflow', 'Bash'],
+                why: 'O **Apache Airflow** foi a escolha ideal para este projeto por sua capacidade de orquestração. Diferentemente de scripts simples que poderiam falhar sem notificação, o Airflow permite monitorizar o estado de cada tarefa, agendar execuções e configurar `retries` automáticos, garantindo a robustez do pipeline. O uso de **Bash Operators** simplificou as tarefas de processamento de logs, já que muitas operações de manipulação de texto são nativas em ambientes Unix.'
+            },
+            {
+                title: 'Sincronização de Data Warehouses',
+                scenario: 'Sincronizar dados entre um ambiente de teste (MySQL) e o de produção (IBM DB2/PostgreSQL) para que a equipa de negócios tenha acesso a informações atualizadas e consistentes, sem impacto na performance do sistema principal.',
+                objectives: ['Manter a integridade e consistência dos dados.', 'Minimizar a latência na sincronização.', 'Reduzir a carga no banco de dados de produção.'],
+                challenge: 'Manter a sincronização de dados entre bases de dados com diferentes arquiteturas e volumes massivos de forma eficiente, evitando a duplicação de registos e minimizando o tempo de inatividade.',
+                solution: 'Desenvolvimento de um script Python para realizar uma carga incremental de dados. O script compara a última data de atualização entre os ambientes e transfere apenas os novos registos, otimizando o processo e reduzindo a carga computacional.',
+                tools: ['Python', 'MySQL', 'IBM DB2', 'PostgreSQL'],
+                why: 'A escolha de **Python** para este projeto foi estratégica devido à sua vasta biblioteca de conectores de base de dados e à sua legibilidade. Em vez de usar ferramentas de ETL complexas, um script simples em Python ofereceu a flexibilidade necessária para conectar a diferentes tipos de bases de dados (MySQL, DB2, PostgreSQL) e implementar a lógica específica de carga incremental, tornando a solução leve e personalizável.'
+            },
+            {
+                title: 'Criação e Consulta de Tabelas no Hive',
+                scenario: 'Simular um ambiente de análise de Big Data para permitir que a equipa de análise de negócios execute consultas complexas de forma simples e familiar (usando SQL), sem a necessidade de programar em Java ou Python.',
+                objectives: ['Criar um ambiente de análise acessível.', 'Executar consultas SQL diretamente sobre dados massivos.', 'Fornecer uma camada de abstração para o sistema de ficheiros distribuído.'],
+                challenge: 'Permitir a análise de dados massivos distribuídos (HDFS) por uma equipa não técnica, superando a complexidade do ambiente de Big Data.',
+                solution: 'Criação de uma tabela externa no Hive, que atua como uma camada de abstração sobre os dados armazenados no HDFS. Isso permitiu que a equipa usasse SQL para consultar e analisar dados de forma intuitiva, sem se preocupar com a localização física dos ficheiros.',
+                tools: ['Apache Hive', 'Hadoop (HDFS)', 'SQL'],
+                why: 'O **Apache Hive** foi escolhido para este cenário por ser a melhor solução para transformar um sistema de ficheiros distribuído, como o **HDFS**, em um banco de dados relacional. Ele permite que analistas de negócios, que já estão familiarizados com **SQL**, possam interagir com grandes volumes de dados sem ter que aprender tecnologias complexas como MapReduce, democratizando o acesso aos dados da empresa.'
+            },
+            {
+                title: 'Configuração de Cluster Hadoop',
+                scenario: 'Montagem de um ambiente de desenvolvimento e teste para processamento distribuído, permitindo que a equipa de engenharia de dados experimente e valide novos pipelines em um ambiente isolado e replicável.',
+                objectives: ['Criar um cluster Hadoop de forma rápida.', 'Reproduzir um ambiente de produção em escala reduzida.', 'Simplificar o processo de desenvolvimento e teste.'],
+                challenge: 'Configurar um ambiente de cluster Hadoop completo e funcional de forma rápida e eficiente, sem a necessidade de infraestrutura de hardware dedicada.',
+                solution: 'Utilização de Docker para criar um cluster Hadoop local com todos os componentes necessários. Isso proporcionou um ambiente de testes portátil e consistente, facilitando a colaboração e a rápida validação de soluções.',
+                tools: ['Hadoop (HDFS)', 'Docker'],
+                why: 'A decisão de usar **Docker** foi motivada pela necessidade de criar um ambiente de desenvolvimento e testes consistente. Em vez de instalar e configurar manualmente todos os componentes do **Hadoop**, o Docker permite encapsular o ambiente em uma imagem, garantindo que a configuração seja idêntica em todas as máquinas. Isso eliminou problemas de compatibilidade e acelerou o processo de `setup`.'
+            },
+            {
+                title: 'Monitorização e Debug de Aplicações Spark',
+                scenario: 'Diagnosticar e otimizar a performance de uma aplicação de processamento de dados distribuídos em Spark, identificando gargalos e corrigindo erros de execução que causam falhas no pipeline.',
+                objectives: ['Reduzir o tempo de processamento.', 'Corrigir erros de execução.', 'Otimizar o uso de recursos computacionais.'],
+                challenge: 'Identificar a causa de falhas e problemas de desempenho em um ambiente de processamento distribuído, onde as tarefas são executadas em múltiplos nós de forma paralela e assíncrona.',
+                solution: 'Utilização da interface de utilizador web do Spark para monitorizar o progresso das tarefas e visualizar os logs de erro. Essa abordagem permitiu identificar com precisão as causas das falhas, como `out of memory` ou `tasks` que demoraram a executar, possibilitando a otimização do código e a correção dos problemas.',
+                tools: ['Apache Spark', 'PySpark', 'SQL'],
+                why: 'A escolha do **Apache Spark** deveu-se à sua capacidade de processamento em memória e à sua UI web integrada. Ao invés de frameworks mais antigos como o MapReduce, o Spark oferece uma ferramenta de monitorização visual que facilita o `debug` de aplicações distribuídas. A interface web do Spark permite visualizar o fluxo de execução das tarefas, o uso de recursos e os `stack traces` de erros, acelerando o diagnóstico e a otimização de forma significativa.'
+            }
+        ];
+
+        let currentSlideIndex = 0;
+        const slidesContainer = document.getElementById('slides-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const slideCounter = document.getElementById('slide-counter');
+
+        function renderSlide(project) {
+            if (project.overview) {
+                return `
+                    <div class="slide px-2">
+                        <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">${project.title}</h2>
+                        <div class="text-lg text-gray-600 leading-relaxed">${project.overview}</div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="slide px-2">
+                        <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">${project.title}</h2>
+                        <div class="space-y-6 md:space-y-8">
+                            <div>
+                                <h3 class="text-xl font-semibold text-indigo-700">Cenário</h3>
+                                <p class="text-gray-600 leading-relaxed mt-2">${project.scenario}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-indigo-700">Objetivos</h3>
+                                <ul class="list-disc list-inside text-gray-600 leading-relaxed mt-2 space-y-1">
+                                    ${project.objectives.map(obj => `<li>${obj}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-indigo-700">Desafio e Solução</h3>
+                                <p class="text-gray-600 leading-relaxed mt-2"><strong class="font-medium">Desafio:</strong> ${project.challenge}</p>
+                                <p class="text-gray-600 leading-relaxed mt-1"><strong class="font-medium">Solução:</strong> ${project.solution}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-indigo-700">Ferramentas Utilizadas</h3>
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    ${project.tools.map(tool => `<span class="bg-gray-200 text-gray-700 text-sm font-medium px-3 py-1 rounded-full">${tool}</span>`).join('')}
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-indigo-700">Porquê estas Tecnologias?</h3>
+                                <p class="text-gray-600 leading-relaxed mt-2">${project.why}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === slides.length - 1;
+            prevBtn.classList.toggle('opacity-50', prevBtn.disabled);
+            nextBtn.classList.toggle('opacity-50', nextBtn.disabled);
+            slideCounter.textContent = `${index + 1} / ${slides.length}`;
+        }
+
+        projectsData.forEach(project => {
+            slidesContainer.innerHTML += renderSlide(project);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                showSlide(currentSlideIndex);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlideIndex < projectsData.length - 1) {
+                currentSlideIndex++;
+                showSlide(currentSlideIndex);
+            }
+        });
+
+        if (projectsData.length > 0) {
+            showSlide(currentSlideIndex);
+        }
+    </script>
+</body>
+</html>
