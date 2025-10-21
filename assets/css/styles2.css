@@ -15,7 +15,7 @@
 
         body {
             color: var(--text-color);
-            background: var(--background-gradient);
+            background: #0d1117;/*var(--background-gradient);*/
             min-height: 100vh;
             line-height: 1.6;
         }
@@ -32,8 +32,38 @@
             pointer-events: none;
             z-index: -1;
         }
+        /* Estilo para o container da imagem de perfil (para centralizar e definir o tamanho) */
+        .profile-slideshow-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 50%;
+            /* Borda verde/ciano para o efeito que você tem na imagem */
+            border: 4px solid #38b2ac; 
+            box-shadow: 0 0 15px rgba(56, 178, 172, 0.6);
+        }
 
+        /* Estilo da imagem, com a transição suave */
         .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0; /* Inicialmente escondida */
+            transition: opacity 1.5s ease-in-out; /* Transição de 1.5s para o cross-fade */
+        }
+        
+        /* Classe para mostrar a imagem atual */
+        .profile-img.active {
+            opacity: 1;
+        }
+
+        /*.profile-img {
             width: 220px;
             height: 220px;
             object-fit: cover;
@@ -41,7 +71,7 @@
             border: 4px solid var(--accent-color);
             transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
             box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
-        }
+        }*/
 
         .profile-img:hover {
             transform: scale(1.03) rotate(3deg);

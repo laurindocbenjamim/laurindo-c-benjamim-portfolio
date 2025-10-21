@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio de Projetos de Engenharia de Dados</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Warm Harmony Neutrals -->
+    <!-- Application Structure Plan: A aplicação foi desenhada com uma estrutura de master-detail, apresentando uma navegação vertical à esquerda (master) e uma área de conteúdo principal à direita (detail). Clicar num projeto na navegação atualiza dinamicamente o conteúdo exibido. Esta abordagem foi escolhida para converter um documento linear num portfólio interativo, facilitando a consulta rápida e a exploração não-linear dos projetos, o que melhora significativamente a usabilidade em comparação com uma página de rolagem longa. A estrutura uniforme para cada projeto (Cenário, Objetivos, etc.) cria consistência e facilita a compreensão. -->
+    <!-- Visualization & Content Choices: O documento de origem é puramente textual, sem dados quantitativos, portanto, não foram utilizadas visualizações gráficas como gráficos. O foco está na arquitetura da informação e na apresentação do texto. Report Info: Lista de projetos -> Goal: Organizar/Navegar -> Presentation Method: Lista de botões verticais (HTML/Tailwind) -> Interaction: JS onClick para mostrar/ocultar conteúdo -> Justification: Navegação rápida e intuitiva. Report Info: Detalhes do projeto -> Goal: Informar -> Presentation Method: Blocos de texto estruturados com ícones temáticos (HTML/Tailwind) -> Interaction: Visibilidade do conteúdo controlada pela navegação -> Justification: Melhora a legibilidade e consistência. Report Info: Ferramentas utilizadas -> Goal: Destacar competências -> Presentation Method: Emblemas/Tags (HTML/Tailwind) -> Interaction: Nenhuma -> Justification: Padrão de UI moderno para realçar tecnologias. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        .content-panel {
+            display: none;
+        }
+        .content-panel.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .nav-link.active {
+            background-color: #4338ca;
+            color: white;
+            transform: translateX(4px);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Portfólio de Projetos</h1>
+            <p class="text-lg text-gray-600 mt-2">Uma visão detalhada sobre os principais projetos de Engenharia de Dados.</p>
+        </header>
+
+        <div class="flex flex-col md:flex-row gap-8 min-h-[600px]">
+            <aside id="navigation" class="w-full md:w-1/4 lg:w-1/5">
+                <nav class="bg-white rounded-lg shadow-md p-4 sticky top-8">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">Projetos</h2>
+                    <ul class="space-y-2"></ul>
+                </nav>
+            </aside>
+
+            <main id="content" class="w-full md:w-3/4 lg:w-4/5">
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const projectsData = [
+            {
+                id: 'pipeline-logs',
+                title: 'Pipeline de Análise de Logs',
+                scenario: 'Analisar um ficheiro de log de um servidor web para extrair informações relevantes. As linhas de interesse são as que terminam em ".html". A partir delas, é necessário extrair o timestamp e o tamanho do ficheiro, transformar os dados (converter bytes para megabytes) e, finalmente, carregar o resultado num ficheiro existente.',
+                objectives: [
+                    'Extrair dados de um ficheiro de log de servidor web.',
+                    'Transformar os dados extraídos para um formato mais útil.',
+                    'Carregar os dados transformados num ficheiro de arquivo (tar).',
+                    'Orquestrar todo o processo utilizando uma DAG do Apache Airflow.'
+                ],
+                tools: ['Apache Airflow', 'Bash'],
+                challenge: 'O principal desafio era orquestrar uma sequência de tarefas de extração, transformação e carga (ETL) de forma automatizada e confiável. A manipulação de ficheiros de texto e a garantia de que cada passo do pipeline executasse na ordem correta eram cruciais.',
+                solution: 'Foi utilizada uma DAG (Directed Acyclic Graph) no Apache Airflow, com cada tarefa representada por um BashOperator. Isso permitiu definir claramente as dependências entre as tarefas (extração primeiro, depois transformação, e por último o carregamento), garantindo a execução sequencial e a robustez do processo.'
+            },
+            {
+                id: 'sync-dw',
+                title: 'Sincronização de Data Warehouses',
+                scenario: 'Numa empresa de e-commerce, é necessário manter os dados sincronizados entre o data warehouse de staging (MySQL) e o de produção (IBM DB2 ou PostgreSQL). A tarefa consiste em automatizar a carga incremental de novos dados do ambiente de staging para o de produção, evitando a duplicação de registos.',
+                objectives: [
+                    'Conectar-se ao data warehouse de produção para identificar o último registo inserido.',
+                    'Conectar-se ao data warehouse de staging e extrair todos os registos mais recentes que o último registo de produção.',
+                    'Inserir os novos dados no data warehouse de produção.',
+                    'Agendar o script para execução periódica.'
+                ],
+                tools: ['Python', 'MySQL', 'IBM DB2', 'PostgreSQL'],
+                challenge: 'O desafio era garantir a consistência dos dados e a eficiência do processo. A transferência de dados entre sistemas de bases de dados diferentes (MySQL e DB2/PostgreSQL) e a lógica para identificar apenas os novos registos (carga incremental) eram os pontos críticos.',
+                solution: 'Foi desenvolvido um script em Python que primeiro consultava o data warehouse de produção para obter o ID do último registo. Em seguida, utilizava esse ID para consultar o data warehouse de staging e selecionar apenas as linhas mais recentes. Finalmente, os novos dados eram inseridos em produção. Esta abordagem incremental é muito mais eficiente do que uma carga completa.'
+            },
+            {
+                id: 'hive-sql',
+                title: 'Criação e Consulta de Tabelas no Hive',
+                scenario: 'Simular a análise de grandes volumes de dados (big data) utilizando o ecossistema Hadoop. A tarefa consiste em usar o Apache Hive para criar uma tabela, carregar dados a partir de ficheiros e de inserções diretas, e depois realizar consultas SQL para analisar esses dados.',
+                objectives: [
+                    'Criar uma tabela no Apache Hive.',
+                    'Carregar dados na tabela a partir de um ficheiro externo.',
+                    'Inserir dados adicionais na tabela usando o comando INSERT.',
+                    'Executar comandos SQL para consultar e analisar os dados na tabela.'
+                ],
+                tools: ['Apache Hive', 'Hadoop (HDFS)', 'SQL'],
+                challenge: 'Compreender a abstração que o Hive oferece sobre o HDFS. Embora as operações sejam realizadas com SQL, por baixo, o Hive está a interagir com ficheiros distribuídos no Hadoop, o que difere de um SGBD relacional tradicional. A sintaxe e o desempenho das consultas precisam de ser considerados neste contexto.',
+                solution: 'Seguindo as melhores práticas do Hive, foi criada uma tabela externa que apontava para os dados num ficheiro no HDFS. Isso permitiu carregar os dados de forma eficiente. Em seguida, foram realizadas consultas SQL padrão (SELECT, WHERE, GROUP BY) para demonstrar a capacidade de análise do Hive sobre grandes conjuntos de dados.'
+            },
+            {
+                id: 'hadoop-cluster',
+                title: 'Configuração de Cluster Hadoop',
+                scenario: 'Configurar um ambiente de cluster Hadoop para entender a sua arquitetura fundamental, incluindo NameNode, DataNode, ResourceManager e NodeManager. O objetivo é interagir com o Hadoop Distributed File System (HDFS) para criar e visualizar ficheiros.',
+                objectives: [
+                    'Executar uma instância de um cluster Hadoop em ambiente containerizado (Docker).',
+                    'Criar um ficheiro no HDFS através da linha de comandos.',
+                    'Visualizar o ficheiro criado através da interface gráfica do Hadoop.'
+                ],
+                tools: ['Hadoop (HDFS)', 'Docker'],
+                challenge: 'A configuração de um cluster Hadoop pode ser complexa e consumir muitos recursos. O principal desafio era criar um ambiente funcional e isolado para aprendizagem sem a necessidade de múltiplos servidores físicos.',
+                solution: 'A utilização de uma imagem Docker pré-configurada de Hadoop simplificou drasticamente o processo. Isso permitiu executar um cluster completo com todos os seus componentes (Namenode, Datanode, etc.) num único host, facilitando a interação com o HDFS e a compreensão da sua arquitetura de forma prática.'
+            },
+            {
+                id: 'spark-debug',
+                title: 'Monitorização e Debug de Aplicações Spark',
+                scenario: 'Monitorizar e depurar uma aplicação Apache Spark através da sua interface web. O processo envolve iniciar um cluster Spark, executar uma aplicação que processa dados e, em seguida, usar a UI web para identificar e corrigir erros de execução, além de monitorizar o desempenho e escalar o cluster.',
+                objectives: [
+                    'Iniciar um cluster Spark Standalone e conectar-se via PySpark.',
+                    'Criar um DataFrame e observar a aplicação na UI web.',
+                    'Depurar um erro de execução localizando a tarefa falhada na UI.',
+                    'Executar uma consulta SQL, monitorizar o seu progresso e escalar o cluster adicionando um novo worker.'
+                ],
+                tools: ['Apache Spark', 'PySpark', 'SQL'],
+                challenge: 'Em processamento distribuído, identificar a causa de um erro pode ser difícil, pois as tarefas são executadas em diferentes nós. O desafio era aprender a navegar na complexa UI do Spark para encontrar informações detalhadas sobre as tarefas, stages e logs de erros.',
+                solution: 'A solução foi seguir um fluxo de trabalho sistemático: ao ocorrer um erro, a UI web do Spark foi acedida para inspecionar a aba "Stages". A partir daí, foi possível identificar o stage falhado e as tarefas associadas. A análise dos logs de erro da tarefa específica revelou a causa raiz do problema, permitindo a sua correção no código da aplicação.'
+            }
+        ];
+
+        const navigation = document.getElementById('navigation').querySelector('ul');
+        const content = document.getElementById('content');
+
+        function renderProject(project) {
+            return `
+                <div id="${project.id}" class="content-panel bg-white rounded-lg shadow-md p-6 md:p-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">${project.title}</h2>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="flex items-center text-xl font-semibold text-indigo-700 mb-3">
+                                <span class="mr-3 h-6 w-6 flex items-center justify-center bg-indigo-100 rounded-full text-indigo-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+                                </span>
+                                Cenário
+                            </h3>
+                            <p class="text-gray-600 leading-relaxed">${project.scenario}</p>
+                        </div>
+
+                        <div>
+                            <h3 class="flex items-center text-xl font-semibold text-indigo-700 mb-3">
+                                <span class="mr-3 h-6 w-6 flex items-center justify-center bg-indigo-100 rounded-full text-indigo-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                                </span>
+                                Objetivos
+                            </h3>
+                            <ul class="list-disc list-inside text-gray-600 leading-relaxed space-y-2">
+                                ${project.objectives.map(obj => `<li>${obj}</li>`).join('')}
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="flex items-center text-xl font-semibold text-indigo-700 mb-3">
+                                 <span class="mr-3 h-6 w-6 flex items-center justify-center bg-indigo-100 rounded-full text-indigo-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                                </span>
+                                Desafio e Solução
+                            </h3>
+                            <p class="text-gray-600 leading-relaxed mb-2"><strong class="font-medium text-gray-700">O Desafio:</strong> ${project.challenge}</p>
+                            <p class="text-gray-600 leading-relaxed"><strong class="font-medium text-gray-700">A Solução:</strong> ${project.solution}</p>
+                        </div>
+
+                        <div>
+                            <h3 class="flex items-center text-xl font-semibold text-indigo-700 mb-4">
+                               <span class="mr-3 h-6 w-6 flex items-center justify-center bg-indigo-100 rounded-full text-indigo-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" /></svg>
+                                </span>
+                                Ferramentas Utilizadas
+                            </h3>
+                            <div class="flex flex-wrap gap-2">
+                                ${project.tools.map(tool => `<span class="bg-gray-200 text-gray-700 text-sm font-medium px-3 py-1 rounded-full">${tool}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchTab(projectId) {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.toggle('active', link.dataset.project === projectId);
+            });
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.toggle('active', panel.id === projectId);
+            });
+        }
+
+        projectsData.forEach(project => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="#" class="nav-link w-full text-left block font-medium text-gray-600 hover:bg-indigo-500 hover:text-white rounded-md p-3 transition-all duration-200 ease-in-out" data-project="${project.id}">${project.title}</a>`;
+            navigation.appendChild(li);
+            content.innerHTML += renderProject(project);
+        });
+
+        navigation.addEventListener('click', (e) => {
+            e.preventDefault();
+            const link = e.target.closest('.nav-link');
+            if (link) {
+                switchTab(link.dataset.project);
+            }
+        });
+
+        if (projectsData.length > 0) {
+            switchTab(projectsData[0].id);
+        }
+
+    </script>
+</body>
+</html>

@@ -28,6 +28,10 @@
                  alt="Laurindo C. Benjamim Profile Picture" 
                  class="profile-img mb-4"
                  loading="lazy">
+<div class="profile-slideshow-container" id="profile-slideshow">
+                <!-- As imagens serão adicionadas aqui pelo JavaScript -->
+            </div>
+
                  <a href="index.html" class="text-decoration-none"><h1 class="mb-3">Laurindo C. Benjamim</h1></a>
             <p class="lead">Data Engineer & Software Developer | Transforming Data into Actionable Insights</p>
             
@@ -58,5 +62,67 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     <script type="module" src="assets/js/app.js"></script>
+    <script>
+        // Define as URLs das imagens para o slideshow. 
+        // Você pode adicionar quantas imagens quiser.
+        const images = [
+            'https://github.com/laurindocbenjamim/dev-images/blob/main/laurindo.jpg?raw=true',
+            'https://github.com/laurindocbenjamim/dev-images/blob/main/laurindo-thinking.jpeg?raw=true',
+            'https://github.com/laurindocbenjamim/dev-images/blob/main/data-engineering-essentials.png?raw=true',
+            'https://placehold.co/150x150/4a90e2/ffffff?text=Professional', // Imagem alternativa 1
+            'https://github.com/laurindocbenjamim/dev-images/blob/main/Laurindo-logo-03.jpeg?raw=true'    // Imagem alternativa 2
+        ];
+        
+        const slideshowContainer = document.getElementById('profile-slideshow');
+        let currentImageIndex = 0;
+
+        /**
+         * Cria e anexa todos os elementos <img> ao container do slideshow.
+         */
+        function initializeSlides() {
+            images.forEach((src, index) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Laurindo C. Benjamim Profile Picture - Style ' + (index + 1);
+                img.loading = 'lazy';
+                img.classList.add('profile-img');
+                if (index === 0) {
+                    img.classList.add('active'); // Define a primeira imagem como ativa
+                }
+                slideshowContainer.appendChild(img);
+            });
+        }
+        
+        /**
+         * Lógica principal para fazer a transição para a próxima imagem.
+         */
+        function nextSlide() {
+            const currentSlide = slideshowContainer.querySelector(`.profile-img:nth-child(${currentImageIndex + 1})`);
+            
+            // Remove a classe 'active' para iniciar o fade-out
+            if (currentSlide) {
+                currentSlide.classList.remove('active');
+            }
+            
+            // Calcula o próximo índice
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            
+            // Seleciona a próxima imagem
+            const nextSlide = slideshowContainer.querySelector(`.profile-img:nth-child(${currentImageIndex + 1})`);
+
+            // Adiciona a classe 'active' para iniciar o fade-in
+            if (nextSlide) {
+                nextSlide.classList.add('active');
+            }
+        }
+
+        // 1. Inicializa o slideshow
+        initializeSlides();
+
+        // 2. Inicia a rotação automática a cada 5 segundos (5000ms)
+        // O tempo de transição (1.5s) deve ser menor que o intervalo (5s) para que o efeito seja visível.
+        setInterval(nextSlide, 5000); 
+
+    </script>
 </body>
 </html>
